@@ -29,7 +29,6 @@ settings:
   use-exact-login-location: false
   water-pushes-tnt: false
   legacy-knockback: true
-  isolate-plugins: true
 spawn-limits:
   monsters: 70
   animals: 15

@@ -88,8 +88,6 @@ running the same plugins as in production.
 Appropriate SportBukkit settings are provided in `bukkit.yml.sample` in this folder. Of particular importance are these:
 
 * `settings.bungeecord: true` This is required in order to connect through Bungee
-* `settings.isolate-plugins: true` Isolate the class loaders of plugins without a dpendency relationship.
-  Without this, plugins can get the wrong versions of common libraries from other plugins.
 * `settings.legacy-knockback: true` Emulate knockback mechanics from older versions of Minecraft
 * `settings.water-pushes-tnt: false` Disable water pushing TNT, a newer Minecraft feature that we don't use.
 
