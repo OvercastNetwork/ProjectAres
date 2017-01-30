@@ -22,12 +22,6 @@
             <version>2.0.5</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom2-contrib</artifactId>
-            <version>2.0.5</version>
-        </dependency>
-
 
         <!-- Our stuff -->
 
