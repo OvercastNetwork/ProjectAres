@@ -50,7 +50,7 @@ out of the kindness of their golden hearts, and not as an obligation to you.
 # Building
 
 At the moment, we don't have a Maven repository thingy, so you will have to build and
-install several dependencies by hand:
+install several dependencies by hand, i.e. by cloning them and running `mvn install`.
 
 * https://github.com/OvercastNetwork/gson (custom fork)
 * https://github.com/OvercastNetwork/sk89q-command-framework (custom fork)
@@ -60,10 +60,14 @@ install several dependencies by hand:
 * https://github.com/OvercastNetwork/BukkitSettings
 * https://github.com/OvercastNetwork/Channels
 * https://github.com/OvercastNetwork/ChatModerator
+* https://github.com/OvercastNetwork/BungeeCord/chat (install this sub-module first)
 * https://github.com/OvercastNetwork/minecraft-api
 * https://github.com/OvercastNetwork/BungeeCord (custom fork)
 * https://github.com/OvercastNetwork/SportBukkit
 
+Note that BungeeCord-Chat needs to be installed before minecraft-api,
+which needs to be installed before the complete BungeeCord.
+You can do this by running maven from the `chat` directory in BungeeCord.
 
 # Running
 
