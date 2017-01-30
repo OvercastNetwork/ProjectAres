@@ -71,7 +71,7 @@ public class LocalUserDocument implements User {
 
     @Override
     public @Nullable Instant granted_tnt_license_at() {
-        return null;
+        return Instant.EPOCH;
     }
 
     @Override
