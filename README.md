@@ -42,6 +42,7 @@ install several dependencies by hand:
 * https://github.com/OvercastNetwork/raven-minecraft
 * https://github.com/OvercastNetwork/Settings
 * https://github.com/OvercastNetwork/BukkitSettings
+* https://github.com/OvercastNetwork/ChatModerator
 * https://github.com/OvercastNetwork/minecraft-api
 * https://github.com/OvercastNetwork/BungeeCord (custom fork)
 * https://github.com/OvercastNetwork/SportBukkit
@@ -80,22 +81,32 @@ for running a standalone server. The api-ocn plugin is the backend implementatio
 the former Overcast Network.
 
 
-# Development Environment
+# Running
 
-A development environment should have at least one Bungee, Lobby, and PGM server, preferably
-running the same plugins as in production.
+The Bukkit plugins in this repo work only with SportBukkit, not regular CraftBukkit.
 
-Appropriate SportBukkit settings are provided in `bukkit.yml.sample` in this folder. Of particular importance are these:
+Appropriate SportBukkit settings are provided in `bukkit.yml.sample` in this folder.
+Of particular interest are these:
 
 * `settings.bungeecord: true` This is required in order to connect through Bungee
 * `settings.legacy-knockback: true` Emulate knockback mechanics from older versions of Minecraft
 * `settings.water-pushes-tnt: false` Disable water pushing TNT, a newer Minecraft feature that we don't use.
 
-Everything from the Web repo will need to be running as well, and each server will need to be configured through the Servers admin page.
-The config.yml for the API plugin specifies the server ID, which must match the one displayed on the admin page.
+These plugins are required for any SportBukkit server:
 
-The PGM server should be configured to load the entire production map repo.
-This will ensure that PGM code changes don't break any maps, at least not at load-time.
+* raven-bukkit
+* bukkit-settings
+* api-bukkit
+* commons-bukkit
+* Channels
+* chatmoderator (optional)
+
+For a PGM server, you also need these:
+
+* PGM
+* Tourney (optional)
+
+For a Lobby server, you just need the Lobby plugin.
 
 
 # Coding Guidelines
