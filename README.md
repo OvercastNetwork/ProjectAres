@@ -66,13 +66,6 @@ install several dependencies by hand:
 * `Lobby` Main Bukkit plugin on lobby servers
 * `Tourney` Bukkit plugin that extends PGM with tournament-related functionality
 
-OCN plugins not found in this repo:
-
-* [Raven](https://github.com/OvercastNetwork/raven-minecraft) - Sentry error reporting client
-* [BukkitSettings](https://github.com/OvercastNetwork/BukkitSettings) - Framework for player settings i.e. `/get`, `/set`, and `/toggle` commands
-* [Channels](https://github.com/OvercastNetwork/Channels) - Framework used to split up team/observer chat
-* [ChatModerator](https://github.com/OvercastNetwork/ChatModerator) - Chat censorship
-
 Direct dependencies between the Bukkit plugins:
 
 * `API` -> `Raven`
