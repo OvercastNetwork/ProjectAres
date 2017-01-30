@@ -1,0 +1,35 @@
+# Automatic restart
+restart:
+  interval: 1m            # Polling interval
+  # uptime: 12h           # Queue a restart automatically after this much uptime
+  # memory: 2560          # Queue a restart if heap gets this big
+  # defer-timeout: 9h     # Maximum time restart can be delayed after request
+  # kick-limit: 5         # Maximum number of players that can be disconnected to restart
+
+# Nicknames
+nicks:
+  enabled: true
+  overhead-flair: false
+
+# AFK auto-kicker
+afk:
+  # timeout: 1h
+  # warning: 59m30s
+  # interval: 10s
+
+join-messages:
+  enabled: true
+  cross-network: true
+  # realms: []
+  # families: []
+
+reports:
+  enabled: true
+  cooldown: 0s
+  families: []
+  cross-server: true
+
+datadog:
+  enabled: false
+  host: localhost
+  port: 8125

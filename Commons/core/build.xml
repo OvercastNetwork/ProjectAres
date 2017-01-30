@@ -1,0 +1,16 @@
+<project name="commons-core" default="pullTranslations">
+    <description>
+        Build file for the core module of Commons. Currently only used for pulling translations from CrowdIn.
+    </description>
+
+    <target name="pullTranslations" description="Pulls current translations from CrowdIn">
+        <echo message="Downloading translations from CrowdIn..."/>
+        <get src="https://api.crowdin.com/api/project/ocn-plugins/download/all.zip?key=819bb5f0f7d0f5676beb7fba75e77027" dest="src/main/i18n/all.zip"/>
+        <echo message="Removing any existing translations..."/>
+        <delete dir="src/main/i18n/translations"/>
+        <echo message="Decompressing downloaded translations..."/>
+        <unzip src="src/main/i18n/all.zip" dest="src/main/i18n"/>
+        <echo message="Removing archive..."/>
+        <delete file="src/main/i18n/all.zip"/>
+    </target>
+</project>

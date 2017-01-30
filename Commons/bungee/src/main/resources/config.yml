@@ -1,0 +1,19 @@
+# Automatic restart
+restart:
+  interval: 1m            # Polling interval
+  # uptime: 12h           # Queue a restart automatically after this much uptime
+  # memory: 2560          # Queue a restart if heap gets this big
+  # defer-timeout: 9h     # Maximum time restart can be delayed after request
+  # kick-limit: 5         # Maximum number of players that can be disconnected to restart
+  # empty-timeout: 9h     # Maximum time restart can be delayed after new player connections have been blocked
+
+# If false, only servers in the same datacenter will be pulled from the
+# API. This allows production servers to be filtered out in a development
+# environment, where failed DNS lookups of their hostnames can cause
+# massive delays (literally 30s of blocking per server).
+inter-datacenter: true
+
+datadog:
+  enabled: false
+  host: localhost
+  port: 8125

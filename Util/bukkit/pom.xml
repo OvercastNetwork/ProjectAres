@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>util</artifactId>
+        <groupId>tc.oc</groupId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.11-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>util-bukkit</artifactId>
+
+    <dependencies>
+        <!-- Prevent Bukkit from hijacking Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- Our stuff-->
+
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>util-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- SportBukkit -->
+        <!-- (keep this below util-core so it doesn't interfere with lookups in common libraries like Guava) -->
+
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>sportbukkit-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <!-- This dependency is NOT transitive, no clue why -->
+            <groupId>tc.oc</groupId>
+            <artifactId>sportbukkit</artifactId>
+        </dependency>
+
+        <!-- Bukkit plugins/libraries -->
+
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>raven-bukkit</artifactId>
+            <version>1.11-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>command-framework-bukkit</artifactId>
+        </dependency>
+
+
+        <!-- Testing -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.sk89q:command-framework-bukkit</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

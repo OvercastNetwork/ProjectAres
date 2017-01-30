@@ -1,0 +1,6 @@
+name: API
+main: tc.oc.api.bukkit.BukkitApiManifest
+version: ${project.version}-${git.commit.id.abbrev}
+author: Overcast Network
+isolate: true
+depend: [Raven]

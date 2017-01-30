@@ -1,0 +1,52 @@
+name: ${plugin.prefix}
+version: ${project.version}-${git.commit.id.abbrev}
+description: ${description}
+author: Overcast Network
+website: ${url}
+main: ${plugin.mainClass}
+prefix: ${plugin.prefix}
+isolate: true
+depend: [API, BukkitSettings, Channels]
+
+permissions:
+  nick.see-through-all:
+    description: See the real names of all nicked players
+    default: op
+  skin.change:
+    description: Change skins
+    default: false
+  tablist.edit:
+    description: Use the tab list commands
+    default: false
+  chat.admin:
+    description: Allows sending and receiving of admin chat messages.
+    default: false
+    children:
+      chat.admin.send:
+        description: Allows sending of admin chat messages
+      chat.admin.receive:
+        description: Allows receiving of admin chat messages
+  afk.forever:
+    description: Do not kick for inactivity
+  whitelist.edit:
+    description: Use whitelist commands
+  whitelist.bypass:
+    description: Bypass the whitelist when connecting to the server
+  server.visibility:
+    description: Change the public visibility of the local server
+    default: false
+  server.cross-datacenter:
+    description: Connect directly to servers in other datacenters
+    default: false
+  ocn.developer:
+    description: Various developer commands
+    default: false
+  ocn.console:
+    description: Parent for perms that are always granted to console
+    default: false
+    children:
+      - chat.admin
+      - skin.change
+      - tablist.edit
+      - server.visibility
+      - ocn.developer

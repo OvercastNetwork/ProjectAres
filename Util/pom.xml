@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>tc.oc</groupId>
+        <artifactId>ProjectAres</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.11-SNAPSHOT</version>
+        <!-- Don't use $global.version because we want to be able to use this in other projects -->
+    </parent>
+
+    <artifactId>util</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>core</module>
+        <module>bukkit</module>
+        <module>bungee</module>
+    </modules>
+
+    <name>Util</name>
+    <description>
+        Very basic utility code usable by all other modules
+    </description>
+    <inceptionYear>2015</inceptionYear>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

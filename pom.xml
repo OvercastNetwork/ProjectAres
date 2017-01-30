@@ -1,0 +1,268 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <global.version>1.11-SNAPSHOT</global.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <groupId>tc.oc</groupId>
+    <artifactId>ProjectAres</artifactId>
+    <version>1.11-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <scm>
+        <connection>scm:git:git@github.com:OvercastNetwork/ProjectAres</connection>
+        <developerConnection>scm:git:git@github.com:OvercastNetwork/ProjectAres</developerConnection>
+        <url>https://github.com/OvercastNetwork/ProjectAres</url>
+    </scm>
+
+    <modules>
+        <module>Util</module>
+        <module>API</module>
+        <module>Commons</module>
+        <module>PGM</module>
+        <module>Lobby</module>
+        <module>Tourney</module>
+    </modules>
+
+    <!-- Dependency versions are managed here to make sure that all modules get the same version.
+         Without this, some modules may inherit incorrect versions transitively from outside dependencies.
+     -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-assistedinject</artifactId>
+                <version>4.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-grapher</artifactId>
+                <version>4.1.0</version>
+            </dependency>
+            <dependency>
+                <!-- Provided by Bukkit at runtime, versions must match -->
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>17.0</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.3</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.trove4j</groupId>
+                <artifactId>trove4j</artifactId>
+                <version>3.0.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ocpsoft.prettytime</groupId>
+                <artifactId>prettytime</artifactId>
+                <version>3.2.5.Final</version>
+            </dependency>
+            <dependency>
+                <!-- Our fork -->
+                <groupId>tc.oc</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.5-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>3.19.0-GA</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>3.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.15</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom2</artifactId>
+                <version>2.0.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom2-contrib</artifactId>
+                <version>2.0.5</version>
+            </dependency>
+
+            <!-- Logging/Sentry related -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.7</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
+                <version>1.7.7</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kencochrane.raven</groupId>
+                <artifactId>raven</artifactId>
+                <version>5.0</version>
+            </dependency>
+            <dependency>
+                <groupId>net.kencochrane.raven</groupId>
+                <artifactId>raven-log4j2</artifactId>
+                <version>5.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>2.0-rc1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.0-rc1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.datadoghq</groupId>
+                <artifactId>java-dogstatsd-client</artifactId>
+                <version>2.3</version>
+            </dependency>
+
+            <!-- Bukkit/Bungee shared -->
+            <dependency>
+                <groupId>tc.oc</groupId>
+                <artifactId>minecraft-api</artifactId>
+                <version>1.11-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>tc.oc</groupId>
+                <artifactId>bungeecord-chat</artifactId>
+                <version>1.11-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sk89q</groupId>
+                <artifactId>command-framework-core</artifactId>
+                <version>1.9-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>me.anxuiz</groupId>
+                <artifactId>settings</artifactId>
+                <version>1.9-SNAPSHOT</version>
+            </dependency>
+
+
+            <!-- Bukkit -->
+            <dependency>
+                <groupId>tc.oc</groupId>
+                <artifactId>sportbukkit-api</artifactId>
+                <version>1.11.1-R0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>tc.oc</groupId>
+                <artifactId>sportbukkit</artifactId>
+                <version>1.11.1-R0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sk89q</groupId>
+                <artifactId>command-framework-bukkit</artifactId>
+                <version>1.9-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>me.anxuiz</groupId>
+                <artifactId>bukkit-settings</artifactId>
+                <version>1.9-SNAPSHOT</version>
+            </dependency>
+
+
+            <!-- Bungee -->
+            <dependency>
+                <groupId>tc.oc</groupId>
+                <artifactId>bungeecord-api</artifactId>
+                <version>1.11-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sk89q</groupId>
+                <artifactId>command-framework-bungee</artifactId>
+                <version>1.9-SNAPSHOT</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArguments>
+                        <!-- Hack to work around an unsolved compiler error since we upgraded to Java 8 -->
+                        <bootclasspath>${java.home}/lib/rt.jar</bootclasspath>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create-timestamp</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <timestampPropertyName>build.timestamp</timestampPropertyName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <!-- Tests that use the Bukkit runtime will generate log files here -->
+                    <workingDirectory>${basedir}/target/test-server</workingDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

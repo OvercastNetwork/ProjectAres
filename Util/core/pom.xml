@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>util</artifactId>
+        <groupId>tc.oc</groupId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.11-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>util-core</artifactId>
+
+    <!-- Versions for most of these dependencies are managed in the ancestor Plugins project -->
+    <dependencies>
+        <!-- General purpose stuff -->
+
+        <!-- JSR-305 stuff e.g. @Nullable-->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
+
+        <!-- Guice dependency injection framework -->
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-grapher</artifactId>
+        </dependency>
+
+        <!-- Guava utilities -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <!-- Apache Commons utilities -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+
+        <!-- Trove primitive collections -->
+        <dependency>
+            <groupId>net.sf.trove4j</groupId>
+            <artifactId>trove4j</artifactId>
+        </dependency>
+
+        <!-- PrettyTime date/time formatting -->
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+        </dependency>
+
+        <!-- Gson JSON serialization -->
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+        <!-- Javassist bytecode manipulation -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </dependency>
+
+        <!-- CGLib bytecode magic -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+        </dependency>
+
+        <!-- YAML - used for some config related stuff -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Logging/Sentry related -->
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>raven-minecraft-core</artifactId>
+            <version>1.11-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.kencochrane.raven</groupId>
+            <artifactId>raven</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.kencochrane.raven</groupId>
+            <artifactId>raven-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+        </dependency>
+
+
+        <!-- Bukkit/Bungee shared stuff-->
+
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>minecraft-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>bungeecord-chat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q</groupId>
+            <artifactId>command-framework-core</artifactId>
+        </dependency>
+
+
+        <!-- Testing (but we use it in our own testing utils as well) -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>test-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.google.code.findbugs:annotations</include>
+                                    <include>aopalliance:aopalliance</include> <!-- from Guice -->
+                                    <include>com.google.inject.extensions:guice-assistedinject</include>
+                                    <include>com.google.inject.extensions:guice-grapher</include>
+                                    <include>tc.oc:gson</include>
+                                    <include>commons-lang:commons-lang</include>
+                                    <include>commons-collections:commons-collections</include>
+                                    <include>commons-io:commons-io</include>
+                                    <include>net.sf.trove4j:trove4j</include>
+                                    <include>org.ocpsoft.prettytime:prettytime</include>
+                                    <include>org.javassist:javassist</include>
+                                    <include>cglib:cglib</include>
+
+                                    <!-- Raven depends on this and does not shade it, so we have to -->
+                                    <include>com.fasterxml.jackson.core:jackson-core</include>
+
+                                    <include>com.sk89q:command-framework-core</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

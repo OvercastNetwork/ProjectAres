@@ -1,0 +1,118 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>tc.oc</groupId>
+        <artifactId>ProjectAres</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.11-SNAPSHOT</version>
+    </parent>
+
+    <!-- Parent Project Information -->
+    <artifactId>PGM</artifactId>
+    <name>PGM</name>
+    <description>PvP Game Manager (PGM) manages running and instancing multiple PvP maps for Minecraft multiplayer.</description>
+
+    <!-- Dependencies -->
+    <dependencies>
+        <!-- General purpose stuff -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom2</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom2-contrib</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+
+
+        <!-- Our stuff -->
+
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>commons-bukkit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <!-- Bukkit plugins -->
+
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>chatmoderator</artifactId>
+            <version>1.9-SNAPSHOT</version>
+        </dependency>
+
+
+        <!-- Testing -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- Build Settings -->
+    <build>
+        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
+
+        <!-- Resources -->
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.jdom:jdom2</include>
+                                    <include>org.jdom:jdom2-contrib</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Git versioning plugin -->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>

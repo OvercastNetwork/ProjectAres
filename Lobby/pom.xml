@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>tc.oc</groupId>
+        <artifactId>ProjectAres</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>1.11-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Lobby</artifactId>
+    <name>Lobby</name>
+    <url>oc.tc</url>
+    <description>Lobby features</description>
+
+    <!-- Dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>tc.oc</groupId>
+            <artifactId>commons-bukkit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Build Settings -->
+    <build>
+        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
+
+        <!-- Resources -->
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+            </resource>
+        </resources>
+    </build>
+</project>

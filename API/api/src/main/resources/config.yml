@@ -1,0 +1,37 @@
+server:
+  id: 0123456789abcdef01234567    # _id field from the server document (should be 24 hex digits)
+  datacenter: DV                  # datacenter name e.g. "US"
+  box: pro                        # local box name
+  role: LOBBY                     # ServerDoc.Role value
+
+# HTTP client settings
+api:
+  http:
+    base-url: http://localhost:3010
+    threads: 0
+    connect-timeout: 20000
+    read-timeout: 20000
+    retries: 10
+
+# AMQP client settings
+queue:
+  addresses:
+  - localhost
+  username: guest
+  password: guest
+  virtual-host: /
+  connection-timeout: 0
+  network-recovery-interval: 5000
+  threads: 0
+
+# Logging config - you can use this to set the initial level
+# of ANY java.util.logging.Logger in the server process.
+# Replace '.' with '-' in the logger name.
+#
+# "log list" command will show all loggers.
+# "log level <level> <name>" can be used to change levels in-game.
+logging:
+  root:
+    level: INFO
+  tc-oc-api-bukkit-BukkitApi:
+    level: INFO

@@ -1,0 +1,203 @@
+name: PGM
+main: tc.oc.pgm.PGM
+version: ${project.version}-${git.commit.id.abbrev}
+isolate: true
+depend:
+- Commons
+- API
+- BukkitSettings
+- Channels
+softdepend:
+- ChatModerator
+authors:
+- Overcast Network
+
+permissions:
+  # common map commands
+  pgm.maplist:
+    description: Allows access to the /maplist command.
+    default: true
+  pgm.mapinfo:
+    description: Allows access to the /mapinfo command.
+    default: true
+  pgm.rotation.view:
+    description: Allows access to the /rotation command
+    default: true
+  pgm.rotation.list:
+    description: Allows access to the /rotations command
+  pgm.mapnext:
+    description: Allows access to the /mapnext command.
+    default: true
+
+  map.rating.rate:
+    description: Allows players to rate maps
+    default: true
+  map.rating.view.live:
+    description: Allows player to see live ratings
+    default: false
+
+  # common match commands
+  pgm.matchinfo:
+    description: Allows access to the /matchinfo command.
+    default: true
+  pgm.proximity:
+    description: Allows access to the /proximity command
+    default: true
+
+  # join commands
+  pgm.fullserver:
+    description: Allows a player to join a full server.
+  pgm.join:
+    description: Allows a player to join a team.
+    default: true
+  pgm.join.choose:
+    description: Allows a player to join a specific team.
+    children:
+      pgm.join.choose.observing: true
+      pgm.join.choose.participating: true
+  pgm.join.choose.observing:
+    description: Allows a player to join a specific observing team.
+    default: true
+  pgm.join.choose.participating:
+    description: Allows a player to join a specific participating team.
+  pgm.join.force:
+    description: Allows a player to join a team, bypassing all checks.
+
+  # special group permissions
+  pgm.mapmaker:
+    description: Indicates a player who made the currently playing map
+    default: false
+    children:
+      flair.mapmaker: true
+      pgm.join.choose: true
+      pgm.join.force: true
+      map.rating.view.live: true
+
+  # misc gameplay commands
+  pgm.toggleobservers:
+    description: Allows access to the /toggleobservers command.
+    default: true
+  pgm.toggledeathmessages:
+    description: Allows access to the /toggledeathmessages command.
+    default: true
+  pgm.myteam:
+    description: Allows access to the /myteam command.
+    default: true
+
+  # chat
+  pgm.chat:
+    description: Allows access to all PGM chat channels and all of their functions.
+    children:
+      pgm.chat.team: true
+      pgm.chat.all.receive: true
+  pgm.chat.team:
+    description: Allows access to team chat.
+    default: true
+    children:
+      pgm.chat.team.send: true
+      pgm.chat.team.receive: true
+  pgm.chat.team.send:
+    description: Allows a player to send to team chat.
+  pgm.chat.team.receive:
+    description: Allows a player to receive messages from team chat.
+  pgm.chat.all.receive:
+    default: op
+    description: Allows a player to see messages from all teams while observing.
+
+  # administration commands
+  server.restart:
+    description: Allows access to the /restart command to restart the server.
+  server.queuerestart:
+    description: Allows access to the /queuerestart command to queue a restart.
+  server.cancelrestart:
+    description: Allows access to the /cancelrestart command to cancel active or queued restart countdowns.
+  pgm.cycle:
+    description: Allows access to the /cycle command.
+  pgm.start:
+    description: Allows access to the /start command.
+  pgm.end:
+    description: Allows access to the /end command.
+  pgm.next.set:
+    description: Allows access to the /setnext command.
+  pgm.cancel:
+    description: Allows access to the /cancel command.
+  pgm.reload:
+    description: Allows reloading of the PGM configuration
+  pgm.defuse:
+    description: Allows access to defuse tnt using shears while observing.
+
+  # map development
+  pgm.mapdev:
+    description: Allows the player to use map debugging commands.
+    default: false
+    children:
+      pgm.maperrors: true
+      pgm.loadnewmaps: true
+      pgm.updatemap: true
+  pgm.maperrors:
+    description: Allows the player to see map loading errors.
+    default: op
+  pgm.loadnewmaps:
+    description: Allows access to the /loadnewmaps command.
+    default: false
+  pgm.updatemap:
+    description: /updatemap command
+    default: false
+
+  # team commands
+  pgm.team.force:
+    description: Allows the player to force other players onto a team.
+  pgm.team.shuffle:
+    description: Allows the player to shuffle the teams.
+  pgm.team.alias:
+    description: Allows the player to rename teams.
+
+  # poll commands
+  poll.vote:
+    description: Allows the player to vote in polls.
+  poll.kick:
+    description: Allows the player to start a poll to kick another player.
+  poll.kick.exempt:
+    description: Prevents the player from being poll kicked.
+  poll.kick.override:
+    description: Allows the player to poll kick an exempt player.
+  poll.next:
+    description: Allows the player to start a poll to set the next map.
+
+  # rotation editing
+  pgm.rotation.reload:
+    description: Allows access to the /editrotation reload command.
+  pgm.skip:
+    description: Allows modification of the rotation cursor.
+  pgm.rotation.edit:
+    description: Allows the player to edit the rotation.
+    children:
+      pgm.rotation.append:
+        description: Allows the player to append a map to the rotation.
+      pgm.rotation.insert:
+        description: Allows the player to insert a map into the rotation.
+      pgm.rotation.remove:
+        description: Allows the player to remove all of one map from the rotation.
+      pgm.rotation.removeat:
+        description: Allows the player to remove single maps from the rotation.
+
+  # rotation controlling
+  pgm.rotation.set:
+    description: Allows the player to set the current rotation.
+
+  # classes
+  pgm.class:
+    description: Allows the player to access the /class command.
+    default: true
+  pgm.class.select:
+    description: Allows the player to select a class.
+  pgm.class.list:
+    description: Allows the player to list available classes.
+  # class.[family].[name] for access to certain class
+  #     family and name are lowercase with spaces replaced with hyphens
+
+  pgm.timelimit:
+    description: Allows the player to use the /timelimit command
+
+  pgm.destroyable.edit:
+    description: Allows the player to edit the properties of destroyables

@@ -1,0 +1,5 @@
+name: ${plugin.prefix}
+main: ${plugin.mainClass}
+version: ${project.version}-${git.commit.id.abbrev}
+author: Overcast Network
+depends: [API, Raven]

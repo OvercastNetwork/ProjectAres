@@ -1,0 +1,5 @@
+name: API
+main: tc.oc.api.bungee.BungeeApiManifest
+version: ${project.version}-${git.commit.id.abbrev}
+author: Overcast Network
+depends: [Raven]

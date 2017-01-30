@@ -1,0 +1,61 @@
+name: Tourney
+main: net.anxuiz.tourney.Tourney
+version: ${project.version}
+isolate: true
+depend:
+- PGM
+- Commons
+- API
+author: Overcast Network
+
+permissions:
+  tourney.addteam:
+    description: Allows the user to register teams for competition.
+    default: op
+  tourney.removeteam:
+    description: Allows the user to eject teams from competition.
+    default: op
+  tourney.ready:
+    description: Signifies that the user is a "ready-able" user, and allows access to the '/ready' and '/unready' commands.
+    default: op
+  tourney.ready.observer:
+    description: Use the /ready and /unready commands as an observer
+    default: op
+  tourney.invalidate:
+    description: Allows the user to invalidate matches, preventing them from saving to the database.
+    default: op
+  tourney.map.veto:
+    description: Allows the user to veto map criteria (and maps) for their team.
+    default: true
+  tourney.map.beginvote:
+    description: Allows the user to begin a map selection vote.
+    default: op
+  tourney.roster:
+    description: Allows the user to view team rosters.
+    default: true
+  tourney.listteams:
+    description: Allows the user to list tournament participations.
+    default: true
+  tourney.bypass-whitelist:
+    description: Allows the user to bypass the whitelist.
+    default: false
+  tourney.referee:
+    description: Denotes a referee in the tournament.
+    default: false
+    children:
+      tourney.regreferee: true
+  tourney.srreferee:
+    description: Denotes a senior referee in the tournament.
+    default: false
+    children:
+      tourney.regreferee: true
+      tourney.invalidate: true
+  tourney.regreferee:
+    description: Internal permission used as a base referee permission set.
+    default: false
+    children:
+      tourney.addteam: true
+      tourney.removeteam: true
+      tourney.ready: true
+      tourney.ready.observer: true
+      tourney.map.beginvote: true

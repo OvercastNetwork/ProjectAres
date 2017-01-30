@@ -1,0 +1,15 @@
+name: Lobby
+main: tc.oc.lobby.bukkit.Lobby
+version: 0.1
+isolate: true
+depend:
+- BukkitSettings
+- Commons
+- API
+author: Overcast Network
+
+permissions:
+  lobby.restricted.access:
+    default: false
+  lobby.overhead-news:
+    default: true

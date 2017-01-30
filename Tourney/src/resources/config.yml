@@ -1,0 +1,7 @@
+# tournament-id: ...
+max-classification-plays: 3
+max-map-plays: 3
+classification-match-families: []
+map-match-families: []
+better-sprint-allowed: false
+kdm-enabled: false
