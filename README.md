@@ -58,6 +58,7 @@ install several dependencies by hand:
 * https://github.com/OvercastNetwork/raven-minecraft
 * https://github.com/OvercastNetwork/Settings
 * https://github.com/OvercastNetwork/BukkitSettings
+* https://github.com/OvercastNetwork/Channels
 * https://github.com/OvercastNetwork/ChatModerator
 * https://github.com/OvercastNetwork/minecraft-api
 * https://github.com/OvercastNetwork/BungeeCord (custom fork)
