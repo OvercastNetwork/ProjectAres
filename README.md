@@ -36,15 +36,15 @@ is a top development priority, specifically:
 At the moment, we don't have a Maven repository thingy, so you will have to build and
 install several dependencies by hand:
 
-https://github.com/OvercastNetwork/gson (custom fork)
-https://github.com/OvercastNetwork/sk89q-command-framework (custom fork)
-https://github.com/OvercastNetwork/test-util
-https://github.com/OvercastNetwork/raven-minecraft
-https://github.com/OvercastNetwork/Settings
-https://github.com/OvercastNetwork/BukkitSettings
-https://github.com/OvercastNetwork/minecraft-api
-https://github.com/OvercastNetwork/BungeeCord (custom fork)
-https://github.com/OvercastNetwork/SportBukkit
+* https://github.com/OvercastNetwork/gson (custom fork)
+* https://github.com/OvercastNetwork/sk89q-command-framework (custom fork)
+* https://github.com/OvercastNetwork/test-util
+* https://github.com/OvercastNetwork/raven-minecraft
+* https://github.com/OvercastNetwork/Settings
+* https://github.com/OvercastNetwork/BukkitSettings
+* https://github.com/OvercastNetwork/minecraft-api
+* https://github.com/OvercastNetwork/BungeeCord (custom fork)
+* https://github.com/OvercastNetwork/SportBukkit
 
 # Contents
 
