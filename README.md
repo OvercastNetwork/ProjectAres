@@ -17,7 +17,11 @@ GNU Affero General Public License for more details.
 
 A copy of the GNU Affero General Public License is included in the file LICENSE.txt
 
+
 # Status
+
+**It is currently a major pain in the ass to build this and get it running.
+We know this, and will improve the situation in the near future.**
 
 These plugins were converted from an internal project to open source in a rush,
 so they are not yet well adapted for third party use. Improving this adaptation
@@ -29,6 +33,18 @@ is a top development priority, specifically:
 * Expanding standalone functionality
 * Map author username lookup through Mojang API
 * Documentation for third-parties (e.g. "how do I run this thing??")
+
+
+# Getting Help
+
+You *may* find some help on the PGM Discord, in these channels:
+
+[#help](https://discord.gg/wSYAT55) Help with *running* a ProjectAres server
+
+[#contributing](https://discord.gg/6zGDEen) Discussion about *contributing* to ProjectAres
+
+Please keep in mind that this help is provided by volunteers and other users,
+out of the kindness of their golden hearts, and not as an obligation to you.
 
 
 # Building
@@ -46,6 +62,35 @@ install several dependencies by hand:
 * https://github.com/OvercastNetwork/minecraft-api
 * https://github.com/OvercastNetwork/BungeeCord (custom fork)
 * https://github.com/OvercastNetwork/SportBukkit
+
+
+# Running
+
+The Bukkit plugins in this repo work only with SportBukkit, not regular CraftBukkit.
+
+Appropriate SportBukkit settings are provided in `bukkit.yml.sample` in this folder.
+Of particular interest are these:
+
+* `settings.bungeecord: true` This is required in order to connect through Bungee
+* `settings.legacy-knockback: true` Emulate knockback mechanics from older versions of Minecraft
+* `settings.water-pushes-tnt: false` Disable water pushing TNT, a newer Minecraft feature that we don't use.
+
+These plugins are required for any SportBukkit server:
+
+* raven-bukkit
+* bukkit-settings
+* api-bukkit
+* commons-bukkit
+* Channels
+* chatmoderator (optional)
+
+For a PGM server, you also need these:
+
+* PGM
+* Tourney (optional)
+
+For a Lobby server, you just need the Lobby plugin.
+
 
 # Contents
 
@@ -79,34 +124,6 @@ It is split into interface and implementation layers, allowing different backend
 to be used. There is a built-in default backend that implements minimal functionality
 for running a standalone server. The api-ocn plugin is the backend implementation for
 the former Overcast Network.
-
-
-# Running
-
-The Bukkit plugins in this repo work only with SportBukkit, not regular CraftBukkit.
-
-Appropriate SportBukkit settings are provided in `bukkit.yml.sample` in this folder.
-Of particular interest are these:
-
-* `settings.bungeecord: true` This is required in order to connect through Bungee
-* `settings.legacy-knockback: true` Emulate knockback mechanics from older versions of Minecraft
-* `settings.water-pushes-tnt: false` Disable water pushing TNT, a newer Minecraft feature that we don't use.
-
-These plugins are required for any SportBukkit server:
-
-* raven-bukkit
-* bukkit-settings
-* api-bukkit
-* commons-bukkit
-* Channels
-* chatmoderator (optional)
-
-For a PGM server, you also need these:
-
-* PGM
-* Tourney (optional)
-
-For a Lobby server, you just need the Lobby plugin.
 
 
 # Coding Guidelines
