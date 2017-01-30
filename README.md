@@ -30,7 +30,23 @@ is a top development priority, specifically:
 * Map author username lookup through Mojang API
 * Documentation for third-parties (e.g. "how do I run this thing??")
 
-## Contents
+
+# Building
+
+At the moment, we don't have a Maven repository thingy, so you will have to build and
+install several dependencies by hand:
+
+https://github.com/OvercastNetwork/gson (custom fork)
+https://github.com/OvercastNetwork/sk89q-command-framework (custom fork)
+https://github.com/OvercastNetwork/test-util
+https://github.com/OvercastNetwork/raven-minecraft
+https://github.com/OvercastNetwork/Settings
+https://github.com/OvercastNetwork/BukkitSettings
+https://github.com/OvercastNetwork/minecraft-api
+https://github.com/OvercastNetwork/BungeeCord (custom fork)
+https://github.com/OvercastNetwork/SportBukkit
+
+# Contents
 
 * `Util` Utility code library (not a plugin) used by everything
   * `core` Utils independent of Bukkit or Bungee
@@ -70,7 +86,8 @@ to be used. There is a built-in default backend that implements minimal function
 for running a standalone server. The api-ocn plugin is the backend implementation for
 the former Overcast Network.
 
-## Development Environment
+
+# Development Environment
 
 A development environment should have at least one Bungee, Lobby, and PGM server, preferably
 running the same plugins as in production.
@@ -89,40 +106,8 @@ The config.yml for the API plugin specifies the server ID, which must match the 
 The PGM server should be configured to load the entire production map repo.
 This will ensure that PGM code changes don't break any maps, at least not at load-time.
 
-## Production Environment
 
-* Bungee proxies
-  * OCN BungeeCord fork https://github.com/OvercastNetwork/BungeeCord
-  * Commons
-  * API
-
-* All Bukkit servers
-  * SportBukkit https://github.com/OvercastNetwork/SportBukkit
-  * Raven-minecraft https://github.com/OvercastNetwork/raven-minecraft
-  * Commons
-  * API
-  * BukkitSettings
-  * Channels
-  * ChatModerator
-  * CommandBook
-  * NullTerrain (generates empty chunks)
-  * WorldEdit
-  * NoCheatPlus
-
-* Lobbies
-  * Lobby
-
-* Development/practice servers
-  * PGM
-
-* Public match servers
-  * PGM
-
-* Tournament match servers
-  * Tourney
-  * PGM
-
-## Coding Guidelines
+# Coding Guidelines
 
 * General
   * Use your judgment always. Any rule can be broken with a good reason. Don't follow a rule without understanding its purpose.
