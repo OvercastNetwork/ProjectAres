@@ -20,14 +20,10 @@ A copy of the GNU Affero General Public License is included in the file LICENSE.
 
 # Status
 
-**It is currently a major pain in the ass to build this and get it running.
-We know this, and will improve the situation in the near future.**
-
 These plugins were converted from an internal project to open source in a rush,
 so they are not yet well adapted for third party use. Improving this adaptation
 is a top development priority, specifically:
 
-* Build/deployment infrastructure
 * Eliminating dependencies on external plugins (e.g. raven-minecraft)
 * Allowing network features to be fully disabled
 * Expanding standalone functionality
@@ -49,29 +45,22 @@ out of the kindness of their golden hearts, and not as an obligation to you.
 
 # Building
 
-At the moment, we don't have a Maven repository thingy, so you will have to build and
-install several dependencies by hand, i.e. by cloning them and running `mvn install`.
+You will need a recent version of [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+Old JDK versions do have bugs that will prevent the code from compiling.
+You will also need [Maven](http://maven.apache.org).
 
-* https://github.com/OvercastNetwork/gson (custom fork)
-* https://github.com/OvercastNetwork/sk89q-command-framework (custom fork)
-* https://github.com/OvercastNetwork/test-util
-* https://github.com/OvercastNetwork/raven-minecraft
-* https://github.com/OvercastNetwork/Settings
-* https://github.com/OvercastNetwork/BukkitSettings
-* https://github.com/OvercastNetwork/Channels
-* https://github.com/OvercastNetwork/ChatModerator
-* https://github.com/OvercastNetwork/BungeeCord/chat (install this sub-module first)
-* https://github.com/OvercastNetwork/minecraft-api
-* https://github.com/OvercastNetwork/BungeeCord (custom fork)
-* https://github.com/OvercastNetwork/SportBukkit
+To build everything, just run `mvn clean package`.
+This should download all dependencies from our [repository](https://repo.extension.ws) and create several .jar files in the `target` directories of each module.
+If the build fails, please report it in Discord.
 
-Note that BungeeCord-Chat needs to be installed before minecraft-api,
-which needs to be installed before the complete BungeeCord.
-You can do this by running maven from the `chat` directory in BungeeCord.
+You can also download builds from our [Jenkins](https://build.extension.ws) server.
+
 
 # Running
 
-The Bukkit plugins in this repo work only with SportBukkit, not regular CraftBukkit.
+The plugins in this repo work only with [SportBukkit](https://github.com/OvercastNetwork/SportBukkit)
+and our custom fork of [BungeeCord](https://github.com/OvercastNetwork/BungeeCord).
+They will not work with standard CraftBukkit or BungeeCord.
 
 Appropriate SportBukkit settings are provided in `bukkit.yml.sample` in this folder.
 Of particular interest are these:
