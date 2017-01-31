@@ -164,9 +164,8 @@ the former Overcast Network.
   * We use Guice everywhere. You will need to [understand it thoroughly](https://github.com/google/guice/wiki/Motivation).
   * Follow the Guice [best practices](https://github.com/google/guice/wiki/InjectOnlyDirectDependencies) (especially that one).
   * We sometimes use the term "manifest" in place of "module", to avoid confusion with PGM modules.
-  * Using Guice in a Bukkit plugin environment has proven to be [somewhat complex](https://github.com/OvercastNetwork/Plugins/blob/master/Util/core/src/main/java/tc/oc/commons/core/plugin/InjectedPluginLoader.java).
-    You don't have to understand all of that, but there are a few things you should know:
-    * Each plugin has its own [private module](https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/PrivateModule.html)
+  * We make good use of SportBukkit's built-in Guice support:
+    * Each plugin has its own [private environment](https://github.com/OvercastNetwork/minecraft-api/blob/master/src/main/java/tc/oc/inject/ProtectedModule.java)
       in which most of its bindings live.
     * Each plugin instance is bound to `org.bukkit.plugin.Plugin` inside its private module.
     * Anything that indirectly depends on `Plugin` will need to be bound in some plugin's private module.
@@ -174,10 +173,8 @@ the former Overcast Network.
     * Avoid depending on `Plugin` directly. There are specific bindings for most Bukkit service types (e.g. `Configuration`)
       and several interfaces of our own that wrap small parts of the Bukkit API (e.g. `BukkitEventBus`).
     * If you really need a `Plugin`, always inject the base interface, never a specific plugin's class. This makes it easy to move things between plugins.
-    * If the same `@Singleton` type is provisioned in multiple plugins, we will detect it and throw an exception.
-      If you actually want a per-plugin singleton, make it `@PluginScoped`.
-    * `PluginFacet`s are service objects registered with a specific plugin to share its lifecycle callbacks (i.e. enable() and disable()).
-      They are also registered automatically in the appropriate way if they implement various interfaces such as `Listener` (see the javadocs for details).
+    * A `@Singleton` bound in a private environment (e.g. a plugin's private environment) will only be unique within that environment,
+      not the entire process, so be careful not to accidentally duplicate a singleton in multiple private environments.
 * Exceptions
   * Detect errors as early as possible, ideally at server startup. This applies to both user errors and internal assertions.
   * Only catch specific exceptions that you are expecting and can handle thoroughly. Don't hide exceptions that other handlers need to know about.
