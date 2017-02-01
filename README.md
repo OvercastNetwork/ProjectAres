@@ -91,7 +91,12 @@ For tournament support on PGM, you also need:
 
 And for a Lobby server, you just need:
 
-* Lobby (built at `Lobby/target/Lobby-1.11-SNAPSHOT.jar`)
+* Lobby (built at `Lobby/target/Lobby-#-SNAPSHOT.jar`)
+
+For a Bungee proxy, you just need these two:
+
+* api-bukkit (built at `API/bungee/target/api-bungee-#-SNAPSHOT.jar`)
+* commons-bukkit (built at `Commons/bungee/target/commons-bungee-#-SNAPSHOT.jar`)
 
 
 # Contents
