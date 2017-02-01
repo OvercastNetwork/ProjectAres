@@ -190,10 +190,7 @@
                                     <include>org.ocpsoft.prettytime:prettytime</include>
                                     <include>org.javassist:javassist</include>
                                     <include>cglib:cglib</include>
-
-                                    <!-- Raven depends on this and does not shade it, so we have to -->
-                                    <include>com.fasterxml.jackson.core:jackson-core</include>
-
+                                    <include>tc.oc:raven-minecraft-core</include>
                                     <include>com.sk89q:command-framework-core</include>
                                 </includes>
                             </artifactSet>

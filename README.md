@@ -69,21 +69,29 @@ Of particular interest are these:
 * `settings.legacy-knockback: true` Emulate knockback mechanics from older versions of Minecraft
 * `settings.water-pushes-tnt: false` Disable water pushing TNT, a newer Minecraft feature that we don't use.
 
-These plugins are required for any SportBukkit server:
+On any PGM or Lobby server, these external plugins can/must be loaded:
 
-* raven-bukkit
-* bukkit-settings
-* api-bukkit
-* commons-bukkit
-* Channels
-* chatmoderator (optional)
+* [bukkit-settings](https://github.com/OvercastNetwork/BukkitSettings) (required)
+* [Channels](https://github.com/OvercastNetwork/Channels) (required)
+* [raven-bukkit](https://github.com/OvercastNetwork/raven-minecraft) (optional)
+* [ChatModerator](https://github.com/OvercastNetwork/ChatModerator) (optional)
 
-For a PGM server, you also need these:
+As well as these plugins from this repo:
 
-* PGM
-* Tourney (optional)
+* api-bukkit (built at `API/bukkit/target/api-bukkit-#-SNAPSHOT.jar`)
+* commons-bukkit (built at `Commons/bukkit/target/commons-bukkit-#-SNAPSHOT.jar`)
 
-For a Lobby server, you just need the Lobby plugin.
+For a PGM server, you also need:
+
+* PGM (built at `PGM/target/PGM-#-SNAPSHOT.jar`)
+
+For tournament support on PGM, you also need:
+
+* Tourney (built at `Tourney/target/Tourney-#-SNAPSHOT.jar`)
+
+And for a Lobby server, you just need:
+
+* Lobby (built at `Lobby/target/Lobby-1.11-SNAPSHOT.jar`)
 
 
 # Contents

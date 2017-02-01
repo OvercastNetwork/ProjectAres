@@ -16,6 +16,7 @@ import tc.oc.api.minecraft.users.MinecraftUsersManifest;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.inject.Manifest;
 import tc.oc.debug.LeakDetectorManifest;
+import tc.oc.minecraft.logging.RavenApiModule;
 
 public final class MinecraftApiManifest extends HybridManifest {
 
@@ -36,6 +37,8 @@ public final class MinecraftApiManifest extends HybridManifest {
     @Override
     protected void configure() {
         publicBinder().install(new Public());
+
+        install(new RavenApiModule());
 
         install(new LeakDetectorManifest());
         install(new MinecraftLoggingManifest());

@@ -7,9 +7,7 @@ import javax.inject.Named;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
-import tc.oc.bukkit.BukkitVersionInspector;
 import tc.oc.commons.bukkit.bossbar.BossBarFactory;
 import tc.oc.commons.bukkit.bossbar.BossBarFactoryImpl;
 import tc.oc.commons.bukkit.chat.BukkitAudiences;
@@ -19,9 +17,8 @@ import tc.oc.commons.bukkit.permissions.BukkitPermissionRegistry;
 import tc.oc.commons.bukkit.permissions.PermissionRegistry;
 import tc.oc.commons.core.inject.SingletonManifest;
 import tc.oc.commons.core.logging.Loggers;
-import tc.oc.commons.core.server.MinecraftServerManifest;
 import tc.oc.commons.core.plugin.PluginResolver;
-import tc.oc.minecraft.VersionInspector;
+import tc.oc.commons.core.server.MinecraftServerManifest;
 
 public class BukkitServerManifest extends SingletonManifest {
 
@@ -38,10 +35,6 @@ public class BukkitServerManifest extends SingletonManifest {
         bind(tc.oc.commons.bukkit.chat.Audiences.class).to(BukkitAudiences.class);
         bind(PermissionRegistry.class).to(BukkitPermissionRegistry.class);
         bind(BossBarFactory.class).to(BossBarFactoryImpl.class);
-    }
-
-    @Provides VersionInspector versionInspector(Server server) {
-        return new BukkitVersionInspector(server);
     }
 
     @Provides @Named("serverRoot")
