@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -122,15 +123,18 @@ public class MatchTabView extends TabView implements Listener {
             } else {
                 List<MatchPlayer> participants = players.get(Party.Type.Participating);
                 // Minimum rows required by participating players
-                int participantRows = Math.min(availableRows - observerRows, 1 + Numbers.divideRoundingUp(participants.size(), this.getWidth()));
+                int participantRows = Math.min(availableRows - addRowIfAny(observerRows), 1 + Numbers.divideRoundingUp(participants.size(), this.getWidth()));
 
                 // Expand observer rows until all observers are showing
-                observerRows = Math.min(availableRows - participantRows, 1 + Numbers.divideRoundingUp(observingPlayers, this.getWidth()));
+                observerRows = Math.min(availableRows - participantRows, Numbers.divideRoundingUp(observingPlayers, this.getWidth()));
 
                 // Expand participant rows to fill whatever if left
-                participantRows = availableRows - observerRows;
+                participantRows = availableRows - addRowIfAny(observerRows);
 
                 this.renderTeam(participants, getManager().getFreeForAllEntry(match), true, 0, this.getWidth(), 0, participantRows);
+
+                // Render 1 line space before observers
+                if (observerRows > 0) renderBlank(availableRows - observerRows + 1);
             }
 
             if(observerRows > 0) {
@@ -142,6 +146,11 @@ public class MatchTabView extends TabView implements Listener {
         super.render();
     }
     /* --- Render utils --- */
+    // Add a blank row, but only if there is any obs to show
+    private int addRowIfAny(int rows) {
+        return rows <= 0 ? 0 : rows + 1;
+    }
+
     // Render a blank row at y
     private void renderBlank(int y) {
         renderBlank(0, this.getWidth(), y, y + 1);
