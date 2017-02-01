@@ -15,7 +15,12 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
 
-A copy of the GNU Affero General Public License is included in the file LICENSE.txt
+A copy of the GNU Affero General Public License is included in the file LICENSE.txt,
+and can also be found at https://www.gnu.org/licenses/agpl-3.0.en.html
+
+**The AGPL license is quite restrictive, please make sure you understand it.
+If you run a modified version of this software as a network service,
+anyone who can use that service must also have access to the modified source code.**
 
 
 # Status
