@@ -95,8 +95,8 @@ And for a Lobby server, you just need:
 
 For a Bungee proxy, you just need these two:
 
-* api-bukkit (built at `API/bungee/target/api-bungee-#-SNAPSHOT.jar`)
-* commons-bukkit (built at `Commons/bungee/target/commons-bungee-#-SNAPSHOT.jar`)
+* api-bungee (built at `API/bungee/target/api-bungee-#-SNAPSHOT.jar`)
+* commons-bungee (built at `Commons/bungee/target/commons-bungee-#-SNAPSHOT.jar`)
 
 
 # Contents
