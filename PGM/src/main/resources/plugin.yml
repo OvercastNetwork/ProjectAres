@@ -34,7 +34,7 @@ permissions:
     default: true
   map.rating.view.live:
     description: Allows player to see live ratings
-    default: false
+    default: op
 
   # common match commands
   pgm.matchinfo:
@@ -129,7 +129,7 @@ permissions:
   # map development
   pgm.mapdev:
     description: Allows the player to use map debugging commands.
-    default: false
+    default: op
     children:
       pgm.maperrors: true
       pgm.loadnewmaps: true
@@ -139,10 +139,10 @@ permissions:
     default: op
   pgm.loadnewmaps:
     description: Allows access to the /loadnewmaps command.
-    default: false
+    default: op
   pgm.updatemap:
     description: /updatemap command
-    default: false
+    default: op
 
   # team commands
   pgm.team.force:

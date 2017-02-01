@@ -38,21 +38,21 @@ permissions:
     default: true
   tourney.bypass-whitelist:
     description: Allows the user to bypass the whitelist.
-    default: false
+    default: op
   tourney.referee:
     description: Denotes a referee in the tournament.
-    default: false
+    default: op
     children:
       tourney.regreferee: true
   tourney.srreferee:
     description: Denotes a senior referee in the tournament.
-    default: false
+    default: op
     children:
       tourney.regreferee: true
       tourney.invalidate: true
   tourney.regreferee:
     description: Internal permission used as a base referee permission set.
-    default: false
+    default: op
     children:
       tourney.addteam: true
       tourney.removeteam: true

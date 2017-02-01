@@ -14,13 +14,13 @@ permissions:
     default: op
   skin.change:
     description: Change skins
-    default: false
+    default: op
   tablist.edit:
     description: Use the tab list commands
-    default: false
+    default: op
   chat.admin:
     description: Allows sending and receiving of admin chat messages.
-    default: false
+    default: op
     children:
       chat.admin.send:
         description: Allows sending of admin chat messages
@@ -34,13 +34,13 @@ permissions:
     description: Bypass the whitelist when connecting to the server
   server.visibility:
     description: Change the public visibility of the local server
-    default: false
+    default: op
   server.cross-datacenter:
     description: Connect directly to servers in other datacenters
-    default: false
+    default: op
   ocn.developer:
     description: Various developer commands
-    default: false
+    default: op
   ocn.console:
     description: Parent for perms that are always granted to console
     default: false

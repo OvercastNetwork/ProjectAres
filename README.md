@@ -20,14 +20,10 @@ A copy of the GNU Affero General Public License is included in the file LICENSE.
 
 # Status
 
-**It is currently a major pain in the ass to build this and get it running.
-We know this, and will improve the situation in the near future.**
-
 These plugins were converted from an internal project to open source in a rush,
 so they are not yet well adapted for third party use. Improving this adaptation
 is a top development priority, specifically:
 
-* Build/deployment infrastructure
 * Eliminating dependencies on external plugins (e.g. raven-minecraft)
 * Allowing network features to be fully disabled
 * Expanding standalone functionality
@@ -49,24 +45,22 @@ out of the kindness of their golden hearts, and not as an obligation to you.
 
 # Building
 
-At the moment, we don't have a Maven repository thingy, so you will have to build and
-install several dependencies by hand:
+You will need a recent version of [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+Old JDK versions do have bugs that will prevent the code from compiling.
+You will also need [Maven](http://maven.apache.org).
 
-* https://github.com/OvercastNetwork/gson (custom fork)
-* https://github.com/OvercastNetwork/sk89q-command-framework (custom fork)
-* https://github.com/OvercastNetwork/test-util
-* https://github.com/OvercastNetwork/raven-minecraft
-* https://github.com/OvercastNetwork/Settings
-* https://github.com/OvercastNetwork/BukkitSettings
-* https://github.com/OvercastNetwork/ChatModerator
-* https://github.com/OvercastNetwork/minecraft-api
-* https://github.com/OvercastNetwork/BungeeCord (custom fork)
-* https://github.com/OvercastNetwork/SportBukkit
+To build everything, just run `mvn clean package`.
+This should download all dependencies from our [repository](https://repo.extension.ws) and create several .jar files in the `target` directories of each module.
+If the build fails, please report it in Discord.
+
+You can also download builds from our [Jenkins](https://build.extension.ws) server.
 
 
 # Running
 
-The Bukkit plugins in this repo work only with SportBukkit, not regular CraftBukkit.
+The plugins in this repo work only with [SportBukkit](https://github.com/OvercastNetwork/SportBukkit)
+and our custom fork of [BungeeCord](https://github.com/OvercastNetwork/BungeeCord).
+They will not work with standard CraftBukkit or BungeeCord.
 
 Appropriate SportBukkit settings are provided in `bukkit.yml.sample` in this folder.
 Of particular interest are these:
@@ -75,21 +69,34 @@ Of particular interest are these:
 * `settings.legacy-knockback: true` Emulate knockback mechanics from older versions of Minecraft
 * `settings.water-pushes-tnt: false` Disable water pushing TNT, a newer Minecraft feature that we don't use.
 
-These plugins are required for any SportBukkit server:
+On any PGM or Lobby server, these external plugins can/must be loaded:
 
-* raven-bukkit
-* bukkit-settings
-* api-bukkit
-* commons-bukkit
-* Channels
-* chatmoderator (optional)
+* [bukkit-settings](https://github.com/OvercastNetwork/BukkitSettings) (required)
+* [Channels](https://github.com/OvercastNetwork/Channels) (required)
+* [raven-bukkit](https://github.com/OvercastNetwork/raven-minecraft) (optional)
+* [ChatModerator](https://github.com/OvercastNetwork/ChatModerator) (optional)
 
-For a PGM server, you also need these:
+As well as these plugins from this repo:
 
-* PGM
-* Tourney (optional)
+* api-bukkit (built at `API/bukkit/target/api-bukkit-#-SNAPSHOT.jar`)
+* commons-bukkit (built at `Commons/bukkit/target/commons-bukkit-#-SNAPSHOT.jar`)
 
-For a Lobby server, you just need the Lobby plugin.
+For a PGM server, you also need:
+
+* PGM (built at `PGM/target/PGM-#-SNAPSHOT.jar`)
+
+For tournament support on PGM, you also need:
+
+* Tourney (built at `Tourney/target/Tourney-#-SNAPSHOT.jar`)
+
+And for a Lobby server, you just need:
+
+* Lobby (built at `Lobby/target/Lobby-#-SNAPSHOT.jar`)
+
+For a Bungee proxy, you just need these two:
+
+* api-bukkit (built at `API/bungee/target/api-bungee-#-SNAPSHOT.jar`)
+* commons-bukkit (built at `Commons/bungee/target/commons-bungee-#-SNAPSHOT.jar`)
 
 
 # Contents
@@ -159,9 +166,8 @@ the former Overcast Network.
   * We use Guice everywhere. You will need to [understand it thoroughly](https://github.com/google/guice/wiki/Motivation).
   * Follow the Guice [best practices](https://github.com/google/guice/wiki/InjectOnlyDirectDependencies) (especially that one).
   * We sometimes use the term "manifest" in place of "module", to avoid confusion with PGM modules.
-  * Using Guice in a Bukkit plugin environment has proven to be [somewhat complex](https://github.com/OvercastNetwork/Plugins/blob/master/Util/core/src/main/java/tc/oc/commons/core/plugin/InjectedPluginLoader.java).
-    You don't have to understand all of that, but there are a few things you should know:
-    * Each plugin has its own [private module](https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/PrivateModule.html)
+  * We make good use of SportBukkit's built-in Guice support:
+    * Each plugin has its own [private environment](https://github.com/OvercastNetwork/minecraft-api/blob/master/src/main/java/tc/oc/inject/ProtectedModule.java)
       in which most of its bindings live.
     * Each plugin instance is bound to `org.bukkit.plugin.Plugin` inside its private module.
     * Anything that indirectly depends on `Plugin` will need to be bound in some plugin's private module.
@@ -169,10 +175,8 @@ the former Overcast Network.
     * Avoid depending on `Plugin` directly. There are specific bindings for most Bukkit service types (e.g. `Configuration`)
       and several interfaces of our own that wrap small parts of the Bukkit API (e.g. `BukkitEventBus`).
     * If you really need a `Plugin`, always inject the base interface, never a specific plugin's class. This makes it easy to move things between plugins.
-    * If the same `@Singleton` type is provisioned in multiple plugins, we will detect it and throw an exception.
-      If you actually want a per-plugin singleton, make it `@PluginScoped`.
-    * `PluginFacet`s are service objects registered with a specific plugin to share its lifecycle callbacks (i.e. enable() and disable()).
-      They are also registered automatically in the appropriate way if they implement various interfaces such as `Listener` (see the javadocs for details).
+    * A `@Singleton` bound in a private environment (e.g. a plugin's private environment) will only be unique within that environment,
+      not the entire process, so be careful not to accidentally duplicate a singleton in multiple private environments.
 * Exceptions
   * Detect errors as early as possible, ideally at server startup. This applies to both user errors and internal assertions.
   * Only catch specific exceptions that you are expecting and can handle thoroughly. Don't hide exceptions that other handlers need to know about.
