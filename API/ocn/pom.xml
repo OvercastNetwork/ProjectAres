@@ -29,21 +29,5 @@
                 <directory>${basedir}/src/main/resources/</directory>
             </resource>
         </resources>
-
-        <plugins>
-            <!-- Git versioning plugin -->
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>2.1.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
     </build>
 </project>
