@@ -136,7 +136,7 @@ public abstract class CommandUtils {
             return def;
         } else {
             try {
-                return TimeUtils.parseDuration("P" + text);
+                return TimeUtils.parseDuration(text);
             } catch(DateTimeParseException e) {
                 throw new TranslatableCommandException("command.error.invalidTimePeriod", text);
             }
