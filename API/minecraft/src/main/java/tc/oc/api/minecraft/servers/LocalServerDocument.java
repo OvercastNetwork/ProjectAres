@@ -180,17 +180,17 @@ public class LocalServerDocument extends StartupServerDocument implements Server
 
     @Override
     public Map<String, Boolean> participant_permissions() {
-        return Collections.emptyMap();
+        return DefaultPermissions.PARTICIPANT_PERMISSIONS;
     }
 
     @Override
     public Map<String, Boolean> observer_permissions() {
-        return Collections.emptyMap();
+        return DefaultPermissions.OBSERVER_PERMISSIONS;
     }
 
     @Override
     public Map<String, Boolean> mapmaker_permissions() {
-        return Collections.emptyMap();
+        return DefaultPermissions.MAPMAKER_PERMISSIONS;
     }
 
     @Override
