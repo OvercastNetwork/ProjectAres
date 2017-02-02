@@ -11,22 +11,22 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 import tc.oc.api.docs.PlayerId;
+import tc.oc.api.docs.SimplePlayerId;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.util.Permissions;
 import tc.oc.minecraft.api.entity.OfflinePlayer;
 
-public class LocalUserDocument implements User {
+public class LocalUserDocument extends SimplePlayerId implements User {
 
     private final OfflinePlayer player;
 
     public LocalUserDocument(OfflinePlayer player) {
-        this.player = player;
-    }
+        super(player.getUniqueId().toString(),
+              player.getUniqueId().toString(),
+              player.getLastKnownName().orElse(""));
 
-    @Override
-    public String _id() {
-        return player.getUniqueId().toString();
+        this.player = player;
     }
 
     @Override
@@ -37,16 +37,6 @@ public class LocalUserDocument implements User {
     @Override
     public @Nullable String mc_locale() {
         return null;
-    }
-
-    @Override
-    public String player_id() {
-        return _id();
-    }
-
-    @Override
-    public String username() {
-        return player.getLastKnownName().orElse("");
     }
 
     @Override
