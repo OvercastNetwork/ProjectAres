@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import tc.oc.api.annotations.Serialize;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.virtual.Document;
+import tc.oc.minecraft.api.user.UserUtils;
 
 public class UserSearchRequest implements Document {
     @Serialize public final String username;

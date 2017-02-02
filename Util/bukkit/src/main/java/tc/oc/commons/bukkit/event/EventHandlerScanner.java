@@ -68,6 +68,6 @@ public abstract class EventHandlerScanner<Event, HandlerAnnotation extends Annot
     public SetMultimap<EventKey<? extends Event>, Info> findEventHandlers(Class<? extends Listener> listener) {
         return findEventHandlerMethods(listener)
             .map(method -> createHandlerInfo(method, findEventType(method), findAnnotation(method)))
-            .collect(Collectors.toSetMultimap(EventSubscriber::key));
+            .collect(Collectors.toImmutableSetMultimap(EventSubscriber::key));
     }
 }

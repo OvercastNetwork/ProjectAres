@@ -80,7 +80,7 @@ public class CommandFutureCallback<T> extends SystemFutureCallback<T> {
     }
 
     @Override
-    protected void onFailureUnhandled(Throwable e) {
+    protected void handleDefaultFailure(Throwable e) {
         exceptionHandlerFactory.create(audience, command)
                                .handleException(e, this, creationSite);
     }

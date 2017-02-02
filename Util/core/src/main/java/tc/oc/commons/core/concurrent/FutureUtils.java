@@ -15,6 +15,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.Uninterruptibles;
 import tc.oc.commons.core.util.Pair;
+import tc.oc.commons.core.util.ThrowingFunction;
 
 public final class FutureUtils {
     private FutureUtils() {}
@@ -85,15 +86,24 @@ public final class FutureUtils {
     /**
      * Equivalent to {@link Futures#transform}, but can be passed a lambda unambiguously
      */
-    public static <T, R> ListenableFuture<R> mapSync(ListenableFuture<T> in, Function<T, R> op) {
-        return Futures.transform(in, op::apply);
+    public static <T, R> ListenableFuture<R> mapSync(ListenableFuture<T> in, ThrowingFunction<T, R, ?> op) {
+        return mapSync(in, op, MoreExecutors.sameThreadExecutor());
     }
-    public static <T, R> ListenableFuture<R> mapSync(ListenableFuture<T> in, Function<T, R> op, Executor executor) {
-        return Futures.transform(in, op::apply, executor);
+
+    public static <T, R> ListenableFuture<R> mapSync(ListenableFuture<T> in, ThrowingFunction<T, R, ?> op, Executor executor) {
+        return mapAsync(in, out -> {
+            try {
+                return Futures.immediateFuture(op.applyThrows(out));
+            } catch(Throwable ex) {
+                return Futures.immediateFailedFuture(ex);
+            }
+        }, executor);
     }
+
     public static <T, R> ListenableFuture<R> mapAsync(ListenableFuture<T> in, AsyncFunction<T, R> op) {
         return Futures.transform(in, op);
     }
+
     public static <T, R> ListenableFuture<R> mapAsync(ListenableFuture<T> in, AsyncFunction<T, R> op, Executor executor) {
         return Futures.transform(in, op, executor);
     }

@@ -2,6 +2,7 @@ package tc.oc.pgm.map;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ComparisonChain;
@@ -153,8 +154,8 @@ public class MapInfo implements Comparable<MapInfo> {
         return Contributor.filterNamed(this.contributors);
     }
 
-    public Iterable<Contributor> getAllContributors() {
-        return Iterables.concat(authors, contributors);
+    public Stream<Contributor> allContributors() {
+        return Stream.concat(authors.stream(), contributors.stream());
     }
 
     public boolean isAuthor(PlayerId player) {

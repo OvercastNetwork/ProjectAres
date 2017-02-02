@@ -1,6 +1,7 @@
 package tc.oc.commons.core.stream;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -11,14 +12,17 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 import tc.oc.commons.core.random.Entropy;
 import tc.oc.commons.core.random.MutableEntropy;
 import tc.oc.commons.core.util.AmbiguousElementException;
@@ -99,25 +103,21 @@ public final class Collectors {
         };
     }
 
-    public static <T, K, V> Collector<T, ?, ImmutableListMultimap<K, V>> toListMultimap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
-        return new MultimapCollector<>(ImmutableListMultimap::builder, keyMapper, valueMapper);
+    public static <T, K> Collector<T, ?, ImmutableSetMultimap<K, T>> toImmutableSetMultimap(Function<? super T, ? extends K> keyMapper) {
+        return toImmutableSetMultimap(keyMapper, identity());
     }
 
-    public static <T, K> Collector<T, ?, ImmutableSetMultimap<K, T>> toSetMultimap(Function<? super T, ? extends K> keyMapper) {
-        return toSetMultimap(keyMapper, identity());
+    public static <T, K, V> Collector<T, ?, ImmutableSetMultimap<K, V>> toImmutableSetMultimap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
+        return new ImmutableMultimapCollector<>(ImmutableSetMultimap::builder, t -> Stream.of(keyMapper.apply(t)), t -> Stream.of(valueMapper.apply(t)));
     }
 
-    public static <T, K, V> Collector<T, ?, ImmutableSetMultimap<K, V>> toSetMultimap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
-        return new MultimapCollector<>(ImmutableSetMultimap::builder, keyMapper, valueMapper);
-    }
-
-    private static class MultimapCollector<T, K, V, A extends ImmutableMultimap.Builder<K, V>, R extends ImmutableMultimap<K, V>> implements Collector<T, A, R> {
+    private static class ImmutableMultimapCollector<T, K, V, A extends ImmutableMultimap.Builder<K, V>, R extends ImmutableMultimap<K, V>> implements Collector<T, A, R> {
 
         private final Supplier<A> builderSupplier;
-        private final Function<? super T, ? extends K> keyMapper;
-        private final Function<? super T, ? extends V> valueMapper;
+        private final Function<? super T, Stream<? extends K>> keyMapper;
+        private final Function<? super T, Stream<? extends V>> valueMapper;
 
-        private MultimapCollector(Supplier<A> builderSupplier, Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends V> valueMapper) {
+        private ImmutableMultimapCollector(Supplier<A> builderSupplier, Function<? super T, Stream<? extends K>> keyMapper, Function<? super T, Stream<? extends V>> valueMapper) {
             this.builderSupplier = builderSupplier;
             this.keyMapper = keyMapper;
             this.valueMapper = valueMapper;
@@ -131,11 +131,11 @@ public final class Collectors {
         @Override
         public BiConsumer<A, T> accumulator() {
             return (builder, t) -> {
-                final K key = keyMapper.apply(t);
-                final V value = valueMapper.apply(t);
-                if(key != null && value != null) {
-                    builder.put(key, value);
-                }
+                keyMapper.apply(t).forEach(
+                    key -> valueMapper.apply(t).forEach(
+                        value -> builder.put(key, value)
+                    )
+                );
             };
         }
 
@@ -157,6 +157,61 @@ public final class Collectors {
         @Override
         public Set<Characteristics> characteristics() {
             return emptySet();
+        }
+    }
+
+    public static <T, K> Collector<T, ?, SetMultimap<K, T>> indexingByMulti(Function<? super T, Stream<? extends K>> keyMapper) {
+        return new MultimapCollector<>(HashMultimap::create, keyMapper, Stream::of);
+    }
+
+    public static <T, V> Collector<T, ?, SetMultimap<T, V>> mappingToMulti(Function<? super T, Stream<? extends V>> valueMapper) {
+        return new MultimapCollector<>(HashMultimap::create, Stream::of, valueMapper);
+    }
+
+    private static class MultimapCollector<T, K, V, A extends Multimap> implements Collector<T, A, A> {
+
+        private final Supplier<A> multimapSupplier;
+        private final Function<? super T, Stream<? extends K>> keyMapper;
+        private final Function<? super T, Stream<? extends V>> valueMapper;
+
+        private MultimapCollector(Supplier<A> multimapSupplier, Function<? super T, Stream<? extends K>> keyMapper, Function<? super T, Stream<? extends V>> valueMapper) {
+            this.multimapSupplier = multimapSupplier;
+            this.keyMapper = keyMapper;
+            this.valueMapper = valueMapper;
+        }
+
+        @Override
+        public Supplier<A> supplier() {
+            return multimapSupplier;
+        }
+
+        @Override
+        public BiConsumer<A, T> accumulator() {
+            return (multimap, t) -> {
+                keyMapper.apply(t).forEach(
+                    key -> valueMapper.apply(t).forEach(
+                        value -> multimap.put(key, value)
+                    )
+                );
+            };
+        }
+
+        @Override
+        public BinaryOperator<A> combiner() {
+            return (m1, m2) -> {
+                m1.putAll(m2);
+                return m1;
+            };
+        }
+
+        @Override
+        public Function<A, A> finisher() {
+            return Function.identity();
+        }
+
+        @Override
+        public Set<Characteristics> characteristics() {
+            return Collections.singleton(Characteristics.IDENTITY_FINISH);
         }
     }
 

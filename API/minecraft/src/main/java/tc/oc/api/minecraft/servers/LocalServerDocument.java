@@ -17,7 +17,7 @@ import tc.oc.api.docs.virtual.MapDoc;
 import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.config.MinecraftApiConfiguration;
-import tc.oc.minecraft.api.entity.OfflinePlayer;
+import tc.oc.minecraft.api.user.User;
 import tc.oc.minecraft.api.server.LocalServer;
 
 @Singleton
@@ -162,8 +162,8 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     @Override
     public Map<UUID, String> operators() {
         final ImmutableMap.Builder<UUID, String> ops = ImmutableMap.builder();
-        for(OfflinePlayer op : minecraftServer.getOperators()) {
-            ops.put(op.getUniqueId(), op.getLastKnownName().orElse("Player"));
+        for(User op : minecraftServer.getOperators()) {
+            ops.put(op.getUniqueId(), op.name().orElse("Player"));
         }
         return ops.build();
     }

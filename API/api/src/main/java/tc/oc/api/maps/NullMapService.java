@@ -7,6 +7,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import tc.oc.api.docs.MapRating;
 import tc.oc.api.docs.virtual.MapDoc;
+import tc.oc.api.message.types.UpdateMultiResponse;
 import tc.oc.api.model.NullModelService;
 
 public class NullMapService extends NullModelService<MapDoc, MapDoc> implements MapService {
@@ -22,7 +23,10 @@ public class NullMapService extends NullModelService<MapDoc, MapDoc> implements 
     }
 
     @Override
-    public ListenableFuture<MapUpdateMultiResponse> updateMapsAndLookupAuthors(Collection<? extends MapDoc> maps) {
-        return Futures.immediateFuture(new MapUpdateMultiResponse(Collections.emptyMap()));
+    public UpdateMapsResponse updateMaps(Collection<? extends MapDoc> maps) {
+        return new UpdateMapsResponse(
+            Futures.immediateFuture(UpdateMultiResponse.EMPTY),
+            Collections.emptyMap()
+        );
     }
 }

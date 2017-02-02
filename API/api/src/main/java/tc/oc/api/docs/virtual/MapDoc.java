@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -49,6 +50,12 @@ public interface MapDoc extends Model {
 
     Collection<UUID> author_uuids();
     Collection<UUID> contributor_uuids();
+
+    @Serialize(false)
+    default Stream<UUID> authorAndContributorUuids() {
+        return Stream.concat(author_uuids().stream(),
+                             contributor_uuids().stream());
+    }
 
     @Serialize
     interface Team extends Model {

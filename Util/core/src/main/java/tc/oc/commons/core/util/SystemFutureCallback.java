@@ -1,5 +1,7 @@
 package tc.oc.commons.core.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -25,6 +27,7 @@ public class SystemFutureCallback<T> implements FutureCallback<T> {
     protected final StackTrace creationSite;
     private final @Nullable ThrowingConsumer<? super T, ?> successHandler;
     private final ListMultimap<Class<? extends Throwable>, ThrowingConsumer> failureHandlers = ArrayListMultimap.create();
+    private final List<ThrowingRunnable<?>> completionHandlers = new ArrayList<>();
 
     public static <T> SystemFutureCallback<T> onSuccess(ThrowingConsumer<? super T, ?> handler) {
         return new SystemFutureCallback<>(checkNotNull(handler));
@@ -53,6 +56,11 @@ public class SystemFutureCallback<T> implements FutureCallback<T> {
         return this;
     }
 
+    public SystemFutureCallback<T> onCompletion(ThrowingRunnable<Throwable> handler) {
+        completionHandlers.add(handler);
+        return this;
+    }
+
     /**
      * @deprecated use {@link #SystemFutureCallback(ThrowingConsumer)}
      */
@@ -68,16 +76,22 @@ public class SystemFutureCallback<T> implements FutureCallback<T> {
                 onSuccessThrows(result);
             }
         } catch(Throwable e) {
-            onFailure(e);
+            handleFailure(e);
         }
-    }
-
-    protected void onFailureUnhandled(Throwable e) {
-        exceptionHandler.handleException(e, this, creationSite);
+        handleCompletion();
     }
 
     @Override
     public void onFailure(Throwable e) {
+        handleFailure(e);
+        handleCompletion();
+    }
+
+    protected void handleDefaultFailure(Throwable e) {
+        exceptionHandler.handleException(e, this, creationSite);
+    }
+
+    private void handleFailure(Throwable e) {
         boolean handled = false;
         for(Map.Entry<Class<? extends Throwable>, ThrowingConsumer> handler : failureHandlers.entries()) {
             if(handler.getKey().isInstance(e)) {
@@ -85,12 +99,22 @@ public class SystemFutureCallback<T> implements FutureCallback<T> {
                     handler.getValue().acceptThrows(e);
                     handled = true;
                 } catch(Throwable e1) {
-                    onFailureUnhandled(e1);
+                    handleDefaultFailure(e1);
                 }
             }
         }
         if(!handled) {
-            onFailureUnhandled(e);
+            handleDefaultFailure(e);
+        }
+    }
+
+    private void handleCompletion() {
+        for(ThrowingRunnable<?> handler : completionHandlers) {
+            try {
+                handler.runThrows();
+            } catch(Throwable e) {
+                handleFailure(e);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
@@ -25,6 +26,7 @@ public class MapDocument extends AbstractModel implements MapDoc {
     private final InfoModule infoModule;
     private final MapInfo info;
     private final List<MapDoc.Team> teams;
+    private final List<UUID> authors, contributors;
 
     @Inject private MapDocument(MapFolder folder, InfoModule infoModule, MapInfo info, List<TeamFactory> teams) {
         this.folder = folder;
@@ -33,6 +35,16 @@ public class MapDocument extends AbstractModel implements MapDoc {
         this.teams = teams.stream()
                           .map(TeamFactory::getDocument)
                           .collect(toImmutableList());
+
+        this.authors = info.authors.stream()
+                                   .map(Contributor::getUuid)
+                                   .filter(Objects::nonNull)
+                                   .collect(toImmutableList());
+
+        this.contributors = info.contributors.stream()
+                                             .map(Contributor::getUuid)
+                                             .filter(Objects::nonNull)
+                                             .collect(toImmutableList());
     }
 
     @Override
@@ -113,18 +125,12 @@ public class MapDocument extends AbstractModel implements MapDoc {
 
     @Override
     public Collection<UUID> author_uuids() {
-        return info.authors.stream()
-            .map(Contributor::getUuid)
-            .filter(uuid -> uuid != null)
-            .collect(toImmutableList());
+        return authors;
     }
 
     @Override
     public Collection<UUID> contributor_uuids() {
-        return info.contributors.stream()
-            .map(Contributor::getUuid)
-            .filter(uuid -> uuid != null)
-            .collect(toImmutableList());
+        return contributors;
     }
 
 }

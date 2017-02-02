@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import javax.annotation.Nullable;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import tc.oc.api.maps.MapUpdateMultiResponse;
+import tc.oc.api.message.types.UpdateMultiResponse;
 
 public interface MapLibrary {
 
@@ -44,7 +44,7 @@ public interface MapLibrary {
 
     Collection<PGMMap> getDirtyMaps();
 
-    ListenableFuture<MapUpdateMultiResponse> pushAllMaps();
+    ListenableFuture<UpdateMultiResponse> pushAllMaps();
 
-    ListenableFuture<MapUpdateMultiResponse> pushDirtyMaps();
+    ListenableFuture<UpdateMultiResponse> pushDirtyMaps();
 }

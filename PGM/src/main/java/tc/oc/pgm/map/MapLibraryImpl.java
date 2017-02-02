@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -23,12 +24,14 @@ import com.google.common.collect.SetMultimap;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import tc.oc.api.docs.virtual.UserDoc;
+import tc.oc.api.exceptions.NotFound;
 import tc.oc.api.maps.MapService;
-import tc.oc.api.maps.MapUpdateMultiResponse;
-import tc.oc.minecraft.scheduler.SyncExecutor;
+import tc.oc.api.maps.UpdateMapsResponse;
+import tc.oc.api.message.types.UpdateMultiResponse;
 import tc.oc.commons.core.logging.Loggers;
-import tc.oc.commons.core.util.Pair;
+import tc.oc.commons.core.stream.Collectors;
 import tc.oc.commons.core.util.SystemFutureCallback;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 @Singleton
 public class MapLibraryImpl implements MapLibrary {
@@ -173,66 +176,73 @@ public class MapLibraryImpl implements MapLibrary {
     }
 
     @Override
-    public ListenableFuture<MapUpdateMultiResponse> pushAllMaps() {
+    public ListenableFuture<UpdateMultiResponse> pushAllMaps() {
         return pushMaps(getMaps());
     }
 
     @Override
-    public ListenableFuture<MapUpdateMultiResponse> pushDirtyMaps() {
+    public ListenableFuture<UpdateMultiResponse> pushDirtyMaps() {
         return pushMaps(getDirtyMaps());
     }
 
-    private ListenableFuture<MapUpdateMultiResponse> pushMaps(final Collection<PGMMap> maps) {
+    private ListenableFuture<UpdateMultiResponse> pushMaps(final Collection<PGMMap> maps) {
         final Set<PGMMap> pushedMaps = ImmutableSet.copyOf(maps);
-        logger.info("Pushing " + pushedMaps.size() + " maps");
 
-        final SettableFuture<MapUpdateMultiResponse> future = SettableFuture.create();
+        final SetMultimap<UUID, PGMMap> mapsByContributorId = maps.stream().collect(Collectors.indexingByMulti(
+            map -> map.getInfo()
+                      .allContributors()
+                      .map(Contributor::getUuid)
+                      .filter(Objects::nonNull)
+        ));
+
+        logger.info("Pushing " + pushedMaps.size() +
+                    " maps and resolving " + mapsByContributorId.keySet().size() + " contributor names");
+
+        final UpdateMapsResponse response = mapService.updateMaps(
+            Collections2.transform(pushedMaps, PGMMap::getDocument)
+        );
+
+        response.authors().forEach(
+            (uuid, future) -> syncExecutor.callback(
+                future,
+                SystemFutureCallback.<UserDoc.Identity>onSuccess(
+                    user -> {
+                        logger.fine(() -> "Resolved map author " + uuid + " to " + user.username());
+                        mapsByContributorId.removeAll(uuid).forEach(
+                            map -> map.getInfo().allContributors().forEach(contributor -> {
+                                if(uuid.equals(contributor.getUuid())) {
+                                    contributor.setUser(user);
+                                }
+                            })
+                        );
+                    }
+                ).onFailure(NotFound.class, ex ->
+                    mapsByContributorId.removeAll(uuid).forEach(
+                        map -> map.getLogger().severe("Contributor UUID not found: " + uuid)
+                    )
+                ).onCompletion(() -> {
+                    if(mapsByContributorId.isEmpty()) {
+                        logger.info("Finished resolving map contributors");
+                    }
+                })
+            )
+        );
+
+        final SettableFuture<UpdateMultiResponse> future = SettableFuture.create();
         syncExecutor.callback(
-            mapService.updateMapsAndLookupAuthors(Collections2.transform(pushedMaps, PGMMap::getDocument)),
-            new SystemFutureCallback<MapUpdateMultiResponse>() {
-                @Override public void onSuccessThrows(MapUpdateMultiResponse result) throws Exception {
-                    logger.info("Push complete: " + result);
-                    logErrors(result);
-                    pushedMaps.forEach(PGMMap::markPushed);
-                    resolveContributors(pushedMaps, result.users_by_uuid);
-                    future.set(result);
-                }
-
-                @Override
-                public void onFailure(Throwable e) {
-                    super.onFailure(e);
-                    future.setException(e);
-                }
-            }
+            response.maps(),
+            SystemFutureCallback.<UpdateMultiResponse>onSuccess(mapResponse -> {
+                logger.info("Push complete: " + mapResponse);
+                logErrors(mapResponse);
+                pushedMaps.forEach(PGMMap::markPushed);
+                future.set(mapResponse);
+            }).onFailure(Throwable.class, future::setException)
         );
 
         return future;
     }
 
-    private void resolveContributors(Collection<PGMMap> maps, Map<UUID, UserDoc.Identity> usersByUuid) {
-        Set<Pair<PGMMap, Contributor>> missing = new HashSet<>();
-
-        for(PGMMap map : maps) {
-            for(Contributor contributor : map.getInfo().getAllContributors()) {
-                if(contributor.needsLookup()) {
-                    final UserDoc.Identity user = usersByUuid.get(contributor.getUuid());
-                    if(user != null) {
-                        contributor.setUser(user);
-                    } else {
-                        missing.add(Pair.create(map, contributor));
-                    }
-                }
-            }
-        }
-
-        logger.info("Resolved " + usersByUuid.size() + " contributor UUIDs");
-
-        for(Pair<PGMMap, Contributor> pair : missing) {
-            pair.first.getLogger().severe("Contributor UUID not found: " + pair.second.getUuid());
-        }
-    }
-
-    private void logErrors(MapUpdateMultiResponse response) {
+    private void logErrors(UpdateMultiResponse response) {
         for(Map.Entry<String, Map<String, List<String>>> mapEntry : response.errors.entrySet()) {
             final PGMMap map = needMapById(mapEntry.getKey());
             for(Map.Entry<String, List<String>> propEntry : mapEntry.getValue().entrySet()) {

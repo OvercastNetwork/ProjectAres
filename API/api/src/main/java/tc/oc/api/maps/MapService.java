@@ -13,5 +13,8 @@ public interface MapService extends ModelService<MapDoc, MapDoc> {
 
     ListenableFuture<MapRatingsResponse> getRatings(MapRatingsRequest request);
 
-    ListenableFuture<MapUpdateMultiResponse> updateMapsAndLookupAuthors(Collection<? extends MapDoc> maps);
+    /**
+     * Send map updates to the backend, and retrieve data about map contributors.
+     */
+    UpdateMapsResponse updateMaps(Collection<? extends MapDoc> maps);
 }
