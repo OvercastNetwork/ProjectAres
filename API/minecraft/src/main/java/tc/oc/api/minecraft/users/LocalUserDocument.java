@@ -15,6 +15,7 @@ import tc.oc.api.docs.SimplePlayerId;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.util.Permissions;
+import tc.oc.api.util.UUIDs;
 import tc.oc.minecraft.api.entity.OfflinePlayer;
 
 public class LocalUserDocument extends SimplePlayerId implements User {
@@ -22,8 +23,8 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     private final OfflinePlayer player;
 
     public LocalUserDocument(OfflinePlayer player) {
-        super(player.getUniqueId().toString(),
-              player.getUniqueId().toString(),
+        super(UUIDs.normalize(player.getUniqueId()),
+              UUIDs.normalize(player.getUniqueId()),
               player.getLastKnownName().orElse(""));
 
         this.player = player;
