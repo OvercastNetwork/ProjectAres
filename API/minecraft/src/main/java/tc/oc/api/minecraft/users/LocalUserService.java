@@ -29,6 +29,7 @@ import tc.oc.api.users.UserSearchRequest;
 import tc.oc.api.users.UserSearchResponse;
 import tc.oc.api.users.UserService;
 import tc.oc.api.users.UserUpdateResponse;
+import tc.oc.api.util.UUIDs;
 import tc.oc.commons.core.concurrent.FutureUtils;
 import tc.oc.minecraft.api.entity.OfflinePlayer;
 import tc.oc.minecraft.api.server.LocalServer;
@@ -41,7 +42,7 @@ public class LocalUserService extends NullModelService<User, UserDoc.Partial> im
 
     @Override
     public ListenableFuture<User> find(UserId userId) {
-        return Futures.immediateFuture(new LocalUserDocument(minecraftServer.getOfflinePlayer(UUID.fromString(userId.player_id()))));
+        return Futures.immediateFuture(new LocalUserDocument(minecraftServer.getOfflinePlayer(UUIDs.parse(userId.player_id()))));
     }
 
     @Override
