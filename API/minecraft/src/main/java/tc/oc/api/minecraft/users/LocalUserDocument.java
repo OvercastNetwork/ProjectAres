@@ -14,6 +14,7 @@ import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.SimplePlayerId;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.UserDoc;
+import tc.oc.api.minecraft.servers.DefaultPermissions;
 import tc.oc.api.util.Permissions;
 import tc.oc.api.util.UUIDs;
 import tc.oc.minecraft.api.entity.OfflinePlayer;
@@ -90,9 +91,7 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     @Override
     public Map<String, Map<String, Boolean>> mc_permissions_by_realm() {
         return ImmutableMap.of(
-            "global", ImmutableMap.of(
-                Permissions.LOGIN, true
-            )
+            "global", DefaultPermissions.DEFAULT_PERMISSIONS
         );
     }
 

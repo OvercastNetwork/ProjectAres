@@ -12,11 +12,19 @@ import com.google.common.collect.ImmutableMap;
  */
 public class DefaultPermissions {
 
+    public static final Map<String, Boolean> DEFAULT_PERMISSIONS;
     public static final Map<String, Boolean> PARTICIPANT_PERMISSIONS;
     public static final Map<String, Boolean> OBSERVER_PERMISSIONS;
     public static final Map<String, Boolean> MAPMAKER_PERMISSIONS;
 
     static {
+        DEFAULT_PERMISSIONS = new ImmutableMap.Builder<String, Boolean>()
+                // Global
+                .put("ocn.login", true)
+                // Tournament
+                .put("tourney.ready", true)
+                .build();
+
         PARTICIPANT_PERMISSIONS = new ImmutableMap.Builder<String, Boolean>()
                 // Global
                 .put("worldedit.navigation.jumpto.tool", false)
@@ -66,7 +74,6 @@ public class DefaultPermissions {
                 .put("pgm.myteam"                  , true)
                 .put("worldedit.navigation.*"      , true)
                 .build();
-
 
         MAPMAKER_PERMISSIONS = new ImmutableMap.Builder<String, Boolean>()
                 // Public
