@@ -5,16 +5,15 @@ import java.util.UUID;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import tc.oc.api.util.UUIDs;
 
 public class UuidTypeAdapter extends NullableTypeAdapter<UUID> {
     @Override
     protected void writeNonNull(JsonWriter out, UUID value) throws IOException {
-        out.value(UUIDs.normalize(value));
+        out.value(value.toString());
     }
 
     @Override
     protected UUID readNonNull(JsonReader in) throws IOException {
-        return UUIDs.parse(in.nextString());
+        return UUID.fromString(in.nextString());
     }
 }
