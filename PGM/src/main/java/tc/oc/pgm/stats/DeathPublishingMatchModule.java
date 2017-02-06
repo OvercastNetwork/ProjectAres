@@ -10,7 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.time.Duration;
 import java.time.Instant;
-import tc.oc.api.annotations.ApiRequired;
+
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.DeathDoc;
 import tc.oc.api.model.BatchUpdater;
@@ -37,7 +37,6 @@ import tc.oc.pgm.tracker.damage.SpleefInfo;
 import tc.oc.pgm.tracker.damage.TNTInfo;
 import tc.oc.pgm.tracker.damage.TrackerInfo;
 
-@ApiRequired
 @ListenerScope(MatchScope.LOADED)
 public class DeathPublishingMatchModule extends MatchModule implements Listener {
 

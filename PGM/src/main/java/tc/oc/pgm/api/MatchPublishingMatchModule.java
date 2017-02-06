@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import tc.oc.api.annotations.ApiRequired;
 import tc.oc.api.docs.virtual.MapDoc;
 import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.api.docs.virtual.ServerDoc;
@@ -25,7 +24,6 @@ import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchScope;
 import tc.oc.pgm.teams.events.TeamResizeEvent;
 
-@ApiRequired
 @ListenerScope(MatchScope.LOADED)
 public class MatchPublishingMatchModule extends MatchModule implements Listener {
     class Update implements ServerDoc.MatchStatusUpdate {

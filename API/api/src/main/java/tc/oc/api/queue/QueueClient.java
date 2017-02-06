@@ -164,7 +164,7 @@ public class QueueClient implements Connectable {
         }
 
         try {
-            this.channel.basicPublish(exchange.name(),
+            getChannel().basicPublish(exchange.name(),
                                       publish.routingKey(),
                                       publish.mandatory(),
                                       publish.immediate(),
@@ -220,16 +220,22 @@ public class QueueClient implements Connectable {
 
     @Override
     public void connect() throws IOException {
-        // create connection and channel
-        logger.info("Connecting to AMQP API at " + Joiners.onCommaSpace.join(config.getAddresses()));
-        this.connection = this.createConnectionFactory().newConnection(this.config.getAddresses().toArray(new Address[0]));
-        this.channel = this.connection.createChannel();
+        if(config.getAddresses().isEmpty()) {
+            logger.warning("Skipping AMQP connection because no addresses are configured");
+        } else {
+            logger.info("Connecting to AMQP API at " + Joiners.onCommaSpace.join(config.getAddresses()));
+            this.connection = this.createConnectionFactory().newConnection(this.config.getAddresses().toArray(new Address[0]));
+            this.channel = this.connection.createChannel();
+        }
     }
 
     @Override
     public void disconnect() throws IOException {
         ExecutorUtils.shutdownImpatiently(executorService, logger, SHUTDOWN_TIMEOUT);
-        this.channel.close();
-        this.connection.close();
+
+        if(channel != null) {
+            channel.close();
+            connection.close();
+        }
     }
 }

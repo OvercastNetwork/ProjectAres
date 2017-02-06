@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import java.time.Instant;
-import tc.oc.api.annotations.ApiRequired;
+
 import tc.oc.api.docs.Objective;
 import tc.oc.api.docs.Server;
 import tc.oc.api.model.IdFactory;
@@ -27,7 +27,6 @@ import tc.oc.pgm.wool.PlayerWoolPlaceEvent;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-@ApiRequired
 @ListenerScope(MatchScope.LOADED)
 public class ObjectivePublishingMatchModule extends MatchModule implements Listener {
 

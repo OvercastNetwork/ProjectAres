@@ -2,16 +2,21 @@ package tc.oc.api.connectable;
 
 import java.io.IOException;
 
+import com.google.inject.binder.ScopedBindingBuilder;
 import tc.oc.minecraft.api.event.Activatable;
-import tc.oc.commons.core.plugin.PluginFacet;
 
 /**
- * Service that needs to be connected and disconnected along with the API.
+ * Service that needs to be connected and disconnected along with the API
  *
- * Use a {@link ConnectableBinder} to register these.
+ * Registration happens automatically the first time any {@link Connectable}
+ * instance is provisioned through Guice. If this happens before or during
+ * the connection process, the instance will be connected in the same order
+ * that it was provisioned, with respect to other {@link Connectable}s.
  *
- * TODO: This should probably extend {@link PluginFacet},
- * but to do that, API needs to be able to find the services bound in other plugins.
+ * If a new {@link Connectable} instance is provisioned after the connection
+ * phase is complete, an exception is thrown. To ensure that a {@link Connectable}
+ * is provisioned in time to be connected, it is usually scoped with
+ * {@link ScopedBindingBuilder#asEagerSingleton()}
  */
 public interface Connectable extends Activatable {
     default void connect() throws IOException {};

@@ -1,6 +1,10 @@
 package tc.oc.api.connectable;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.IdentityHashMap;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -8,26 +12,34 @@ import javax.inject.Singleton;
 
 import tc.oc.commons.core.exception.ExceptionHandler;
 import tc.oc.commons.core.logging.Loggers;
-import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.ExceptionUtils;
+import tc.oc.minecraft.api.event.Enableable;
 
 import static com.google.common.base.Preconditions.checkState;
-import static tc.oc.commons.core.IterableUtils.reverseForEach;
-import static tc.oc.commons.core.exception.LambdaExceptionUtils.rethrowConsumer;
 
 @Singleton
-public class Connector implements PluginFacet {
+class Connector implements Enableable {
 
     protected final Logger logger;
     private final ExceptionHandler exceptionHandler;
-    private final Set<Connectable> services;
-    private boolean connected;
+    private final Set<Connectable> registered = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Deque<Connectable> pending = new LinkedList<>();
+    private final Deque<Connectable> connected = new LinkedList<>();
+    private boolean finishedConnecting;
 
-    @Inject
-    Connector(Loggers loggers, ExceptionHandler exceptionHandler, Set<Connectable> services) {
+    @Inject Connector(Loggers loggers, ExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
-        this.services = services;
         this.logger = loggers.get(getClass());
+    }
+
+    void register(Connectable connectable) {
+        if(registered.add(connectable)) {
+            if(finishedConnecting) {
+                throw new IllegalStateException("Tried to provision a " + Connectable.class.getSimpleName() +
+                                                " when already connected");
+            }
+            pending.add(connectable);
+        }
     }
 
     private void connect(Connectable service) throws IOException {
@@ -44,23 +56,25 @@ public class Connector implements PluginFacet {
         }
     }
 
-    public boolean isConnected() {
-        return connected;
-    }
-
     @Override
     public void enable() {
-        checkState(!connected, "already connected");
-        connected = true;
+        checkState(!finishedConnecting, "already connected");
         logger.fine(() -> "Connecting all services");
-        ExceptionUtils.propagate(() -> services.forEach(rethrowConsumer(this::connect)));
+        for(;;) {
+            final Connectable connectable = pending.poll();
+            if(connectable == null) break;
+            ExceptionUtils.propagate(() -> connect(connectable));
+            connected.push(connectable);
+        }
+        finishedConnecting = true;
     }
 
     @Override
     public void disable() {
-        checkState(connected, "not connected");
-        connected = false;
+        checkState(finishedConnecting, "not connected");
         logger.fine(() -> "Disconnecting all services");
-        reverseForEach(services, service -> exceptionHandler.run(() -> disconnect(service)));
+        while(!connected.isEmpty()) {
+            exceptionHandler.run(() -> disconnect(connected.pop()));
+        }
     }
 }

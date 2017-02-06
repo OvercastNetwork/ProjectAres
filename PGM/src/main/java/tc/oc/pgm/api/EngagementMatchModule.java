@@ -19,7 +19,6 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import tc.oc.api.annotations.ApiRequired;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.virtual.EngagementDoc;
@@ -54,7 +53,6 @@ import tc.oc.pgm.victory.VictoryMatchModule;
 /**
  * Responsible for creating/updating {@link EngagementDoc}s.
  */
-@ApiRequired
 @ListenerScope(MatchScope.LOADED)
 public class EngagementMatchModule extends MatchModule implements Listener {
 

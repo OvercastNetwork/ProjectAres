@@ -7,8 +7,6 @@ import javax.inject.Provider;
 
 import com.google.inject.TypeLiteral;
 import org.bukkit.event.Listener;
-import tc.oc.api.connectable.Connector;
-import tc.oc.api.annotations.ApiRequired;
 import tc.oc.commons.core.reflect.Types;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
@@ -27,15 +25,12 @@ import tc.oc.pgm.module.ModuleManifest;
  */
 public abstract class MatchModuleManifest<M extends MatchModule> extends ModuleManifest<MatchModule, MatchScoped, MatchModuleContext, M> {
 
-    protected final boolean apiRequired;
-
     protected MatchModuleManifest() {
         this(null);
     }
 
     protected MatchModuleManifest(@Nullable TypeLiteral<M> type) {
         super(type);
-        this.apiRequired = rawType.isAnnotationPresent(ApiRequired.class);
     }
 
     @Override
@@ -49,13 +44,9 @@ public abstract class MatchModuleManifest<M extends MatchModule> extends ModuleM
     }
 
     @Inject protected Provider<Match> matchProvider;
-    @Inject private Connector connector;
 
     @Override
     protected final Optional<M> provisionModuleWithoutDependencies() throws ModuleLoadException {
-        if(apiRequired && !connector.isConnected()) {
-            return Optional.empty();
-        }
         return provisionModuleWithoutFiltering()
             .filter(MatchModule::shouldLoad);
     }

@@ -2,7 +2,6 @@ package tc.oc.api.minecraft;
 
 import com.google.inject.Provides;
 import tc.oc.api.config.ApiConfiguration;
-import tc.oc.api.connectable.ConnectableBinder;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.config.MinecraftApiConfiguration;
@@ -24,9 +23,6 @@ public final class MinecraftApiManifest extends HybridManifest {
         @Override
         protected void configure() {
             bind(ServerDoc.Identity.class).to(Server.class);
-
-            new ConnectableBinder(binder())
-                .addBinding().to(MinecraftServiceImpl.class);
         }
 
         @Provides Server localServer(MinecraftService minecraftService) {
@@ -53,6 +49,6 @@ public final class MinecraftApiManifest extends HybridManifest {
         bindAndExpose(MinecraftApiConfiguration.class).to(MinecraftApiConfigurationImpl.class);
 
         bindAndExpose(MinecraftService.class).to(MinecraftServiceImpl.class);
-        bindAndExpose(MinecraftServiceImpl.class); // Needs to be exposed so it can be registered as a connectable service
+        bind(MinecraftServiceImpl.class).asEagerSingleton();
     }
 }

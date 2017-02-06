@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import javax.inject.Inject;
 
 import com.google.inject.Binder;
 import com.google.inject.Binding;
@@ -21,6 +22,8 @@ import com.google.inject.spi.Elements;
 import com.google.inject.spi.ProvisionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
+import tc.oc.commons.core.reflect.ResolvableType;
+import tc.oc.commons.core.reflect.TypeArgument;
 import tc.oc.commons.core.reflect.TypeParameter;
 import tc.oc.commons.core.reflect.TypeResolver;
 import tc.oc.commons.core.reflect.Types;
@@ -160,6 +163,18 @@ public interface Binders extends ForwardingBinder {
     default <T> UnaryOperator<T> membersInjector(Class<T> type) {
         return membersInjector(TypeLiteral.get(type));
     }
+
+    class EagerProvisioner<T> {
+        @Inject EagerProvisioner(T t) {}
+    }
+
+    default <T> void provisionEagerly(Key<T> key) {
+        bind(key.ofType(new ResolvableType<EagerProvisioner<T>>(){}.with(new TypeArgument<T>(key.getTypeLiteral()){})))
+            .asEagerSingleton();
+    }
+
+    default <T> void provisionEagerly(TypeLiteral<T> type) { provisionEagerly(Key.get(type)); }
+    default <T> void provisionEagerly(Class<T> type) { provisionEagerly(Key.get(type)); }
 
     @Override
     default Binders withSource(Object source) {

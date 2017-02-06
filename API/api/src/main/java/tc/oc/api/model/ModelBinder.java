@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Set;
 import javax.inject.Singleton;
 
-import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
@@ -12,8 +11,8 @@ import com.google.inject.multibindings.Multibinder;
 import com.google.inject.multibindings.OptionalBinder;
 import tc.oc.api.docs.virtual.Model;
 import tc.oc.api.docs.virtual.PartialModel;
-import tc.oc.api.connectable.ConnectableBinder;
 import tc.oc.api.queue.QueueQueryService;
+import tc.oc.commons.core.inject.Binders;
 import tc.oc.commons.core.inject.KeyedManifest;
 import tc.oc.commons.core.inject.SingletonManifest;
 import tc.oc.commons.core.reflect.ResolvableType;
@@ -29,7 +28,7 @@ public class ModelBinder<M extends Model, P extends PartialModel> implements Mod
 
     private final TypeLiteral<M> M;
     private final TypeLiteral<P> P;
-    private final Binder binder;
+    private final Binders binder;
     private final Multibinder<ModelMeta> metas;
     private final OptionalBinder<QueryService<M>> queryServiceBinder;
     private final OptionalBinder<UpdateService<P>> updateServiceBinder;
@@ -53,7 +52,7 @@ public class ModelBinder<M extends Model, P extends PartialModel> implements Mod
     }
 
     private ModelBinder(ProtectedBinder protectedBinder, TypeLiteral<M> M, TypeLiteral<P> P) {
-        this.binder = protectedBinder.publicBinder();
+        this.binder = Binders.wrap(protectedBinder.publicBinder());
         this.M = M;
         this.P = P;
 
@@ -68,7 +67,7 @@ public class ModelBinder<M extends Model, P extends PartialModel> implements Mod
     }
 
     public LinkedBindingBuilder<ModelStore<M>> bindStore() {
-        new ConnectableBinder(binder).addBinding().to(ModelStore(M));
+        binder.provisionEagerly(ModelStore(M));
         new SuspendableBinder(binder).addBinding().to(ModelStore(M));
         return storeBinder.setBinding();
     }

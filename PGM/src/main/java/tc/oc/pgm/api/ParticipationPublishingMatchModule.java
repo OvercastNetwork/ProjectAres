@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import java.time.Instant;
-import tc.oc.api.annotations.ApiRequired;
+
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.Participation;
 import tc.oc.api.docs.Server;
@@ -26,7 +26,6 @@ import tc.oc.pgm.match.MatchScope;
 import tc.oc.pgm.match.Party;
 import tc.oc.pgm.teams.Team;
 
-@ApiRequired
 @ListenerScope(MatchScope.LOADED)
 public class ParticipationPublishingMatchModule extends MatchModule implements Listener {
 
