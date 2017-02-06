@@ -3,7 +3,6 @@ package tc.oc.api.connectable;
 import java.io.IOException;
 
 import com.google.inject.binder.ScopedBindingBuilder;
-import tc.oc.minecraft.api.event.Activatable;
 
 /**
  * Service that needs to be connected and disconnected along with the API
@@ -18,7 +17,7 @@ import tc.oc.minecraft.api.event.Activatable;
  * is provisioned in time to be connected, it is usually scoped with
  * {@link ScopedBindingBuilder#asEagerSingleton()}
  */
-public interface Connectable extends Activatable {
+public interface Connectable {
     default void connect() throws IOException {};
     default void disconnect() throws IOException {};
 }

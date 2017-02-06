@@ -6,6 +6,7 @@ import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.config.MinecraftApiConfiguration;
 import tc.oc.api.minecraft.config.MinecraftApiConfigurationImpl;
+import tc.oc.api.minecraft.connectable.ConnectablesManifest;
 import tc.oc.api.minecraft.logging.MinecraftLoggingManifest;
 import tc.oc.api.minecraft.maps.MinecraftMapsManifest;
 import tc.oc.api.minecraft.model.MinecraftModelsManifest;
@@ -38,6 +39,7 @@ public final class MinecraftApiManifest extends HybridManifest {
 
         install(new LeakDetectorManifest());
         install(new MinecraftLoggingManifest());
+        install(new ConnectablesManifest());
         install(new MinecraftModelsManifest());
 
         install(new MinecraftServersManifest());

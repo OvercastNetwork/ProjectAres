@@ -1,7 +1,8 @@
-package tc.oc.api.connectable;
+package tc.oc.api.minecraft.connectable;
 
 import javax.inject.Provider;
 
+import tc.oc.api.connectable.Connectable;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.minecraft.api.event.ListenerBinder;
 

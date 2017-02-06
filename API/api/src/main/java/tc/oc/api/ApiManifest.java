@@ -1,6 +1,5 @@
 package tc.oc.api;
 
-import tc.oc.api.connectable.ConnectablesManifest;
 import tc.oc.api.document.DocumentsManifest;
 import tc.oc.api.engagement.EngagementModelManifest;
 import tc.oc.api.games.GameModelManifest;
@@ -30,7 +29,6 @@ public final class ApiManifest extends HybridManifest {
         install(new DocumentsManifest());
         install(new MessagesManifest());
         install(new ModelsManifest());
-        install(new ConnectablesManifest());
 
         install(new ServerModelManifest());
         install(new UserModelManifest());

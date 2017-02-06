@@ -1,6 +1,5 @@
-package tc.oc.api.connectable;
+package tc.oc.api.minecraft.connectable;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.IdentityHashMap;
@@ -10,6 +9,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import tc.oc.api.connectable.Connectable;
 import tc.oc.commons.core.exception.ExceptionHandler;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.commons.core.util.ExceptionUtils;
@@ -42,20 +42,6 @@ class Connector implements Enableable {
         }
     }
 
-    private void connect(Connectable service) throws IOException {
-        if(service.isActive()) {
-            logger.fine(() -> "Connecting " + service.getClass().getName());
-            service.connect();
-        }
-    }
-
-    private void disconnect(Connectable service) throws IOException {
-        if(service.isActive()) {
-            logger.fine(() -> "Disconnecting " + service.getClass().getName());
-            service.disconnect();
-        }
-    }
-
     @Override
     public void enable() {
         checkState(!finishedConnecting, "already connected");
@@ -63,7 +49,9 @@ class Connector implements Enableable {
         for(;;) {
             final Connectable connectable = pending.poll();
             if(connectable == null) break;
-            ExceptionUtils.propagate(() -> connect(connectable));
+
+            logger.fine(() -> "Connecting " + connectable.getClass().getName());
+            ExceptionUtils.propagate(connectable::connect);
             connected.push(connectable);
         }
         finishedConnecting = true;
@@ -74,7 +62,9 @@ class Connector implements Enableable {
         checkState(finishedConnecting, "not connected");
         logger.fine(() -> "Disconnecting all services");
         while(!connected.isEmpty()) {
-            exceptionHandler.run(() -> disconnect(connected.pop()));
+            final Connectable connectable = connected.pop();
+            logger.fine(() -> "Disconnecting " + connectable.getClass().getName());
+            exceptionHandler.run(connectable::disconnect);
         }
     }
 }
