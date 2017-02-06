@@ -2,4 +2,5 @@ name: API-OCN
 main: tc.oc.api.ocn.OCNApiManifest
 version: ${project.version}-${git.commit.id.abbrev}
 author: Overcast Network
+isolate: true
 depends: [API]
