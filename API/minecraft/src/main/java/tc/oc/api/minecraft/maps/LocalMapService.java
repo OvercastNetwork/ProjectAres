@@ -17,7 +17,6 @@ import tc.oc.api.message.types.UpdateMultiResponse;
 import tc.oc.api.minecraft.users.UserStore;
 import tc.oc.api.model.NullModelService;
 import tc.oc.api.users.UserService;
-import tc.oc.api.util.UUIDs;
 import tc.oc.commons.core.stream.Collectors;
 import tc.oc.minecraft.api.entity.Player;
 
@@ -44,7 +43,7 @@ public class LocalMapService extends NullModelService<MapDoc, MapDoc> implements
             maps.stream()
                 .flatMap(MapDoc::authorAndContributorUuids)
                 .distinct()
-                .collect(Collectors.mappingTo(uuid -> (ListenableFuture) userService.find(() -> UUIDs.normalize(uuid))))
+                .collect(Collectors.mappingTo(uuid -> (ListenableFuture) userService.find(uuid::toString)))
         );
     }
 }
