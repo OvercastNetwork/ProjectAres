@@ -19,6 +19,7 @@ import tc.oc.pgm.freeze.FreezeListener;
 import tc.oc.pgm.listeners.BlockTransformListener;
 import tc.oc.pgm.listeners.MatchAnnouncer;
 import tc.oc.pgm.listeners.PGMListener;
+import tc.oc.pgm.listing.ListingManifest;
 import tc.oc.pgm.map.MapLibrary;
 import tc.oc.pgm.map.MapLibraryImpl;
 import tc.oc.pgm.map.MapLoader;
@@ -55,6 +56,8 @@ public final class PGMManifest extends HybridManifest {
 
         install(new MatchPlayerEventRouter.Manifest());
         install(new MatchAnalyticsManifest());
+
+        install(new ListingManifest());
 
         bind(MatchManager.class);
         bind(MatchLoader.class);

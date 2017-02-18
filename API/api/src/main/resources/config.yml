@@ -33,5 +33,3 @@ queue:
 logging:
   root:
     level: INFO
-  tc-oc-api-bukkit-BukkitApi:
-    level: INFO

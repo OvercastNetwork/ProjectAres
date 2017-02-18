@@ -9,14 +9,18 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 import javax.annotation.Nullable;
 
+import tc.oc.commons.core.util.Lazy;
 import tc.oc.commons.core.util.Utils;
+import tc.oc.image.ImageUtils;
 
 public class MapFolder {
 
     public static final String MAP_DESCRIPTION_FILE_NAME = "map.xml";
-    public static final String THUMBNAIL_FILE_NAME = "map.png";
+    public static final String IMAGE_FILE_NAME = "map.png";
+    public static final int THUMBNAIL_HEIGHT = 64;
 
     public static boolean isMapFolder(Path path) {
         return Files.isDirectory(path) && Files.isRegularFile(path.resolve(MAP_DESCRIPTION_FILE_NAME));
@@ -24,7 +28,17 @@ public class MapFolder {
 
     private final MapSource source;
     private final Path path;
-    private Collection<String> thumbnails;
+
+    private final Lazy<Collection<Path>> images = Lazy.from(() -> {
+        final Path path = getAbsolutePath().resolve(IMAGE_FILE_NAME);
+        return Files.isRegularFile(path)? Collections.singleton(path)
+                                        : Collections.emptySet();
+    });
+
+    private final Lazy<Optional<String>> thumbnailUri = Lazy.from(
+        () -> getImages().stream().findAny()
+                         .map(path -> ImageUtils.thumbnailUri(path, THUMBNAIL_HEIGHT))
+    );
 
     public MapFolder(MapSource source, Path path) {
         this.source = source;
@@ -111,14 +125,11 @@ public class MapFolder {
         return getRelativeUrl(getRelativeDescriptionFilePath());
     }
 
-    public Collection<String> getThumbnails() {
-        if(thumbnails == null) {
-            if(Files.isRegularFile(getAbsolutePath().resolve(THUMBNAIL_FILE_NAME))) {
-                thumbnails = Collections.singleton(THUMBNAIL_FILE_NAME);
-            } else {
-                thumbnails = Collections.emptySet();
-            }
-        }
-        return thumbnails;
+    public Optional<String> getThumbnailUri() {
+        return thumbnailUri.get();
+    }
+
+    public Collection<Path> getImages() {
+        return images.get();
     }
 }

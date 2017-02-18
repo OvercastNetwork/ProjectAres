@@ -10,6 +10,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
+import com.google.common.collect.Collections2;
 import tc.oc.api.docs.AbstractModel;
 import tc.oc.api.docs.SemanticVersion;
 import tc.oc.api.docs.virtual.MapDoc;
@@ -105,7 +106,7 @@ public class MapDocument extends AbstractModel implements MapDoc {
 
     @Override
     public Collection<String> images() {
-        return folder.getThumbnails();
+        return Collections2.transform(folder.getImages(), path -> path.getFileName().toString());
     }
 
     @Override

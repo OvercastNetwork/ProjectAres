@@ -1,5 +1,7 @@
 package tc.oc.commons.core.configuration;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.time.Duration;
 import tc.oc.commons.core.util.Predicates;
 import tc.oc.commons.core.util.TimeUtils;
 import tc.oc.minecraft.api.configuration.ConfigurationSection;
+import tc.oc.minecraft.api.configuration.InvalidConfigurationException;
 
 public final class ConfigUtils {
     private ConfigUtils() {}
@@ -48,6 +51,26 @@ public final class ConfigUtils {
 
     public static @Nullable Duration getDuration(ConfigurationSection section, String path) {
         return getDuration(section, path, null);
+    }
+
+    public static URL needUrl(ConfigurationSection section, String path) {
+        return parseUrl(section, path, section.needString(path), null);
+    }
+
+    public static @Nullable URL getUrl(ConfigurationSection section, String path) {
+        return getUrl(section, path, null);
+    }
+
+    public static URL getUrl(ConfigurationSection section, String path, URL def) {
+        return parseUrl(section, path, section.getString(path), def);
+    }
+
+    private static URL parseUrl(ConfigurationSection section, String path, @Nullable String value, URL def) {
+        try {
+            return value == null ? def : new URL(value);
+        } catch(MalformedURLException e) {
+            throw new InvalidConfigurationException(section, path, e.getMessage());
+        }
     }
 
     private static void buildDeepMap(Map<String, Object> map, ConfigurationSection section, String prefix) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -62,6 +63,10 @@ public class MapDefinition {
 
     public MapFolder getFolder() {
         return folder;
+    }
+
+    public Optional<String> getThumbnailUri() {
+        return getFolder().getThumbnailUri();
     }
 
     public String getDottedPath() {

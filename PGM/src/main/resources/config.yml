@@ -59,6 +59,21 @@
 # If false, PGM will load its classes but not enable itself
 enabled: true
 
+# Public PGM listing service
+# --------------------------
+# If announce is enabled, and this server is running the PGM plugin,
+# the listing service will be notified whenever this server starts up
+# or shuts down. If the server is reachable at the announced address,
+# it will be included in the public list.
+#
+# WARNING: Enabling this will publish your IP address to the world,
+# unless you set server-host to something else.
+announce:
+  enabled: false                  # Announce this server?
+  # server-port: 25565            # Public port - defaults to whatever port is bound at startup
+  # server-host: myserver.com     # Public hostname or IP - if not set, the listing service will use
+                                  # the IP address that the announcement originates from
+
 # Variables accessible by the XML pre-processor
 environment:
   ranked: false

@@ -7,7 +7,7 @@ public class HttpManifest extends HybridManifest {
     @Override
     protected void configure() {
         expose(HttpClient.class);
-        bind(HttpClient.class);
+        bind(HttpClient.class).asEagerSingleton();
         bind(HttpClientConfiguration.class)
             .to(HttpClientConfigurationImpl.class);
     }

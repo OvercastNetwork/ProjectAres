@@ -201,3 +201,7 @@ permissions:
 
   pgm.destroyable.edit:
     description: Allows the player to edit the properties of destroyables
+
+  pgm.listing.announce:
+    description: Allows the /announce command
+    default: op

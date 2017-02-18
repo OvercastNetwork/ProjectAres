@@ -3,6 +3,8 @@ package tc.oc.api.http;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -105,10 +107,6 @@ public class HttpClient implements Connectable {
         });
     }
 
-    public String getBaseUrl() {
-        return this.config.getBaseUrl();
-    }
-
     public ListenableFuture<?> get(String path, HttpOption... options) {
         return get(path, (TypeToken) null, options);
     }
@@ -166,11 +164,17 @@ public class HttpClient implements Connectable {
     }
 
     protected <T> ListenableFuture<T> request(String method, String path, @Nullable Object content, @Nullable TypeToken<T> returnType, HttpOption...options) {
+        final GenericUrl url;
+        try {
+            url = new GenericUrl(new URL(config.getBaseUrl(), path));
+        } catch(MalformedURLException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+
         // NOTE: Serialization must happen synchronously, because getter methods may not be thread-safe
         final HttpContent httpContent = content == null ? null : new Content(gson.toJson(content));
 
-        GenericUrl url = new GenericUrl(this.getBaseUrl() + path);
-        HttpRequest request;
+        final HttpRequest request;
         try {
             request = requestFactory.buildRequest(method, url, httpContent).setThrowExceptionOnExecuteError(false);
         } catch (IOException e) {

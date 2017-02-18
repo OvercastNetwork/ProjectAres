@@ -1,7 +1,9 @@
 package tc.oc.api.http;
 
+import java.net.URL;
 import javax.inject.Inject;
 
+import tc.oc.commons.core.configuration.ConfigUtils;
 import tc.oc.minecraft.api.configuration.Configuration;
 import tc.oc.minecraft.api.configuration.ConfigurationSection;
 
@@ -24,8 +26,8 @@ public class HttpClientConfigurationImpl implements HttpClientConfiguration {
     }
 
     @Override
-    public String getBaseUrl() {
-        return config.getString(BASE_URL_PATH);
+    public URL getBaseUrl() {
+        return ConfigUtils.needUrl(config, BASE_URL_PATH);
     }
 
     @Override

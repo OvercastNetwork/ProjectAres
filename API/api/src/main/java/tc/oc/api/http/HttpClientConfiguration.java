@@ -1,5 +1,7 @@
 package tc.oc.api.http;
 
+import java.net.URL;
+
 public interface HttpClientConfiguration {
 
     int DEFAULT_THREADS = 0;
@@ -10,7 +12,7 @@ public interface HttpClientConfiguration {
     /**
      * Base URL of the API. End points will be appended to this address.
      */
-    String getBaseUrl();
+    URL getBaseUrl();
 
     /**
      * Number of threads to execute requests. 0 indicates an unbounded number
