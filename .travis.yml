@@ -1,0 +1,6 @@
+language: java
+dist: trusty #Older versions don't provide openjdk8
+jdk:
+    - openjdk8
+    - oraclejdk8
+script: mvn test -B
