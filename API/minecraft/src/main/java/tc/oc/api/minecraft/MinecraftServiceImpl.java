@@ -18,7 +18,7 @@ import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.exceptions.ApiNotConnected;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.types.ModelUpdate;
 import tc.oc.api.minecraft.config.MinecraftApiConfiguration;
 import tc.oc.api.minecraft.servers.LocalServerDocument;
@@ -40,7 +40,7 @@ public class MinecraftServiceImpl implements MinecraftService, MessageListener, 
     private final ServerService serverService;
     private final MinecraftApiConfiguration apiConfiguration;
     private final StartupServerDocument startupDocument;
-    private final MessageQueue serverQueue;
+    private final MessageService serverQueue;
     private final Server everfreshLocalServer;
 
     private @Nullable Server server;
@@ -50,7 +50,7 @@ public class MinecraftServiceImpl implements MinecraftService, MessageListener, 
                                  SyncExecutor syncExecutor,
                                  ServerService serverService,
                                  MinecraftApiConfiguration apiConfiguration,
-                                 MessageQueue serverQueue,
+                                 MessageService serverQueue,
                                  LocalServerDocument localServerDocument,
                                  StartupServerDocument startupDocument) {
 

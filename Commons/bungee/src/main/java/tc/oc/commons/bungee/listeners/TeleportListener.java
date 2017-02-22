@@ -10,7 +10,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.types.PlayerTeleportRequest;
 import tc.oc.api.model.ModelSync;
 import tc.oc.commons.bungee.servers.ServerTracker;
@@ -25,10 +25,10 @@ public class TeleportListener implements MessageListener, PluginFacet {
     private final ProxyServer proxy;
     private final Logger logger;
     private final ServerTracker serverTracker;
-    private final MessageQueue primaryQueue;
+    private final MessageService primaryQueue;
     private final ExecutorService executor;
 
-    @Inject TeleportListener(Loggers loggers, ProxyServer proxy, ServerTracker serverTracker, MessageQueue primaryQueue, @ModelSync ExecutorService executor) {
+    @Inject TeleportListener(Loggers loggers, ProxyServer proxy, ServerTracker serverTracker, MessageService primaryQueue, @ModelSync ExecutorService executor) {
         this.proxy = proxy;
         this.executor = executor;
         this.logger = loggers.get(getClass());

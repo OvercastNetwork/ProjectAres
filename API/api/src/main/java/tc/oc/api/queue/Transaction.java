@@ -123,7 +123,8 @@ public class Transaction<T extends Message> extends TimeoutFuture<T> {
         this.requestType = request.getClass();
 
         this.messageHandler = new MessageHandler<Message>() {
-            @Override public void handleDelivery(Message message, TypeToken<? extends Message> type, Metadata replyProps, Delivery delivery) {
+            @Override public void handleDelivery(Message message, TypeToken type) {
+                Metadata replyProps = Queue.METADATA.need();
                 if(requestId.equals(replyProps.getCorrelationId())) {
                     Transaction.this.replyQueue.unsubscribe(messageHandler);
 
