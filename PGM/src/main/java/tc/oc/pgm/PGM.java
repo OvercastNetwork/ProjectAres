@@ -40,6 +40,7 @@ import tc.oc.pgm.match.MatchManager;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.polls.PollListener;
 import tc.oc.pgm.polls.PollManager;
+import tc.oc.pgm.rotation.DynamicRotationChangeListener;
 import tc.oc.pgm.start.StartCommands;
 import tc.oc.pgm.tablist.MatchTabManager;
 import tc.oc.pgm.timelimit.TimeLimitCommands;
@@ -199,6 +200,7 @@ public final class PGM extends JavaPlugin {
         this.registerEvents(new CraftingProtect());
         this.registerEvents(new ObjectivesFireworkListener());
         this.registerEvents(new ItemTransferListener());
+        this.registerEvents(new DynamicRotationChangeListener());
     }
 
     public void registerEvents(Listener listener) {

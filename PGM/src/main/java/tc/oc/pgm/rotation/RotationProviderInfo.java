@@ -8,15 +8,17 @@ public class RotationProviderInfo implements Comparable<RotationProviderInfo> {
     public final @Nonnull
     RotationProvider provider;
     public final int priority;
+    public final int count;
     public final @Nonnull String name;
 
-    public RotationProviderInfo(@Nonnull RotationProvider provider, @Nonnull String name, int priority) {
+    public RotationProviderInfo(@Nonnull RotationProvider provider, @Nonnull String name, int priority, int count) {
         Preconditions.checkNotNull(provider, "rotation provider");
         Preconditions.checkNotNull(name, "name");
 
         this.provider = provider;
         this.name = name;
         this.priority = priority;
+        this.count = count;
     }
 
     @Override

@@ -116,12 +116,12 @@ public class RotationManager {
         return null;
     }
 
-    public void addProvider(@Nonnull RotationProvider provider, @Nonnull String name, int priority) {
+    public void addProvider(@Nonnull RotationProvider provider, @Nonnull String name, int priority, int count) {
         Preconditions.checkNotNull(provider, "rotation provider");
         Preconditions.checkNotNull(name, "name");
         Preconditions.checkArgument(this.getProviderByName(name) == null, "provider is already registered to name");
 
-        RotationProviderInfo state = new RotationProviderInfo(provider, name, priority);
+        RotationProviderInfo state = new RotationProviderInfo(provider, name, priority, count);
         this.providers.add(state);
     }
 

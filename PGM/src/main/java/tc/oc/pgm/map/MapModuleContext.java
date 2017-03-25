@@ -130,4 +130,11 @@ public class MapModuleContext extends ModuleContext<MapModule, MapScoped> {
     public Range<Integer> playerLimits() {
         return playerLimits.get();
     }
+
+    public Integer playerLimitAverage() {
+        Range<Integer> lims = playerLimits();
+        int sum = lims.lowerEndpoint() + lims.upperEndpoint();
+
+        return ((Double) Math.floor(sum/2)).intValue();
+    }
 }

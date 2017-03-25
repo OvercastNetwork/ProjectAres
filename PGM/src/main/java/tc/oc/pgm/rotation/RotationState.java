@@ -1,5 +1,6 @@
 package tc.oc.pgm.rotation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -37,6 +38,20 @@ public final class RotationState {
      */
     public @Nonnull List<PGMMap> getMaps() {
         return this.maps;
+    }
+
+    /**
+     * Gets the approximate number of players supposed to be playing the rotation maps.
+     * @return Integer with average size of teams over all maps
+     */
+    public @Nonnull Integer getAverageNeededPlayers() {
+        List<Integer> players = new ArrayList<>();
+        int total = 0;
+
+        getMaps().stream().forEach(m -> players.add(m.getContext().playerLimitAverage()));
+        for (int pl : players) { total += pl; }
+
+        return ((Double) Math.floor(total / players.size())).intValue();
     }
 
     /**
