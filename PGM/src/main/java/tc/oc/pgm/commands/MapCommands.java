@@ -215,7 +215,7 @@ public class MapCommands {
         final RotationState rotation = CommandUtils.getRotation(args.getFlag('n'), sender);
         int page = args.getInteger(0, 1);
 
-        new PrettyPaginatedResult<PGMMap>(PGMTranslations.get().t("command.map.currentRotation.title", sender)) {
+        new PrettyPaginatedResult<PGMMap>(PGMTranslations.get().t("command.map.currentRotation.title", sender) + "(" + ChatColor.DARK_AQUA + PGM.getMatchManager().getRotationManager().getCurrentRotationName() + ChatColor.RESET + ")") {
             @Override public String format(PGMMap map, int index) {
                 ChatColor color = index == rotation.getNextId() ? ChatColor.DARK_AQUA : ChatColor.WHITE;
                 return color.toString() + (index + 1) + ". " + map.getInfo().getShortDescription(sender);
@@ -240,7 +240,9 @@ public class MapCommands {
         new PrettyPaginatedResult<String>(PGMTranslations.get().t("command.map.rotationList.title", sender)) {
             @Override public String format(String rotationName, int index) {
                 int activation = Config.getConfiguration().getInt("rotation.providers.file." + rotationName + ".count");
-                return (index % 2 == 0 ? ChatColor.AQUA : ChatColor.DARK_AQUA) + rotationName + (activation > 0 ? ChatColor.GRAY + " " + PGMTranslations.get().t("command.map.rotationList.activatesWith", sender, ChatColor.RED + "" + activation + ChatColor.GRAY) : "");
+                boolean current = rotationName.equalsIgnoreCase(PGM.getMatchManager().getRotationManager().getCurrentRotationName());
+
+                return (current ? ChatColor.GOLD + "\u0187 " : "") + (index % 2 == 0 ? ChatColor.AQUA : ChatColor.DARK_AQUA) + rotationName + (activation > 0 ? ChatColor.GRAY + " " + PGMTranslations.get().t("command.map.rotationList.activatesWith", sender, ChatColor.RED + "" + activation + ChatColor.GRAY) : "");
             }
         }.display(new BukkitWrappedCommandSender(sender), Lists.newArrayList(rotations.keySet()), page);
     }

@@ -31,7 +31,8 @@ public class DynamicRotationChangeListener implements Listener {
         RotationCategory appr = getAppropriateRotationCategory(playersOnline, rotationManager);
 
         if (appr != null && !rotationManager.getCurrentRotationName().equals(appr.toString().toLowerCase())) {
-            rotationManager.setRotation(rotationManager.getRotation(appr.toString().toLowerCase()));
+            rotationManager.setRotation(appr.toString().toLowerCase(), rotationManager.getRotation(appr.toString().toLowerCase()));
+            rotationManager.setCurrentRotationName(appr.toString().toLowerCase());
             CycleMatchModule cmm = event.getMatch().needMatchModule(CycleMatchModule.class);
             cmm.startCountdown(cmm.getConfig().countdown());
 
