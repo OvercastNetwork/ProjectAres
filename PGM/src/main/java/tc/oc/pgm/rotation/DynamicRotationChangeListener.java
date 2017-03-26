@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import tc.oc.commons.bukkit.chat.HeaderComponent;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.pgm.Config;
 import tc.oc.pgm.PGM;
@@ -20,14 +21,14 @@ public class DynamicRotationChangeListener implements Listener {
     public void onMatchEnd(MatchEndEvent event) {
         RotationManager rotationManager = PGM.getMatchManager().getRotationManager();
 
-        // Ignore if there is only one rotation available
-        if (rotationManager.getRotations().size() == 1 || !Config.getConfiguration().getBoolean("rotation.dynamic")) return;
+        // Ignore if dynamic rotations are disabled or if there is only one rotation available
+        if (!Config.getConfiguration().getBoolean("rotation.dynamic") || rotationManager.getRotations().size() == 1) return;
 
         // Number of players we can assume is active
-        int participatingPlayers = event.getMatch().getServer().getOnlinePlayers().size();
+        int playersOnline = event.getMatch().getServer().getOnlinePlayers().size();
 
         // Get appropriate rotation
-        RotationCategory appr = getAppropriateRotationCategory(participatingPlayers, rotationManager);
+        RotationCategory appr = getAppropriateRotationCategory(playersOnline, rotationManager);
 
         if (appr != null && !rotationManager.getCurrentRotationName().equals(appr.toString().toLowerCase())) {
             rotationManager.setRotation(rotationManager.getRotation(appr.toString().toLowerCase()));
@@ -58,9 +59,9 @@ public class DynamicRotationChangeListener implements Listener {
     }
 
     private void sendRotationChangeMessage(Match match) {
-        match.sendMessage(new TextComponent(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "---------------------------------------------------"));
+        match.sendMessage(new HeaderComponent(ChatColor.RED));
         match.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.title"), ChatColor.GOLD));
         match.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.info"), ChatColor.YELLOW));
-        match.sendMessage(new TextComponent(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "---------------------------------------------------"));
+        match.sendMessage(new HeaderComponent(ChatColor.RED));
     }
 }
