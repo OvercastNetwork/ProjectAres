@@ -32,6 +32,7 @@ import tc.oc.commons.bukkit.nick.UsernameRenderer;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
+import tc.oc.pgm.Config;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.PGMTranslations;
 import tc.oc.pgm.ffa.FreeForAllModule;
@@ -238,7 +239,8 @@ public class MapCommands {
 
         new PrettyPaginatedResult<String>(PGMTranslations.get().t("command.map.rotationList.title", sender)) {
             @Override public String format(String rotationName, int index) {
-                return (index % 2 == 0 ? ChatColor.AQUA : ChatColor.DARK_AQUA) + rotationName;
+                int activation = Config.getConfiguration().getInt("rotation.providers.file." + rotationName + ".count");
+                return (index % 2 == 0 ? ChatColor.AQUA : ChatColor.DARK_AQUA) + rotationName + (activation > 0 ? ChatColor.GRAY + " " + PGMTranslations.get().t("command.map.rotationList.activatesWith", sender, ChatColor.RED + "" + activation + ChatColor.GRAY) : "");
             }
         }.display(new BukkitWrappedCommandSender(sender), Lists.newArrayList(rotations.keySet()), page);
     }

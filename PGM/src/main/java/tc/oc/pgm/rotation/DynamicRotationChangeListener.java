@@ -11,33 +11,31 @@ import tc.oc.pgm.Config;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.cycle.CycleMatchModule;
 import tc.oc.pgm.events.MatchEndEvent;
+import tc.oc.pgm.match.Match;
 
 public class DynamicRotationChangeListener implements Listener {
 
-    public static void main(String[] args) {
-        System.out.println(RotationCategory.MEDIUM.toString().toLowerCase());
-    }
 
     @EventHandler
     public void onMatchEnd(MatchEndEvent event) {
         RotationManager rotationManager = PGM.getMatchManager().getRotationManager();
 
         // Ignore if there is only one rotation available
-        if (rotationManager.getRotations().size() == 1) return;
+        if (rotationManager.getRotations().size() == 1 || !Config.getConfiguration().getBoolean("rotation.dynamic")) return;
 
         // Number of players we can assume is active
         int participatingPlayers = event.getMatch().getServer().getOnlinePlayers().size();
 
+        // Get appropriate rotation
         RotationCategory appr = getAppropriateRotationCategory(participatingPlayers, rotationManager);
-        if (appr != null && rotationManager.getRotation(appr.toString().toLowerCase()) != rotationManager.getRotation()) {
+
+        if (appr != null && !rotationManager.getCurrentRotationName().equals(appr.toString().toLowerCase())) {
             rotationManager.setRotation(rotationManager.getRotation(appr.toString().toLowerCase()));
             CycleMatchModule cmm = event.getMatch().needMatchModule(CycleMatchModule.class);
             cmm.startCountdown(cmm.getConfig().countdown());
 
-            event.getMatch().sendMessage(new TextComponent(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "---------------------------------------------------"));
-            event.getMatch().sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.title"), ChatColor.GOLD));
-            event.getMatch().sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.info"), ChatColor.YELLOW));
-            event.getMatch().sendMessage(new TextComponent(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "---------------------------------------------------"));
+            PGM.get().getLogger().info("[Dynamic Rotations] Changing to \"" + appr.toString().toLowerCase() + "\" rotation...");
+            sendRotationChangeMessage(event.getMatch());
         }
     }
 
@@ -57,5 +55,12 @@ public class DynamicRotationChangeListener implements Listener {
         if (players > mega && rotationManager.getRotation("mega") != null) return RotationCategory.MEGA;
 
         return RotationCategory.MINI;
+    }
+
+    private void sendRotationChangeMessage(Match match) {
+        match.sendMessage(new TextComponent(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "---------------------------------------------------"));
+        match.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.title"), ChatColor.GOLD));
+        match.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.info"), ChatColor.YELLOW));
+        match.sendMessage(new TextComponent(ChatColor.RED + "" + ChatColor.STRIKETHROUGH + "---------------------------------------------------"));
     }
 }
