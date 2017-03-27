@@ -29,4 +29,15 @@ public class RotationProviderInfo implements Comparable<RotationProviderInfo> {
         }
         return c;
     }
+    
+    @Override
+    public String toString() {
+        return "RotationProviderInfo{" +
+                "provider=" + provider.getRotations() +
+                ", priority=" + priority +
+                ", count=" + count +
+                ", name='" + name + '\'' +
+                '}';
+    }
+    
 }

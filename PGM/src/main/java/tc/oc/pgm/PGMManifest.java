@@ -4,6 +4,7 @@ import tc.oc.commons.bukkit.chat.FlairRenderer;
 import tc.oc.commons.bukkit.nick.UsernameRenderer;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.plugin.PluginFacetBinder;
+import tc.oc.minecraft.api.event.ListenerBinder;
 import tc.oc.pgm.analytics.MatchAnalyticsManifest;
 import tc.oc.pgm.antigrief.DefuseListener;
 import tc.oc.pgm.chat.MatchFlairRenderer;
@@ -33,6 +34,7 @@ import tc.oc.pgm.match.MatchPlayerEventRouter;
 import tc.oc.pgm.module.MatchModulesManifest;
 import tc.oc.pgm.mutation.command.MutationCommands;
 import tc.oc.pgm.restart.RestartListener;
+import tc.oc.pgm.rotation.DynamicRotationListener;
 import tc.oc.pgm.settings.Settings;
 import tc.oc.pgm.spawns.states.State;
 import tc.oc.pgm.tnt.license.LicenseBroker;
@@ -65,6 +67,7 @@ public final class PGMManifest extends HybridManifest {
 
         bind(MapLibrary.class).to(MapLibraryImpl.class);
         bind(MapLoader.class).to(MapLoaderImpl.class);
+        new ListenerBinder(binder()).bindListener().to(DynamicRotationListener.class);
 
         // Tourney needs this
         expose(MapLibrary.class);

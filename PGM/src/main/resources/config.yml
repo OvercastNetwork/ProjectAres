@@ -79,6 +79,7 @@ environment:
   ranked: false
 
 rotation:
+  dynamic: false
   default-name: default
   initial-wait: 20000
   providers: {}

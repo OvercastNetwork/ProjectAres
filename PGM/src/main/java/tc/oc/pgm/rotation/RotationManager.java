@@ -115,6 +115,10 @@ public class RotationManager {
         }
         return null;
     }
+    
+    public @Nonnull List<RotationProviderInfo> getProviders() {
+        return ImmutableList.copyOf(this.providers);
+    }
 
     public void addProvider(@Nonnull RotationProvider provider, @Nonnull String name, int priority, int count) {
         Preconditions.checkNotNull(provider, "rotation provider");

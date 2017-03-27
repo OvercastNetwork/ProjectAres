@@ -2,14 +2,11 @@ package tc.oc.pgm.commands;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Lists;
 import com.sk89q.bukkit.util.BukkitWrappedCommandSender;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
@@ -32,20 +29,17 @@ import tc.oc.commons.bukkit.nick.UsernameRenderer;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
-import tc.oc.pgm.Config;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.PGMTranslations;
 import tc.oc.pgm.ffa.FreeForAllModule;
 import tc.oc.pgm.map.Contributor;
 import tc.oc.pgm.map.MapInfo;
 import tc.oc.pgm.map.PGMMap;
-import tc.oc.pgm.match.MatchManager;
-import tc.oc.pgm.match.Party;
 import tc.oc.pgm.modules.InfoModule;
 import tc.oc.pgm.rotation.RotationManager;
+import tc.oc.pgm.rotation.RotationProviderInfo;
 import tc.oc.pgm.rotation.RotationState;
 import tc.oc.pgm.teams.TeamFactory;
-import tc.oc.pgm.teams.TeamModule;
 
 public class MapCommands {
     @Command(
@@ -234,17 +228,20 @@ public class MapCommands {
     @CommandPermissions("pgm.rotation.list")
     public static void rotations(final CommandContext args, final CommandSender sender) throws CommandException {
         RotationManager manager = PGM.getMatchManager().getRotationManager();
-        Map<String, RotationState> rotations = manager.getRotations();
+        List<RotationProviderInfo> rotations = manager.getProviders();
         int page = args.getFlagInteger('p', 1);
 
-        new PrettyPaginatedResult<String>(PGMTranslations.get().t("command.map.rotationList.title", sender)) {
-            @Override public String format(String rotationName, int index) {
-                int activation = Config.getConfiguration().getInt("rotation.providers.file." + rotationName + ".count");
-                boolean current = rotationName.equalsIgnoreCase(PGM.getMatchManager().getRotationManager().getCurrentRotationName());
-
-                return (current ? ChatColor.GOLD + "\u0187 " : "") + (index % 2 == 0 ? ChatColor.AQUA : ChatColor.DARK_AQUA) + rotationName + (activation > 0 ? ChatColor.GRAY + " " + PGMTranslations.get().t("command.map.rotationList.activatesWith", sender, ChatColor.RED + "" + activation + ChatColor.GRAY) : "");
+        new PrettyPaginatedResult<RotationProviderInfo>(PGMTranslations.get().t("command.map.rotationList.title", sender)) {
+            @Override public String format(RotationProviderInfo rotationInfo, int index) {
+                boolean current = manager.getCurrentRotationName().equals(rotationInfo.name);
+                int count = rotationInfo.count;
+                return (current ? ChatColor.GOLD : ChatColor.GRAY) + " \u25ba " +
+                        (index % 2 == 0 ? ChatColor.AQUA : ChatColor.DARK_AQUA) + rotationInfo.name +
+                        (count > 0 ? ChatColor.GRAY + " " +
+                                PGMTranslations.get().t("command.map.rotationList.activatesWith", sender,
+                                        ChatColor.RED + "" + count + ChatColor.GRAY) : "");
             }
-        }.display(new BukkitWrappedCommandSender(sender), Lists.newArrayList(rotations.keySet()), page);
+        }.display(new BukkitWrappedCommandSender(sender), rotations, page);
     }
 
     @Command(
