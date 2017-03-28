@@ -41,7 +41,10 @@ public class ProtoVersions {
 
     // Various changes to support dynamic filters
     public static final SemanticVersion DYNAMIC_FILTERS = new SemanticVersion(1, 4, 2);
+    
+    // Enable block 36 to be used, protos before this will remove it from the map
+    public static final SemanticVersion ENABLE_BLOCK_36 = new SemanticVersion(1, 4, 3);
 
     // Current version - change this whenever we bump the proto
-    public static final SemanticVersion CURRENT = DYNAMIC_FILTERS;
+    public static final SemanticVersion CURRENT = ENABLE_BLOCK_36;
 }
