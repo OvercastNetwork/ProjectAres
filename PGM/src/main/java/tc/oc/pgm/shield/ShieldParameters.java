@@ -14,4 +14,8 @@ public class ShieldParameters {
         this.maxHealth = maxHealth;
         this.rechargeDelay = rechargeDelay;
     }
+
+    public ShieldParameters() {
+        this(DEFAULT_HEALTH, DEFAULT_DELAY);
+    }
 }

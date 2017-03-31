@@ -123,7 +123,7 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
      */
     public S lore(String lore) {
         meta().setLore(meta().hasLore() ? ListUtils.append(meta().getLore(), lore)
-                                        : Collections.singletonList(lore));
+                : Collections.singletonList(lore));
         return self();
     }
 
@@ -170,6 +170,16 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
 
     public S skin(String name, UUID uuid, Skin skin) {
         meta(SkullMeta.class).setOwner(name, uuid, skin);
+        return self();
+    }
+
+    public S shareable(boolean yes) {
+        new BooleanItemTag("prevent-sharing", false).set(stack, !yes);
+        return self();
+    }
+
+    public S locked(boolean yes) {
+        new BooleanItemTag("locked", false).set(stack, !yes);
         return self();
     }
 }

@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 
-import com.google.common.collect.Collections2;
 import com.google.common.util.concurrent.ListenableFuture;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
@@ -28,12 +27,12 @@ public class MutationQueue {
             .getLocalServer()
             .queued_mutations()
             .stream()
-            .map(mutation -> Mutation.values()[mutation.ordinal()])
+            .flatMap(Mutation::fromString)
             .collect(Collectors.toList());
     }
 
     public ListenableFuture<Server> clear() {
-        return force(Collections.<Mutation>emptyList());
+        return force(Collections.emptyList());
     }
 
     public ListenableFuture<Server> removeAll(final Collection<Mutation> mutations) {
@@ -53,6 +52,7 @@ public class MutationQueue {
     }
 
     private ListenableFuture<Server> force(final Collection<Mutation> mutations) {
-        return minecraftService.updateLocalServer((ServerDoc.Mutation) () -> mutations.stream().map(Mutation::toApi).collect(Collectors.toSet()));
+        return minecraftService.updateLocalServer((ServerDoc.Mutation) () -> mutations.stream().map(Mutation::name).collect(Collectors.toSet()));
     }
+
 }

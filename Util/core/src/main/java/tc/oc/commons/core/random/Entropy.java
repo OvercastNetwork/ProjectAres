@@ -3,6 +3,7 @@ package tc.oc.commons.core.random;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import tc.oc.commons.core.util.Ranges;
 
@@ -24,6 +25,10 @@ public interface Entropy {
         final int min = Ranges.needMinimum(range);
         final int delta = Ranges.needOpenMaximum(range) - min;
         return min + (int) ((randomLong() & 0xffffffffL) * delta / 0x100000000L);
+    }
+
+    default <T> T randomElement(T... array) {
+        return randomElement(Lists.newArrayList(array));
     }
 
     default <T> T randomElement(Iterable<T> iterable) {

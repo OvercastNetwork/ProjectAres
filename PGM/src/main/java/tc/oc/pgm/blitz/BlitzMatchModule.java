@@ -65,7 +65,7 @@ public class BlitzMatchModule extends MatchModule implements Listener, JoinHandl
 
     public BlitzMatchModule(Match match, BlitzConfig config) {
         super(match);
-        this.config = MutationMatchModule.check(match, Mutation.BLITZ) ? new BlitzConfig(1, true) : config;
+        this.config = match.module(MutationMatchModule.class).get().enabled(Mutation.BLITZ) ? new BlitzConfig(1, true) : config;
         this.lifeManager = new LifeManager(this.config.getNumLives());
     }
 
