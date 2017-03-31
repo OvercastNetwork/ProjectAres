@@ -179,6 +179,10 @@ public class StringUtils {
         return builder.toString();
     }
 
+    public static List<String> complete(String prefix, Class<? extends Enum> enumClass) {
+        return complete(prefix, Stream.of(enumClass.getEnumConstants()).map(c -> c.name().toLowerCase().replace('_', ' ')));
+    }
+
     public static List<String> complete(String prefix, Collection<String> options) {
         return complete(prefix, options.stream());
     }

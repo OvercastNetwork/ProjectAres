@@ -37,9 +37,9 @@ import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.commons.core.util.Comparables;
 import tc.oc.pgm.PGMTranslations;
-import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.events.PlayerLeaveMatchEvent;
+import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchExecutor;
 import tc.oc.pgm.match.MatchModule;
@@ -98,6 +98,7 @@ public class MapRatingsMatchModule extends MatchModule implements Listener {
     @Inject private MapRatingsConfiguration config;
     @Inject private MapService mapService;
     @Inject private MatchExecutor matchExecutor;
+    @Inject private BlitzMatchModule blitz;
 
     private final Map<MatchPlayer, Integer> playerRatings = new HashMap<>();
 
@@ -140,10 +141,8 @@ public class MapRatingsMatchModule extends MatchModule implements Listener {
             return PGMTranslations.t("noPermission", player);
         }
 
-        BlitzMatchModule blitz = player.getMatch().getMatchModule(BlitzMatchModule.class);
-
         if(Comparables.lessThan(player.getCumulativeParticipationTime(), MIN_PARTICIPATION_TIME) &&
-           !(blitz != null && blitz.isPlayerEliminated(player.getBukkit().getUniqueId())) &&
+           !(blitz.eliminated(player)) &&
            !(this.getMatch().isFinished() && player.getCumulativeParticipationPercent() > MIN_PARTICIPATION_PERCENT)) {
             return PGMTranslations.t("rating.lowParticipation", player);
         }

@@ -77,12 +77,18 @@ public interface TeamFactory extends SluggedFeatureDefinition, Validatable, Feat
         return org.bukkit.scoreboard.Team.OptionStatus.ALWAYS;
     }
 
+    @Property(name="lives")
+    Optional<Integer> getLives();
+
     MapDoc.Team getDocument();
 
     @Override
     default void validate() throws InvalidXMLException {
         if(getMaxOverfill().isPresent() && getMaxOverfill().get() < getMaxPlayers()) {
             throw new InvalidXMLException("Max overfill cannot be less than max players");
+        }
+        if(getLives().isPresent() && getLives().get() <= 0) {
+            throw new InvalidXMLException("Lives must be at least 1");
         }
     }
 }

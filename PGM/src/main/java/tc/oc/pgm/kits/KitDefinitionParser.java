@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jdom2.Element;
 import tc.oc.commons.bukkit.inventory.ArmorType;
 import tc.oc.commons.bukkit.inventory.Slot;
+import tc.oc.pgm.blitz.LivesKit;
 import tc.oc.pgm.compose.CompositionParser;
 import tc.oc.pgm.doublejump.DoubleJumpKit;
 import tc.oc.pgm.features.FeatureDefinitionContext;
@@ -253,5 +254,10 @@ public class KitDefinitionParser extends MagicMethodFeatureParser<Kit> implement
     private Kit force(Element el) throws InvalidXMLException {
         return new ForceKit(XMLUtils.parseVector(new Node(el)),
                             parseRelativeFlags(el));
+    }
+
+    @MethodParser
+    private Kit lives(Element el) throws InvalidXMLException {
+        return new LivesKit(XMLUtils.parseNumber(new Node(el), Integer.class, false, +1));
     }
 }
