@@ -21,10 +21,23 @@ public class DoubleJumpKit extends Kit.Impl {
         this.rechargeInAir = rechargeInAir;
     }
 
+    public DoubleJumpKit() {
+        this(true, DEFAULT_POWER, DEFAULT_RECHARGE, true);
+    }
+
     @Override
     public void apply(MatchPlayer player, boolean force, ItemKitApplicator items) {
-        DoubleJumpMatchModule djmm = player.getMatch().getMatchModule(DoubleJumpMatchModule.class);
-        if(djmm != null) djmm.setKit(player.getBukkit(), this);
+        player.getMatch().module(DoubleJumpMatchModule.class).ifPresent(jump -> jump.setKit(player.getBukkit(), this));
+    }
+
+    @Override
+    public boolean isRemovable() {
+        return true;
+    }
+
+    @Override
+    public void remove(MatchPlayer player) {
+        player.getMatch().module(DoubleJumpMatchModule.class).ifPresent(jump -> jump.setKit(player.getBukkit(), null));
     }
 
     public float chargePerTick() {

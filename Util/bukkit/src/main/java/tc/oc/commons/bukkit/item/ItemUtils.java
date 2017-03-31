@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
@@ -98,6 +99,24 @@ public class ItemUtils {
 
     public static Optional<ItemStack> something(@Nullable ItemStack stack) {
         return isNothing(stack) ? Optional.empty() : Optional.of(stack);
+    }
+
+    private static final String[] TOOLS = {"axe", "hoe", "spade"};
+
+    public static boolean isTool(ItemStack stack) {
+        return isTool(stack.getData());
+    }
+
+    public static boolean isTool(MaterialData item) {
+        return Stream.of(TOOLS).anyMatch(query -> item.getItemType().name().toLowerCase().contains(query));
+    }
+
+    public static boolean isArmor(ItemStack stack) {
+        return isArmor(stack.getData());
+    }
+
+    public static boolean isArmor(MaterialData item) {
+        return !Bukkit.getItemFactory().getAttributeModifiers(item, Attribute.GENERIC_ARMOR).isEmpty();
     }
 
     public static boolean isWeapon(ItemStack stack) {

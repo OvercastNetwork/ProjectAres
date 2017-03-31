@@ -279,7 +279,7 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     }
 
     @Override
-    public Set<MatchDoc.Mutation> queued_mutations() {
+    public Set<String> queued_mutations() {
         return mutations != null ? mutations.queued_mutations() : Collections.emptySet();
     }
 }

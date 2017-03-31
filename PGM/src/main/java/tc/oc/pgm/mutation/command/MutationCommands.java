@@ -2,20 +2,21 @@ package tc.oc.pgm.mutation.command;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.logging.Level;
 import javax.inject.Inject;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissions;
-import com.sk89q.minecraft.util.commands.NestedCommand;
+import com.sk89q.minecraft.util.commands.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
+import tc.oc.commons.bukkit.chat.PlayerComponent;
+import tc.oc.commons.bukkit.chat.WarningComponent;
+import tc.oc.commons.bukkit.nick.IdentityProvider;
+import tc.oc.commons.core.chat.Audience;
 import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.ListComponent;
@@ -56,39 +57,42 @@ public class MutationCommands implements NestedCommands {
     private final SyncExecutor syncExecutor;
     private final Audiences audiences;
     private final MutationQueue mutationQueue;
+    private final IdentityProvider identityProvider;
 
-    @Inject
-    MutationCommands(SyncExecutor syncExecutor, Audiences audiences, MutationQueue mutationQueue) {
+    @Inject MutationCommands(SyncExecutor syncExecutor, Audiences audiences, MutationQueue mutationQueue, IdentityProvider identityProvider) {
         this.syncExecutor = syncExecutor;
         this.audiences = audiences;
         this.mutationQueue = mutationQueue;
+        this.identityProvider = identityProvider;
     }
 
     @Command(
-            aliases = {"enable", "add"},
+            aliases = {"enable", "e"},
             desc = "Adds a mutation to the upcoming match." +
                     "You can use '?' as a wildcard or " +
                     "'*' to use all.",
             usage = "<mutation|?|*>",
+            flags = "q",
             min = 1,
             max = 1
     )
     @CommandPermissions(PERMISSION_SET)
-    public void enable(CommandContext args, CommandSender sender) throws CommandException {
+    public void enable(CommandContext args, CommandSender sender) throws CommandException, SuggestException {
         set(args, sender, true);
     }
 
     @Command(
-            aliases = {"disable", "remove"},
+            aliases = {"disable", "d"},
             desc = "Remove a mutation to the upcoming match." +
                     "You can use '?' as a wildcard or " +
                     "'*' to use all.",
             usage = "<mutation|?|*>",
+            flags = "q",
             min = 1,
             max = 1
     )
     @CommandPermissions(PERMISSION_SET)
-    public void disable(CommandContext args, CommandSender sender) throws CommandException {
+    public void disable(CommandContext args, CommandSender sender) throws CommandException, SuggestException {
         set(args, sender, false);
     }
 
@@ -105,8 +109,8 @@ public class MutationCommands implements NestedCommands {
     public void list(final CommandContext args, CommandSender sender) throws CommandException {
         MutationMatchModule module = verify(sender);
         final boolean queued = args.hasFlag('q');
-        final Collection<Mutation> active = queued ? mutationQueue.mutations() : module.getActiveMutations();
-        new Paginator<Mutation>() {
+        final Collection<Mutation> active = queued ? mutationQueue.mutations() : module.mutationsActive();
+        new Paginator<Mutation>(Mutation.values().length / 2) {
             @Override
             protected BaseComponent title() {
                 return new TranslatableComponent(queued ? "command.mutation.list.queued" : "command.mutation.list.current");
@@ -124,20 +128,26 @@ public class MutationCommands implements NestedCommands {
         return CommandUtils.getMatchModule(MutationMatchModule.class, sender);
     }
 
-    public void set(CommandContext args, final CommandSender sender, final boolean value) throws CommandException {
+    public void set(CommandContext args, final CommandSender sender, final boolean value) throws CommandException, SuggestException {
         final MutationMatchModule module = verify(sender);
         final Match match = module.getMatch();
         String action = args.getString(0);
+        boolean queued = args.hasFlag('q') || match.isFinished();
         // Mutations that *will* be added or removed
         final Collection<Mutation> mutations = new HashSet<>();
         // Mutations that *are allowed* to be added or removed
         final Collection<Mutation> availableMutations = Sets.newHashSet(Mutation.values());
 
-        final Collection<Mutation> queue = mutationQueue.mutations();
+        final Collection<Mutation> queue = queued ? mutationQueue.mutations() : module.mutationsActive();
         if(value) availableMutations.removeAll(queue); else availableMutations.retainAll(queue);
         // Check if all mutations have been enabled/disabled
         if((queue.size() == Mutation.values().length && value) || (queue.isEmpty() && !value)) {
-            throw newCommandException(sender, new TranslatableComponent(value ? "command.mutation.error.enabled" : "command.mutation.error.disabled"));
+            throw newCommandException(sender, new TranslatableComponent(value ? "command.mutation.error.enabled.all" : "command.mutation.error.disabled.all"));
+        }
+        // Suggest mutations for the user to choose
+        final SuggestionContext context = args.getSuggestionContext();
+        if(context != null) {
+            context.suggestArgument(0, StringUtils.complete(context.getPrefix(), availableMutations.stream().map(mutation -> mutation.name().toLowerCase())));
         }
         // Get which action the user wants to preform
         switch (action) {
@@ -145,27 +155,50 @@ public class MutationCommands implements NestedCommands {
             case "?": mutations.add(Iterables.get(availableMutations, RandomUtils.safeNextInt(match.getRandom(), availableMutations.size()))); break;
             default:
                 Mutation query = StringUtils.bestFuzzyMatch(action, Sets.newHashSet(Mutation.values()), 0.9);
-                if (query == null) {
+                if(query == null) {
                     throw newCommandException(sender, new TranslatableComponent("command.mutation.error.find", action));
+                } else if(value == queue.contains(query)) {
+                    throw newCommandException(sender, new TranslatableComponent(value ? "command.mutation.error.enabled" : "command.mutation.error.disabled", query.getComponent(ChatColor.RED)));
                 } else {
                     mutations.add(query);
                 }
         }
-
-        // Send the queued changes off to the api
-        syncExecutor.callback(
-            value ? mutationQueue.mergeAll(mutations)
-                  : mutationQueue.removeAll(mutations),
-            result -> {
-                audiences.get(sender).sendMessage(new Component(new TranslatableComponent(
-                    message(false, value, mutations.size() == 1),
-                    new ListComponent(Collections2.transform(mutations, Mutation.toComponent(ChatColor.AQUA)))
-                ), ChatColor.WHITE));
+        Audience origin = audiences.get(sender);
+        Audience all = audiences.localServer();
+        String message = message(!queued, value, mutations.size() == 1);
+        ListComponent changed = new ListComponent(Collections2.transform(mutations, Mutation.toComponent(ChatColor.AQUA)));
+        if(queued) {
+            // Send the queued changes off to the api
+            syncExecutor.callback(
+                value ? mutationQueue.mergeAll(mutations)
+                      : mutationQueue.removeAll(mutations),
+                result -> {
+                    origin.sendMessage(new Component(new TranslatableComponent(message, changed), ChatColor.WHITE));
+                }
+            );
+        } else {
+            // Make the changes immediately
+            for(Mutation mutation : mutations) {
+                try {
+                    module.register(mutation, value);
+                    module.mutate(mutation);
+                } catch(Throwable t) {
+                    module.register(mutation, !value);
+                    origin.sendMessage(
+                        new WarningComponent(
+                            "command.mutation.error.mutate",
+                            mutation.getComponent(ChatColor.RED)
+                        )
+                    );
+                    module.getLogger().log(Level.SEVERE, "Unable to enable/disable mutation", t);
+                    return;
+                }
             }
-        );
+            PlayerComponent player = new PlayerComponent(identityProvider.currentIdentity(sender));
+            all.sendMessage(new Component(new TranslatableComponent(message, player, changed)));
+        }
     }
 
-    // TODO: force enabling mutations
     public String message(boolean now, boolean enable, boolean singular) {
         if(now) {
             if(enable) {

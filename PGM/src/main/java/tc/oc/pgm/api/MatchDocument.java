@@ -120,10 +120,10 @@ public class MatchDocument extends AbstractModel implements MatchDoc {
     }
 
     @Override
-    public Set<Mutation> mutations() {
-        return mutations.map(mmm -> mmm.getHistoricalMutations()
+    public Set<String> mutations() {
+        return mutations.map(mmm -> mmm.mutationsHistorical()
                                        .stream()
-                                       .map(tc.oc.pgm.mutation.Mutation::toApi)
+                                       .map(tc.oc.pgm.mutation.Mutation::name)
                                        .collect(Collectors.toImmutableSet()))
                         .orElse(ImmutableSet.of());
     }

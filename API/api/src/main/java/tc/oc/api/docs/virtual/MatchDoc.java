@@ -30,11 +30,7 @@ public interface MatchDoc extends Model {
     Collection<String> winning_team_ids();
     Collection<String> winning_user_ids();
 
-    enum Mutation {
-        BLITZ, UHC, EXPLOSIVES, NO_FALL, MOBS, STRENGTH, DOUBLE_JUMP, INVISIBILITY, LIGHTNING, RAGE, ELYTRA;
-    }
-
-    Set<Mutation> mutations();
+    Set<String> mutations();
 
     @Serialize
     interface Team extends MapDoc.Team, CompetitorDoc {

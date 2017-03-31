@@ -138,7 +138,7 @@ public interface ServerDoc {
 
     @Serialize
     interface Mutation extends Partial {
-        Set<MatchDoc.Mutation> queued_mutations();
+        Set<String> queued_mutations();
     }
 
     /**
