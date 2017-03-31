@@ -110,6 +110,10 @@ public abstract class CountdownContext implements Listener {
         return countdowns().anyMatch(test);
     }
 
+    public boolean anyRunning(Class<? extends Countdown> countdownClass) {
+        return anyRunning(countdown -> countdown.getClass().equals(countdownClass));
+    }
+
     public void cancelAll() {
         cancelAll(false);
     }

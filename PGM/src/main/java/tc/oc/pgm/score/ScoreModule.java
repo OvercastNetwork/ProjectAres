@@ -18,11 +18,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import tc.oc.api.docs.virtual.MapDoc;
 import tc.oc.commons.core.util.Optionals;
-import tc.oc.pgm.blitz.BlitzModule;
 import tc.oc.pgm.filters.Filter;
 import tc.oc.pgm.filters.matcher.StaticFilter;
 import tc.oc.pgm.filters.parser.FilterParser;
 import tc.oc.pgm.goals.GoalModule;
+import tc.oc.pgm.blitz.BlitzModule;
 import tc.oc.pgm.map.MapModule;
 import tc.oc.pgm.map.MapModuleContext;
 import tc.oc.pgm.map.ProtoVersions;
@@ -36,7 +36,7 @@ import tc.oc.pgm.utils.XMLUtils;
 import tc.oc.pgm.xml.InvalidXMLException;
 import tc.oc.pgm.xml.Node;
 
-@ModuleDescription(name = "Score", follows = {GoalModule.class, BlitzModule.class })
+@ModuleDescription(name = "Score", follows = { GoalModule.class, BlitzModule.class })
 public class ScoreModule implements MapModule, MatchModuleFactory<ScoreMatchModule> {
 
     private final ScoreConfig config;
