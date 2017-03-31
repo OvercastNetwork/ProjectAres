@@ -1,5 +1,6 @@
 package tc.oc.pgm.killreward;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -27,10 +28,10 @@ import tc.oc.pgm.xml.InvalidXMLException;
 
 @ModuleDescription(name="Kill Reward")
 public class KillRewardModule implements MapModule, MatchModuleFactory<KillRewardMatchModule> {
-    protected final ImmutableList<KillReward> rewards;
+    protected final List<KillReward> rewards;
 
     public KillRewardModule(List<KillReward> rewards) {
-        this.rewards = ImmutableList.copyOf(rewards);
+        this.rewards = rewards;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class KillRewardModule implements MapModule, MatchModuleFactory<KillRewar
     // ---------------------
 
     public static KillRewardModule parse(MapModuleContext context, Logger logger, Document doc) throws InvalidXMLException {
-        ImmutableList.Builder<KillReward> rewards = ImmutableList.builder();
+        List<KillReward> rewards = new ArrayList<>();
         final ItemParser itemParser = context.needModule(ItemParser.class);
         final Optional<ItemModifyModule> itemModifier = context.module(ItemModifyModule.class);
 
@@ -61,11 +62,6 @@ public class KillRewardModule implements MapModule, MatchModuleFactory<KillRewar
             rewards.add(new KillReward(items.build(), filter, kit));
         }
 
-        ImmutableList<KillReward> list = rewards.build();
-        if(list.isEmpty()) {
-            return null;
-        } else {
-            return new KillRewardModule(list);
-        }
+        return new KillRewardModule(rewards);
     }
 }

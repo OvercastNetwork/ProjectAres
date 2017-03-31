@@ -7,58 +7,61 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.commons.core.chat.Component;
-import tc.oc.pgm.mutation.submodule.MutationModule;
+import tc.oc.pgm.PGM;
+import tc.oc.pgm.mutation.types.MutationModule;
+import tc.oc.pgm.mutation.types.kit.ArmorMutation;
+import tc.oc.pgm.mutation.types.kit.ElytraMutation;
+import tc.oc.pgm.mutation.types.kit.EnchantmentMutation;
+import tc.oc.pgm.mutation.types.kit.EquestrianMutation;
+import tc.oc.pgm.mutation.types.kit.ExplosiveMutation;
+import tc.oc.pgm.mutation.types.kit.GlowMutation;
+import tc.oc.pgm.mutation.types.kit.HardcoreMutation;
+import tc.oc.pgm.mutation.types.kit.HealthMutation;
+import tc.oc.pgm.mutation.types.kit.JumpMutation;
+import tc.oc.pgm.mutation.types.kit.MobsMutation;
+import tc.oc.pgm.mutation.types.kit.PotionMutation;
+import tc.oc.pgm.mutation.types.kit.ProjectileMutation;
+import tc.oc.pgm.mutation.types.kit.StealthMutation;
+import tc.oc.pgm.mutation.types.other.RageMutation;
+import tc.oc.pgm.mutation.types.targetable.ApocalypseMutation;
+import tc.oc.pgm.mutation.types.targetable.BomberMutation;
+import tc.oc.pgm.mutation.types.targetable.LightningMutation;
 
-import static tc.oc.pgm.mutation.submodule.MutationModules.*;
+import java.util.stream.Stream;
 
 public enum Mutation {
 
-    BLITZ       (null,               false),
-    UHC         (null,               false),
-    EXPLOSIVES  (Explosives.class,   true),
-    NO_FALL     (null,               false),
-    MOBS        (null,               false),
-    STRENGTH    (Strength.class,     true),
-    DOUBLE_JUMP (DoubleJump.class,   true),
-    INVISIBILITY(Invisibility.class, true),
-    LIGHTNING   (Lightning.class,    true),
-    RAGE        (Rage.class,         true),
-    ELYTRA      (Elytra.class,       true);
+    BLITZ      (null),
+    RAGE       (RageMutation.class),
+    HARDCORE   (HardcoreMutation.class),
+    JUMP       (JumpMutation.class),
+    EXPLOSIVE  (ExplosiveMutation.class),
+    ELYTRA     (ElytraMutation.class),
+    PROJECTILE (ProjectileMutation.class),
+    ENCHANTMENT(EnchantmentMutation.class),
+    POTION     (PotionMutation.class),
+    EQUESTRIAN (EquestrianMutation.class),
+    HEALTH     (HealthMutation.class),
+    GLOW       (GlowMutation.class),
+    STEALTH    (StealthMutation.class),
+    ARMOR      (ArmorMutation.class),
+    MOBS       (MobsMutation.class),
+    LIGHTNING  (LightningMutation.class),
+    BOMBER     (BomberMutation.class),
+    APOCALYPSE (ApocalypseMutation.class);
 
     public static final String TYPE_KEY = "mutation.type.";
     public static final String DESCRIPTION_KEY = ".desc";
 
-    /**
-     * The module class that handles this mutation.
-     */
-    private final @Nullable Class<? extends MutationModule> clazz;
+    private final @Nullable Class<? extends MutationModule> loader;
 
-    /**
-     * Whether this mutation be changed during a match.
-     */
-    private final boolean change;
-
-    Mutation(@Nullable Class<? extends MutationModule> clazz, boolean change) {
-        this.clazz = clazz;
-        this.change = change;
+    Mutation(@Nullable Class<? extends MutationModule> loader) {
+        this.loader = loader;
     }
 
-    public static Mutation fromApi(MatchDoc.Mutation mutation) {
-        return values()[mutation.ordinal()];
-    }
-
-    public MatchDoc.Mutation toApi() {
-        return MatchDoc.Mutation.values()[ordinal()];
-    }
-
-    public Class<? extends MutationModule> getModuleClass() {
-        return clazz;
-    }
-
-    public boolean isChangeable() {
-        return change;
+    public Class<? extends MutationModule> loader() {
+        return loader;
     }
 
     public String getName() {
@@ -76,4 +79,14 @@ public enum Mutation {
     public static Function<Mutation, BaseComponent> toComponent(final ChatColor color) {
         return mutation -> mutation.getComponent(color);
     }
+
+    public static Stream<Mutation> fromString(final String name) {
+        try {
+            return Stream.of(Mutation.valueOf(name));
+        } catch(IllegalArgumentException iae) {
+            PGM.get().getLogger().warning("Unable to find mutation named '" + name + "'");
+            return Stream.empty();
+        }
+    }
+
 }

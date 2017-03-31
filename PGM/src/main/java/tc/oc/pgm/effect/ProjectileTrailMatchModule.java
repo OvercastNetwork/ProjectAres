@@ -57,7 +57,7 @@ public class ProjectileTrailMatchModule extends MatchModule implements Listener 
         return Math.max(0.001, rgb / 255.0);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
         match.player(event.getActor()).ifPresent(shooter -> {
             final Projectile projectile = event.getEntity();

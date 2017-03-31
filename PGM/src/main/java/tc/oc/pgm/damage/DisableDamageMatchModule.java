@@ -3,6 +3,7 @@ package tc.oc.pgm.damage;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
+import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Sets;
 import org.bukkit.block.Block;
@@ -36,12 +37,12 @@ public class DisableDamageMatchModule extends MatchModule implements Listener {
         this.causes = causes;
     }
 
-    @Override
-    public void load() {
-        super.load();
-        if(MutationMatchModule.check(match, Mutation.NO_FALL)) {
-            this.causes.putAll(DamageCause.FALL, Sets.newHashSet(PlayerRelation.values()));
-        }
+    public SetMultimap<DamageCause, PlayerRelation> causes() {
+        return causes;
+    }
+
+    public ImmutableSetMultimap<DamageCause, PlayerRelation> causesImmutable() {
+        return ImmutableSetMultimap.copyOf(causes());
     }
 
     private static DamageCause getBlockDamageCause(Block block) {
@@ -59,11 +60,11 @@ public class DisableDamageMatchModule extends MatchModule implements Listener {
     }
 
     private boolean canDamage(DamageCause cause, MatchPlayer victim, @Nullable ParticipantState damager) {
-        return !this.causes.containsEntry(cause, PlayerRelation.get(victim.getParticipantState(), damager));
+        return !causesImmutable().containsEntry(cause, PlayerRelation.get(victim.getParticipantState(), damager));
     }
 
     private boolean canDamage(DamageCause cause, MatchPlayer victim, DamageInfo info) {
-        return !this.causes.containsEntry(cause, PlayerRelation.get(victim.getParticipantState(), info.getAttacker()));
+        return !causesImmutable().containsEntry(cause, PlayerRelation.get(victim.getParticipantState(), info.getAttacker()));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

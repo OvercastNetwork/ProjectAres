@@ -21,4 +21,5 @@ public class SlotItemKit extends FreeItemKit {
     public void apply(MatchPlayer player, boolean force, ItemKitApplicator items) {
         items.put(slot, item, force);
     }
+
 }

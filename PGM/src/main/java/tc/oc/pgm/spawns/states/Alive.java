@@ -21,8 +21,7 @@ import tc.oc.pgm.match.Competitor;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.ParticipantState;
 import tc.oc.pgm.mutation.MutationMatchModule;
-import tc.oc.pgm.mutation.submodule.KitMutationModule;
-import tc.oc.pgm.mutation.submodule.MutationModule;
+import tc.oc.pgm.mutation.types.KitMutation;
 import tc.oc.pgm.spawns.Spawn;
 import tc.oc.pgm.spawns.events.ParticipantDespawnEvent;
 import tc.oc.pgm.spawns.events.ParticipantReleaseEvent;
@@ -86,16 +85,10 @@ public class Alive extends Participating {
         match.module(KillRewardMatchModule.class).ifPresent(krmm -> krmm.giveDeadPlayerRewards(player));
 
         // Apply kit injections from KitMutationModules
-        match.module(MutationMatchModule.class).ifPresent(mmm -> {
-            for(MutationModule module : mmm.getMutationModules()) {
-                if(module instanceof KitMutationModule) {
-                    KitMutationModule kitModule = ((KitMutationModule) module);
-                    for(Kit kit : kitModule.getKits()) {
-                        player.facet(KitPlayerFacet.class).applyKit(kit, kitModule.isForceful());
-                    }
-                }
-            }
-        });
+        match.module(MutationMatchModule.class)
+             .ifPresent(mmm -> mmm.mutationModules().stream()
+                                                    .filter(mm -> mm instanceof KitMutation)
+                                                    .forEach(mm -> ((KitMutation) mm).apply(player)));
 
         player.getBukkit().updateInventory();
 
