@@ -1,7 +1,6 @@
 package tc.oc.pgm;
 
 import tc.oc.commons.core.inject.HybridManifest;
-import tc.oc.pgm.blitz.BlitzModule;
 import tc.oc.pgm.blockdrops.BlockDropsModule;
 import tc.oc.pgm.crafting.CraftingModule;
 import tc.oc.pgm.eventrules.EventRuleModule;
@@ -13,6 +12,7 @@ import tc.oc.pgm.goals.GoalModule;
 import tc.oc.pgm.hunger.HungerModule;
 import tc.oc.pgm.itemmeta.ItemModifyModule;
 import tc.oc.pgm.killreward.KillRewardModule;
+import tc.oc.pgm.blitz.BlitzModule;
 import tc.oc.pgm.map.MapModuleFactory;
 import tc.oc.pgm.map.StaticMethodMapModuleFactory;
 import tc.oc.pgm.modules.DiscardPotionBottlesModule;
@@ -55,6 +55,7 @@ public class MapModulesManifest extends HybridManifest {
         install(new ProjectileModule.Factory());
         install(new SpawnModule.Factory());
         install(new TimeLimitModule.Factory());
+        install(new BlitzModule.Factory());
 
         // MapModules with static parse methods
         install(new StaticMethodMapModuleFactory<EventRuleModule>(){});
@@ -68,7 +69,6 @@ public class MapModulesManifest extends HybridManifest {
         install(new StaticMethodMapModuleFactory<ModifyBowProjectileModule>(){});
         install(new StaticMethodMapModuleFactory<MobsModule>(){});
         install(new StaticMethodMapModuleFactory<HungerModule>(){});
-        install(new StaticMethodMapModuleFactory<BlitzModule>(){});
         install(new StaticMethodMapModuleFactory<KillRewardModule>(){});
         install(new StaticMethodMapModuleFactory<GhostSquadronModule>(){});
         install(new StaticMethodMapModuleFactory<RageModule>(){});

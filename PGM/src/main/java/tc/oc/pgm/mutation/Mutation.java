@@ -23,6 +23,7 @@ import tc.oc.pgm.mutation.types.kit.MobsMutation;
 import tc.oc.pgm.mutation.types.kit.PotionMutation;
 import tc.oc.pgm.mutation.types.kit.ProjectileMutation;
 import tc.oc.pgm.mutation.types.kit.StealthMutation;
+import tc.oc.pgm.mutation.types.other.BlitzMutation;
 import tc.oc.pgm.mutation.types.other.RageMutation;
 import tc.oc.pgm.mutation.types.targetable.ApocalypseMutation;
 import tc.oc.pgm.mutation.types.targetable.BomberMutation;
@@ -32,7 +33,7 @@ import java.util.stream.Stream;
 
 public enum Mutation {
 
-    BLITZ      (null),
+    BLITZ      (BlitzMutation.class),
     RAGE       (RageMutation.class),
     HARDCORE   (HardcoreMutation.class),
     JUMP       (JumpMutation.class),

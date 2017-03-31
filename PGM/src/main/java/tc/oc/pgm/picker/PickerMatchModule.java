@@ -40,7 +40,7 @@ import tc.oc.commons.core.chat.ChatUtils;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.pgm.PGMTranslations;
-import tc.oc.pgm.blitz.BlitzModule;
+import tc.oc.pgm.blitz.BlitzEvent;
 import tc.oc.pgm.classes.ClassMatchModule;
 import tc.oc.pgm.classes.ClassModule;
 import tc.oc.pgm.classes.PlayerClass;
@@ -53,6 +53,7 @@ import tc.oc.pgm.events.PlayerPartyChangeEvent;
 import tc.oc.pgm.join.JoinMatchModule;
 import tc.oc.pgm.join.JoinRequest;
 import tc.oc.pgm.join.JoinResult;
+import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchScope;
@@ -94,18 +95,18 @@ public class PickerMatchModule extends MatchModule implements Listener {
 
     private final ComponentRenderContext renderer;
     private final JoinMatchModule jmm;
+    private final BlitzMatchModule bmm;
     private final boolean hasTeams;
     private final boolean hasClasses;
-    private final boolean isBlitz;
 
     private final Set<MatchPlayer> picking = new HashSet<>();
 
-    @Inject PickerMatchModule(ComponentRenderContext renderer, JoinMatchModule jmm, Optional<TeamModule> teamModule, Optional<ClassModule> classModule, Optional<BlitzModule> blitzModule) {
+    @Inject PickerMatchModule(ComponentRenderContext renderer, JoinMatchModule jmm, BlitzMatchModule bmm, Optional<TeamModule> teamModule, Optional<ClassModule> classModule) {
         this.renderer = renderer;
         this.jmm = jmm;
+        this.bmm = bmm;
         this.hasTeams = teamModule.isPresent();
         this.hasClasses = classModule.isPresent();
-        this.isBlitz = blitzModule.filter(BlitzModule::isEnabled).isPresent();
     }
 
     protected boolean settingEnabled(MatchPlayer player) {
@@ -142,7 +143,7 @@ public class PickerMatchModule extends MatchModule implements Listener {
         if(player == null) return false;
 
         // Player is eliminated from Blitz
-        if(isBlitz && getMatch().isRunning()) return false;
+        if(bmm.activated() && getMatch().isRunning()) return false;
 
         // Player is not observing or dead
         if(!(player.isObserving() || player.isDead())) return false;
@@ -342,6 +343,12 @@ public class PickerMatchModule extends MatchModule implements Listener {
 
     @EventHandler
     public void matchEnd(final MatchEndEvent event) {
+        refreshCountsAll();
+        refreshKitAll();
+    }
+
+    @EventHandler
+    public void blitzEnable(final BlitzEvent event) {
         refreshCountsAll();
         refreshKitAll();
     }

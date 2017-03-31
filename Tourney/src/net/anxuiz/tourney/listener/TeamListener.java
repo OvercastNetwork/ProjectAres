@@ -26,10 +26,11 @@ import tc.oc.api.docs.Entrant;
 import tc.oc.api.docs.Tournament;
 import tc.oc.commons.bukkit.event.UserLoginEvent;
 import tc.oc.commons.core.chat.Component;
-import tc.oc.pgm.blitz.BlitzMatchModule;
+import tc.oc.pgm.blitz.BlitzMatchModuleImpl;
 import tc.oc.pgm.channels.ChannelMatchModule;
 import tc.oc.pgm.events.MatchEndEvent;
 import tc.oc.pgm.events.MatchPlayerAddEvent;
+import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchState;
@@ -120,7 +121,7 @@ public class TeamListener implements Listener {
             TourneyState state = event.getNewState();
             if(tourney.getKDMSession() == null && state.equals(TourneyState.ENABLED_WAITING_FOR_READY)) {
                 Match match = matchProvider.get();
-                if(match.getMatchModule(ScoreMatchModule.class) != null || match.getMatchModule(BlitzMatchModule.class) != null) {
+                if(match.getMatchModule(ScoreMatchModule.class) != null || match.module(BlitzMatchModuleImpl.class).filter(BlitzMatchModule::activated).isPresent()) {
                     tourney.createKDMSession();
                 }
             }
