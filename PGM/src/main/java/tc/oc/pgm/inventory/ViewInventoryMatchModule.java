@@ -270,7 +270,7 @@ public class ViewInventoryMatchModule extends MatchModule implements Listener {
         MatchPlayer matchHolder = this.match.getPlayer(holder);
         if (matchHolder != null && matchHolder.isParticipating()) {
             BlitzMatchModule module = matchHolder.getMatch().getMatchModule(BlitzMatchModuleImpl.class);
-            if(module != null) {
+            if(module != null && module.activated() && module.lives(matchHolder).isPresent()) {
                 int livesLeft = module.livesCount(matchHolder);
                 ItemStack lives = new ItemStack(Material.EGG, livesLeft);
                 ItemMeta lifeMeta = lives.getItemMeta();
