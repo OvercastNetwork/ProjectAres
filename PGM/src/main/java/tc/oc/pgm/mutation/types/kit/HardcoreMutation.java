@@ -1,7 +1,6 @@
 package tc.oc.pgm.mutation.types.kit;
 
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import tc.oc.pgm.gamerules.GameRulesMatchModule;
 import tc.oc.pgm.killreward.KillReward;
 import tc.oc.pgm.kits.FreeItemKit;
@@ -26,13 +25,13 @@ public class HardcoreMutation extends KitMutation {
     }
 
     public GameRulesMatchModule rules() {
-        return match.module(GameRulesMatchModule.class).get();
+        return match().module(GameRulesMatchModule.class).get();
     }
 
     @Override
     public void enable() {
         super.enable();
-        previous = world.getGameRuleValue(KEY);
+        previous = world().getGameRuleValue(KEY);
         rules().gameRules().put(KEY, "false");
     }
 
@@ -40,7 +39,7 @@ public class HardcoreMutation extends KitMutation {
     public void disable() {
         rules().gameRules().remove(KEY);
         if(previous != null) {
-            world.setGameRuleValue(KEY, previous);
+            world().setGameRuleValue(KEY, previous);
         }
         super.disable();
     }

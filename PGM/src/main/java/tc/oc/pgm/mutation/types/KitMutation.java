@@ -1,9 +1,16 @@
 package tc.oc.pgm.mutation.types;
 
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import tc.oc.commons.bukkit.inventory.Slot;
+import tc.oc.commons.core.util.Optionals;
 import tc.oc.pgm.killreward.KillReward;
 import tc.oc.pgm.killreward.KillRewardMatchModule;
+import tc.oc.pgm.kits.ItemKit;
 import tc.oc.pgm.kits.Kit;
 import tc.oc.pgm.kits.KitPlayerFacet;
 import tc.oc.pgm.match.Match;
@@ -11,19 +18,22 @@ import tc.oc.pgm.match.MatchPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.stream.Stream;
 
 /**
  * A mutation module that injects special kits on spawn and/or kill.
  */
-public class KitMutation extends MutationModule {
+public class KitMutation extends MutationModule.Impl {
 
     protected final List<Kit> kits;
     protected final Map<MatchPlayer, List<Kit>> playerKits;
     protected final Map<MatchPlayer, Map<Slot, ItemStack>> savedSlots;
+    protected final Set<Material> itemRemove;
     protected final List<KillReward> rewards;
     protected final boolean force;
 
@@ -32,6 +42,7 @@ public class KitMutation extends MutationModule {
         this.kits = new ArrayList<>();
         this.playerKits = new WeakHashMap<>();
         this.savedSlots = new WeakHashMap<>();
+        this.itemRemove = new HashSet<>();
         this.rewards = new ArrayList<>();
         this.force = force;
     }
@@ -59,6 +70,7 @@ public class KitMutation extends MutationModule {
         List<Kit> kits = new ArrayList<>();
         kits(player, kits);
         playerKits.put(player, kits);
+        kits.forEach(kit -> Optionals.cast(kit, ItemKit.class).ifPresent(items -> itemRemove.add(items.item().getType())));
         saved().forEach(slot -> {
             slot.item(player.getInventory()).ifPresent(item -> {
                 Map<Slot, ItemStack> slots = savedSlots.getOrDefault(player, new HashMap<>());
@@ -88,22 +100,34 @@ public class KitMutation extends MutationModule {
         return Stream.empty();
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onItemDrop(ItemSpawnEvent event) {
+        Item entity = event.getEntity();
+        if(entity != null) {
+            ItemStack item = entity.getItemStack();
+            if(item != null && itemRemove.contains(item.getType())) {
+                entity.remove();
+            }
+        }
+    }
+
     @Override
     public void enable() {
         super.enable();
-        match.module(KillRewardMatchModule.class).get().rewards().addAll(rewards);
-        if(match.hasStarted()) {
-            match.participants().forEach(this::apply);
+        match().module(KillRewardMatchModule.class).get().rewards().addAll(rewards);
+        if(match().hasStarted()) {
+            match().participants().forEach(this::apply);
         }
     }
 
     @Override
     public void disable() {
-        match.module(KillRewardMatchModule.class).get().rewards().removeAll(rewards);
-        match.participants().forEach(this::remove);
+        match().module(KillRewardMatchModule.class).get().rewards().removeAll(rewards);
+        match().participants().forEach(this::remove);
         kits.clear();
         playerKits.clear();
         savedSlots.clear();
+        itemRemove.clear();
         rewards.clear();
         super.disable();
     }

@@ -21,6 +21,7 @@ import tc.oc.commons.core.random.WeightedRandomChooser;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.Repeatable;
+import tc.oc.pgm.mutation.types.EntityMutation;
 import tc.oc.pgm.mutation.types.kit.EnchantmentMutation;
 import tc.oc.pgm.mutation.types.TargetMutation;
 import tc.oc.pgm.points.PointProviderAttributes;
@@ -28,19 +29,17 @@ import tc.oc.pgm.points.RandomPointProvider;
 import tc.oc.pgm.points.RegionPointProvider;
 import tc.oc.pgm.regions.CuboidRegion;
 
+import javax.annotation.Nullable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.WeakHashMap;
 
 import static tc.oc.commons.core.random.RandomUtils.nextBoolean;
 
-public class ApocalypseMutation extends TargetMutation {
+public class ApocalypseMutation extends EntityMutation<LivingEntity> implements TargetMutation {
 
     final static ImmutableMap<Integer, Integer> AMOUNT_MAP = new ImmutableMap.Builder<Integer, Integer>()
             .put(3,  25)
@@ -104,6 +103,7 @@ public class ApocalypseMutation extends TargetMutation {
     final static WeightedRandomChooser<EntityType, Integer> PASSENGER = new ImmutableWeightedRandomChooser<>(PASSENGER_MAP);
     final static WeightedRandomChooser<EntityType, Integer> CUBE = new ImmutableWeightedRandomChooser<>(CUBE_MAP);
 
+    final static Range<Integer> FREQUENCY = Range.closed(5, 30); // Seconds between entity spawns
     final static int DISTANCE = 15; // Max distance entities spawn from players
     final static int PARTICIPANT_ENTITIES = 25; // Max entities on the field per participant
     final static int MAX_ENTITIES = 500; // Max total entities on the field
@@ -111,33 +111,34 @@ public class ApocalypseMutation extends TargetMutation {
     final static Fraction SPECIAL_CHANCE = Fraction.ONE_FIFTH; // Chance of a special attribute occuring in an entity
     final static int SPECIAL_MULTIPLIER = 3; // Multiplier for special attributes
 
-    final WeakHashMap<Entity, Instant> entities;
-    long time;
+    long time; // world time
+    Instant next; // next time to spawn entities
+    final PointProviderAttributes attributes; // attributes to choosing random points
 
     public ApocalypseMutation(Match match) {
-        super(match, Duration.ofSeconds(20));
-        this.entities = new WeakHashMap<>();
+        super(match, false);
+        this.attributes = new PointProviderAttributes(null, null, true, false);
     }
 
     /**
      * Get the maximum amount of entities that can be spawned.
      */
     public int entitiesMax() {
-        return Math.min((int) match.participants().count() * PARTICIPANT_ENTITIES, MAX_ENTITIES);
+        return Math.min((int) match().participants().count() * PARTICIPANT_ENTITIES, MAX_ENTITIES);
     }
 
     /**
      * Get the number of available slots are left for additional entities to spawn.
      */
     public int entitiesLeft() {
-        return entitiesMax() - world.getLivingEntities().size() + (int) match.participants().count();
+        return entitiesMax() - world().getLivingEntities().size() + (int) match().participants().count();
     }
 
     /**
      * Generate a random spawn point given two locations.
      */
     public Optional<Location> location(Location start, Location end) {
-        return Optional.ofNullable(new RandomPointProvider(Collections.singleton(new RegionPointProvider(new CuboidRegion(start.position(), end.position()), new PointProviderAttributes()))).getPoint(match, null));
+        return Optional.ofNullable(new RandomPointProvider(Collections.singleton(new RegionPointProvider(new CuboidRegion(start.position(), end.position()), attributes))).getPoint(match(), null));
     }
 
     /**
@@ -147,15 +148,15 @@ public class ApocalypseMutation extends TargetMutation {
      */
     public void spawn(Location location, boolean ground) {
         int slots = entitiesLeft();
-        int queued = AMOUNT.choose(entropy);
+        int queued = AMOUNT.choose(entropy());
         // Remove any entities that may be over the max limit
         despawn(queued - slots);
         // Determine whether the entities should be airborn
-        int stack = STACK.choose(entropy);
-        boolean air = !ground || nextBoolean(random, SPECIAL_CHANCE);
+        int stack = STACK.choose(entropy());
+        boolean air = !ground || nextBoolean(random(), SPECIAL_CHANCE);
         if(air) {
-            stack += (stack == 1 && random.nextBoolean() ? 1 : 0);
-            location.add(0, entropy.randomInt(AIR_OFFSET), 0);
+            stack += (stack == 1 && random().nextBoolean() ? 1 : 0);
+            location.add(0, entropy().randomInt(AIR_OFFSET), 0);
         }
         // Select the random entity chooser based on ground, air, and stacked
         boolean stacked = stack > 1;
@@ -163,7 +164,7 @@ public class ApocalypseMutation extends TargetMutation {
         if(air) {
             if(stacked) {
                 if(ground) {
-                    chooser = nextBoolean(random, SPECIAL_CHANCE) ? CUBE : FLYABLE;
+                    chooser = nextBoolean(random(), SPECIAL_CHANCE) ? CUBE : FLYABLE;
                 } else {
                     chooser = FLYABLE;
                 }
@@ -174,7 +175,7 @@ public class ApocalypseMutation extends TargetMutation {
             if(stacked) {
                 chooser = GROUND;
             } else {
-                chooser = random.nextBoolean() ? GROUND : RANGED;
+                chooser = random().nextBoolean() ? GROUND : RANGED;
             }
         }
         // Select the specific entity types for the spawn,
@@ -182,13 +183,13 @@ public class ApocalypseMutation extends TargetMutation {
         // but may have variations (like armor) between them.
         List<EntityType> types = new ArrayList<>();
         for(int i = 0; i < stack; i++) {
-            types.add((i == 0 ? chooser : PASSENGER).choose(entropy));
+            types.add((i == 0 ? chooser : PASSENGER).choose(entropy()));
         }
         // Spawn the mobs and stack them if required
         for(int i = 0; i < queued; i++) {
             Entity last = null;
             for(EntityType type : types) {
-                Entity entity = spawn(location, type);
+                Entity entity = spawn(location, (Class<LivingEntity>) type.getEntityClass());
                 if(last != null) {
                     last.setPassenger(entity);
                 }
@@ -198,20 +199,14 @@ public class ApocalypseMutation extends TargetMutation {
 
     }
 
-    /**
-     * Spawn an individual entitiy at a location given an entity type.
-     * @param location the location to spawn at.
-     * @param type the type of entity.
-     * @return the constructed entity.
-     */
-    public LivingEntity spawn(Location location, EntityType type) {
-        EnchantmentMutation enchant = new EnchantmentMutation(match);
-        LivingEntity entity = (LivingEntity) spawn(location, type.getEntityClass());
+    @Override
+    public LivingEntity spawn(Location location, Class<LivingEntity> entityClass, @Nullable MatchPlayer owner) {
+        LivingEntity entity = super.spawn(location, entityClass, owner);
+        EnchantmentMutation enchant = new EnchantmentMutation(match());
         EntityEquipment equipment = entity.getEquipment();
         entity.setVelocity(Vector.getRandom());
-        entity.setAbsorption(5);
         ItemStack held = null;
-        switch(type) {
+        switch(entity.getType()) {
             case SKELETON:
             case WITHER_SKELETON:
             case STRAY:
@@ -221,7 +216,7 @@ public class ApocalypseMutation extends TargetMutation {
             case ZOMBIE_VILLAGER:
             case HUSK:
                 Zombie zombie = (Zombie) entity;
-                zombie.setBaby(nextBoolean(random, SPECIAL_CHANCE));
+                zombie.setBaby(nextBoolean(random(), SPECIAL_CHANCE));
                 break;
             case PIG_ZOMBIE:
                 PigZombie pigZombie = (PigZombie) entity;
@@ -231,8 +226,8 @@ public class ApocalypseMutation extends TargetMutation {
                 break;
             case CREEPER:
                 Creeper creeper = (Creeper) entity;
-                creeper.setPowered(nextBoolean(random, SPECIAL_CHANCE));
-                world.strikeLightningEffect(location);
+                creeper.setPowered(nextBoolean(random(), SPECIAL_CHANCE));
+                world().strikeLightningEffect(location);
                 break;
             case PRIMED_TNT:
                 TNTPrimed tnt = (TNTPrimed) entity;
@@ -244,14 +239,13 @@ public class ApocalypseMutation extends TargetMutation {
                 slime.setSize(slime.getSize() * SPECIAL_MULTIPLIER);
                 break;
             case SKELETON_HORSE:
-                world.strikeLightning(location);
+                world().strikeLightning(location);
                 break;
         }
-        if(held != null && random.nextBoolean()) {
+        if(held != null && random().nextBoolean()) {
             enchant.apply(held, equipment);
             equipment.setItemInMainHand(held);
         }
-        entities.put(entity, Instant.now());
         return entity;
     }
 
@@ -260,17 +254,12 @@ public class ApocalypseMutation extends TargetMutation {
      * to make room for new entities.
      * @param amount the amount of entities to despawn.
      */
-    public void despawn(int amount) {
-        entities.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.comparing(Instant::toEpochMilli)))
-                .limit(Math.max(0, amount))
-                .map(Map.Entry::getKey)
-                .forEach(Entity::remove);
+    public void despawn(long amount) {
+        entitiesByTime().limit(Math.max(0, amount)).forEachOrdered(this::despawn);
     }
 
     @Override
-    public void execute(List<MatchPlayer> players) {
+    public void target(List<MatchPlayer> players) {
         // At least one player is required to spawn mobs
         if(players.size() >= 1) {
             Location start, end;
@@ -284,7 +273,7 @@ public class ApocalypseMutation extends TargetMutation {
             if(location.isPresent()) { // if the location is safe (on ground)
                 spawn(location.get(), true);
             } else { // if the location was not safe, generate a simple midpoint location
-                spawn(start.position().midpoint(end.position()).toLocation(world), false);
+                spawn(start.position().midpoint(end.position()).toLocation(world()), false);
             }
         }
     }
@@ -295,20 +284,37 @@ public class ApocalypseMutation extends TargetMutation {
     }
 
     @Override
+    public Instant next() {
+        return next;
+    }
+
+    @Override
+    public void next(Instant time) {
+        next = time;
+    }
+
+    @Override
+    public Duration frequency() {
+        return Duration.ofSeconds(entropy().randomInt(FREQUENCY));
+    }
+
+    @Override
     public void enable() {
         super.enable();
-        time = world.getTime();
+        TargetMutation.super.enable();
+        time = world().getTime();
     }
 
     @Repeatable
     public void tick() {
-        world.setTime(16000); // Night time to prevent flaming entities
+        TargetMutation.super.tick();
+        world().setTime(16000); // Night time to prevent flaming entities
     }
 
     @Override
     public void disable() {
-        world.setTime(time);
-        despawn(entities.size());
+        world().setTime(time);
+        despawn(entities().count());
         super.disable();
     }
 
