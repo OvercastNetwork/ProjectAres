@@ -4,63 +4,85 @@ import com.google.common.collect.Range;
 import org.bukkit.Location;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
-import tc.oc.commons.core.collection.WeakHashSet;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
-import tc.oc.pgm.match.Repeatable;
+import tc.oc.pgm.mutation.types.EntityMutation;
 import tc.oc.pgm.mutation.types.TargetMutation;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
-public class BomberMutation extends TargetMutation {
+public class BomberMutation extends EntityMutation<TNTPrimed> implements TargetMutation {
 
     final static Duration FREQUENCY = Duration.ofSeconds(30);
-    final static Range<Integer> TARGETS = Range.closed(1, 5);
+    final static Range<Integer> TARGETS = Range.closed(2, 5);
     final static Range<Integer> HEIGHT = Range.closed(30, 60);
     final static Range<Integer> TICKS = Range.closed(10, 30);
 
-    final WeakHashSet<TNTPrimed> falling;
+    Instant next;
 
     public BomberMutation(Match match) {
-        super(match, FREQUENCY);
-        this.falling = new WeakHashSet<>();
+        super(match, false);
     }
 
     @Override
-    public void execute(List<MatchPlayer> players) {
+    public void target(List<MatchPlayer> players) {
         players.forEach(player -> {
-            int bombs = entropy.randomInt(TARGETS);
-            int height = entropy.randomInt(HEIGHT);
+            int bombs = entropy().randomInt(TARGETS);
+            int height = entropy().randomInt(HEIGHT);
             Location location = player.getLocation().clone().add(0, height, 0);
             for(int i = 0; i < bombs; i++) {
-                TNTPrimed tnt = world.spawn(location, TNTPrimed.class);
+                TNTPrimed tnt = spawn(location, TNTPrimed.class);
                 tnt.setGlowing(true);
                 tnt.setIsIncendiary(false);
-                tnt.setFuseTicks(Integer.MAX_VALUE);
+                tnt.setFuseTicks(200);
                 tnt.setVelocity(
                     new Vector(
-                        (random.nextBoolean() ? .5 : -.5) * entropy.randomDouble(),
-                        -entropy.randomDouble(),
-                        (random.nextBoolean() ? .5 : -.5) * entropy.randomDouble()
+                        (random().nextBoolean() ? .5 : -.5) * entropy().randomDouble(),
+                        -entropy().randomDouble(),
+                        (random().nextBoolean() ? .5 : -.5) * entropy().randomDouble()
                     )
                 );
-                falling.add(tnt);
             }
         });
     }
 
     @Override
     public int targets() {
-        return match.entropyForTick().randomInt(TARGETS);
+        return match().entropyForTick().randomInt(TARGETS);
     }
 
-    @Repeatable
+    @Override
+    public Instant next() {
+        return next;
+    }
+
+    @Override
+    public void next(Instant time) {
+        next = time;
+    }
+
+    @Override
+    public Duration frequency() {
+        return FREQUENCY;
+    }
+
+    @Override
+    public void remove(TNTPrimed entity) {
+        entity.setFuseTicks(entropy().randomInt(TICKS));
+    }
+
+    @Override
+    public void enable() {
+        super.enable();
+        TargetMutation.super.enable();
+    }
+
+    @Override
     public void tick() {
-        falling.stream()
-               .filter(TNTPrimed::isOnGround)
-               .forEach(tnt -> tnt.setFuseTicks(entropy.randomInt(TICKS)));
-        falling.removeIf(TNTPrimed::isOnGround);
+        TargetMutation.super.tick();
+        entities().filter(TNTPrimed::isOnGround).forEach(this::despawn);
     }
 
 }

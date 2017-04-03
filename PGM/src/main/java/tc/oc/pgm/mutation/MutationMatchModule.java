@@ -4,7 +4,6 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import tc.oc.commons.core.util.MapUtils;
 import tc.oc.commons.core.random.RandomUtils;
 import tc.oc.pgm.Config;
@@ -155,19 +154,6 @@ public class MutationMatchModule extends MatchModule {
 
     public boolean enabled(Mutation... mutations) {
         return mutationsActive().stream().anyMatch(m1 -> Stream.of(mutations).anyMatch(m2 -> m2.equals(m1)));
-    }
-
-    public boolean allowMob(CreatureSpawnEvent.SpawnReason reason) {
-        switch(reason) {
-            case NATURAL:
-            case DEFAULT:
-            case CHUNK_GEN:
-            case JOCKEY:
-            case MOUNT:
-                return false;
-            default:
-                return true;
-        }
     }
 
 }

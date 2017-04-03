@@ -7,7 +7,7 @@ import tc.oc.pgm.match.Match;
 import tc.oc.pgm.mutation.types.MutationModule;
 import tc.oc.pgm.rage.RageMatchModule;
 
-public class RageMutation extends MutationModule {
+public class RageMutation extends MutationModule.Impl {
 
     RageMatchModule rage;
 
@@ -26,4 +26,5 @@ public class RageMutation extends MutationModule {
         super.disable();
         rage = null;
     }
+
 }
