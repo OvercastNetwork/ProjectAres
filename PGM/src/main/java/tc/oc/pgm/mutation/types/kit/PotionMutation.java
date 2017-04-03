@@ -68,13 +68,13 @@ public class PotionMutation extends KitMutation {
     @Override
     public void kits(MatchPlayer player, List<Kit> kits) {
         super.kits(player, kits);
-        int numberOfPotions = entropy.randomInt(AMOUNT_RANGE);
+        int numberOfPotions = entropy().randomInt(AMOUNT_RANGE);
         for(int i = 0; i < numberOfPotions; i++) {
             WeightedRandomChooser<PotionEffectType, Integer> type;
             WeightedRandomChooser<Material, Integer> material;
             Range<Integer> range;
             // Determine whether the potion will be "good" or "bad"
-            if(random.nextBoolean()) {
+            if(random().nextBoolean()) {
                 type = BAD;
                 material = BAD_BOTTLE;
                 range = BAD_DURATION_RANGE;
@@ -84,10 +84,10 @@ public class PotionMutation extends KitMutation {
                 range = GOOD_DURATION_RANGE;
             }
             // Choose all the random attributes
-            PotionEffectType effect = type.choose(entropy);
-            Material bottle = material.choose(entropy);
-            int duration = 20 * entropy.randomInt(range);
-            int amplifier = entropy.randomInt(AMPLIFIER_RANGE);
+            PotionEffectType effect = type.choose(entropy());
+            Material bottle = material.choose(entropy());
+            int duration = 20 * entropy().randomInt(range);
+            int amplifier = entropy().randomInt(AMPLIFIER_RANGE);
             // Apply the attributes to the item stack
             ItemStack potion = item(bottle);
             PotionMeta meta = (PotionMeta) potion.getItemMeta();

@@ -1,7 +1,6 @@
 package tc.oc.pgm.mutation.types.kit;
 
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import tc.oc.pgm.killreward.KillReward;
 import tc.oc.pgm.kits.FreeItemKit;
 import tc.oc.pgm.kits.HealthKit;

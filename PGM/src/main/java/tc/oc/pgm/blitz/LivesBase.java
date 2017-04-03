@@ -27,7 +27,7 @@ public abstract class LivesBase implements Lives {
         update();
     }
 
-    private void update() {
+    protected void update() {
         competitor().getMatch().callEvent(new LivesEvent(this));
     }
 
@@ -67,7 +67,8 @@ public abstract class LivesBase implements Lives {
     public BaseComponent remaining() {
         return new Component(
             new TranslatableComponent(
-                "lives.remaining." + type().name().toLowerCase() + "." + (current() == 1 ? "singular" : "plural"),
+                "lives.remaining." + type().name().toLowerCase() + "." + (current() == 1 ? "singular"
+                                                                                         : "plural"),
                 new Component(current(), ChatColor.YELLOW)
             ),
             ChatColor.AQUA
@@ -103,7 +104,7 @@ public abstract class LivesBase implements Lives {
             new TranslatableComponent(
                 (delta > 0 ? "lives.change.gained."
                            : "lives.change.lost.") + (absDelta == 1 ? "singular"
-                                                                           : "plural"),
+                                                                    : "plural"),
                 new Component(absDelta, ChatColor.AQUA)
             ),
             ChatColor.WHITE

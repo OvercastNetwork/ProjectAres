@@ -3,20 +3,17 @@ package tc.oc.pgm.mutation.types.kit;
 import com.google.common.collect.Range;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.TippedArrow;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import tc.oc.commons.core.random.ImmutableWeightedRandomChooser;
 import tc.oc.commons.core.random.WeightedRandomChooser;
-import tc.oc.pgm.PGM;
+import tc.oc.commons.core.util.Optionals;
 import tc.oc.pgm.killreward.KillReward;
 import tc.oc.pgm.kits.FreeItemKit;
 import tc.oc.pgm.kits.ItemKit;
@@ -26,6 +23,7 @@ import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.mutation.types.KitMutation;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProjectileMutation extends KitMutation {
 
@@ -39,8 +37,6 @@ public class ProjectileMutation extends KitMutation {
     final static ItemKit BOW = new FreeItemKit(item(Material.BOW));
     final static ItemKit ARROWS = new FreeItemKit(item(Material.ARROW, 16));
 
-    final static String KEY = "is_modified_arrow";
-
     public ProjectileMutation(Match match) {
         super(match, false);
         this.rewards.add(new KillReward(ARROWS));
@@ -50,7 +46,7 @@ public class ProjectileMutation extends KitMutation {
     public void apply(MatchPlayer player) {
         super.apply(player);
         Inventory inventory = player.getInventory();
-        inventory.all(Material.BOW).values().forEach(arrow -> arrow.addUnsafeEnchantment(ENCHANTMENTS.choose(entropy), entropy.randomInt(ENCHANT_RANGE)));
+        inventory.all(Material.BOW).values().forEach(arrow -> arrow.addUnsafeEnchantment(ENCHANTMENTS.choose(entropy()), entropy().randomInt(ENCHANT_RANGE)));
     }
 
     @Override
@@ -62,23 +58,10 @@ public class ProjectileMutation extends KitMutation {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onBowShoot(EntityShootBowEvent event) {
-        Entity projectile = event.getProjectile();
-        if(projectile instanceof Arrow && (!projectile.hasMetadata(KEY) || !projectile.getMetadata(KEY, PGM.get()).asBoolean())) {
-            Arrow arrow = (Arrow) projectile;
-            TippedArrow tipped = world.spawn(projectile.getLocation(), TippedArrow.class);
-            tipped.setMetadata(KEY, new FixedMetadataValue(PGM.get(), true));
-            tipped.setCritical(arrow.isCritical());
-            tipped.setKnockbackStrength(arrow.getKnockbackStrength());
-            tipped.setDamage(arrow.getDamage());
-            tipped.setShooter(arrow.getShooter());
-            tipped.setVelocity(projectile.getVelocity());
-            tipped.setPickupRule(Arrow.PickupRule.DISALLOWED);
-            tipped.addCustomEffect(new PotionEffect(POTIONS.choose(entropy), 20 * entropy.randomInt(DURATION_RANGE), entropy.randomInt(AMPLIFIER_RANGE)), true);
-            arrow.remove();
-            event.setCancelled(true);
-            match.callEvent(new ProjectileLaunchEvent(tipped));
-        }
+    public void onProjectileHit(ProjectileHitEvent event) {
+        Optionals.cast(Optional.ofNullable(event.getHitEntity()), LivingEntity.class)
+                 .filter(entity -> Optional.ofNullable(event.getEntity().getShooter()).filter(shooter -> shooter instanceof Player).isPresent())
+                 .ifPresent(entity -> entity.addPotionEffect(new PotionEffect(POTIONS.choose(entropy()), 20 * entropy().randomInt(DURATION_RANGE), entropy().randomInt(AMPLIFIER_RANGE)), true));
     }
 
 }

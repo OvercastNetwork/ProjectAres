@@ -22,7 +22,7 @@ public abstract class NoFallMutation extends KitMutation {
     }
 
     public DisableDamageMatchModule damage() {
-        return match.module(DisableDamageMatchModule.class).get();
+        return match().module(DisableDamageMatchModule.class).get();
     }
 
     @Override

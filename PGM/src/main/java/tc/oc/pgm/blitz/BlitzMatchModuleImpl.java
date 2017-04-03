@@ -105,7 +105,11 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
         }
     }
 
-    private void showLives(MatchPlayer player, boolean release, boolean activate) {
+    private void livesHotbar(MatchPlayer player) {
+        lives(player).map(Lives::remaining).ifPresent(player::sendHotbarMessage);
+    }
+
+    private void livesTitle(MatchPlayer player, boolean release, boolean activate) {
         final Optional<Lives> lives = lives(player);
         if(activated() && lives.isPresent()) {
             player.showTitle(
@@ -116,6 +120,10 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
                 0, 60, 20
             );
         }
+    }
+
+    private void update() {
+        match.callEvent(new BlitzEvent(match, this));
     }
 
     @Override
@@ -142,6 +150,7 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
         activated = false;
         lives.clear();
         eliminated.clear();
+        update();
     }
 
     @Override
@@ -161,10 +170,10 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
             match.participants().forEach(player -> {
                 setup(player, false);
                 if(match.hasStarted()) {
-                    showLives(player, false, true);
+                    livesTitle(player, false, true);
                 }
             });
-            match.callEvent(new BlitzEvent(match, this));
+            update();
         }
     }
 
@@ -181,6 +190,7 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
                 if(notify) {
                     player.showTitle(Components.blank(), life.change(lives), 0, 40, 10);
                 }
+                player.competitor().ifPresent(competitor -> competitor.participants().forEach(this::livesHotbar));
                 if(life.empty() && immediate) {
                     eliminate(player);
                     return true;
@@ -225,9 +235,9 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
                 ImmutableSet.copyOf(getMatch().getParticipatingPlayers())
                             .stream()
                             .filter(this::eliminated)
-                            .forEach(participating -> {
-                                match.setPlayerParty(participating, match.getDefaultParty());
-                                world.spawnParticle(Particle.SMOKE_LARGE, player.getLocation(), 5);
+                            .forEach(eliminated -> {
+                                match.setPlayerParty(eliminated, match.getDefaultParty());
+                                world.spawnParticle(Particle.SMOKE_LARGE, eliminated.getLocation(), 5);
                             });
                 victory.invalidateAndCheckEnd();
             });
@@ -269,15 +279,14 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onDeath(MatchPlayerDeathEvent event) {
-        final MatchPlayer player = event.getVictim();
-        if(player.competitor().isPresent()) {
-            increment(player, -1, false, true);
-        }
+        event.getVictim()
+             .competitor()
+             .ifPresent(competitor -> increment(event.getVictim(), -1, false, true));
     }
 
     @EventHandler
     public void onRelease(ParticipantReleaseEvent event) {
-        showLives(event.getPlayer(), event.wasFrozen(), false);
+        livesTitle(event.getPlayer(), event.wasFrozen(), false);
     }
 
 }

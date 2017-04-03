@@ -21,31 +21,28 @@ import java.util.WeakHashMap;
 public class EnchantmentMutation extends KitMutation {
 
     final static ImmutableMap<Integer, Integer> LEVELS_MAP = new ImmutableMap.Builder<Integer, Integer>()
-            .put(1, 10)
-            .put(2, 3)
+            .put(1, 25)
+            .put(2, 5)
             .put(3, 1)
             .build();
 
     final static ImmutableMap<Enchantment, Integer> ARMOR_MAP = new ImmutableMap.Builder<Enchantment, Integer>()
             .put(Enchantment.PROTECTION_ENVIRONMENTAL, 15)
             .put(Enchantment.PROTECTION_PROJECTILE,    10)
-            .put(Enchantment.DURABILITY,               10)
             .put(Enchantment.PROTECTION_EXPLOSIONS,    5)
-            .put(Enchantment.PROTECTION_FALL,          5)
             .put(Enchantment.PROTECTION_FIRE,          5)
             .put(Enchantment.THORNS,                   1)
             .build();
 
     final static ImmutableMap<Enchantment, Integer> BOOTS_MAP = new ImmutableMap.Builder<Enchantment, Integer>()
             .putAll(ARMOR_MAP)
-            .put(Enchantment.WATER_WORKER,  5)
-            .put(Enchantment.DEPTH_STRIDER, 3)
-            .put(Enchantment.FROST_WALKER,  1)
+            .put(Enchantment.PROTECTION_FALL, 10)
+            .put(Enchantment.DEPTH_STRIDER,   3)
+            .put(Enchantment.FROST_WALKER,    1)
             .build();
 
     final static ImmutableMap<Enchantment, Integer> WEAPONS_MAP = new ImmutableMap.Builder<Enchantment, Integer>()
             .put(Enchantment.DAMAGE_ALL,    15)
-            .put(Enchantment.DURABILITY,    10)
             .put(Enchantment.KNOCKBACK,     10)
             .put(Enchantment.MENDING,       5)
             .put(Enchantment.SWEEPING_EDGE, 5)
@@ -53,7 +50,6 @@ public class EnchantmentMutation extends KitMutation {
             .build();
 
     final static ImmutableMap<Enchantment, Integer> TOOLS_MAP = new ImmutableMap.Builder<Enchantment, Integer>()
-            .put(Enchantment.DURABILITY,        10)
             .put(Enchantment.DIG_SPEED,         10)
             .put(Enchantment.SILK_TOUCH,        5)
             .put(Enchantment.LOOT_BONUS_BLOCKS, 5)
@@ -116,9 +112,9 @@ public class EnchantmentMutation extends KitMutation {
             byEntity.put(item, ImmutableMap.copyOf(item.getEnchantments()));
             savedEnchantments.put(entity, byEntity);
             // Apply the new enchantments
-            int amountOfEnchants = LEVELS.choose(entropy);
+            int amountOfEnchants = LEVELS.choose(entropy());
             for(int i = 0; i < amountOfEnchants; i++) {
-                item.addUnsafeEnchantment(chooser.choose(entropy), LEVELS.choose(entropy));
+                item.addUnsafeEnchantment(chooser.choose(entropy()), LEVELS.choose(entropy()));
             }
 
         }
@@ -129,7 +125,7 @@ public class EnchantmentMutation extends KitMutation {
         super.apply(player);
         player.getInventory().forEach(item -> {
             // Random number of enchantments on each item
-            int numberOfEnchants = LEVELS.choose(entropy);
+            int numberOfEnchants = LEVELS.choose(entropy());
             for(int i = 0; i < numberOfEnchants; i++) {
                 apply(item, player.getBukkit().getEquipment());
             }
