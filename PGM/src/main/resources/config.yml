@@ -84,6 +84,10 @@ rotation:
   initial-wait: 20000
   providers: {}
 
+poll:
+  maps:
+    path:
+
 map:
   sources: {}
 #    public:

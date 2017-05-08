@@ -18,17 +18,7 @@ import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.exceptions.NotFound;
 import tc.oc.api.minecraft.sessions.LocalSessionFactory;
 import tc.oc.api.model.NullModelService;
-import tc.oc.api.users.ChangeClassRequest;
-import tc.oc.api.users.ChangeSettingRequest;
-import tc.oc.api.users.CreditRaindropsRequest;
-import tc.oc.api.users.LoginRequest;
-import tc.oc.api.users.LoginResponse;
-import tc.oc.api.users.LogoutRequest;
-import tc.oc.api.users.PurchaseGizmoRequest;
-import tc.oc.api.users.UserSearchRequest;
-import tc.oc.api.users.UserSearchResponse;
-import tc.oc.api.users.UserService;
-import tc.oc.api.users.UserUpdateResponse;
+import tc.oc.api.users.*;
 import tc.oc.commons.core.concurrent.FutureUtils;
 import tc.oc.minecraft.api.user.UserFinder;
 
@@ -136,6 +126,36 @@ class LocalUserService extends NullModelService<User, UserDoc.Partial> implement
     @Override
     public ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request) {
         return find(userId);
+    }
+
+    @Override
+    public ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, CreditMaptokensRequest request) {
+        return FutureUtils.mapSync(find(userId), user -> new UserUpdateResponse() {
+            @Override
+            public boolean success() {
+                return true;
+            }
+
+            @Override
+            public User user() {
+                return user;
+            }
+        });
+    }
+
+    @Override
+    public ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, CreditMutationtokensRequest request) {
+        return FutureUtils.mapSync(find(userId), user -> new UserUpdateResponse() {
+            @Override
+            public boolean success() {
+                return true;
+            }
+
+            @Override
+            public User user() {
+                return user;
+            }
+        });
     }
 
     @Override

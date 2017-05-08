@@ -41,6 +41,16 @@ public class NullUserService extends NullModelService<User, UserDoc.Partial> imp
     }
 
     @Override
+    public ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, CreditMaptokensRequest request) {
+        return Futures.immediateFuture(UserUpdateResponse.FAILURE);
+    }
+
+    @Override
+    public ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, CreditMutationtokensRequest request) {
+        return Futures.immediateFuture(UserUpdateResponse.FAILURE);
+    }
+
+    @Override
     public <T extends UserDoc.Partial> ListenableFuture<User> update(UserId userId, T update) {
         return Futures.immediateFailedFuture(new NotFound());
     }

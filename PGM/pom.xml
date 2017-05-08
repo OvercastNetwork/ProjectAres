@@ -40,7 +40,6 @@
             <version>1.9-SNAPSHOT</version>
         </dependency>
 
-
         <!-- Testing -->
 
         <dependency>

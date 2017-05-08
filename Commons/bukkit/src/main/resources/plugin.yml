@@ -9,6 +9,9 @@ isolate: true
 depend: [API, BukkitSettings, Channels]
 
 permissions:
+  tokens.give:
+    description: Allows the player to give other players tokens
+    default: op
   nick.see-through-all:
     description: See the real names of all nicked players
     default: op
