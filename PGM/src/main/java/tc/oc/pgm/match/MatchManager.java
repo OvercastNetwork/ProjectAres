@@ -22,6 +22,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.event.EventBus;
 import tc.oc.api.util.Permissions;
 import tc.oc.commons.core.logging.Loggers;
+import tc.oc.pgm.PGM;
 import tc.oc.pgm.development.MapErrorTracker;
 import tc.oc.pgm.events.SetNextMapEvent;
 import tc.oc.pgm.map.MapLibrary;
@@ -113,7 +114,12 @@ public class MatchManager implements MatchFinder {
     public Set<PGMMap> loadMapsAndRotations() throws MapNotFoundException {
         Set<PGMMap> maps = loadNewMaps();
         loadRotations();
+        PGM.getPollableMaps().loadPollableMaps();
         return maps;
+    }
+
+    public Path getPluginDataFolder() {
+        return pluginDataFolder;
     }
 
     public RotationManager getRotationManager() {
@@ -233,6 +239,10 @@ public class MatchManager implements MatchFinder {
         }
 
         return null;
+    }
+
+    public boolean hasMapSet() {
+        return this.nextMap != null;
     }
 
     private @Nullable Match cycleTo(@Nullable Match oldMatch, PGMMap map) {

@@ -27,6 +27,18 @@ public interface UserService extends ModelService<User, UserDoc.Partial> {
 
     ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request);
 
+    default ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, int maptokens) {
+        return creditMaptokens(userId, () -> maptokens);
+    }
+
+    ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, CreditMaptokensRequest request);
+
+    default ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, int mutationtokens) {
+        return creditMutationtokens(userId, () -> mutationtokens);
+    }
+
+    ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, CreditMutationtokensRequest request);
+
     <T extends UserDoc.Partial> ListenableFuture<User> update(UserId userId, T update);
 
     ListenableFuture<User> changeSetting(UserId userId, ChangeSettingRequest request);

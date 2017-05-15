@@ -15,17 +15,7 @@ import tc.oc.api.message.types.PlayerTeleportRequest;
 import tc.oc.api.minecraft.users.UserStore;
 import tc.oc.api.model.HttpModelService;
 import tc.oc.api.queue.Exchange;
-import tc.oc.api.users.ChangeClassRequest;
-import tc.oc.api.users.ChangeSettingRequest;
-import tc.oc.api.users.CreditRaindropsRequest;
-import tc.oc.api.users.LoginRequest;
-import tc.oc.api.users.LoginResponse;
-import tc.oc.api.users.LogoutRequest;
-import tc.oc.api.users.PurchaseGizmoRequest;
-import tc.oc.api.users.UserSearchRequest;
-import tc.oc.api.users.UserSearchResponse;
-import tc.oc.api.users.UserService;
-import tc.oc.api.users.UserUpdateResponse;
+import tc.oc.api.users.*;
 import tc.oc.commons.core.concurrent.FutureUtils;
 import tc.oc.minecraft.api.entity.Player;
 
@@ -89,6 +79,16 @@ class OCNUserService extends HttpModelService<User, UserDoc.Partial> implements 
     @Override
     public ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request) {
         return handleUpdate(client().post(memberUri(userId, "purchase_gizmo"), request, User.class, HttpOption.INFINITE_RETRY));
+    }
+
+    @Override
+    public ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, CreditMaptokensRequest request) {
+        return handleUserUpdate(client().post(memberUri(userId, "credit_maptokens"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
+    }
+
+    @Override
+    public ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, CreditMutationtokensRequest request) {
+        return handleUserUpdate(client().post(memberUri(userId, "credit_mutationtokens"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
     }
 
     @Override

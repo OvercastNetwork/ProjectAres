@@ -18,6 +18,7 @@ import tc.oc.pgm.development.MapErrorTracker;
 import tc.oc.pgm.freeze.FreezeCommands;
 import tc.oc.pgm.freeze.FreezeListener;
 import tc.oc.pgm.listeners.BlockTransformListener;
+import tc.oc.pgm.listeners.InterfaceListener;
 import tc.oc.pgm.listeners.MatchAnnouncer;
 import tc.oc.pgm.listeners.PGMListener;
 import tc.oc.pgm.listing.ListingManifest;
@@ -97,6 +98,7 @@ public final class PGMManifest extends HybridManifest {
         facets.register(DefuseListener.class);
         facets.register(FreezeCommands.class);
         facets.register(FreezeListener.class);
+        facets.register(InterfaceListener.class);
 
         requestStaticInjection(State.class);
     }

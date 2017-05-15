@@ -8,6 +8,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import tc.oc.commons.bukkit.configuration.ConfigUtils;
 import tc.oc.commons.core.util.TimeUtils;
@@ -21,6 +24,12 @@ public class Config {
         } else {
             return new YamlConfiguration();
         }
+    }
+
+    public static Path getPollAbleMapPath() {
+        Path pollPath = Paths.get(getConfiguration().getString("poll.maps.path", "default.txt"));
+        if(!pollPath.isAbsolute()) pollPath = PGM.getMatchManager().getPluginDataFolder().resolve(pollPath);
+        return pollPath;
     }
 
     public static int minimumPlayers() {

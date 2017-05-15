@@ -25,6 +25,7 @@ import tc.oc.pgm.structure.StructureManifest;
 import tc.oc.pgm.teams.TeamManifest;
 import tc.oc.pgm.terrain.TerrainManifest;
 import tc.oc.pgm.tnt.TNTManifest;
+import tc.oc.pgm.tokens.TokenManifest;
 import tc.oc.pgm.tracker.TrackerManifest;
 import tc.oc.pgm.tutorial.TutorialManifest;
 import tc.oc.pgm.wool.WoolManifest;
@@ -62,6 +63,7 @@ public class PGMModulesManifest extends HybridManifest {
         install(new BroadcastManifest());
         install(new StatsManifest());
         install(new RaindropManifest());
+        install(new TokenManifest());
         install(new ObjectiveModeManifest());
         install(new BlitzManifest());
     }

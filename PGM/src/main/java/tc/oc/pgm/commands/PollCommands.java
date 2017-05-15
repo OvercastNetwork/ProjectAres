@@ -1,15 +1,30 @@
 package tc.oc.pgm.commands;
 
+import com.google.common.collect.Sets;
+import com.google.inject.Inject;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import tc.oc.api.bukkit.users.BukkitUserStore;
+import tc.oc.api.docs.PlayerId;
+import tc.oc.commons.bukkit.commands.UserFinder;
+import tc.oc.commons.bukkit.tokens.TokenUtil;
+import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.map.PGMMap;
+import tc.oc.pgm.mutation.Mutation;
+import tc.oc.pgm.mutation.MutationMatchModule;
+import tc.oc.pgm.mutation.command.MutationCommands;
 import tc.oc.pgm.polls.*;
 
 import com.sk89q.minecraft.util.commands.*;
+
+import java.util.Collection;
+
+import static tc.oc.commons.bukkit.commands.CommandUtils.newCommandException;
 
 public class PollCommands {
     @Command(
@@ -102,12 +117,59 @@ public class PollCommands {
         )
         @CommandPermissions("poll.next")
         public static void pollNext(CommandContext args, CommandSender sender) throws CommandException {
+            if (PGM.getMatchManager().hasMapSet()) {
+                throw newCommandException(sender, new TranslatableComponent("poll.map.alreadyset"));
+            }
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                if (TokenUtil.getUser(player).maptokens() < 1) {
+                    throw newCommandException(sender, new TranslatableComponent("tokens.map.fail"));
+                }
+            }
+
             Player initiator = tc.oc.commons.bukkit.commands.CommandUtils.senderToPlayer(sender);
+
             PGMMap nextMap = CommandUtils.getMap(args.getJoinedStrings(0), sender);
-            startPoll(new PollNextMap(PGM.getPollManager(), Bukkit.getServer(), initiator.getName(), PGM.getMatchManager(), nextMap));
+
+            if (!PGM.getPollableMaps().isAllowed(nextMap)) {
+                throw newCommandException(sender, new TranslatableComponent("poll.map.notallowed"));
+            }
+
+            startPoll(new PollNextMap(PGM.getPollManager(), Bukkit.getServer(), sender,  initiator.getName(), PGM.getMatchManager(), nextMap));
         }
 
-        private static void startPoll(Poll poll) throws CommandException {
+        @Command(
+                aliases = {"mutation", "mt"},
+                desc = "Start a poll to set a mutation",
+                usage = "[mutation name]",
+                min = 1,
+                max = -1
+        )
+        @CommandPermissions("poll.mutation")
+        public static void pollMutation(CommandContext args, CommandSender sender) throws CommandException {
+
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                if (TokenUtil.getUser(player).mutationtokens() < 1) {
+                    throw newCommandException(sender, new TranslatableComponent("tokens.mutation.fail"));
+                }
+            }
+
+            String mutationString = args.getString(0);
+            MutationMatchModule module = PGM.getMatchManager().getCurrentMatch(sender).getMatchModule(MutationMatchModule.class);
+
+
+            Mutation mutation = StringUtils.bestFuzzyMatch(mutationString, Sets.newHashSet(Mutation.values()), 0.9);
+            if(mutation == null) {
+                throw newCommandException(sender, new TranslatableComponent("command.mutation.error.find", mutationString));
+            } else if(MutationCommands.getInstance().getMutationQueue().mutations().contains(mutation)) {
+                throw newCommandException(sender, new TranslatableComponent(true ? "command.mutation.error.enabled" : "command.mutation.error.disabled", mutation.getComponent(net.md_5.bungee.api.ChatColor.RED)));
+            }
+
+            startPoll(new PollMutation(PGM.getPollManager(), Bukkit.getServer(), sender, mutation, module));
+        }
+
+        public static void startPoll(Poll poll) throws CommandException {
             PollManager pollManager = PGM.getPollManager();
             if(pollManager.isPollRunning()) {
                 throw new CommandException("Another poll is already running.");
