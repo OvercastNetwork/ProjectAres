@@ -1,6 +1,7 @@
 package tc.oc.pgm;
 
 import tc.oc.commons.core.inject.HybridManifest;
+import tc.oc.pgm.animation.AnimationManifest;
 import tc.oc.pgm.broadcast.BroadcastManifest;
 import tc.oc.pgm.classes.ClassManifest;
 import tc.oc.pgm.controlpoint.ControlPointManifest;
@@ -44,6 +45,7 @@ public class PGMModulesManifest extends HybridManifest {
         install(new TeamManifest());
         install(new TrackerManifest());
         install(new StructureManifest());
+        install(new AnimationManifest());
         install(new PickerManifest());
         install(new ScoreboardManifest());
         install(new DamageManifest());
