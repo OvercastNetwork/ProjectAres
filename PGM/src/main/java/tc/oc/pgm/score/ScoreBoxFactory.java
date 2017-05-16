@@ -1,6 +1,7 @@
 package tc.oc.pgm.score;
 
 import java.util.Map;
+import java.util.Optional;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -153,7 +154,7 @@ class ScoreBoxFactoryImpl extends FeatureDefinition.Impl implements ScoreBoxFact
                 );
             }
 
-            smm.incrementScore(player.getCompetitor(), points);
+            smm.incrementScore(player.getCompetitor(), points, Optional.of(player));
         }
     }
 }

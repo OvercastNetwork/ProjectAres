@@ -10,6 +10,7 @@ import tc.oc.pgm.damage.DamageManifest;
 import tc.oc.pgm.destroyable.DestroyableManifest;
 import tc.oc.pgm.filters.FilterManifest;
 import tc.oc.pgm.flag.FlagManifest;
+import tc.oc.pgm.highlights.HighlightManifest;
 import tc.oc.pgm.itemkeep.ItemKeepManifest;
 import tc.oc.pgm.kits.KitManifest;
 import tc.oc.pgm.lane.LaneManifest;
@@ -68,5 +69,6 @@ public class PGMModulesManifest extends HybridManifest {
         install(new TokenManifest());
         install(new ObjectiveModeManifest());
         install(new BlitzManifest());
+        install(new HighlightManifest());
     }
 }
