@@ -68,6 +68,16 @@ public class MainTokenMenu extends ChestInterface {
             }
         });
 
+        buttons.add(new Button(
+                new ItemCreator(Material.EMERALD)
+                        .setName(Constants.PREFIX + "Buy Tokens")
+                , 13) {
+            @Override
+            public void function(Player player) {
+                player.openInventory(new TokenPurchaseInterface(player).getInventory());
+            }
+        });
+
         setButtons(buttons);
         updateInventory();
     }

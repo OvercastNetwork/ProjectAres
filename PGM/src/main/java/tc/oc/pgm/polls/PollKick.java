@@ -20,7 +20,12 @@ public class PollKick extends Poll {
     }
 
     @Override
-    public String getActionString(ChatColor neutral) {
-        return "to kick " + ChatColor.RED + this.player;
+    public String getActionString() {
+        return normalize + "Kick: " + boldAqua + this.player;
+    }
+
+    @Override
+    public String getDescriptionMessage() {
+        return "to kick " + boldAqua +  this.player;
     }
 }

@@ -11,7 +11,7 @@ depend: [API, BukkitSettings, Channels]
 permissions:
   tokens.give:
     description: Allows the player to give other players tokens
-    default: op
+    default: false
   nick.see-through-all:
     description: See the real names of all nicked players
     default: op
@@ -43,7 +43,7 @@ permissions:
     default: op
   ocn.developer:
     description: Various developer commands
-    default: op
+    default: false
   ocn.console:
     description: Parent for perms that are always granted to console
     default: false

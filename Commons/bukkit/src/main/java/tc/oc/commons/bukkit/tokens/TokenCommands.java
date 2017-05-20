@@ -83,10 +83,10 @@ public class TokenCommands implements Commands {
                         TokenUtil.giveMapTokens(result.user, numberOfTokens);
                     } else if (type.equals("mutation") || type.equals("mt")) {
                         TokenUtil.giveMutationTokens(result.user, numberOfTokens);
-                    } else if (type.equals("raindrops")) {
+                    } else if (type.equals("droplets") || type.equals("raindrops") || type.equals("rds")) {
                         RaindropUtil.giveRaindrops(result.user, numberOfTokens, null);
                     } else {
-                        throw new CommandUsageException(ChatColor.RED + "/givetokens [player] [map|mutation] [count]");
+                        throw new CommandUsageException(ChatColor.RED + "/givetokens [player] [setnext|mutation] [count]");
                     }
                 })
         );
