@@ -1,16 +1,16 @@
 package tc.oc.pgm.commands;
 
 import com.google.common.collect.Sets;
-import com.google.inject.Inject;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
+import com.sk89q.minecraft.util.commands.NestedCommand;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import tc.oc.api.bukkit.users.BukkitUserStore;
-import tc.oc.api.docs.PlayerId;
-import tc.oc.commons.bukkit.commands.UserFinder;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
 import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.pgm.PGM;
@@ -18,12 +18,13 @@ import tc.oc.pgm.map.PGMMap;
 import tc.oc.pgm.mutation.Mutation;
 import tc.oc.pgm.mutation.MutationMatchModule;
 import tc.oc.pgm.mutation.command.MutationCommands;
-import tc.oc.pgm.polls.*;
-
-import com.sk89q.minecraft.util.commands.*;
-
-import java.util.Collection;
-
+import tc.oc.pgm.polls.Poll;
+import tc.oc.pgm.polls.PollCustom;
+import tc.oc.pgm.polls.PollEndReason;
+import tc.oc.pgm.polls.PollKick;
+import tc.oc.pgm.polls.PollManager;
+import tc.oc.pgm.polls.PollMutation;
+import tc.oc.pgm.polls.PollNextMap;
 import static tc.oc.commons.bukkit.commands.CommandUtils.newCommandException;
 
 public class PollCommands {
@@ -158,15 +159,31 @@ public class PollCommands {
             String mutationString = args.getString(0);
             MutationMatchModule module = PGM.getMatchManager().getCurrentMatch(sender).getMatchModule(MutationMatchModule.class);
 
-
             Mutation mutation = StringUtils.bestFuzzyMatch(mutationString, Sets.newHashSet(Mutation.values()), 0.9);
             if(mutation == null) {
                 throw newCommandException(sender, new TranslatableComponent("command.mutation.error.find", mutationString));
             } else if(MutationCommands.getInstance().getMutationQueue().mutations().contains(mutation)) {
                 throw newCommandException(sender, new TranslatableComponent(true ? "command.mutation.error.enabled" : "command.mutation.error.disabled", mutation.getComponent(net.md_5.bungee.api.ChatColor.RED)));
+            } else if (!mutation.isPollable()) {
+                throw newCommandException(sender, new TranslatableComponent("command.mutation.error.illegal", mutationString));
             }
 
             startPoll(new PollMutation(PGM.getPollManager(), Bukkit.getServer(), sender, mutation, module));
+        }
+
+        @Command(
+                aliases = {"custom"},
+                desc = "Start a poll with the supplied text",
+                usage = "[text...]",
+                min = 1,
+                max = -1
+        )
+        @CommandPermissions("poll.custom")
+        public static void pollCustom(CommandContext args, CommandSender sender) throws CommandException {
+            String text = args.getJoinedStrings(0);
+            Player initiator = tc.oc.commons.bukkit.commands.CommandUtils.senderToPlayer(sender);
+
+            startPoll(new PollCustom(PGM.getPollManager(), Bukkit.getServer(), initiator.getName(), text));
         }
 
         public static void startPoll(Poll poll) throws CommandException {
@@ -175,7 +192,8 @@ public class PollCommands {
                 throw new CommandException("Another poll is already running.");
             }
             pollManager.startPoll(poll);
-            Bukkit.getServer().broadcastMessage(ChatColor.RED + poll.getInitiator() + ChatColor.YELLOW + " has started a poll to " + poll.getActionString(ChatColor.YELLOW));
+            Bukkit.getServer().broadcastMessage(Poll.boldAqua + poll.getInitiator() + Poll.normalize + " has started a poll " + poll.getDescriptionMessage());
+            Bukkit.broadcastMessage(Poll.tutorialMessage());
         }
     }
 }

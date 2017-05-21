@@ -22,6 +22,8 @@ public class LastPageButton extends Button {
     public LastPageButton(SinglePageInterface gui, int slot) {
         super(null, slot);
         this.page = gui;
+        this.setIcon(new ItemCreator(Material.BARRIER)
+                .setName(Constants.PREFIX + "Previous"));
     }
 
     public SinglePageInterface getPage() {
@@ -47,12 +49,6 @@ public class LastPageButton extends Button {
         } catch (Exception e) {
             return gui;
         }
-    }
-
-    @Override
-    public ItemCreator getIcon() {
-        return new ItemCreator(Material.BARRIER)
-                .setName(Constants.PREFIX + "Previous");
     }
 
     @Override

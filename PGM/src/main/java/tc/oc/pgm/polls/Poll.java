@@ -14,6 +14,10 @@ public abstract class Poll implements Runnable {
     protected String initiator;
     protected int timeLeftSeconds;
 
+    public static String boldAqua = ChatColor.BOLD + "" + ChatColor.AQUA;
+    public static String normalize = ChatColor.RESET + "" + ChatColor.DARK_AQUA;
+    public static String seperator = ChatColor.RESET + " | ";
+
     public Poll(PollManager pollManager, Server server, String initiator) {
         this.pollManager = pollManager;
         this.server = server;
@@ -64,15 +68,23 @@ public abstract class Poll implements Runnable {
 
     public abstract void executeAction();
 
-    public abstract String getActionString(ChatColor neutral);
+    public abstract String getActionString();
+
+    public abstract String getDescriptionMessage();
 
     public String getStatusMessage() {
-        ChatColor neutral = ChatColor.YELLOW;
-        return ChatColor.GOLD.toString() + this.getTimeLeftSeconds() + neutral + " seconds left in poll " + this.getActionString(neutral) + neutral + "  " + this.formatForAgainst(neutral);
+        String message = boldAqua + "[Poll] " + this.getTimeLeftSeconds() + normalize + " seconds left" + seperator;
+        message += getActionString() + seperator + formatForAgainst();
+
+        return message;
     }
 
-    protected String formatForAgainst(ChatColor neutral) {
-        return "[" + ChatColor.DARK_GREEN + this.getVotesFor() + " " + ChatColor.DARK_RED + this.getVotesAgainst() + neutral + "]";
+    protected String formatForAgainst() {
+        return normalize + "Yes: " + boldAqua + this.getVotesFor() + " " + normalize + "No: " + boldAqua + this.getVotesAgainst();
+    }
+
+    public static String tutorialMessage() {
+        return normalize + "Use " + boldAqua + "/vote [yes|no]" + normalize + " to vote";
     }
 
     public boolean hasVoted(String playerName) {

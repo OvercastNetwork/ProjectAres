@@ -1,13 +1,11 @@
 package tc.oc.pgm.polls;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
 import tc.oc.pgm.map.PGMMap;
 import tc.oc.pgm.match.MatchManager;
-
 
 public class PollNextMap extends Poll {
     private final MatchManager mm;
@@ -31,7 +29,12 @@ public class PollNextMap extends Poll {
     }
 
     @Override
-    public String getActionString(ChatColor neutral) {
-        return "to set the next map to " + ChatColor.GOLD + this.nextMap.getInfo().name;
+    public String getActionString() {
+        return normalize + "Next map: " + boldAqua + this.nextMap.getInfo().name;
+    }
+
+    @Override
+    public String getDescriptionMessage() {
+        return "to set the next map to " + boldAqua + this.nextMap.getInfo().name;
     }
 }

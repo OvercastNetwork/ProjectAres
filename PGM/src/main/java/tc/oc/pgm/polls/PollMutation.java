@@ -1,7 +1,6 @@
 package tc.oc.pgm.polls;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,8 +36,14 @@ public class PollMutation extends Poll {
     }
 
     @Override
-    public String getActionString(ChatColor neutral) {
-        return "to add the mutation " + ChatColor.GOLD + mutation.name().substring(0,1)
+    public String getActionString() {
+        return normalize + "Add mutation: " + boldAqua + mutation.name().substring(0,1)
                 + mutation.name().toLowerCase().substring(1);
+    }
+
+    @Override
+    public String getDescriptionMessage() {
+        return "to add the " + boldAqua + mutation.name().substring(0,1)
+                + mutation.name().toLowerCase().substring(1) + " mutation";
     }
 }

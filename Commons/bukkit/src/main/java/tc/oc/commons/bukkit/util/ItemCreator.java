@@ -24,7 +24,7 @@ public class ItemCreator {
     private Color armorColor;
     private String skullOwner;
     private PotionEffect potionEffect;
-    private boolean hideFlags;
+    private List<HideFlag> hideFlags;
     private boolean unbreakable;
 
     public ItemCreator(Material material) {
@@ -138,12 +138,44 @@ public class ItemCreator {
         return this;
     }
 
-    public boolean getHideFlags() {
+    public enum HideFlag {
+        ENCHANTMENTS(1),
+        ATTRIBUTES(2),
+        UNBREAKABLE(4),
+        CAN_DESTROY(8),
+        CAN_PLACE_ON(16),
+        OTHERS(32),
+        ALL(ENCHANTMENTS.getValue() +
+                ATTRIBUTES.getValue() +
+                UNBREAKABLE.getValue() +
+                CAN_DESTROY.getValue() +
+                CAN_PLACE_ON.getValue() +
+                OTHERS.getValue()
+        );
+
+        private int value;
+
+        HideFlag(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public List<HideFlag> getHideFlags() {
         return hideFlags;
     }
 
-    public ItemCreator setHideFlags(boolean hideFlags) {
-        this.hideFlags = hideFlags;
+    @Deprecated
+    public ItemCreator setHideFlags(boolean all) {
+        this.hideFlags = all ? Collections.singletonList(HideFlag.ALL) : Collections.emptyList();
+        return this;
+    }
+
+    public ItemCreator setHideFlags(HideFlag... hideFlags) {
+        this.hideFlags = Arrays.asList(hideFlags);
         return this;
     }
 
@@ -152,8 +184,13 @@ public class ItemCreator {
         if (!item.getType().equals(Material.AIR)) {
             net.minecraft.server.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
             NBTTagCompound tag = new NBTTagCompound();
-            if (hideFlags) {
-                tag.setInt("HideFlags", 63);
+            if (hideFlags != null && hideFlags.size() > 0) {
+                int hideFlagValue = 0;
+                for (HideFlag flag : getHideFlags()) {
+                    hideFlagValue += flag.getValue();
+                }
+                hideFlagValue = Math.max(1, Math.min(63, hideFlagValue));
+                tag.setInt("HideFlags", hideFlagValue);
             }
             if (skullOwner != null) {
                 tag.setString("SkullOwner", skullOwner);

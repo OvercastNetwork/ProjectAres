@@ -32,10 +32,10 @@ public class TeamCommands implements NestedCommands {
     @Singleton
     public static class Parent implements Commands {
         @Command(
-            aliases = {"team"},
-            desc = "Commands for working with teams",
-            min = 1,
-            max = -1
+                aliases = {"team"},
+                desc = "Commands for working with teams",
+                min = 1,
+                max = -1
         )
         @NestedCommand({TeamCommands.class})
         public void team() {}
@@ -50,10 +50,10 @@ public class TeamCommands implements NestedCommands {
     }
 
     @Command(
-        aliases = {"myteam", "mt"},
-        desc = "Shows you what team you are on",
-        min = 0,
-        max = 0
+            aliases = {"myteam", "mt"},
+            desc = "Shows you what team you are on",
+            min = 0,
+            max = 0
     )
     @CommandPermissions("pgm.myteam")
     public void myteam(CommandContext args, CommandSender sender) throws CommandException {
@@ -66,11 +66,11 @@ public class TeamCommands implements NestedCommands {
     }
 
     @Command(
-        aliases = {"force"},
-        desc = "Force a player onto a team",
-        usage = "<player> [team]",
-        min = 1,
-        max = 2
+            aliases = {"force"},
+            desc = "Force a player onto a team",
+            usage = "<player> [team]",
+            min = 1,
+            max = 2
     )
     @CommandPermissions("pgm.team.force")
     public void force(CommandContext args, CommandSender sender) throws CommandException, SuggestException {
@@ -90,10 +90,10 @@ public class TeamCommands implements NestedCommands {
     }
 
     @Command(
-        aliases = {"shuffle"},
-        desc = "Shuffle the teams",
-        min = 0,
-        max = 0
+            aliases = {"shuffle"},
+            desc = "Shuffle the teams",
+            min = 0,
+            max = 0
     )
     @CommandPermissions("pgm.team.shuffle")
     public void shuffle(CommandContext args, CommandSender sender) throws CommandException {
@@ -114,11 +114,11 @@ public class TeamCommands implements NestedCommands {
     }
 
     @Command(
-        aliases = {"alias"},
-        desc = "Rename a team",
-        usage = "<old name> <new name>",
-        min = 2,
-        max = -1
+            aliases = {"alias"},
+            desc = "Rename a team",
+            usage = "<old name> <new name>",
+            min = 2,
+            max = -1
     )
     @CommandPermissions("pgm.team.alias")
     public void alias(CommandContext args, CommandSender sender) throws CommandException, SuggestException {
@@ -143,42 +143,62 @@ public class TeamCommands implements NestedCommands {
     }
 
     @Command(
-        aliases = {"max", "size"},
-        desc = "Change the maximum size of a team. If max-overfill is not specified, it will be the same as max-players.",
-        usage = "<team> (default | <max-players> [max-overfill])",
-        min = 2,
-        max = 3
+            aliases = {"max", "size"},
+            desc = "Change the maximum size of a team. If max-overfill is not specified, it will be the same as max-players.",
+            usage = "<team> (default | <max-players> [max-overfill])",
+            min = 2,
+            max = 3
     )
     @CommandPermissions("pgm.team.size")
     public void max(CommandContext args, CommandSender sender) throws CommandException, SuggestException {
-        Team team = utils.teamArgument(args, 0);
 
-        if("default".equals(args.getString(1))) {
-            team.resetMaxSize();
-        } else {
-            int maxPlayers = args.getInteger(1);
-            if(maxPlayers < 0) throw new CommandException("max-players cannot be less than 0");
+        int maxPlayers = args.getInteger(1);
+        if(maxPlayers < 0) throw new CommandException("max-players cannot be less than 0");
 
-            Integer maxOverfill = null;
-            if(args.argsLength() == 3) {
-                maxOverfill = args.getInteger(2);
-                if(maxOverfill < maxPlayers) throw new CommandException("max-overfill cannot be less than max-players");
-            }
-
-            team.setMaxSize(maxPlayers, maxOverfill != null ? maxOverfill : maxPlayers);
+        Integer maxOverfill = null;
+        if(args.argsLength() == 3) {
+            maxOverfill = args.getInteger(2);
+            if (maxOverfill < maxPlayers) throw new CommandException("max-overfill cannot be less than max-players");
         }
 
-        sender.sendMessage(team.getColoredName() +
-                           ChatColor.WHITE + " now has max size " + ChatColor.AQUA + team.getMaxPlayers() +
-                           ChatColor.WHITE + " and max overfill " + ChatColor.AQUA + team.getMaxOverfill());
+        List<Team> teams = new ArrayList<>();
+
+        if (args.getString(0).equals("*")) {
+            List<String> teamNames = utils.teamNames();
+            for (String teamName: teamNames) {
+                if (!teamName.toLowerCase().contains("obs")) {
+                    teams.add(utils.team(teamName));
+                }
+            }
+        } else {
+            teams.add(utils.teamArgument(args, 0));
+        }
+
+        for (Team team: teams) {
+            if("default".equals(args.getString(1))) {
+                team.resetMaxSize();
+            } else {
+                team.setMaxSize(maxPlayers, maxOverfill != null ? maxOverfill : maxPlayers);
+            }
+        }
+
+        if (teams.size() == 1) {
+            sender.sendMessage(teams.get(0).getColoredName() +
+                    ChatColor.WHITE + " now has max size " + ChatColor.AQUA + teams.get(0).getMaxPlayers() +
+                    ChatColor.WHITE + " and max overfill " + ChatColor.AQUA + teams.get(0).getMaxOverfill());
+        } else if (teams.size() > 1) {
+            sender.sendMessage("All teams" +
+                    ChatColor.WHITE + " now have max size " + ChatColor.AQUA + teams.get(0).getMaxPlayers() +
+                    ChatColor.WHITE + " and max overfill " + ChatColor.AQUA + teams.get(0).getMaxOverfill());
+        }
     }
 
     @Command(
-        aliases = {"min"},
-        desc = "Change the minimum size of a team.",
-        usage = "<team> (default | <min-players>)",
-        min = 2,
-        max = 2
+            aliases = {"min"},
+            desc = "Change the minimum size of a team.",
+            usage = "<team> (default | <min-players>)",
+            min = 2,
+            max = 2
     )
     @CommandPermissions("pgm.team.size")
     public void min(CommandContext args, CommandSender sender) throws CommandException, SuggestException {
@@ -193,6 +213,6 @@ public class TeamCommands implements NestedCommands {
         }
 
         sender.sendMessage(team.getColoredName() +
-                           ChatColor.WHITE + " now has min size " + ChatColor.AQUA + team.getMinPlayers());
+                ChatColor.WHITE + " now has min size " + ChatColor.AQUA + team.getMinPlayers());
     }
 }
