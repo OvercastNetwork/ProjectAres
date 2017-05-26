@@ -12,6 +12,7 @@ import tc.oc.pgm.chat.MatchNameInvalidator;
 import tc.oc.pgm.chat.MatchUsernameRenderer;
 import tc.oc.pgm.commands.AdminCommands;
 import tc.oc.pgm.commands.MatchCommands;
+import tc.oc.pgm.commands.PollCommands;
 import tc.oc.pgm.debug.PGMLeakListener;
 import tc.oc.pgm.development.MapDevelopmentCommands;
 import tc.oc.pgm.development.MapErrorTracker;
@@ -80,6 +81,7 @@ public final class PGMManifest extends HybridManifest {
 
         final PluginFacetBinder facets = new PluginFacetBinder(binder());
         facets.register(AdminCommands.class);
+        facets.register(PollCommands.class);
         facets.register(MatchNameInvalidator.class);
         facets.register(MapDevelopmentCommands.class);
         facets.register(MapErrorTracker.class);
@@ -101,5 +103,6 @@ public final class PGMManifest extends HybridManifest {
         facets.register(InterfaceListener.class);
 
         requestStaticInjection(State.class);
+        requestStaticInjection(PollCommands.class);
     }
 }

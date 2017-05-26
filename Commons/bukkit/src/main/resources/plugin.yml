@@ -53,3 +53,4 @@ permissions:
       - tablist.edit
       - server.visibility
       - ocn.developer
+      - tokens.give

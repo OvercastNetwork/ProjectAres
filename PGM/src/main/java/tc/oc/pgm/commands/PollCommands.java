@@ -12,7 +12,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
+import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.formatting.StringUtils;
+import tc.oc.commons.core.restart.RestartManager;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.map.PGMMap;
 import tc.oc.pgm.mutation.Mutation;
@@ -25,9 +27,16 @@ import tc.oc.pgm.polls.PollKick;
 import tc.oc.pgm.polls.PollManager;
 import tc.oc.pgm.polls.PollMutation;
 import tc.oc.pgm.polls.PollNextMap;
+
+import javax.inject.Inject;
+
 import static tc.oc.commons.bukkit.commands.CommandUtils.newCommandException;
 
-public class PollCommands {
+public class PollCommands implements Commands {
+
+    @Inject
+    private static RestartManager restartManager;
+
     @Command(
         aliases = {"poll"},
         desc = "Poll commands",
@@ -118,6 +127,9 @@ public class PollCommands {
         )
         @CommandPermissions("poll.next")
         public static void pollNext(CommandContext args, CommandSender sender) throws CommandException {
+            if (restartManager.isRestartRequested()) {
+                throw newCommandException(sender, new TranslatableComponent("poll.map.restarting"));
+            }
             if (PGM.getMatchManager().hasMapSet()) {
                 throw newCommandException(sender, new TranslatableComponent("poll.map.alreadyset"));
             }

@@ -26,7 +26,7 @@ public class PollListener implements Listener {
                 event.getPoll().executeAction();
             } else {
                 match.sendMessage(Poll.normalize + "The poll " + event.getPoll().getDescriptionMessage()
-                        + Poll.normalize + " has failed" + Poll.seperator + event.getPoll().formatForAgainst());
+                        + Poll.normalize + " has failed" + Poll.seperator);
                 match.sendMessage(event.getPoll().formatForAgainst());
             }
         }

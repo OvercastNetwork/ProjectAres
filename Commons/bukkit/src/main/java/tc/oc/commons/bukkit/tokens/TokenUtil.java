@@ -1,6 +1,5 @@
 package tc.oc.commons.bukkit.tokens;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.PlayerId;
