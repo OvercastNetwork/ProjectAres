@@ -1,4 +1,4 @@
-package tc.oc.pgm.highlights;
+package tc.oc.pgm.streamermod;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -15,12 +15,12 @@ import tc.oc.pgm.playerstats.StatsUserFacet;
 
 import javax.inject.Inject;
 
-public class HighlightListener implements Listener {
+public class StreamerModListener implements Listener {
 
     private final MatchScheduler scheduler;
 
     @Inject
-    HighlightListener(MatchScheduler scheduler) {
+    StreamerModListener(MatchScheduler scheduler) {
         this.scheduler = scheduler;
     }
 
@@ -41,17 +41,17 @@ public class HighlightListener implements Listener {
             points += facet.matchKills();
             points -= facet.deaths();
             for (long wool : facet.getWoolCaptureTimes()) {
-                int woolPoints = (int)((wool * 2.25) - 2);
+                int woolPoints = (int)((wool * 2.5) - 2);
                 points += Math.min(Math.max(woolPoints, 0), 120);
             }
 
             for (long core : facet.getCoreLeakTimes()) {
-                int corePoints = (int)((core * 2.25) - 2);
+                int corePoints = (int)((core * 2.5) - 2);
                 points += Math.min(Math.max(corePoints, 0), 120);
             }
 
             for (DestroyableContribution destroyable : facet.getDestroyableDestroyTimes().keySet()) {
-                int destroyablePoints = (int)((facet.getDestroyableDestroyTimes().get(destroyable) * 2.25 * destroyable.getPercentage()) - 2);
+                int destroyablePoints = (int)((facet.getDestroyableDestroyTimes().get(destroyable) * 2.5 * destroyable.getPercentage()) - 2);
                 points += Math.min(Math.max(destroyablePoints, 0), 120);
             }
 

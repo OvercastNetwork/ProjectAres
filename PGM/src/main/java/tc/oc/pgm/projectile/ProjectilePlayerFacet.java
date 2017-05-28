@@ -3,6 +3,8 @@ package tc.oc.pgm.projectile;
 import java.util.logging.Level;
 import javax.inject.Inject;
 
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -74,6 +76,10 @@ public class ProjectilePlayerFacet implements MatchPlayerFacet, Listener {
             }
 
             projectile.setMetadata(Projectiles.METADATA_KEY, new FixedMetadataValue(PGM.get(), definition));
+        }
+
+        if (projectile instanceof Arrow && item.getEnchantments().containsKey(Enchantment.ARROW_INFINITE)) {
+            ((Arrow) projectile).setPickupRule(Arrow.PickupRule.DISALLOWED);
         }
 
         // If the entity implements Projectile, it will have already generated a ProjectileLaunchEvent.

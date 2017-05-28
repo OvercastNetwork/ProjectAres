@@ -33,13 +33,6 @@ public class TokenListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void giveKitToObservers(ObserverKitApplyEvent event) {
-        ItemStack main = MainTokenButton.getInstance().getIcon().create();
-        Player player = event.getPlayer();
-        player.getInventory().setItem(5, main);
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void handleMatchEndEvent(final MatchEndEvent event) {
         Match match = event.getMatch();

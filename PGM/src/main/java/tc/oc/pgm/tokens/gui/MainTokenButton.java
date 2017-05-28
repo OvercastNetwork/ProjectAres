@@ -10,7 +10,7 @@ public class MainTokenButton extends Button {
     private static MainTokenButton instance;
 
     public MainTokenButton() {
-        super(null);
+        super(13);
         instance = this;
     }
 
