@@ -30,6 +30,8 @@ import tc.oc.pgm.polls.PollNextMap;
 
 import javax.inject.Inject;
 
+import java.util.List;
+
 import static tc.oc.commons.bukkit.commands.CommandUtils.newCommandException;
 
 public class PollCommands implements Commands {
@@ -126,7 +128,12 @@ public class PollCommands implements Commands {
             max = -1
         )
         @CommandPermissions("poll.next")
-        public static void pollNext(CommandContext args, CommandSender sender) throws CommandException {
+        public static List<String> pollNext(CommandContext args, CommandSender sender) throws CommandException {
+            final String mapName = args.argsLength() > 0 ? args.getJoinedStrings(0) : "";
+            if(args.getSuggestionContext() != null) {
+                return CommandUtils.completeMapName(mapName);
+            }
+
             if (restartManager.isRestartRequested()) {
                 throw newCommandException(sender, new TranslatableComponent("poll.map.restarting"));
             }
@@ -149,6 +156,7 @@ public class PollCommands implements Commands {
             }
 
             startPoll(new PollNextMap(PGM.getPollManager(), Bukkit.getServer(), sender,  initiator.getName(), PGM.getMatchManager(), nextMap));
+            return null;
         }
 
         @Command(

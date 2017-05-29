@@ -101,6 +101,11 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     }
 
     @Override
+    public Map<String, Map<String, Map<String, Object>>> stats_value() {
+        return Collections.emptyMap();
+    }
+
+    @Override
     public Map<String, Map<String, Boolean>> mc_permissions_by_realm() {
         return ImmutableMap.of(
             "global", DefaultPermissions.DEFAULT_PERMISSIONS

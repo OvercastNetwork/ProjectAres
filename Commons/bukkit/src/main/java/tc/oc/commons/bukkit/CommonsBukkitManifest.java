@@ -24,13 +24,7 @@ import tc.oc.commons.bukkit.chat.TextComponentRenderer;
 import tc.oc.commons.bukkit.chat.TranslatableComponentRenderer;
 import tc.oc.commons.bukkit.chat.UserTextComponent;
 import tc.oc.commons.bukkit.chat.UserTextComponentRenderer;
-import tc.oc.commons.bukkit.commands.PermissionCommands;
-import tc.oc.commons.bukkit.commands.ServerCommands;
-import tc.oc.commons.bukkit.commands.ServerVisibilityCommands;
-import tc.oc.commons.bukkit.commands.SkinCommands;
-import tc.oc.commons.bukkit.commands.TraceCommands;
-import tc.oc.commons.bukkit.commands.UserCommands;
-import tc.oc.commons.bukkit.commands.UserFinder;
+import tc.oc.commons.bukkit.commands.*;
 import tc.oc.commons.bukkit.debug.LeakListener;
 import tc.oc.commons.bukkit.event.targeted.TargetedEventManifest;
 import tc.oc.commons.bukkit.format.ServerFormatter;
@@ -68,6 +62,8 @@ import tc.oc.commons.bukkit.respack.ResourcePackManager;
 import tc.oc.commons.bukkit.restart.RestartCommands;
 import tc.oc.commons.bukkit.sessions.SessionListener;
 import tc.oc.commons.bukkit.settings.SettingManifest;
+import tc.oc.commons.bukkit.stats.StatsCommands;
+import tc.oc.commons.bukkit.stats.StatsManifest;
 import tc.oc.commons.bukkit.suspend.SuspendListener;
 import tc.oc.commons.bukkit.tablist.PlayerTabEntry;
 import tc.oc.commons.bukkit.tablist.TabRender;
@@ -112,6 +108,7 @@ public final class CommonsBukkitManifest extends HybridManifest {
         install(new NavigatorManifest());
         install(new RaindropManifest());
         install(new TokenManifest());
+        install(new StatsManifest());
         install(new PunishmentManifest());
 
         // These are already bound as facets, so they only need to be exposed

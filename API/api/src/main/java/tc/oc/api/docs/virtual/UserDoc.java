@@ -85,6 +85,7 @@ public interface UserDoc {
         int mutationtokens();
         String mc_last_sign_in_ip();
         @Nullable Date trial_expires_at();
+        Map<String, Map<String, Map<String, Object>>> stats_value();
         Map<String, Map<String, Boolean>> mc_permissions_by_realm();
         Map<String, Map<String, String>> mc_settings_by_profile();
         Map<String, String> classes();

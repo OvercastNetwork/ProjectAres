@@ -210,3 +210,7 @@ permissions:
   pgm.listing.announce:
     description: Allows the /announce command
     default: op
+
+  projectares.stats:
+    description: Allows the player to use the /stats command
+    default: true
