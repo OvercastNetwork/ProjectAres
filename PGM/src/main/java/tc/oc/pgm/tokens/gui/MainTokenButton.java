@@ -21,9 +21,7 @@ public class MainTokenButton extends Button {
     @Override
     public ItemCreator getIcon() {
         return new ItemCreator(Material.DOUBLE_PLANT)
-                .setName(Constants.PREFIX + "Tokens")
-                .addLore(Constants.SUBTEXT + "Open the Token Menu",
-                        Constants.CLICK + "Right Click");
+                .setName(Constants.PREFIX + "Tokens");
     }
 
     @Override

@@ -23,7 +23,7 @@ import tc.oc.commons.core.commands.NestedCommands;
 import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.minecraft.api.command.CommandSender;
 
-class ModelCommands implements NestedCommands {
+public class ModelCommands implements NestedCommands {
 
     public static class Parent implements Commands {
         @Command(

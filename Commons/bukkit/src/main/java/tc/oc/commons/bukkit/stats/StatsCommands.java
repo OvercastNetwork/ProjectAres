@@ -37,8 +37,8 @@ public class StatsCommands implements Commands {
 
     @Command(
             aliases = { "stats"},
-            usage = "<player>",
-            desc = "Shows when a player was last seen",
+            usage = "[player]",
+            desc = "Shows a player's stats",
             min = 0,
             max = 1
     )
