@@ -15,6 +15,7 @@ import tc.oc.pgm.events.MatchPlayerDeathEvent;
 import tc.oc.pgm.events.MatchScoreChangeEvent;
 import tc.oc.pgm.events.PlayerPartyChangeEvent;
 import tc.oc.pgm.flag.event.FlagCaptureEvent;
+import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchUserFacet;
 import tc.oc.pgm.match.ParticipantState;
 import tc.oc.pgm.match.inject.ForMatchUser;
@@ -156,8 +157,11 @@ public class StatsUserFacet implements MatchUserFacet, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onScoreEvent(final MatchScoreChangeEvent event) {
-        if (event.getPlayer().isPresent() && event.getPlayer().get().getUniqueId().equals(player)) {
-            pointsScored += event.getNewScore() - event.getOldScore();
+        Optional<MatchPlayer> matchPlayerOptional = event.getPlayer();
+        if (matchPlayerOptional != null) {
+            if (matchPlayerOptional.isPresent() && matchPlayerOptional.get().getUniqueId().equals(player)) {
+                pointsScored += event.getNewScore() - event.getOldScore();
+            }
         }
     }
 
