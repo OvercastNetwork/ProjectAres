@@ -3,9 +3,7 @@ package tc.oc.pgm.mutation.types.kit;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -22,13 +20,12 @@ import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.mutation.types.EntityMutation;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 import static tc.oc.commons.core.util.Optionals.cast;
 
-public class EquestrianMutation extends EntityMutation<AbstractHorse> {
+public class EquestrianMutation extends EntityMutation<LivingEntity> {
 
     final static ImmutableMap<EntityType, Integer> TYPE_MAP = new ImmutableMap.Builder<EntityType, Integer>()
             .put(EntityType.HORSE,          100)
@@ -79,31 +76,35 @@ public class EquestrianMutation extends EntityMutation<AbstractHorse> {
         super.apply(player);
         Location location = player.getLocation();
         if(spawnable(location)) {
-            spawn(location, (Class<AbstractHorse>) TYPES.choose(entropy()).getEntityClass(), player);
+            register(world().spawn(location, (Class<LivingEntity>) TYPES.choose(entropy()).getEntityClass()), player);
         }
     }
 
     @Override
-    public AbstractHorse register(AbstractHorse horse, @Nullable MatchPlayer owner) {
-        super.register(horse, owner);
-        if(owner != null) {
-            horse.setAdult();
-            horse.setJumpStrength(2 * entropy().randomDouble());
-            horse.setDomestication(1);
-            horse.setMaxDomestication(1);
-            horse.setTamed(true);
-            horse.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0));
-            horse.setOwner(owner.getBukkit());
-            horse.setPassenger(owner.getBukkit());
-            cast(horse, Horse.class).ifPresent(horsey -> {
-                horsey.setStyle(entropy().randomElement(Horse.Style.values()));
-                horsey.setColor(entropy().randomElement(Horse.Color.values()));
-                HorseInventory inventory = horsey.getInventory();
-                inventory.setSaddle(item(Material.SADDLE));
-                inventory.setArmor(item(ARMOR.choose(entropy())));
-            });
+    public LivingEntity register(LivingEntity entity, @Nullable MatchPlayer owner) {
+        super.register(entity, owner);
+        if (entity instanceof AbstractHorse) {
+            AbstractHorse horse = (AbstractHorse)entity;
+            if(owner != null) {
+                horse.setAdult();
+                horse.setJumpStrength(2 * entropy().randomDouble());
+                horse.setDomestication(1);
+                horse.setMaxDomestication(1);
+                horse.setTamed(true);
+                horse.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0));
+                horse.setOwner(owner.getBukkit());
+                horse.setPassenger(owner.getBukkit());
+                cast(horse, Horse.class).ifPresent(horsey -> {
+                    horsey.setStyle(entropy().randomElement(Horse.Style.values()));
+                    horsey.setColor(entropy().randomElement(Horse.Color.values()));
+                    HorseInventory inventory = horsey.getInventory();
+                    inventory.setSaddle(item(Material.SADDLE));
+                    inventory.setArmor(item(ARMOR.choose(entropy())));
+                });
+            }
+            return horse;
         }
-        return horse;
+        return entity;
     }
 
     public boolean spawnable(Location location) {
