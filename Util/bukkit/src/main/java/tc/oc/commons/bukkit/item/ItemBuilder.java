@@ -8,7 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Skin;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.ItemAttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -110,6 +114,22 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
 
     public S durability(int durability) {
         stack.setDurability((short) durability);
+        return self();
+    }
+
+    public S knockBackRestistance(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE.getName(),
+                amount, AttributeModifier.Operation.ADD_NUMBER)));
+        return self();
+    }
+
+    public S speed(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED.getName(),
+                amount, AttributeModifier.Operation.ADD_SCALAR)));
         return self();
     }
 
