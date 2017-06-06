@@ -23,7 +23,7 @@ public class BomberMutation extends EntityMutation<TNTPrimed> implements TargetM
     Instant next;
 
     public BomberMutation(Match match) {
-        super(match, false);
+        super(match, TNTPrimed.class, false);
     }
 
     @Override

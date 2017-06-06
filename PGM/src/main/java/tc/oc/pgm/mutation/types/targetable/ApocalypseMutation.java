@@ -116,7 +116,7 @@ public class ApocalypseMutation extends EntityMutation<LivingEntity> implements 
     final PointProviderAttributes attributes; // attributes to choosing random points
 
     public ApocalypseMutation(Match match) {
-        super(match, false);
+        super(match, LivingEntity.class, false);
         this.attributes = new PointProviderAttributes(null, null, true, false);
     }
 

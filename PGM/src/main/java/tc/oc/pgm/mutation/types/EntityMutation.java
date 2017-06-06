@@ -3,7 +3,6 @@ package tc.oc.pgm.mutation.types;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.reflect.TypeToken;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -35,13 +34,15 @@ import static tc.oc.commons.core.util.Optionals.cast;
  */
 public class EntityMutation<E extends Entity> extends KitMutation {
 
+    final Class<E> type;
     final Set<E> entities;
     final Map<Instant, Set<E>> entitiesByTime;
     final Map<MatchPlayer, Set<E>> entitiesByPlayer;
     final Map<E, MatchPlayer> playersByEntity;
 
-    public EntityMutation(Match match, boolean force) {
+    public EntityMutation(Match match, Class<E> type, boolean force) {
         super(match, force);
+        this.type = type;
         this.entities = new WeakHashSet<>();
         this.entitiesByTime = new WeakHashMap<>();
         this.entitiesByPlayer = new WeakHashMap<>();
@@ -195,9 +196,9 @@ public class EntityMutation<E extends Entity> extends KitMutation {
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
     public void onPlayerSpawnEntity(PlayerSpawnEntityEvent event) {
         match().participant(event.getPlayer())
-               .ifPresent(player -> cast(event.getEntity(), new TypeToken<E>(){}.getRawType())
+               .ifPresent(player -> cast(event.getEntity(), type)
                .ifPresent(entity -> {
-                   register((E) entity, player);
+                   register(entity, player);
                    event.setCancelled(false);
                }));
     }
@@ -207,9 +208,9 @@ public class EntityMutation<E extends Entity> extends KitMutation {
         boolean allowed = allowed(event.getSpawnReason());
         event.setCancelled(!allowed);
         if(allowed) {
-            cast(event.getEntity(), new TypeToken<E>(){}.getRawType())
-                      .filter(entity -> !playerByEntity((E) entity).isPresent())
-                      .ifPresent(entity -> register((E) entity, null));
+            cast(event.getEntity(), type)
+                      .filter(entity -> !playerByEntity(entity).isPresent())
+                      .ifPresent(entity -> register(entity, null));
         }
     }
 

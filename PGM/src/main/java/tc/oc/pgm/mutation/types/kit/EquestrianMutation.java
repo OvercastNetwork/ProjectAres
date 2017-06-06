@@ -49,7 +49,7 @@ public class EquestrianMutation extends EntityMutation<AbstractHorse> {
     final static WeightedRandomChooser<Material, Integer> ARMOR = new ImmutableWeightedRandomChooser<>(ARMOR_MAP);
 
     public EquestrianMutation(Match match) {
-        super(match, false);
+        super(match, AbstractHorse.class, false);
     }
 
     @Override

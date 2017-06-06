@@ -38,7 +38,7 @@ public class MobsMutation extends EntityMutation<LivingEntity> {
     final static Range<Integer> AMOUNT = Range.closed(1, 3);
 
     public MobsMutation(Match match) {
-        super(match, false);
+        super(match, LivingEntity.class, false);
     }
 
     @Override
