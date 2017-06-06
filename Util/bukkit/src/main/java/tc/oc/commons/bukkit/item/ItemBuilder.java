@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Dye;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Wool;
+import tc.oc.commons.bukkit.inventory.Slot;
 import tc.oc.commons.core.ListUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -130,6 +131,22 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
                 new ItemAttributeModifier(slot,
                 new AttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED.getName(),
                 amount, AttributeModifier.Operation.ADD_SCALAR)));
+        return self();
+    }
+
+    public S health(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_MAX_HEALTH.getName(),
+                amount, AttributeModifier.Operation.ADD_NUMBER)));
+        return self();
+    }
+
+    public S armor(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_ARMOR,
+                new ItemAttributeModifier(slot,
+                        new AttributeModifier(Attribute.GENERIC_ARMOR.getName(),
+                                amount, AttributeModifier.Operation.ADD_NUMBER)));
         return self();
     }
 
