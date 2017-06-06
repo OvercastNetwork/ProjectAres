@@ -244,7 +244,9 @@ public class AdminCommands implements Commands {
         }
         int lives = args.getInteger(0, 1);
         Lives.Type type = tc.oc.commons.bukkit.commands.CommandUtils.getEnum(args, sender, 1, Lives.Type.class, Lives.Type.INDIVIDUAL);
-        blitz.activate(BlitzProperties.create(match, lives, type));
+        if(lives >= 1) {
+            blitz.activate(BlitzProperties.create(match, lives, type));
+        }
     }
 
 }
