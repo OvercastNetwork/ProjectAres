@@ -2,9 +2,12 @@ package tc.oc.pgm.mutation.types;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import tc.oc.commons.core.stream.Collectors;
+import com.google.api.client.util.Lists;
+import tc.oc.commons.core.random.MutableWeightedRandomChooser;
 import tc.oc.commons.core.util.TimeUtils;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
@@ -54,9 +57,18 @@ public interface TargetMutation extends MutationModule {
      * @return the random players.
      */
     default List<MatchPlayer> search() {
-        return match().participants()
-                      .filter(MatchPlayer::isSpawned)
-                      .collect(Collectors.toRandomSubList(entropy(), targets()));
+        Set<MatchPlayer> players = new HashSet<>();
+        MutableWeightedRandomChooser<MatchPlayer, Double> chooser = new MutableWeightedRandomChooser<>(
+            match().participants().filter(MatchPlayer::canInteract),
+            player -> Math.max(1, player.getBukkit().getMaxHealth() - player.getBukkit().getHealth())
+        );
+        int targets = targets();
+        for(int i = 0; !chooser.isEmpty() && i < targets; i++) {
+            MatchPlayer choice = chooser.choose(entropy());
+            players.add(choice);
+            chooser.remove(choice);
+        }
+        return Lists.newArrayList(players);
     }
 
     /**
