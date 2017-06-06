@@ -2,7 +2,6 @@ package tc.oc.pgm.mutation.types.targetable;
 
 import com.google.common.collect.Range;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.util.Vector;
 import tc.oc.pgm.match.Match;
@@ -14,7 +13,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 
-public class BomberMutation extends EntityMutation<Entity> implements TargetMutation {
+public class BomberMutation extends EntityMutation<TNTPrimed> implements TargetMutation {
 
     final static Duration FREQUENCY = Duration.ofSeconds(30);
     final static Range<Integer> TARGETS = Range.closed(2, 5);
@@ -34,16 +33,16 @@ public class BomberMutation extends EntityMutation<Entity> implements TargetMuta
             int height = entropy().randomInt(HEIGHT);
             Location location = player.getLocation().clone().add(0, height, 0);
             for(int i = 0; i < bombs; i++) {
-                TNTPrimed tnt = (TNTPrimed) register(world().spawn(location, TNTPrimed.class),null);
+                TNTPrimed tnt = spawn(location, TNTPrimed.class);
                 tnt.setGlowing(true);
                 tnt.setIsIncendiary(false);
                 tnt.setFuseTicks(200);
                 tnt.setVelocity(
-                    new Vector(
-                        (random().nextBoolean() ? .5 : -.5) * entropy().randomDouble(),
-                        -entropy().randomDouble(),
-                        (random().nextBoolean() ? .5 : -.5) * entropy().randomDouble()
-                    )
+                        new Vector(
+                                (random().nextBoolean() ? .5 : -.5) * entropy().randomDouble(),
+                                -entropy().randomDouble(),
+                                (random().nextBoolean() ? .5 : -.5) * entropy().randomDouble()
+                        )
                 );
             }
         });
@@ -70,10 +69,8 @@ public class BomberMutation extends EntityMutation<Entity> implements TargetMuta
     }
 
     @Override
-    public void remove(Entity entity) {
-        if (entity instanceof TNTPrimed) {
-            ((TNTPrimed)entity).setFuseTicks(entropy().randomInt(TICKS));
-        }
+    public void remove(TNTPrimed entity) {
+        entity.setFuseTicks(entropy().randomInt(TICKS));
     }
 
     @Override
@@ -85,7 +82,7 @@ public class BomberMutation extends EntityMutation<Entity> implements TargetMuta
     @Override
     public void tick() {
         TargetMutation.super.tick();
-        entities().filter(Entity::isOnGround).forEach(this::despawn);
+        entities().filter(TNTPrimed::isOnGround).forEach(this::despawn);
     }
 
 }

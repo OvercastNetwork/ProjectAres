@@ -3,7 +3,9 @@ package tc.oc.pgm.mutation.types.kit;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.AbstractHorse;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,12 +22,13 @@ import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.mutation.types.EntityMutation;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 import static tc.oc.commons.core.util.Optionals.cast;
 
-public class EquestrianMutation extends EntityMutation<LivingEntity> {
+public class EquestrianMutation extends EntityMutation<AbstractHorse> {
 
     final static ImmutableMap<EntityType, Integer> TYPE_MAP = new ImmutableMap.Builder<EntityType, Integer>()
             .put(EntityType.HORSE,          100)
@@ -76,35 +79,31 @@ public class EquestrianMutation extends EntityMutation<LivingEntity> {
         super.apply(player);
         Location location = player.getLocation();
         if(spawnable(location)) {
-            register(world().spawn(location, (Class<LivingEntity>) TYPES.choose(entropy()).getEntityClass()), player);
+            spawn(location, (Class<AbstractHorse>) TYPES.choose(entropy()).getEntityClass(), player);
         }
     }
 
     @Override
-    public LivingEntity register(LivingEntity entity, @Nullable MatchPlayer owner) {
-        super.register(entity, owner);
-        if (entity instanceof AbstractHorse) {
-            AbstractHorse horse = (AbstractHorse)entity;
-            if(owner != null) {
-                horse.setAdult();
-                horse.setJumpStrength(2 * entropy().randomDouble());
-                horse.setDomestication(1);
-                horse.setMaxDomestication(1);
-                horse.setTamed(true);
-                horse.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0));
-                horse.setOwner(owner.getBukkit());
-                horse.setPassenger(owner.getBukkit());
-                cast(horse, Horse.class).ifPresent(horsey -> {
-                    horsey.setStyle(entropy().randomElement(Horse.Style.values()));
-                    horsey.setColor(entropy().randomElement(Horse.Color.values()));
-                    HorseInventory inventory = horsey.getInventory();
-                    inventory.setSaddle(item(Material.SADDLE));
-                    inventory.setArmor(item(ARMOR.choose(entropy())));
-                });
-            }
-            return horse;
+    public AbstractHorse register(AbstractHorse horse, @Nullable MatchPlayer owner) {
+        super.register(horse, owner);
+        if(owner != null) {
+            horse.setAdult();
+            horse.setJumpStrength(2 * entropy().randomDouble());
+            horse.setDomestication(1);
+            horse.setMaxDomestication(1);
+            horse.setTamed(true);
+            horse.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0));
+            horse.setOwner(owner.getBukkit());
+            horse.setPassenger(owner.getBukkit());
+            cast(horse, Horse.class).ifPresent(horsey -> {
+                horsey.setStyle(entropy().randomElement(Horse.Style.values()));
+                horsey.setColor(entropy().randomElement(Horse.Color.values()));
+                HorseInventory inventory = horsey.getInventory();
+                inventory.setSaddle(item(Material.SADDLE));
+                inventory.setArmor(item(ARMOR.choose(entropy())));
+            });
         }
-        return entity;
+        return horse;
     }
 
     public boolean spawnable(Location location) {
@@ -121,7 +120,7 @@ public class EquestrianMutation extends EntityMutation<LivingEntity> {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         if(playerByEntity(event.getEntity()).flatMap(MatchPlayer::competitor)
-                                            .equals(match().participant(event.getDamager()).flatMap(MatchPlayer::competitor))) {
+                .equals(match().participant(event.getDamager()).flatMap(MatchPlayer::competitor))) {
             event.setCancelled(true);
         }
     }
