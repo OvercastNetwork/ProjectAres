@@ -248,7 +248,8 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
     public JoinResult queryJoin(MatchPlayer joining, JoinRequest request) {
         if(activated() &&
            match.hasStarted() &&
-           !EnumSet.of(JoinMethod.FORCE, JoinMethod.REMOTE).contains(request.method())) {
+           !EnumSet.of(JoinMethod.FORCE, JoinMethod.REMOTE).contains(request.method()) &&
+           request.competitor().map(this::lives).map(opt -> !opt.map(Lives::empty).orElse(false)).orElse(true)) {
             // This message should NOT look like an error, because remotely joining players will see it often.
             // It also should not say "Blitz" because not all maps that use this module want to be labelled "Blitz".
             return JoinDenied.friendly("command.gameplay.join.matchStarted");
