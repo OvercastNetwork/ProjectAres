@@ -9,6 +9,12 @@ isolate: true
 depend: [API, BukkitSettings, Channels]
 
 permissions:
+  sudo:
+    description: Run special commands with wild cards or in bulk
+    default: op
+  sudo.others:
+    description: Run special commands as other people or console
+    default: false
   tokens.give:
     description: Allows the player to give other players tokens
     default: false
@@ -54,3 +60,5 @@ permissions:
       - server.visibility
       - ocn.developer
       - tokens.give
+      - sudo
+      - sudo.others

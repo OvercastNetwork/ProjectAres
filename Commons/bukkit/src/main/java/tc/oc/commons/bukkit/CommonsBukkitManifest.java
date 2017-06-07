@@ -154,6 +154,7 @@ public final class CommonsBukkitManifest extends HybridManifest {
         facets.register(LeakListener.class);
         facets.register(LocaleListener.class);
         facets.register(LoginListener.class);
+        facets.register(MiscCommands.class);
         facets.register(NicknameCommands.class);
         facets.register(PermissionCommands.class);
         facets.register(PermissionCommands.Parent.class);

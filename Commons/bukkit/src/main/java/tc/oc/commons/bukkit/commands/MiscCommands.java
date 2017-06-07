@@ -1,0 +1,141 @@
+package tc.oc.commons.bukkit.commands;
+
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
+import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import tc.oc.api.bukkit.users.BukkitUserStore;
+import tc.oc.commons.bukkit.nick.IdentityProvider;
+import tc.oc.commons.core.commands.Commands;
+import tc.oc.commons.core.stream.Collectors;
+import tc.oc.commons.core.util.Streams;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+/**
+ * Commands for miscellaneous purposes.
+ */
+public class MiscCommands implements Commands {
+
+    private final BukkitUserStore userStore;
+    private final IdentityProvider identityProvider;
+
+    @Inject
+    MiscCommands(BukkitUserStore userStore, IdentityProvider identityProvider) {
+        this.userStore = userStore;
+        this.identityProvider = identityProvider;
+    }
+
+    @Command(
+            aliases = { "sudo" },
+            usage = "<player> [command... (rand|mode|near|color|*)=value]",
+            desc = "Run a command as console or another player",
+            flags = "cd",
+            anyFlags = true,
+            min = 1,
+            max = -1
+    )
+    @CommandPermissions("sudo")
+    public void sudo(final CommandContext args, final CommandSender sender) throws CommandException {
+        Server server = sender.getServer();
+        int index = 1;
+        CommandSender other = userStore.find(args.getString(0, ""));
+        if(other == null) {
+            other = args.hasFlag('c') ? server.getConsoleSender() : sender;
+            index = 0;
+        }
+        if(!sender.equals(other) && !sender.hasPermission("sudo.others")) {
+            throw new CommandPermissionsException();
+        }
+        String command = args.getRemainingString(index);
+        List<String> commands = getPermutations(sender, command);
+        String explanation;
+        if(commands.size() == 1) {
+            explanation = "/" + commands.get(0);
+        } else {
+            explanation = commands.size() + ChatColor.WHITE.toString() + " commands";
+        }
+        sender.sendMessage("Executing " + ChatColor.AQUA + explanation + ChatColor.WHITE + " as " + identityProvider.currentIdentity(other).getName(sender));
+        for(String cmd : commands) {
+            if(commands.size() > 1 && args.hasFlag('d')) {
+                sender.sendMessage(" > " + cmd);
+            }
+            server.dispatchCommand(other, cmd);
+        }
+    }
+
+    public List<String> getPermutations(CommandSender sender, String command) throws CommandException {
+        List<String> permutations = new ArrayList<>();
+        getPermutations(sender, command, permutations);
+        return permutations;
+    }
+
+    public void getPermutations(CommandSender sender, String command, List<String> commands) throws CommandException {
+        Matcher matcher = Pattern.compile("\\*|[A-Za-z]{1,}=[A-Za-z0-9_-]{1,}").matcher(command);
+        if(matcher.find()) {
+            String keyValue = matcher.group();
+            for(String name : getPlayers(sender, keyValue).map(player -> player.getName(sender)).collect(Collectors.toImmutableList())) {
+                getPermutations(sender, matcher.replaceFirst(name), commands);
+            }
+        } else {
+            commands.add(command);
+        }
+    }
+
+    public Stream<Player> getPlayers(CommandSender sender, String keyValue) throws CommandException {
+        Stream<Player> players = userStore.stream();
+        int seperator = keyValue.indexOf("=");
+        String key = seperator != -1 ? keyValue.substring(0, seperator) : keyValue;
+        String value = seperator != -1 ? keyValue.substring(seperator + 1, keyValue.length()) : "";
+        int parsed;
+        try {
+            parsed = Integer.parseInt(value);
+        } catch(NumberFormatException nfe) {
+            parsed = -1;
+        }
+        int valueInt = parsed;
+        switch(key) {
+            case "rand":
+                return players.collect(Collectors.toRandomSubList(valueInt)).stream();
+            case "mode":
+                return players.filter(p -> p.getGameMode().getValue() == valueInt);
+            case "near":
+                Location location = CommandUtils.senderToPlayer(sender).getLocation();
+                return players.filter(p -> p.getLocation().distance(location) <= valueInt);
+            case "color":
+                ChatColor color = CommandUtils.getEnum(value, sender, ChatColor.class, ChatColor.WHITE);
+                return players.filter(p -> getFuzzyColor(p).equals(color));
+            case "*":
+                return Streams.shuffle(players);
+            default:
+                throw new CommandException("Unrecognized player filter '" + key + "'");
+        }
+    }
+
+    public ChatColor getFuzzyColor(CommandSender sender) {
+        if(sender instanceof Player) {
+            Player player = (Player) sender;
+            Matcher matcher = ChatColor.STRIP_COLOR_PATTERN.matcher(player.getDisplayName(sender));
+            String color = null;
+            while(matcher.find()) {
+                color = matcher.group();
+            }
+            if(color != null) {
+                return ChatColor.getByChar(color.charAt(1));
+            }
+        }
+        return ChatColor.WHITE;
+    }
+
+}
