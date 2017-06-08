@@ -61,7 +61,7 @@ public class SettingsInterface extends SinglePageInterface {
     }
 
     private Button getSettingButton(Setting setting) {
-        ItemCreator itemCreator = new ItemCreator(setting.getExtra() instanceof Material ? (Material) setting.getExtra() : Material.PAPER)
+        ItemCreator itemCreator = new ItemCreator(Material.PAPER)
                 .setName(Constants.PREFIX + setting.getName())
                 .addLore(Constants.SUBTEXT + setting.getSummary(),
                          setting.getType().print(PlayerSettings.getManager(getPlayer()).getValue(setting)))
