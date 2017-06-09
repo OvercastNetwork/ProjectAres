@@ -113,7 +113,7 @@ public class MutationCommands implements NestedCommands {
         MutationMatchModule module = verify(sender);
         final boolean queued = args.hasFlag('q');
         final Collection<Mutation> active = queued ? mutationQueue.mutations() : module.mutationsActive();
-        new Paginator<Mutation>(Mutation.values().length / 2) {
+        new Paginator<Mutation>(8) {
             @Override
             protected BaseComponent title() {
                 return new TranslatableComponent(queued ? "command.mutation.list.queued" : "command.mutation.list.current");
