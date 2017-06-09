@@ -52,7 +52,7 @@ public enum Mutation {
     MOBS       (MobsMutation.class,        Material.MONSTER_EGG),
     LIGHTNING  (LightningMutation.class,   Material.JACK_O_LANTERN),
     BOMBER     (BomberMutation.class,      Material.TNT),
-    BREAD      (BreadMutation.class,       Material.BREAD, false),
+    BREAD      (BreadMutation.class,       Material.BREAD),
     APOCALYPSE (ApocalypseMutation.class,  Material.NETHER_STAR);
 
     public static final String TYPE_KEY = "mutation.type.";
