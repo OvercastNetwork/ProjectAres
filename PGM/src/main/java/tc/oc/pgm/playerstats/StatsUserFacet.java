@@ -28,7 +28,7 @@ import java.util.*;
 public class StatsUserFacet implements MatchUserFacet, Listener {
 
     private final UUID player;
-    private int lifeKills, teamKills, matchKills, deaths;
+    private int lifeKills, teamKills, matchKills, teammatesKilled, deaths;
     private List<Long> woolCaptureTimes;
     private Map<Core, Long> coreTouchTimes;
     private List<Long> coreLeakTimes;
@@ -67,6 +67,13 @@ public class StatsUserFacet implements MatchUserFacet, Listener {
      */
     public int matchKills() {
         return matchKills;
+    }
+
+    /**
+     * Get the amount of kills this player got in the whole match.
+     */
+    public int teammatesKilled() {
+        return teammatesKilled;
     }
 
     /**
@@ -111,6 +118,8 @@ public class StatsUserFacet implements MatchUserFacet, Listener {
             ++lifeKills;
             ++teamKills;
             ++matchKills;
+        } else if (killer != null && killer.getUniqueId().equals(player) && event.isTeamKill()) {
+            ++teammatesKilled;
         }
     }
 

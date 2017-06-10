@@ -40,6 +40,7 @@ public class HighlightListener implements Listener {
             double points = 0;
             points += facet.matchKills();
             points -= facet.deaths();
+            points -= facet.teammatesKilled();
             for (long wool : facet.getWoolCaptureTimes()) {
                 int woolPoints = (int)((wool * 2.25) - 2);
                 points += Math.min(Math.max(woolPoints, 0), 120);
@@ -60,7 +61,7 @@ public class HighlightListener implements Listener {
                 points += Math.min(Math.max(flagPoints, 0), 120);
             }
 
-            points += (facet.getBlocksBroken() / 20);
+            points += (facet.getBlocksBroken() / 30);
 
             if (bestPlayerStats == null || points > bestPlayerPoints) {
                 bestPlayerStats = facet;
