@@ -11,13 +11,13 @@ public class GeneralFormatter {
 
     @Inject private GeneralFormatter() {}
 
-    private final Component brandName = new Component("PGM", GOLD);
+    private final Component brandName = new Component("Stratus", GOLD);
 
     public BaseComponent brandName() {
         return brandName;
     }
 
     public String publicHostname() {
-        return "localhost"; // TODO: configurable
+        return "play.stratus.network"; // TODO: configurable
     }
 }
