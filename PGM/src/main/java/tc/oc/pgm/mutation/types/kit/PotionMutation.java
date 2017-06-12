@@ -20,11 +20,12 @@ import java.util.List;
 public class PotionMutation extends KitMutation {
 
     final static ImmutableMap<PotionEffectType, Integer> BAD_MAP = new ImmutableMap.Builder<PotionEffectType, Integer>()
-            .put(PotionEffectType.WEAKNESS,     15)
+            .put(PotionEffectType.WEAKNESS,     10)
             .put(PotionEffectType.SLOW,         10)
             .put(PotionEffectType.POISON,       10)
-            .put(PotionEffectType.BLINDNESS,    3)
-            .put(PotionEffectType.LEVITATION,   1)
+            .put(PotionEffectType.WITHER,       10)
+            .put(PotionEffectType.BLINDNESS,    5)
+            .put(PotionEffectType.LEVITATION,   3)
             .build();
 
     final static ImmutableMap<PotionEffectType, Integer> GOOD_MAP = new ImmutableMap.Builder<PotionEffectType, Integer>()
