@@ -23,7 +23,9 @@ public class ToolsMutation extends KitMutation{
     final static FreeItemKit[] TOOLS = new FreeItemKit[] {
             new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_PICKAXE)).enchant(Enchantment.DIG_SPEED, 10).name("Quick Pick").unbreakable(true).get()),
             new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_AXE)).enchant(Enchantment.DIG_SPEED, 10).name("Quick Axe").unbreakable(true).get()),
-            new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_SPADE)).enchant(Enchantment.DIG_SPEED, 10).name("Quick Shovel").unbreakable(true).get())
+            new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_SPADE)).enchant(Enchantment.DIG_SPEED, 10).name("Quick Shovel").unbreakable(true).get()),
+            new FreeItemKit(new ItemBuilder(item(Material.SHEARS)).enchant(Enchantment.DIG_SPEED, 10).name("Quick Shears").unbreakable(true).get()),
+            new FreeItemKit(new ItemBuilder(item(Material.GLASS)).amount(64).get())
     };
 
     final WeakHashMap<MatchPlayer, List<ItemStack>> toolsRemoved;

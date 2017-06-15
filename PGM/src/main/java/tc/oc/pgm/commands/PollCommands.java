@@ -15,6 +15,7 @@ import tc.oc.commons.bukkit.tokens.TokenUtil;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.commons.core.restart.RestartManager;
+import tc.oc.pgm.Config;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.map.PGMMap;
 import tc.oc.pgm.mutation.Mutation;
@@ -134,6 +135,10 @@ public class PollCommands implements Commands {
                 return CommandUtils.completeMapName(mapName);
             }
 
+            if (!Config.Poll.enabled()) {
+                throw newCommandException(sender, new TranslatableComponent("poll.disabled"));
+            }
+
             if (restartManager.isRestartRequested()) {
                 throw newCommandException(sender, new TranslatableComponent("poll.map.restarting"));
             }
@@ -168,6 +173,10 @@ public class PollCommands implements Commands {
         )
         @CommandPermissions("poll.mutation")
         public static void pollMutation(CommandContext args, CommandSender sender) throws CommandException {
+
+            if (!Config.Poll.enabled()) {
+                throw newCommandException(sender, new TranslatableComponent("poll.disabled"));
+            }
 
             if (sender instanceof Player) {
                 Player player = (Player) sender;

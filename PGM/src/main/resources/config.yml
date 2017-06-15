@@ -84,7 +84,15 @@ rotation:
   initial-wait: 20000
   providers: {}
 
+tokens:
+  enabled: true
+  mvp-chance: 0.03
+  winning-chance: 0.0025
+  losing-chance: 0.001
+  sn-chance: 0.25
+
 poll:
+  enabled: true
   maps:
     path:
 

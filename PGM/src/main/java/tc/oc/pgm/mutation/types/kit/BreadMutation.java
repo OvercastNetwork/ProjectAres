@@ -40,7 +40,7 @@ public class BreadMutation extends KitMutation {
             .put(new FreeItemKit(new ItemBuilder(item(Material.BREAD)).speed(1,EquipmentSlot.OFF_HAND).speed(1,EquipmentSlot.HAND).name("Very Fast Bread").get()), 3)
             .put(new FreeItemKit(new ItemBuilder(item(Material.BREAD)).enchant(Enchantment.FIRE_ASPECT, 10).name("Very Hot Bread").get()), 3)
             .put(new FreeItemKit(new ItemBuilder(item(Material.BREAD)).enchant(Enchantment.KNOCKBACK, 10).name("Very Bouncy Bread").get()), 2)
-            .put(new FreeItemKit(new ItemBuilder(item(Material.BREAD)).enchant(Enchantment.DAMAGE_ALL, 100).name("Insanely Sharp Bread").get()), 1)
+            .put(new FreeItemKit(new ItemBuilder(item(Material.BREAD)).enchant(Enchantment.DAMAGE_ALL, 20).name("Insanely Sharp Bread").get()), 1)
             .put(new FreeItemKit(new ItemBuilder(item(Material.BREAD)).enchant(Enchantment.KNOCKBACK, 100).name("Insanely Bouncy Bread").get()), 1)
             .put(new FreeItemKit(new ItemBuilder(item(Material.BREAD)).enchant(Enchantment.FIRE_ASPECT, 100).name("Insanely Hot Bread").get()), 1)
             .build();
@@ -63,7 +63,8 @@ public class BreadMutation extends KitMutation {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
-        if(event.getDamager() instanceof Player && (((Player) event.getDamager()).getItemInHand()).isSimilar(potionBread)) {
+        if(event.getDamager() instanceof Player && ((((Player) event.getDamager()).getItemInHand()).isSimilar(potionBread)
+                || (((Player) event.getDamager()).getInventory().getItemInOffHand()).isSimilar(potionBread))) {
             if (event.getEntity() instanceof LivingEntity) {
                 ((LivingEntity)event.getEntity()).addPotionEffect(new PotionEffect(POTIONS.choose(entropy()), 20 * entropy().randomInt(DURATION_RANGE), entropy().randomInt(AMPLIFIER_RANGE)));
             }

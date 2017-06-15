@@ -27,7 +27,7 @@ public class PollableMaps {
     }
 
     public void loadPollableMaps() {
-        Path filepath = Config.getPollAbleMapPath();
+        Path filepath = Config.Poll.getPollAbleMapPath();
         if (filepath == null) return;
         List<String> lines = null;
         try {

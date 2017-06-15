@@ -57,7 +57,7 @@ public class RaindropsListener implements PluginFacet, Listener {
         final PlayerId playerId = tc.oc.api.bukkit.users.Users.playerId(player);
         final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
         final Objective objective = getOrCreateObjective(scoreboard, player.getName(), "dummy");
-        final String raindropsName = ChatColor.AQUA + "Raindrops";
+        final String raindropsName = ChatColor.AQUA + "Droplets";
 
         objective.setDisplayName(renderer.renderLegacy(generalFormatter.brandName(), event.getPlayer()));
 
