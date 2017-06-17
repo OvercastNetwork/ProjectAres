@@ -42,33 +42,35 @@ public class TokenListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void handleMatchEndEvent(final MatchEndEvent event) {
-        Match match = event.getMatch();
-        //use the same playtime rules as raindrops
-        boolean applyCutoff = Comparables.greaterThan(match.getLength(), RaindropConstants.TEAM_REWARD_CUTOFF);
-        final Set<Competitor> winners = event.getMatch().needMatchModule(VictoryMatchModule.class).winners();
-        for(MatchPlayer player : match.getParticipatingPlayers()) {
-            if(player.getParty() instanceof Team) {
-                Team team = (Team) player.getParty();
-                Duration teamTime = team.getCumulativeParticipation(player.getPlayerId());
-                if(!(applyCutoff && Comparables.lessThan(teamTime, RaindropConstants.TEAM_REWARD_CUTOFF))) {
-                    Competitor playerTeam = player.getCompetitor();
-                    assert playerTeam != null;
-                    double chance;
-                    if (winners.contains(playerTeam)) {
-                        chance = Config.Token.winningChance();
-                    } else {
-                        chance = Config.Token.losingChance();
-                    }
-                    if (Math.random() < chance) {
-                        if (Math.random() > Config.Token.setNextTokenChange()) {
-                            Bukkit.broadcastMessage(player.getDisplayName() + ChatColor.AQUA + " has won a Mutation Token!");
-                            TokenUtil.giveMutationTokens(TokenUtil.getUser(player.getBukkit()), 1);
+        if (Config.Token.enabled()) {
+            Match match = event.getMatch();
+            //use the same playtime rules as raindrops
+            boolean applyCutoff = Comparables.greaterThan(match.getLength(), RaindropConstants.TEAM_REWARD_CUTOFF);
+            final Set<Competitor> winners = event.getMatch().needMatchModule(VictoryMatchModule.class).winners();
+            for (MatchPlayer player : match.getParticipatingPlayers()) {
+                if (player.getParty() instanceof Team) {
+                    Team team = (Team) player.getParty();
+                    Duration teamTime = team.getCumulativeParticipation(player.getPlayerId());
+                    if (!(applyCutoff && Comparables.lessThan(teamTime, RaindropConstants.TEAM_REWARD_CUTOFF))) {
+                        Competitor playerTeam = player.getCompetitor();
+                        assert playerTeam != null;
+                        double chance;
+                        if (winners.contains(playerTeam)) {
+                            chance = Config.Token.winningChance();
                         } else {
-                            Bukkit.broadcastMessage(player.getDisplayName() + ChatColor.AQUA + " has won a SetNext Token!");
-                            TokenUtil.giveMapTokens(TokenUtil.getUser(player.getBukkit()), 1);
+                            chance = Config.Token.losingChance();
                         }
-                    }
+                        if (Math.random() < chance) {
+                            if (Math.random() > Config.Token.setNextTokenChange()) {
+                                Bukkit.broadcastMessage(player.getDisplayName() + ChatColor.AQUA + " has won a Mutation Token!");
+                                TokenUtil.giveMutationTokens(TokenUtil.getUser(player.getBukkit()), 1);
+                            } else {
+                                Bukkit.broadcastMessage(player.getDisplayName() + ChatColor.AQUA + " has won a SetNext Token!");
+                                TokenUtil.giveMapTokens(TokenUtil.getUser(player.getBukkit()), 1);
+                            }
+                        }
 
+                    }
                 }
             }
         }

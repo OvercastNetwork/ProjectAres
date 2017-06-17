@@ -91,6 +91,9 @@ tokens:
   losing-chance: 0.001
   sn-chance: 0.25
 
+mvp:
+  enabled: true
+
 poll:
   enabled: true
   maps:

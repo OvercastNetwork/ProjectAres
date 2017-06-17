@@ -6,6 +6,7 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -35,6 +36,22 @@ public class MiscCommands implements Commands {
     MiscCommands(BukkitUserStore userStore, IdentityProvider identityProvider) {
         this.userStore = userStore;
         this.identityProvider = identityProvider;
+    }
+
+    @Command(
+            aliases = { "coinflip" },
+            desc = "Flip a Coin",
+            flags = "b",
+            min = 0,
+            max = 0
+    )
+    @CommandPermissions("coinflip")
+    public void coinFlip(final CommandContext args, final CommandSender sender) throws CommandException {
+        if (args.hasFlag('b')) {
+            Bukkit.broadcastMessage(ChatColor.AQUA + (Math.random() < 0.5 ? "Heads" : "Tails"));
+        } else {
+            sender.sendMessage(ChatColor.AQUA + (Math.random() < 0.5 ? "Heads" : "Tails"));
+        }
     }
 
     @Command(

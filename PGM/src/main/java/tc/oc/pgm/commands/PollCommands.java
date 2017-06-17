@@ -160,6 +160,10 @@ public class PollCommands implements Commands {
                 throw newCommandException(sender, new TranslatableComponent("poll.map.notallowed"));
             }
 
+            if (PGM.get().getServer().getOnlinePlayers().size() * 4 / 5 > nextMap.getDocument().max_players()) {
+                throw newCommandException(sender, new TranslatableComponent("poll.map.toomanyplayers"));
+            }
+
             startPoll(new PollNextMap(PGM.getPollManager(), Bukkit.getServer(), sender,  initiator.getName(), PGM.getMatchManager(), nextMap));
             return null;
         }
