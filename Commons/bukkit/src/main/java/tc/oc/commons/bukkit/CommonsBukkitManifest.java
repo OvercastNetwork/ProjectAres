@@ -67,6 +67,8 @@ import tc.oc.commons.bukkit.stats.StatsManifest;
 import tc.oc.commons.bukkit.suspend.SuspendListener;
 import tc.oc.commons.bukkit.tablist.PlayerTabEntry;
 import tc.oc.commons.bukkit.tablist.TabRender;
+import tc.oc.commons.bukkit.teleport.Navigator;
+import tc.oc.commons.bukkit.teleport.NavigatorInterface;
 import tc.oc.commons.bukkit.teleport.NavigatorManifest;
 import tc.oc.commons.bukkit.teleport.PlayerServerChanger;
 import tc.oc.commons.bukkit.teleport.TeleportCommands;
@@ -155,6 +157,8 @@ public final class CommonsBukkitManifest extends HybridManifest {
         facets.register(LocaleListener.class);
         facets.register(LoginListener.class);
         facets.register(MiscCommands.class);
+        facets.register(Navigator.class);
+        facets.register(NavigatorInterface.class);
         facets.register(NicknameCommands.class);
         facets.register(PermissionCommands.class);
         facets.register(PermissionCommands.Parent.class);

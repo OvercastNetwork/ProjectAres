@@ -62,7 +62,7 @@ public class Utils {
     public static ItemStack getGhastTear(Player player, int count) {
         ItemStack raindrops = new ItemStack(Material.GHAST_TEAR);
         ItemMeta meta = raindrops.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + "Raindrops" + ChatColor.DARK_PURPLE + " | " + ChatColor.WHITE + String.format("%,d", count));
+        meta.setDisplayName(ChatColor.AQUA + "Droplets" + ChatColor.DARK_PURPLE + " | " + ChatColor.WHITE + String.format("%,d", count));
         raindrops.setItemMeta(meta);
 
         return raindrops;

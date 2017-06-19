@@ -3,6 +3,7 @@ package tc.oc.commons.bukkit.teleport;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -13,8 +14,13 @@ import javax.inject.Inject;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Singleton;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.docs.Arena;
 import tc.oc.api.docs.Game;
@@ -27,12 +33,13 @@ import tc.oc.api.model.ModelListener;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.format.GameFormatter;
 import tc.oc.commons.bukkit.ticket.TicketBooth;
+import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.CacheUtils;
 import tc.oc.commons.core.util.Utils;
 
 @Singleton
-public class Navigator implements PluginFacet, ModelListener {
+public class Navigator implements PluginFacet, ModelListener, Commands {
 
     private static final char SERVER_SIGIL = '@';
     private static final char FAMILY_SIGIL = '.';
@@ -60,6 +67,31 @@ public class Navigator implements PluginFacet, ModelListener {
         this.ticketBooth = ticketBooth;
         this.featuredServerTracker = featuredServerTracker;
         modelDispatcher.subscribe(this);
+    }
+
+    @Command(
+            aliases = { "showcachedconnectors" },
+            desc = "Print a list of cached connectors",
+            min = 0,
+            max = 0
+    )
+    @CommandPermissions("ocn.developer")
+    public void servers(final CommandContext args, final CommandSender sender) throws CommandException {
+        sender.sendMessage("Cached Connectors:");
+        final Map<String, SingleServerConnector> servers = serverConnectors.asMap();
+        for (Map.Entry<String, SingleServerConnector> value : servers.entrySet()) {
+            sender.sendMessage(value.getKey() + " : " + value.getValue().toString());
+        }
+
+        final Map<String, FeaturedServerConnector> families = familyConnectors.asMap();
+        for (Map.Entry<String, FeaturedServerConnector> value :families.entrySet()) {
+            sender.sendMessage(value.getKey() + " : " + value.getValue().toString());
+        }
+
+        final Map<String, GameConnector> games = gameConnectors.asMap();
+        for (Map.Entry<String, GameConnector> value : games.entrySet()) {
+            sender.sendMessage(value.getKey() + " : " + value.getValue().toString());
+        }
     }
 
     private String localDatacenter() {
@@ -212,7 +244,7 @@ public class Navigator implements PluginFacet, ModelListener {
             return server != null &&
                    server.datacenter().equals(localDatacenter()) &&
                    server.visibility() == ServerDoc.Visibility.PUBLIC &&
-                   server.running();
+                   server.online();
         }
 
         @Override

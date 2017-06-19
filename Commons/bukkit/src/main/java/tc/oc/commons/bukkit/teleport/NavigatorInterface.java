@@ -13,11 +13,16 @@ import javax.inject.Singleton;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.sk89q.minecraft.util.commands.Command;
+import com.sk89q.minecraft.util.commands.CommandContext;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -51,6 +56,7 @@ import tc.oc.commons.bukkit.listeners.WindowManager;
 import tc.oc.commons.bukkit.ticket.TicketBooth;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
+import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.inject.InnerFactory;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.minecraft.api.configuration.InvalidConfigurationException;
@@ -58,7 +64,7 @@ import tc.oc.minecraft.api.configuration.InvalidConfigurationException;
 import static tc.oc.commons.core.exception.LambdaExceptionUtils.rethrowFunction;
 
 @Singleton
-public class NavigatorInterface implements PluginFacet, Listener {
+public class NavigatorInterface implements PluginFacet, Listener, Commands {
 
     private final GameStore games;
     private final ServerFormatter serverFormatter = ServerFormatter.light;
@@ -102,6 +108,21 @@ public class NavigatorInterface implements PluginFacet, Listener {
 
         configFactory.create(this);
     }
+
+    @Command(
+            aliases = { "shownavigatorbuttons" },
+            desc = "Print a list of the buttons in the navigator",
+            min = 0,
+            max = 0
+    )
+    @CommandPermissions("ocn.developer")
+    public void servers(final CommandContext args, final CommandSender sender) throws CommandException {
+        sender.sendMessage("Buttons:");
+        for (Button button: buttons.values()) {
+            sender.sendMessage(button.toString());
+        }
+    }
+
 
     public void setOpenButtonSlot(Slot.Player openButtonSlot) {
         this.openButtonSlot = openButtonSlot;
@@ -247,6 +268,36 @@ public class NavigatorInterface implements PluginFacet, Listener {
 
         final Consumer<Navigator.Connector> observer = c ->
             openWindows.forEach(window -> updateWindow((Player) window.getPlayer(), window.getTopInventory()));
+
+        public String toString() {
+            String string = "{";
+            string += "slot: {" + slot.getColumn() + ", " + slot.getRow() + "}, ";
+            string += "icon: " + icon.getType() + ", ";
+            string += "connector: " + "{isConnectable: " + connector.isConnectable() + ", ";
+            string += "isVisible: " + connector.isVisible() + ", ";
+            if (connector instanceof Navigator.ServerConnector) {
+                Server server = ((Navigator.ServerConnector)connector).server;
+                string += "server: {";
+                string += "bungee_name: " + server.bungee_name() + ", ";
+                string += "box: " + server.box() + ", ";
+                string += "datacenter: " + server.datacenter() + ", ";
+                string += "family: " + server.family() + ", ";
+                string += "description: " + server.description() + ", ";
+                string += "ip: " + server.ip() + ", ";
+                string += "name: " + server.name() + ", ";
+                string += "max_players: " + server.max_players() + ", ";
+                string += "num_online: " + server.num_online() + ", ";
+                string += "_id: " + server._id() + ", ";
+                string += "slug: " + server.slug() + ", ";
+                string += "priority: " + server.priority() + ", ";
+                string += "visibility: " + server.visibility() + ", ";
+                string += "online: " + server.online() + ", ";
+                string += "running: " + server.running();
+                string += "}";
+            }
+            string += "}";
+            return string;
+        }
 
         Button(ConfigurationSection config, ItemConfigurationParser itemParser) throws InvalidConfigurationException {
             this.slot = itemParser.needSlotByPosition(config, null, null, Slot.Container.class);
