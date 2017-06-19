@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.pgm.Config;
@@ -88,10 +89,10 @@ public class HighlightListener implements Listener {
                         }
                         subtitle = new Component(bestPlayer.getDisplayName() + appendMe);
                     } else {
-                        subtitle = new Component(bestPlayer.getDisplayName());
+                        subtitle = new Component(bestPlayer.getStyledName(NameStyle.COLOR));
                     }
                 } else {
-                    subtitle = new Component(bestPlayer.getDisplayName());
+                    subtitle = new Component(bestPlayer.getStyledName(NameStyle.COLOR));
                 }
 
                 for (MatchPlayer viewer : event.getMatch().getPlayers()) {

@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.event.ObserverKitApplyEvent;
 import tc.oc.commons.bukkit.raindrops.RaindropConstants;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
@@ -62,10 +63,10 @@ public class TokenListener implements Listener {
                         }
                         if (Math.random() < chance) {
                             if (Math.random() > Config.Token.setNextTokenChange()) {
-                                Bukkit.broadcastMessage(player.getDisplayName() + ChatColor.AQUA + " has won a Mutation Token!");
+                                event.getMatch().sendMessage(new TranslatableComponent("tokens.mutation.find", player.getStyledName(NameStyle.COLOR)));
                                 TokenUtil.giveMutationTokens(TokenUtil.getUser(player.getBukkit()), 1);
                             } else {
-                                Bukkit.broadcastMessage(player.getDisplayName() + ChatColor.AQUA + " has won a SetNext Token!");
+                                event.getMatch().sendMessage(new TranslatableComponent("tokens.map.find", player.getStyledName(NameStyle.COLOR)));
                                 TokenUtil.giveMapTokens(TokenUtil.getUser(player.getBukkit()), 1);
                             }
                         }
