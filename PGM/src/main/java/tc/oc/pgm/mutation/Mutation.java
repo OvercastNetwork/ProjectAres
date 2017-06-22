@@ -40,7 +40,6 @@ public enum Mutation {
     LIGHTNING  (LightningMutation.class,   Material.JACK_O_LANTERN),
     BOMBER     (BomberMutation.class,      Material.TNT),
     BREAD      (BreadMutation.class,       Material.BREAD),
-    TEAMCHEST  (TeamChestMutation.class,   Material.CHEST, false),
     BOAT       (BoatMutation.class,        Material.BOAT, false),
     TOOLS      (ToolsMutation.class,       Material.DIAMOND_PICKAXE),
     APOCALYPSE (ApocalypseMutation.class,  Material.NETHER_STAR);
