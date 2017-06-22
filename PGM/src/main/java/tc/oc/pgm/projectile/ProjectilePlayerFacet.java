@@ -79,7 +79,7 @@ public class ProjectilePlayerFacet implements MatchPlayerFacet, Listener {
         }
 
         if (projectile instanceof Arrow && item.getEnchantments().containsKey(Enchantment.ARROW_INFINITE)) {
-            ((Arrow) projectile).setPickupRule(Arrow.PickupRule.DISALLOWED);
+            ((Arrow) projectile).setPickupStatus(Arrow.PickupStatus.DISALLOWED);
         }
 
         // If the entity implements Projectile, it will have already generated a ProjectileLaunchEvent.

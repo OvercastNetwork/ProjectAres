@@ -14,7 +14,6 @@ import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingManager;
 import me.anxuiz.settings.bukkit.PlayerSettings;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.EntityLocation;
 import org.bukkit.Location;
@@ -35,7 +34,6 @@ import tc.oc.api.docs.User;
 import tc.oc.commons.bukkit.attribute.AttributeUtils;
 import tc.oc.commons.bukkit.chat.BukkitAudiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
-import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.Named;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
@@ -44,7 +42,6 @@ import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.bukkit.settings.SettingManagerProvider;
 import tc.oc.commons.bukkit.util.PlayerStates;
 import tc.oc.commons.core.chat.Audience;
-import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.ForwardingAudience;
 import tc.oc.commons.core.chat.Sound;
 import tc.oc.commons.core.logging.Loggers;
@@ -55,8 +52,6 @@ import tc.oc.pgm.filters.query.IPlayerQuery;
 import tc.oc.pgm.kits.WalkSpeedKit;
 import tc.oc.pgm.settings.ObserverSetting;
 import tc.oc.pgm.settings.Settings;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * MatchPlayer represents a player who is part of a match.  Note that the
