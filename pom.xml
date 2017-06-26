@@ -26,10 +26,6 @@
             <id>pa-releases</id>
             <url>https://repo.extension.ws/content/repositories/releases</url>
         </repository>
-        <repository>
-            <id>maven-public</id>
-            <url>http://nexus:8081/repository/maven-public/</url>
-        </repository>
     </repositories>
 
     <distributionManagement>
