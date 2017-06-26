@@ -29,14 +29,14 @@
     </repositories>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>http://nexus:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
         <repository>
-            <id>nexus-releases</id>
-            <url>http://nexus:8081/repository/maven-releases/</url>
+            <id>pa-deployment</id>
+            <url>https://repo.extension.ws/content/repositories/releases</url>
         </repository>
+        <snapshotRepository>
+            <id>pa-deployment</id>
+            <url>https://repo.extension.ws/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <modules>
