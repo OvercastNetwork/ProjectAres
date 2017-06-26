@@ -33,14 +33,6 @@
     </repositories>
 
     <distributionManagement>
-        <repository>
-            <id>pa-deployment</id>
-            <url>https://repo.extension.ws/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>pa-deployment</id>
-            <url>https://repo.extension.ws/content/repositories/snapshots</url>
-        </snapshotRepository>
         <snapshotRepository>
             <id>nexus-snapshots</id>
             <url>http://nexus:8081/repository/maven-snapshots/</url>
