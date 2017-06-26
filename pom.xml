@@ -26,6 +26,10 @@
             <id>pa-releases</id>
             <url>https://repo.extension.ws/content/repositories/releases</url>
         </repository>
+        <repository>
+            <id>maven-public</id>
+            <url>http://nexus/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -37,6 +41,14 @@
             <id>pa-deployment</id>
             <url>https://repo.extension.ws/content/repositories/snapshots</url>
         </snapshotRepository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://nexus/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://nexus/repository/maven-releases/</url>
+        </repository>
     </distributionManagement>
 
     <modules>
