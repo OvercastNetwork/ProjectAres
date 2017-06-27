@@ -55,6 +55,19 @@ public class MiscCommands implements Commands {
     }
 
     @Command(
+            aliases = { "togglegravity" },
+            usage = "<player>",
+            desc = "Toggle a player's gravity.",
+            min = 0,
+            max = 1
+    )
+    @CommandPermissions("togglegravity")
+    public void noGravity(final CommandContext args, final CommandSender sender) throws CommandException {
+        Player player = CommandUtils.getPlayerOrSelf(args, sender, 0);
+        player.setGravity(!player.hasGravity());
+    }
+
+    @Command(
             aliases = { "sudo" },
             usage = "<player> [command... (rand|mode|near|color|*)=value]",
             desc = "Run a command as console or another player",

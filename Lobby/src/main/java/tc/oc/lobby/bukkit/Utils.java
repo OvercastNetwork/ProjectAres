@@ -54,6 +54,7 @@ public class Utils {
         player.setAllowFlight(player.hasPermission("lobby.fly"));
         player.setWalkSpeed(0.2f);
         player.setFlySpeed(0.1f);
+        player.setGravity(true);
         player.setPotionParticles(false);
         player.hideTitle();
         player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 15, 0.5, 0.5, 0.5, 0);
