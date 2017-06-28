@@ -27,6 +27,7 @@ public abstract class Spawning extends Participating {
     public void enterState() {
         super.enterState();
 
+        bukkit.setGravity(true);
         player.setDead(true);
         player.refreshInteraction();
         player.refreshVisibility();

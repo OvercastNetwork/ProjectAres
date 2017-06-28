@@ -150,6 +150,11 @@ public class KitDefinitionParser extends MagicMethodFeatureParser<Kit> implement
         return new FlyKit(canFly, flying, flySpeedMultiplier);
     }
 
+    @MethodParser
+    public Kit gravity(Element el) throws InvalidXMLException {
+        return new GravityKit(XMLUtils.parseBoolean(el, true));
+    }
+
     @MethodParser({"effect", "potion"})
     public Kit effect(Element el) throws InvalidXMLException {
         return new PotionKit(itemParser.parsePotionEffect(el));

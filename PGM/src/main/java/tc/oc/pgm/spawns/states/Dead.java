@@ -41,6 +41,7 @@ public class Dead extends Spawning {
         super.enterState();
 
         player.clearInventory();
+        bukkit.setGravity(true);
 
         if(player.isVisible()) NMSHacks.playDeathAnimation(player.getBukkit());
 

@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import tc.oc.api.docs.User;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
+import tc.oc.pgm.Config;
 import tc.oc.pgm.mutation.Mutation;
 import tc.oc.pgm.mutation.MutationMatchModule;
 
@@ -14,6 +16,7 @@ public class PollMutation extends Poll {
     private CommandSender sender;
     private MutationMatchModule module;
     private String mutationName;
+    private User user;
 
     public PollMutation(PollManager pollManager, Server server, CommandSender sender, Mutation mutation,
                         MutationMatchModule module) {
@@ -22,6 +25,9 @@ public class PollMutation extends Poll {
         this.sender = sender;
         this.module = module;
         this.mutationName = mutationName;
+        if (sender instanceof Player) {
+            user = TokenUtil.getUser((Player)sender);
+        }
     }
 
     @Override
@@ -29,9 +35,8 @@ public class PollMutation extends Poll {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
                 "mutation enable -q " + mutation.name().toLowerCase());
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            TokenUtil.giveMutationTokens(TokenUtil.getUser(player), -1);
+        if (user != null) {
+            TokenUtil.giveMutationTokens(user, -1);
         }
     }
 

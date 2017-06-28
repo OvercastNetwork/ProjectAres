@@ -44,6 +44,7 @@ public abstract class State {
     }
 
     public void enterState() {
+        bukkit.setGravity(true);
         if(exited) {
             throw new IllegalStateException("Tried to enter already exited state " + this);
         } else if(entered) {
@@ -55,6 +56,7 @@ public abstract class State {
     /**
      */
     public void leaveState() {
+        bukkit.setGravity(true);
         if(!entered) {
             throw new IllegalStateException("Tried to leave state before entering " + this);
         } else if(exited) {
