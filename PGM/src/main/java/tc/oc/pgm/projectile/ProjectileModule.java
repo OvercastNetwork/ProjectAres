@@ -13,6 +13,8 @@ import java.time.Duration;
 import tc.oc.pgm.filters.Filter;
 import tc.oc.pgm.filters.parser.FilterParser;
 import tc.oc.pgm.kits.ItemParser;
+import tc.oc.pgm.kits.Kit;
+import tc.oc.pgm.kits.KitParser;
 import tc.oc.pgm.map.MapModule;
 import tc.oc.pgm.map.MapModuleContext;
 import tc.oc.pgm.map.MapModuleFactory;
@@ -28,6 +30,7 @@ public class ProjectileModule implements MapModule {
         public @Nullable ProjectileModule parse(MapModuleContext context, Logger logger, Document doc) throws InvalidXMLException {
             final ItemParser itemParser = context.needModule(ItemParser.class);
             FilterParser filterParser = context.needModule(FilterParser.class);
+            KitParser kitParser = context.needModule(KitParser.class);
 
             for(Element projectileElement : XMLUtils.flattenElements(doc.getRootElement(), "projectiles", "projectile")) {
                 String name = projectileElement.getAttributeValue("name");
@@ -39,8 +42,9 @@ public class ProjectileModule implements MapModule {
                 Filter destroyFilter = filterParser.parseOptionalProperty(projectileElement, "destroy-filter").orElse(null);
                 Duration coolDown = XMLUtils.parseDuration(projectileElement.getAttribute("cooldown"));
                 boolean throwable = XMLUtils.parseBoolean(projectileElement.getAttribute("throwable"), true);
+                Kit kit = kitParser.parseOptionalProperty(projectileElement, "kit").orElse(null);
 
-                context.features().define(projectileElement, new ProjectileDefinitionImpl(name, damage, velocity, clickAction, entity, potionKit, destroyFilter, coolDown, throwable));
+                context.features().define(projectileElement, new ProjectileDefinitionImpl(name, damage, velocity, clickAction, entity, potionKit, destroyFilter, coolDown, throwable, kit));
             }
 
             return null;

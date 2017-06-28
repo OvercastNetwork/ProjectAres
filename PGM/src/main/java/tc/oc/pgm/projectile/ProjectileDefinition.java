@@ -9,6 +9,7 @@ import java.time.Duration;
 import tc.oc.pgm.features.FeatureDefinition;
 import tc.oc.pgm.features.FeatureInfo;
 import tc.oc.pgm.filters.Filter;
+import tc.oc.pgm.kits.Kit;
 
 @FeatureInfo(name = "projectile")
 public interface ProjectileDefinition extends FeatureDefinition {
@@ -30,6 +31,8 @@ public interface ProjectileDefinition extends FeatureDefinition {
     Duration cooldown();
 
     boolean throwable();
+
+    Kit kit();
 }
 
 class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements ProjectileDefinition {
@@ -42,6 +45,7 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
     private @Inspect Filter destroyFilter;
     private @Inspect Duration coolDown;
     private @Inspect boolean throwable;
+    private @Inspect Kit kit;
 
     public ProjectileDefinitionImpl(@Nullable String name,
                                     @Nullable Double damage,
@@ -51,7 +55,8 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
                                     List<PotionEffect> potion,
                                     Filter destroyFilter,
                                     Duration coolDown,
-                                    boolean throwable) {
+                                    boolean throwable,
+                                    Kit kit) {
         this.name = name;
         this.damage = damage;
         this.velocity = velocity;
@@ -61,6 +66,7 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
         this.destroyFilter = destroyFilter;
         this.coolDown = coolDown;
         this.throwable = throwable;
+        this.kit = kit;
     }
 
     @Override
@@ -107,5 +113,10 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
     @Override
     public boolean throwable() {
         return throwable;
+    }
+
+    @Override
+    public Kit kit() {
+        return kit;
     }
 }

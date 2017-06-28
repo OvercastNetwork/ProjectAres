@@ -38,6 +38,12 @@ public class ProjectileMatchModule extends MatchModule implements Listener {
         if(projectileDefinition.damage() != null) {
             event.setDamage(projectileDefinition.damage());
         }
+
+        if (projectileDefinition.kit() != null) {
+            if (event.getEntity() instanceof Player) {
+                projectileDefinition.kit().apply(match.getPlayer((Player)event.getEntity()));
+            }
+        }
     }
 
     @EventHandler
