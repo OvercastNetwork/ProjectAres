@@ -3,6 +3,7 @@ package tc.oc.pgm.projectile;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import com.google.inject.Inject;
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import java.time.Duration;
@@ -32,7 +33,9 @@ public interface ProjectileDefinition extends FeatureDefinition {
 
     boolean throwable();
 
-    Kit kit();
+    Kit victimKit();
+
+    Kit attackerKit();
 }
 
 class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements ProjectileDefinition {
@@ -45,7 +48,8 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
     private @Inspect Filter destroyFilter;
     private @Inspect Duration coolDown;
     private @Inspect boolean throwable;
-    private @Inspect Kit kit;
+    private @Inspect Kit victimKit;
+    private @Inspect Kit attackerKit;
 
     public ProjectileDefinitionImpl(@Nullable String name,
                                     @Nullable Double damage,
@@ -56,7 +60,8 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
                                     Filter destroyFilter,
                                     Duration coolDown,
                                     boolean throwable,
-                                    Kit kit) {
+                                    Kit victimKit,
+                                    Kit attackerKit) {
         this.name = name;
         this.damage = damage;
         this.velocity = velocity;
@@ -66,7 +71,8 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
         this.destroyFilter = destroyFilter;
         this.coolDown = coolDown;
         this.throwable = throwable;
-        this.kit = kit;
+        this.victimKit = victimKit;
+        this.attackerKit = attackerKit;
     }
 
     @Override
@@ -116,7 +122,12 @@ class ProjectileDefinitionImpl extends FeatureDefinition.Impl implements Project
     }
 
     @Override
-    public Kit kit() {
-        return kit;
+    public Kit victimKit() {
+        return victimKit;
+    }
+
+    @Override
+    public Kit attackerKit() {
+        return attackerKit;
     }
 }

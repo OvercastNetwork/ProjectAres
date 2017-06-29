@@ -1,5 +1,6 @@
 package tc.oc.pgm.projectile;
 
+import com.google.inject.Inject;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -19,9 +20,17 @@ import tc.oc.pgm.filters.query.PlayerBlockEventQuery;
 import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchScope;
+import tc.oc.pgm.match.ParticipantState;
+import tc.oc.pgm.tracker.trackers.EntityTracker;
 
 @ListenerScope(MatchScope.RUNNING)
 public class ProjectileMatchModule extends MatchModule implements Listener {
+
+    private EntityTracker tracker;
+
+    @Inject ProjectileMatchModule (EntityTracker tracker) {
+        this.tracker = tracker;
+    }
 
     @EventHandler
     public void onProjectileHurtEvent(EntityDamageByEntityEvent event) {
@@ -39,9 +48,19 @@ public class ProjectileMatchModule extends MatchModule implements Listener {
             event.setDamage(projectileDefinition.damage());
         }
 
-        if (projectileDefinition.kit() != null) {
+        if (projectileDefinition.victimKit() != null) {
             if (event.getEntity() instanceof Player) {
-                projectileDefinition.kit().apply(match.getPlayer((Player)event.getEntity()));
+                projectileDefinition.victimKit().apply(match.getPlayer((Player)event.getEntity()));
+            }
+        }
+
+        if (projectileDefinition.attackerKit() != null) {
+            tracker.getOwner(event.getActor()).getMatchPlayer();
+            if (event.getActor() != null) {
+                ParticipantState state = tracker.getOwner(event.getActor());
+                if (state != null && state.isParticipating()) {
+                    projectileDefinition.attackerKit().apply(state.getMatchPlayer());
+                }
             }
         }
     }

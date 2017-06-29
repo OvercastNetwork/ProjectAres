@@ -42,9 +42,10 @@ public class ProjectileModule implements MapModule {
                 Filter destroyFilter = filterParser.parseOptionalProperty(projectileElement, "destroy-filter").orElse(null);
                 Duration coolDown = XMLUtils.parseDuration(projectileElement.getAttribute("cooldown"));
                 boolean throwable = XMLUtils.parseBoolean(projectileElement.getAttribute("throwable"), true);
-                Kit kit = kitParser.parseOptionalProperty(projectileElement, "kit").orElse(null);
+                Kit kit = kitParser.parseOptionalProperty(projectileElement, "victim-kit").orElse(null);
+                Kit shooterKit = kitParser.parseOptionalProperty(projectileElement, "attacker-kit").orElse(null);
 
-                context.features().define(projectileElement, new ProjectileDefinitionImpl(name, damage, velocity, clickAction, entity, potionKit, destroyFilter, coolDown, throwable, kit));
+                context.features().define(projectileElement, new ProjectileDefinitionImpl(name, damage, velocity, clickAction, entity, potionKit, destroyFilter, coolDown, throwable, kit, shooterKit));
             }
 
             return null;
