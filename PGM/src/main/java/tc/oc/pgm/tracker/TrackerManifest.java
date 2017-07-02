@@ -1,6 +1,7 @@
 package tc.oc.pgm.tracker;
 
 import com.google.inject.multibindings.Multibinder;
+import tc.oc.commons.bukkit.inventory.Slot;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.inject.Manifest;
 import tc.oc.pgm.match.MatchScope;
@@ -20,6 +21,7 @@ import tc.oc.pgm.tracker.trackers.EntityTracker;
 import tc.oc.pgm.tracker.trackers.FallTracker;
 import tc.oc.pgm.tracker.trackers.FireTracker;
 import tc.oc.pgm.tracker.trackers.OwnedMobTracker;
+import tc.oc.pgm.tracker.trackers.PlayerLocationTracker;
 import tc.oc.pgm.tracker.trackers.ProjectileTracker;
 import tc.oc.pgm.tracker.trackers.SpleefTracker;
 import tc.oc.pgm.tracker.trackers.TNTTracker;
@@ -43,6 +45,7 @@ public class TrackerManifest extends HybridManifest implements MatchBinders {
                 bind(AnvilTracker.class);
                 bind(CombatLogTracker.class);
                 bind(DeathTracker.class);
+                bind(PlayerLocationTracker.class);
 
                 bind(PotionDamageResolver.class);
                 bind(ExplosionDamageResolver.class);
@@ -73,6 +76,7 @@ public class TrackerManifest extends HybridManifest implements MatchBinders {
         matchListener(AnvilTracker.class, MatchScope.RUNNING);
         matchListener(CombatLogTracker.class, MatchScope.RUNNING);
         matchListener(DeathTracker.class, MatchScope.RUNNING);
+        matchListener(PlayerLocationTracker.class, MatchScope.RUNNING);
 
         // Damage resolvers - order is important!
         final Multibinder<DamageResolver> damageResolvers = inSet(DamageResolver.class);

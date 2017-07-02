@@ -136,7 +136,7 @@ public class TeamListener implements Listener {
                 final Player player = event.getPlayer().getBukkit();
                 Team team = teamManagerProvider.get().getTeam(player);
                 if(team != null) {
-                    event.getMatch().setPlayerParty(event.getPlayer(), team);
+                    event.getMatch().setPlayerParty(event.getPlayer(), team, false);
                     ChannelsPlugin.get().getPlayerManager().setMembershipChannel(
                         player,
                         event.getMatch().needMatchModule(ChannelMatchModule.class).getChannel(team)

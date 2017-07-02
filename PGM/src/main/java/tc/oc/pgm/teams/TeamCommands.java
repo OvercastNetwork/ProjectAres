@@ -79,7 +79,7 @@ public class TeamCommands implements NestedCommands {
         if(args.argsLength() >= 2) {
             String name = args.getString(1);
             if(name.trim().toLowerCase().startsWith("obs")) {
-                player.getMatch().setPlayerParty(player, player.getMatch().getDefaultParty());
+                player.getMatch().setPlayerParty(player, player.getMatch().getDefaultParty(), false);
             } else {
                 Team team = utils.teamArgument(args, 1);
                 utils.module().forceJoin(player, team);

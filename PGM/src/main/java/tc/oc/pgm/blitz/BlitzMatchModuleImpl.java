@@ -236,7 +236,7 @@ public class BlitzMatchModuleImpl extends MatchModule implements BlitzMatchModul
                             .stream()
                             .filter(this::eliminated)
                             .forEach(eliminated -> {
-                                match.setPlayerParty(eliminated, match.getDefaultParty());
+                                match.setPlayerParty(eliminated, match.getDefaultParty(), false);
                                 world.spawnParticle(Particle.SMOKE_LARGE, eliminated.getLocation(), 5);
                             });
                 victory.invalidateAndCheckEnd();

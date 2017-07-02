@@ -612,7 +612,7 @@ public interface Match extends Audience, IMatchQuery, Filterable<IMatchQuery>, M
      * This is the ONLY way that external code can change a player's party.
      * Any other methods that appear to do so are meant for internal use only.
      */
-    boolean setPlayerParty(MatchPlayer player, Party newParty);
+    boolean setPlayerParty(MatchPlayer player, Party newParty, boolean force);
 
     /**
      * Commit the match, if it is not already committed. Commitment is a boolean

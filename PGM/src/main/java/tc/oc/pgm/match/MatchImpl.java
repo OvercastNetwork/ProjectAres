@@ -712,7 +712,7 @@ public class MatchImpl implements Match, ForwardingAudience {
 
                 // If the player hasn't joined a party by this point, join the default party
                 if(!player.hasParty()) {
-                    setPlayerParty(player, getDefaultParty());
+                    setPlayerParty(player, getDefaultParty(), false);
                 }
 
                 return player;
@@ -728,7 +728,7 @@ public class MatchImpl implements Match, ForwardingAudience {
 
         try {
             logger.fine("Removing player " + player);
-            setOrClearPlayerParty(player, null);
+            setOrClearPlayerParty(player, null, false);
 
             // As with enable, facets are disabled after the player is removed
             // from their party and all collections.
@@ -811,8 +811,8 @@ public class MatchImpl implements Match, ForwardingAudience {
     }
 
     @Override
-    public boolean setPlayerParty(MatchPlayer player, Party newParty) {
-        return setOrClearPlayerParty(player, checkNotNull(newParty));
+    public boolean setPlayerParty(MatchPlayer player, Party newParty, boolean force) {
+        return setOrClearPlayerParty(player, checkNotNull(newParty), force);
     }
 
     /**
@@ -827,7 +827,7 @@ public class MatchImpl implements Match, ForwardingAudience {
      *  - If the player is already in newParty, or if the party change is cancelled by {@link PlayerParticipationStopEvent},
      *    none of the above changes will happen, and the method will return false.
      */
-    private boolean setOrClearPlayerParty(MatchPlayer player, @Nullable Party newParty) {
+    private boolean setOrClearPlayerParty(MatchPlayer player, @Nullable Party newParty, boolean force) {
         final Party oldParty = player.party;
 
         checkArgument(equals(player.getMatch()), "Player belongs to a different match");
@@ -847,7 +847,7 @@ public class MatchImpl implements Match, ForwardingAudience {
                 throw new IllegalStateException("Nested party change: " + player + " tried to join " + newParty + " in the middle of joining " + nested);
             }
 
-            if(oldParty instanceof Competitor) {
+            if(oldParty instanceof Competitor && !force) {
                 final PlayerParticipationStopEvent request = new PlayerParticipationStopEvent(player, (Competitor) oldParty);
                 bukkitEventBus.callEvent(request);
                 if(request.isCancelled() && newParty != null) { // Can't cancel this if the player is leaving the match
