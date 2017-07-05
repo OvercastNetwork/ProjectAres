@@ -9,6 +9,9 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.MinecraftAudiences;
 import tc.oc.commons.core.chat.NullAudience;
 
+import static tc.oc.minecraft.protocol.MinecraftVersion.lessThan;
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
+
 @Singleton
 public class BukkitAudiences extends MinecraftAudiences<CommandSender> implements Audiences {
 
@@ -17,7 +20,12 @@ public class BukkitAudiences extends MinecraftAudiences<CommandSender> implement
         if(sender == null) {
             return NullAudience.INSTANCE;
         } if(sender instanceof Player) {
-            return new PlayerAudience((Player) sender);
+            Player player = (Player) sender;
+            if(lessThan(MINECRAFT_1_8, player.getProtocolVersion())) {
+                return new LegacyPlayerAudience(player);
+            } else {
+                return new PlayerAudience(player);
+            }
         } else if(sender instanceof ConsoleCommandSender) {
             return new ConsoleAudience(sender.getServer());
         } else {

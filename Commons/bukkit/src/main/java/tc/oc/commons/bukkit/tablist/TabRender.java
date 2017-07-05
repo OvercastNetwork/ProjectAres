@@ -14,6 +14,9 @@ import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.chat.ComponentRenderContext;
 import tc.oc.commons.bukkit.util.NMSHacks;
 
+import static tc.oc.minecraft.protocol.MinecraftVersion.atLeast;
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
+
 public class TabRender {
 
     @Inject private static ComponentRenderContext componentRenderContext;
@@ -38,7 +41,10 @@ public class TabRender {
     }
 
     private void send(Packet packet) {
-        NMSHacks.sendPacket(this.view.getViewer(), packet);
+        // Legacy players will be unable to see custom tab rendering code
+        if(atLeast(MINECRAFT_1_8, this.view.getViewer().getProtocolVersion())) {
+            NMSHacks.sendPacket(this.view.getViewer(), packet);
+        }
     }
 
     private PacketPlayOutPlayerInfo createPlayerInfoPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction action) {

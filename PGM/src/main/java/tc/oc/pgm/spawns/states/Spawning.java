@@ -11,16 +11,23 @@ import tc.oc.pgm.events.ObserverInteractEvent;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.spawns.Spawn;
 
+import static tc.oc.minecraft.protocol.MinecraftVersion.lessThan;
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
+
 /**
  * Player is waiting to spawn as a participant
  */
 public abstract class Spawning extends Participating {
 
+    protected boolean legacy;
     protected boolean spawnRequested;
+    protected boolean seenTitle;
 
     public Spawning(MatchPlayer player) {
         super(player);
-        this.spawnRequested = options.auto;
+        this.legacy = lessThan(MINECRAFT_1_8, player.getBukkit().getProtocolVersion());
+        this.spawnRequested = options.auto || legacy;
+        this.seenTitle = false;
     }
 
     @Override
@@ -74,7 +81,10 @@ public abstract class Spawning extends Participating {
     }
 
     public void updateTitle() {
+        if(legacy && seenTitle) return;
+
         player.showTitle(getTitle(), new Component(getSubtitle(), ChatColor.GREEN), 0, 3, 3);
+        seenTitle = true;
     }
 
     protected abstract BaseComponent getTitle();

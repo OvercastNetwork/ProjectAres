@@ -2,6 +2,7 @@ package tc.oc.commons.bukkit.freeze;
 
 import java.time.Duration;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,9 +16,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import tc.oc.commons.bukkit.event.CoarsePlayerMoveEvent;
 import tc.oc.commons.bukkit.util.NMSHacks;
+import tc.oc.commons.core.collection.WeakHashSet;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.minecraft.api.scheduler.Tickable;
+
+import static tc.oc.minecraft.protocol.MinecraftVersion.lessThan;
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
 
 /**
  * Freezes players by mounting them on an invisible minecart.
@@ -27,6 +33,7 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
 
     private final Map<World, NMSHacks.FakeArmorStand> armorStands = new WeakHashMap<>();
     private final SetMultimap<Player, FrozenPlayer> frozenPlayers = HashMultimap.create();
+    private final Set<Player> legacyFrozenPlayers = new WeakHashSet<>();
 
     @Inject PlayerFreezer() {}
 
@@ -53,6 +60,9 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
             player.leaveVehicle(); // TODO: Put them back in the vehicle when thawed?
             armorStand(player).spawn(player, player.getLocation());
             sendAttach(player);
+            if(lessThan(MINECRAFT_1_8, player.getProtocolVersion())) {
+                legacyFrozenPlayers.add(player);
+            }
         }
 
         return frozenPlayer;
@@ -70,9 +80,17 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
         armorStand(player).ride(player, player);
     }
 
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onMove(CoarsePlayerMoveEvent event) {
+        if(isFrozen(event.getPlayer()) && legacyFrozenPlayers.contains(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         frozenPlayers.removeAll(event.getPlayer());
+        legacyFrozenPlayers.remove(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -96,6 +114,7 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
             if(frozenPlayers.remove(player, this) && !isFrozen(player) && player.isOnline()) {
                 armorStand(player).destroy(player);
                 player.setPaused(false);
+                legacyFrozenPlayers.remove(player);
             }
         }
     }
