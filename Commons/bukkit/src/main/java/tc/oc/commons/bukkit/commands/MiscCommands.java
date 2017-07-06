@@ -6,20 +6,29 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
+import tc.oc.commons.bukkit.chat.Audiences;
+import tc.oc.commons.bukkit.chat.HeaderComponent;
+import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
+import tc.oc.commons.core.chat.Audience;
+import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.stream.Collectors;
 import tc.oc.commons.core.util.Streams;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -31,11 +40,45 @@ public class MiscCommands implements Commands {
 
     private final BukkitUserStore userStore;
     private final IdentityProvider identityProvider;
+    private final Audiences audiences;
 
     @Inject
-    MiscCommands(BukkitUserStore userStore, IdentityProvider identityProvider) {
+    MiscCommands(BukkitUserStore userStore, IdentityProvider identityProvider, Audiences audiences) {
         this.userStore = userStore;
         this.identityProvider = identityProvider;
+        this.audiences = audiences;
+    }
+
+    @Command(
+            aliases = { "playerversion" },
+            desc = "Shows statics on what version players online are using",
+            flags = "a",
+            min = 0,
+            max = 1
+    )
+    @CommandPermissions("ocn.developer")
+    public void listPlayerVersions(final CommandContext args, final CommandSender sender) throws CommandException {
+        Audience audience = audiences.get(sender);
+        if (args.hasFlag('a')) {
+            Map<Integer, Integer> playerCountVersionMap = new HashMap<>();
+            Stream<Player> players = userStore.stream();
+            players.forEach(player -> {
+                int version = player.getProtocolVersion();
+                playerCountVersionMap.put(version, (playerCountVersionMap.containsKey(version) ? playerCountVersionMap.get(version) : 0) + 1);
+            });
+            playerCountVersionMap.size();
+
+            audience.sendMessage(new HeaderComponent(new Component(ChatColor.AQUA).translate("list.player.versions.title")));
+            for (Map.Entry<Integer, Integer> entry: playerCountVersionMap.entrySet()) {
+                audience.sendMessage(new TranslatableComponent("list.player.versions.message." + (entry.getValue() == 1 ? "singular" : "plural"),
+                        ChatColor.AQUA + entry.getValue().toString(),
+                        ChatColor.AQUA + MinecraftVersion.describeProtocol(entry.getKey()),
+                        Double.valueOf(100 * entry.getValue() / (double)userStore.count()).toString() + "%"));
+            }
+        } else {
+            Player player = CommandUtils.getPlayerOrSelf(args, sender, 0);
+            audience.sendMessage(new TranslatableComponent("list.player.version.singular.message", new PlayerComponent(identityProvider.createIdentity(player)), ChatColor.AQUA + MinecraftVersion.describeProtocol(player.getProtocolVersion())));
+        }
     }
 
     @Command(
