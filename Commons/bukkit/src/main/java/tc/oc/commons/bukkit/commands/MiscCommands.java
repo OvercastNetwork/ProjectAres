@@ -73,7 +73,7 @@ public class MiscCommands implements Commands {
                 audience.sendMessage(new TranslatableComponent("list.player.versions.message." + (entry.getValue() == 1 ? "singular" : "plural"),
                         ChatColor.AQUA + entry.getValue().toString(),
                         ChatColor.AQUA + MinecraftVersion.describeProtocol(entry.getKey()),
-                        Double.valueOf(100 * entry.getValue() / (double)userStore.count()).toString() + "%"));
+                        String.format("%.1f", 100 * entry.getValue() / (double)userStore.count()) + "%"));
             }
         } else {
             Player player = CommandUtils.getPlayerOrSelf(args, sender, 0);
