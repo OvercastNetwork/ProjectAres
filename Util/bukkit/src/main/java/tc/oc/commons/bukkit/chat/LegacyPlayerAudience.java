@@ -2,8 +2,10 @@ package tc.oc.commons.bukkit.chat;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
-import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
+import tc.oc.commons.core.stream.Collectors;
+
+import java.util.stream.Stream;
 
 public class LegacyPlayerAudience extends PlayerAudience {
 
@@ -18,13 +20,20 @@ public class LegacyPlayerAudience extends PlayerAudience {
         // Do not spam hot bar messages, as the protocol converts
         // them to regular chat messages.
         if(!Components.equals(message, recentHotbarMessage)) {
-            super.sendHotbarMessage(message);
+            emphasize(message);
             recentHotbarMessage = message;
         }
     }
 
     @Override
     public void showTitle(BaseComponent title, BaseComponent subtitle, int inTicks, int stayTicks, int outTicks) {
-        super.sendMessage(new Component(title).extra(" ").extra(subtitle));
+        emphasize(Components.join(Components.space(), Stream.of(title, subtitle).filter(msg -> msg != null).collect(Collectors.toImmutableList())));
     }
+
+    protected void emphasize(BaseComponent message) {
+        sendMessage(Components.blank());
+        sendMessage(message);
+        sendMessage(Components.blank());
+    }
+
 }
