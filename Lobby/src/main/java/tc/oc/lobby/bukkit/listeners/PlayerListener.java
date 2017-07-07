@@ -147,10 +147,9 @@ public class PlayerListener implements PluginFacet, Listener {
                     new Component(ChatColor.GOLD, ChatColor.BOLD).extra(generalFormatter.publicHostname())
                 ));
 
-            final BossBar bar = bossBarFactory.createBossBar(renderer.render(news, player), BarColor.BLUE, BarStyle.SOLID);
+            final BossBar bar = bossBarFactory.createBossBar(player, renderer.render(news, player), BarColor.BLUE, BarStyle.SOLID);
             bar.setProgress(1);
-            bar.addPlayer(player);
-            bar.show();
+            bar.setVisible(true);
         }
 
         if(!player.hasPermission("lobby.disabled-permissions-exempt")) {
