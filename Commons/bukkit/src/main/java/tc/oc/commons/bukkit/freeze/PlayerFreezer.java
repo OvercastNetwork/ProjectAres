@@ -20,6 +20,7 @@ import tc.oc.commons.bukkit.event.CoarsePlayerMoveEvent;
 import tc.oc.commons.bukkit.util.NMSHacks;
 import tc.oc.commons.core.collection.WeakHashSet;
 import tc.oc.commons.core.plugin.PluginFacet;
+import tc.oc.commons.core.util.Pair;
 import tc.oc.minecraft.api.scheduler.Tickable;
 
 import static tc.oc.minecraft.protocol.MinecraftVersion.lessThan;
@@ -33,7 +34,7 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
 
     private final Map<World, NMSHacks.FakeArmorStand> armorStands = new WeakHashMap<>();
     private final SetMultimap<Player, FrozenPlayer> frozenPlayers = HashMultimap.create();
-    private final Set<Player> legacyFrozenPlayers = new WeakHashSet<>();
+    private final Map<Player, Pair<Boolean, Boolean>> legacyFrozenPlayers = new WeakHashMap<>();
 
     @Inject PlayerFreezer() {}
 
@@ -61,7 +62,12 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
             armorStand(player).spawn(player, player.getLocation());
             sendAttach(player);
             if(lessThan(MINECRAFT_1_8, player.getProtocolVersion())) {
-                legacyFrozenPlayers.add(player);
+                boolean canFly = player.getAllowFlight(), isFlying = player.isFlying();
+                legacyFrozenPlayers.put(player, Pair.create(canFly, isFlying));
+                if(!player.isOnGround()) {
+                    player.setAllowFlight(true);
+                    player.setFlying(true);
+                }
             }
         }
 
@@ -82,7 +88,7 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onMove(CoarsePlayerMoveEvent event) {
-        if(isFrozen(event.getPlayer()) && legacyFrozenPlayers.contains(event.getPlayer())) {
+        if(isFrozen(event.getPlayer()) && legacyFrozenPlayers.containsKey(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
@@ -114,7 +120,11 @@ public class PlayerFreezer implements PluginFacet, Listener, Tickable {
             if(frozenPlayers.remove(player, this) && !isFrozen(player) && player.isOnline()) {
                 armorStand(player).destroy(player);
                 player.setPaused(false);
-                legacyFrozenPlayers.remove(player);
+                Pair<Boolean, Boolean> fly = legacyFrozenPlayers.remove(player);
+                if(fly != null) {
+                    player.setFlying(fly.second);
+                    player.setAllowFlight(fly.first);
+                }
             }
         }
     }
