@@ -50,7 +50,7 @@ public class MiscCommands implements Commands {
     }
 
     @Command(
-            aliases = { "playerversion" },
+            aliases = { "playerversion", "pv" },
             desc = "Shows statics on what version players online are using",
             flags = "a",
             min = 0,
