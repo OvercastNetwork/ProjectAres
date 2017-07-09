@@ -62,7 +62,7 @@ public class MiscCommands implements Commands {
         if (args.hasFlag('a')) {
             Map<String, Integer> playerCountVersionMap = new HashMap<>();
             userStore.stream().forEach(player -> {
-                String version = MinecraftVersion.describeProtocol(player.getProtocolVersion(), args.hasFlag('d'));
+                String version = MinecraftVersion.describeProtocol(player.getProtocolVersion(), !args.hasFlag('d'));
                 playerCountVersionMap.put(version, playerCountVersionMap.getOrDefault(version, 0) + 1);
             });
 
