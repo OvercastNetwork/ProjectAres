@@ -203,7 +203,22 @@ public interface Match extends Audience, IMatchQuery, Filterable<IMatchQuery>, M
      * @see #registerEvents
      * @see #registerRepeatable
      */
-    void registerEventsAndRepeatables(Object thing);
+    default void registerEventsAndRepeatables(Object thing) {
+        registerRepeatable(thing);
+        if(thing instanceof Listener) registerEvents((Listener) thing);
+    }
+
+    /**
+     * Unregister {@link Repeatable} methods on the given object, and also
+     * unregister it for events if it is a {@link Listener}.
+     *
+     * @see #unregisterEvents
+     * @see #unregisterRepeatable
+     */
+    default void unregisterEventsAndRepeatables(Object thing) {
+        unregisterRepeatable(thing);
+        if(thing instanceof Listener) unregisterEvents((Listener) thing);
+    }
 
     /**
      * Return the {@link MapModuleContext} that was used to load this match.

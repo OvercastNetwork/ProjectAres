@@ -352,14 +352,6 @@ public class MatchImpl implements Match, ForwardingAudience {
         runningScheduler.unregisterRepeatables(object);
     }
 
-    @Override
-    public void registerEventsAndRepeatables(Object thing) {
-        registerRepeatable(thing);
-        if(thing instanceof Listener) {
-            registerEvents((Listener) thing);
-        }
-    }
-
 
     // -----------------------------------
     // ---- Modules/Features/Contexts ----

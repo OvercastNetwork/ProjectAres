@@ -61,6 +61,10 @@ public class Carried extends Spawned implements Missing {
         this.dropLocations.add(dropLocation); // Need an initial dropLocation in case the carrier never generates ones
     }
 
+    public MatchPlayer getCarrier() {
+        return carrier;
+    }
+
     @Override
     public boolean isRecoverable() {
         return true;
@@ -191,7 +195,7 @@ public class Carried extends Spawned implements Missing {
 
     @Override
     protected boolean canSeeParticles(Player player) {
-        return player != this.carrier.getBukkit();
+        return super.canSeeParticles(player) && player != this.carrier.getBukkit();
     }
 
     protected void dropFlag() {
