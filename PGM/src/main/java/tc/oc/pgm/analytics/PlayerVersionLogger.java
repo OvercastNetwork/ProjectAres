@@ -54,11 +54,11 @@ public class PlayerVersionLogger implements PluginFacet {
         });
 
         StringBuilder builder = new StringBuilder();
-        builder.append("['").append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date())).append("'");
+        builder.append("[").append(new Date().getTime());
 
         playerCountVersionMap.entrySet().stream()
                 .sorted(Comparator.comparingInt(e -> Integer.parseInt(e.getKey().split("\\.")[1])))
-                .forEach( entry -> builder.append(", '").append(entry.getValue()).append("'"));
+                .forEach( entry -> builder.append(", ").append(entry.getValue()));
         builder.append("]\n");
 
         try {
