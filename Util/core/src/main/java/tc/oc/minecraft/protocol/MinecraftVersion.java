@@ -7,6 +7,12 @@ import com.google.common.collect.ImmutableMap;
 
 public enum MinecraftVersion {
 
+    MINECRAFT_1_4_7(51, 1, 4, 7),
+    MINECRAFT_1_5_1(60, 1, 5, 1),
+    MINECRAFT_1_5_2(61, 1, 5, 2),
+    MINECRAFT_1_6_1(73, 1, 6, 1),
+    MINECRAFT_1_6_2(74, 1, 6, 2),
+    MINECRAFT_1_6_4(78, 1, 6, 4),
     MINECRAFT_1_7_2(4, 1, 7, 2),
     MINECRAFT_1_7_10(5, 1, 7, 10),
     MINECRAFT_1_8(47, 1, 8, 0),
@@ -59,7 +65,7 @@ public enum MinecraftVersion {
 
     public static boolean atLeast(MinecraftVersion version, int protocol) {
         MinecraftVersion other = byProtocol(protocol);
-        return other == null || other.protocol() >= version.protocol();
+        return other == null || other.ordinal() >= version.ordinal();
     }
 
     public static boolean lessThan(MinecraftVersion version, int protocol) {
