@@ -23,7 +23,7 @@ import tc.oc.minecraft.api.command.CommandSender;
 /**
  * AMQP debugging commands
  */
-class QueueCommands implements NestedCommands {
+public class QueueCommands implements NestedCommands {
     public static class Parent implements Commands {
         @Command(
             aliases = "amqp",

@@ -10,7 +10,8 @@ public class MinecraftQueueManifest extends HybridManifest {
     protected void configure() {
         install(new QueueManifest());
 
-        new PluginFacetBinder(binder())
-            .register(QueueCommands.Parent.class);
+        final PluginFacetBinder facets = new PluginFacetBinder(binder());
+        facets.register(QueueCommands.Parent.class);
+        facets.register(QueueCommands.class);
     }
 }
