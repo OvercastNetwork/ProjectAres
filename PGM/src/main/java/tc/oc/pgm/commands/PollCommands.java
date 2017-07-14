@@ -156,11 +156,11 @@ public class PollCommands implements Commands {
 
             PGMMap nextMap = CommandUtils.getMap(args.getJoinedStrings(0), sender);
 
-            if (!PGM.getPollableMaps().isAllowed(nextMap)) {
+            if (!PGM.getPollableMaps().isAllowed(nextMap) && !sender.hasPermission("poll.next.override")) {
                 throw newCommandException(sender, new TranslatableComponent("poll.map.notallowed"));
             }
 
-            if (PGM.get().getServer().getOnlinePlayers().size() * 4 / 5 > nextMap.getDocument().max_players()) {
+            if (PGM.get().getServer().getOnlinePlayers().size() * 4 / 5 > nextMap.getDocument().max_players() && !sender.hasPermission("poll.next.override")) {
                 throw newCommandException(sender, new TranslatableComponent("poll.map.toomanyplayers"));
             }
 
@@ -197,7 +197,7 @@ public class PollCommands implements Commands {
                 throw newCommandException(sender, new TranslatableComponent("command.mutation.error.find", mutationString));
             } else if(MutationCommands.getInstance().getMutationQueue().mutations().contains(mutation)) {
                 throw newCommandException(sender, new TranslatableComponent(true ? "command.mutation.error.enabled" : "command.mutation.error.disabled", mutation.getComponent(net.md_5.bungee.api.ChatColor.RED)));
-            } else if (!mutation.isPollable()) {
+            } else if (!mutation.isPollable() && !sender.hasPermission("poll.mutation.override")) {
                 throw newCommandException(sender, new TranslatableComponent("command.mutation.error.illegal", mutationString));
             }
 
