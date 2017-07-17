@@ -16,8 +16,8 @@ public class ChestRenderInterface extends ChestInterface {
 
     private Coordinate origin;
 
-    public ChestRenderInterface(Player player, List<Button> buttons, int size, String title, Interface parent) {
-        super(player, buttons, size, title, parent);
+    public ChestRenderInterface(Player player, List<Button> buttons, int size, String title) {
+        super(player, buttons, size, title);
         this.origin = new Coordinate(0, 0);
     }
 

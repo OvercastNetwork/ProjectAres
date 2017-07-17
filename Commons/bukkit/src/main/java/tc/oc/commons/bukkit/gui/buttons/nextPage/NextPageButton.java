@@ -10,9 +10,6 @@ import tc.oc.commons.bukkit.util.ItemCreator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-/**
- * Created by ShinyDialga45 on 4/10/2015.
- */
 public class NextPageButton extends Button {
 
     private SinglePageInterface page;
@@ -33,7 +30,7 @@ public class NextPageButton extends Button {
                 nextPage.update();
                 return nextPage != null ? nextPage : chestInterface;
             }
-            SinglePageInterface nextPage = new SinglePageInterface(this.page.getPlayer(), this.page.rawButtons, this.page.getSize(), this.page.rawTitle, this.page, this.page.page + 1);
+            SinglePageInterface nextPage = new SinglePageInterface(this.page.getPlayer(), this.page.rawButtons, this.page.getSize(), this.page.rawTitle, this.page.page + 1);
             nextPage.update();
             return nextPage != null ? nextPage : chestInterface;
         } catch (Exception e) {

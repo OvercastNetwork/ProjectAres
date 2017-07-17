@@ -12,15 +12,13 @@ import java.util.List;
 public class ChestInterface extends Interface {
 
     private int size;
-    public Interface parent;
     private Inventory inventory;
     private String title;
 
-    public ChestInterface(Player player, List<Button> buttons, int size, String title, Interface parent) {
+    public ChestInterface(Player player, List<Button> buttons, int size, String title) {
         super(player, buttons);
         setSize(size);
         setTitle(title);
-        setParent(parent);
         this.inventory = Bukkit.createInventory(new SimpleInterfaceHolder(inventory, this, player.getWorld()), getSize(), getTitle());
         //setInventory(new InterfaceInventory(this, inventory));
     }
@@ -47,17 +45,15 @@ public class ChestInterface extends Interface {
         return this.title;
     }
 
-    public void setParent(Interface parent) {
-        this.parent = parent;
-    }
-
-    public Interface getParent() {
-        return this.parent;
-    }
-
     @Override
     public Inventory getInventory() {
         return this.inventory;
+    }
+
+    @Override
+    public void cleanUp() {
+        super.cleanUp();
+        inventory = null;
     }
 
 }

@@ -16,8 +16,8 @@ public class GridTextRenderInterface extends ChestRenderInterface {
 
     private String text;
 
-    public GridTextRenderInterface(Player player, List<Button> buttons, int size, String title, Interface parent, String text) {
-        super(player, buttons, size, title, parent);
+    public GridTextRenderInterface(Player player, List<Button> buttons, int size, String title, String text) {
+        super(player, buttons, size, title);
         this.text = text;
     }
 

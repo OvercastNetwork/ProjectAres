@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Interface {
 
-    private Player player;
+    protected Player player;
     private List<Button> buttons = new ArrayList<>();
     private List<Object> data = new ArrayList<>();
 
@@ -19,6 +19,7 @@ public class Interface {
         setData(data);
         setPlayer(viewer);
         setButtons(buttons);
+        InterfaceManager.cleanUp(this);
     }
 
     public void setData(Object... data) {
@@ -70,6 +71,12 @@ public class Interface {
 
     public Inventory getInventory() {
         return null;
+    }
+
+    public void cleanUp() {
+        player = null;
+        buttons = null;
+        data = null;
     }
 
 }

@@ -3,7 +3,6 @@ package tc.oc.commons.bukkit.gui.interfaces;
 import tc.oc.commons.bukkit.gui.Interface;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.bukkit.gui.buttons.empty.EmptyButton;
-import tc.oc.commons.bukkit.gui.buttons.lastPage.LastPageButton;
 import tc.oc.commons.bukkit.gui.buttons.nextPage.NextPageButton;
 import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
@@ -28,15 +27,14 @@ public class SinglePageInterface extends ChestInterface {
     public String rawTitle;
     public List<Button> rawButtons = new ArrayList<>();
 
-    public final LastPageButton lastPageButton = new LastPageButton(this, 0);
     public final NextPageButton nextPageButton = new NextPageButton(this, 8);
 
-    public SinglePageInterface(Player player, List<Button> buttons, int size, String title, Interface parent) {
-        this(player, buttons, size, title, parent, 1);
+    public SinglePageInterface(Player player, List<Button> buttons, int size, String title) {
+        this(player, buttons, size, title, 1);
     }
 
-    public SinglePageInterface(Player player, List<Button> buttons, int size, String title, Interface parent, int page, Object... data) {
-        super(player, buttons, size, title + (page > 1 ? " - " + page : ""), parent);
+    public SinglePageInterface(Player player, List<Button> buttons, int size, String title, int page, Object... data) {
+        super(player, buttons, size, title + (page > 1 ? " - " + page : ""));
         this.rawTitle = title;
         this.rawButtons = buttons;
         /*
@@ -53,7 +51,7 @@ public class SinglePageInterface extends ChestInterface {
         if (page > 0) {
             update();
         } else {
-            player.openInventory(getParent().getInventory());
+            player.openInventory(getInventory());
             //getParent().updateButtons();
         }
     }
@@ -155,7 +153,6 @@ public class SinglePageInterface extends ChestInterface {
 
     public void setDefaultButtons() {
         defaultButtons.clear();
-        defaultButtons.add(this.lastPageButton);
         defaultButtons.add(this.nextPageButton);
         for (Integer integer : new Integer[]{1, 2, 3, 4, 5, 6, 7, 9, 17, 18, 26, 27, 35, 36, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}) {
             if (integer > getSize()) {
@@ -198,4 +195,10 @@ public class SinglePageInterface extends ChestInterface {
         return this.defaultButtons;
     }
 
+    @Override
+    public void cleanUp() {
+        super.cleanUp();
+        defaultButtons = null;
+        rawButtons = null;
+    }
 }

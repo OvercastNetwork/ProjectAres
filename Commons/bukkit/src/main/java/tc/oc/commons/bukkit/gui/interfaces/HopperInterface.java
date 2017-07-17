@@ -13,14 +13,12 @@ import java.util.List;
 public class HopperInterface extends Interface {
 
     private int size;
-    private Interface parent;
     private Inventory inventory;
     private String title;
 
     public HopperInterface(Player player, List<Button> buttons, String title, Interface parent) {
         super(player, buttons);
         setTitle(title);
-        setParent(parent);
         this.inventory = Bukkit.createInventory(new SimpleInterfaceHolder(inventory, this, player.getWorld()), InventoryType.HOPPER, getTitle());
         /*//this.inventory = player.getInventory();
         //inventory = Bukkit.createInventory(new SimpleInterfaceHolder(inventory, this), InventoryType.valueOf(args), getTitle());
@@ -38,17 +36,15 @@ public class HopperInterface extends Interface {
         return this.title;
     }
 
-    public void setParent(Interface parent) {
-        this.parent = parent;
-    }
-
-    public Interface getParent() {
-        return this.parent;
-    }
-
     @Override
     public Inventory getInventory() {
         return this.inventory;
+    }
+
+    @Override
+    public void cleanUp() {
+        super.cleanUp();
+        inventory = null;
     }
 
 }

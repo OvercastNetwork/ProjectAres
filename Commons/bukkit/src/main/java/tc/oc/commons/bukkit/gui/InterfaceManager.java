@@ -1,5 +1,6 @@
 package tc.oc.commons.bukkit.gui;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
@@ -63,6 +64,24 @@ public class InterfaceManager {
             }
         }
         return null;
+    }
+
+    public static void cleanUp(Interface inventory) {
+        for (Interface inv: inventories) {
+            if (inv != inventory && inv.getPlayer() == inventory.getPlayer()) {
+                inv.cleanUp();
+                inventories.remove(inv);
+            }
+        }
+    }
+
+    public static void cleanUp(Player player) {
+        for (Interface inventory: inventories) {
+            if (inventory.getPlayer() == player) {
+                inventory.cleanUp();
+                inventories.remove(inventory);
+            }
+        }
     }
 
 }

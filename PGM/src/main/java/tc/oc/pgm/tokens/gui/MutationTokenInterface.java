@@ -12,6 +12,7 @@ import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.PGMTranslations;
+import tc.oc.pgm.menu.gui.MainMenuInterface;
 import tc.oc.pgm.mutation.Mutation;
 import tc.oc.pgm.mutation.MutationMatchModule;
 import tc.oc.pgm.mutation.command.MutationCommands;
@@ -22,7 +23,7 @@ import java.util.List;
 public class MutationTokenInterface extends SinglePageInterface {
 
     public MutationTokenInterface(Player player) {
-        super(player, new ArrayList<>(), 54, "Token Menu - Mutations", new MainTokenMenu(player));
+        super(player, new ArrayList<>(), 54, "Token Menu - Mutations");
         update();
     }
 
@@ -86,11 +87,14 @@ public class MutationTokenInterface extends SinglePageInterface {
     @Override
     public void setDefaultButtons() {
         defaultButtons.clear();
-        defaultButtons.add(this.lastPageButton);
-        this.lastPageButton.setSlot(49);
-        this.lastPageButton.setIcon(new ItemCreator(Material.WOOL)
-                                        .setData(14)
-                                        .setName(ChatColor.GREEN + "Go Back"));
+        defaultButtons.add(new Button(new ItemCreator(Material.WOOL)
+                .setData(14)
+                .setName(ChatColor.GREEN + "Go Back"), 49) {
+            @Override
+            public void function(Player player) {
+                player.openInventory(new MainTokenMenu(player).getInventory());
+            }
+        });
         for (Integer integer : new Integer[]{
                  0,  1,  2,  3,  4,  5,  6,  7,  8,
                  9,                             17,

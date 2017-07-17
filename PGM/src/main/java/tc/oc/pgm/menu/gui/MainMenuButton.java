@@ -9,7 +9,7 @@ import tc.oc.pgm.tokens.gui.MainTokenMenu;
 
 public class MainMenuButton extends Button {
 
-    public MainMenuButton(Player player) {
+    public MainMenuButton() {
         super(new ItemCreator(Material.ENCHANTED_BOOK)
                 .setName(Constants.PREFIX + "Main Menu")
                 .addLore(Constants.SUBTEXT + "Open the Main Menu",

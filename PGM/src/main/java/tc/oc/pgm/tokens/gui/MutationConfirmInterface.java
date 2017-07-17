@@ -19,26 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MutationConfirmInterface extends ChestInterface {
-    private static MutationConfirmInterface instance;
-
-    private Player player;
     private Mutation mutation;
 
     public MutationConfirmInterface(Player player, Mutation mutation) {
-        super(player, new ArrayList<Button>(), 27, "Confirmation Menu", getInstance());
-        this.player = player;
+        super(player, new ArrayList<Button>(), 27, "Confirmation Menu");
         updateButtons();
-        instance = this;
         this.mutation = mutation;
-    }
-
-    @Override
-    public ChestInterface getParent() {
-        return getInstance();
-    }
-
-    public static MutationConfirmInterface getInstance() {
-        return instance;
     }
 
     @Override

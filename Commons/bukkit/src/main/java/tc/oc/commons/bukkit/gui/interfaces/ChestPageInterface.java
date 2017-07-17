@@ -31,8 +31,8 @@ public class ChestPageInterface extends ChestInterface {
         this(null, buttons, size, title, parent);
     }
 
-    public ChestPageInterface(Player player, List<Button> buttons, int size, String title, Interface parent, Object... data) {
-        super(player, buttons, size, title, parent);
+    public ChestPageInterface(Player player, List<Button> buttons, int size, String title, Object... data) {
+        super(player, buttons, size, title);
         /*
         MultiPageInterfaces must be contain necessary default items, if it cannot contain the next page item
         (currently has the highest slot value of a necessary default item), it won't allow proper navagation.
@@ -58,7 +58,7 @@ public class ChestPageInterface extends ChestInterface {
             if (empty.getSlot() < getSize()) {
                 buttons.add(empty);
             }
-            pages.add(new ChestInterface(null, buttons, getSize(), getTitle(), getParent()));
+            pages.add(new ChestInterface(null, buttons, getSize(), getTitle()));
             return;
         }
         int allButtons = getDefaultButtons().size() + getButtons().size();
@@ -98,7 +98,7 @@ public class ChestPageInterface extends ChestInterface {
                  //   currentButtons.remove(this.nextPageButton);
                 }
                 String suffix = i > 1 ? " - " + i : "";
-                ChestInterface gui = new ChestInterface(null, currentButtons, getSize(), getTitle() + suffix, getParent());
+                ChestInterface gui = new ChestInterface(null, currentButtons, getSize(), getTitle() + suffix);
                 gui.updateInventory();
                 pages.add(gui);
             }

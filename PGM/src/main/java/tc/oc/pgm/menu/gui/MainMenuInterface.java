@@ -21,29 +21,20 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MainMenuInterface extends ChestInterface {
-    private static MainMenuInterface instance;
 
     public MainMenuInterface(Player player) {
-        super(player, new ArrayList<>(), 27, "Main Menu", getInstance());
+        super(player, new ArrayList<>(), 27, "Main Menu");
         updateButtons();
-        instance = this;
-    }
-
-    @Override
-    public ChestInterface getParent() {
-        return getInstance();
-    }
-
-    public static MainMenuInterface getInstance() {
-        return instance;
     }
 
     @Override
     public void updateButtons() {
         List<Button> buttons = new ArrayList<>();
 
-        MainTokenButton.getInstance().setSlot(11);
-        buttons.add(MainTokenButton.getInstance());
+        MainTokenButton button = new MainTokenButton();
+
+        button.setSlot(11);
+        buttons.add(button);
 
         HashMap<String, Double> stats = StatsUtil.getStats(getPlayer());
 

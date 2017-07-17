@@ -32,7 +32,7 @@ import java.util.*;
 public class SettingsInterface extends SinglePageInterface {
 
     public SettingsInterface(Player player) {
-        super(player, new ArrayList<>(), 54, "Settings", MainMenuInterface.getInstance());
+        super(player, new ArrayList<>(), 54, "Settings");
         update();
     }
 
@@ -80,11 +80,14 @@ public class SettingsInterface extends SinglePageInterface {
     @Override
     public void setDefaultButtons() {
         defaultButtons.clear();
-        defaultButtons.add(this.lastPageButton);
-        this.lastPageButton.setSlot(49);
-        this.lastPageButton.setIcon(new ItemCreator(Material.WOOL)
-                                        .setData(14)
-                                        .setName(ChatColor.GREEN + "Go Back"));
+        defaultButtons.add(new Button(new ItemCreator(Material.WOOL)
+                .setData(14)
+                .setName(ChatColor.GREEN + "Go Back"), 49) {
+            @Override
+            public void function(Player player) {
+                player.openInventory(new MainMenuInterface(player).getInventory());
+            }
+        });
         for (Integer integer : new Integer[]{
                  0,  1,  2,  3,  4,  5,  6,  7,  8,
                  9,                             17,

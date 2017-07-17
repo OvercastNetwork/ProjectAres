@@ -14,24 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainTokenMenu extends ChestInterface {
-    private static MainTokenMenu instance;
-
-    private Player player;
 
     public MainTokenMenu(Player player) {
-        super(player, new ArrayList<Button>(), 36, "Token Menu", getInstance());
-        this.player = player;
+        super(player, new ArrayList<Button>(), 36, "Token Menu");
         updateButtons();
-        instance = this;
-    }
-
-    @Override
-    public ChestInterface getParent() {
-        return getInstance();
-    }
-
-    public static MainTokenMenu getInstance() {
-        return instance;
     }
 
     @Override

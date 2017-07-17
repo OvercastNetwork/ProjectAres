@@ -15,24 +15,9 @@ import java.util.List;
 
 public class TokenPurchaseInterface extends ChestInterface {
 
-    private static TokenPurchaseInterface instance;
-
-    private Player player;
-
     public TokenPurchaseInterface(Player player) {
-        super(player, new ArrayList<Button>(), 36, "Purchase Tokens", getInstance());
-        this.player = player;
+        super(player, new ArrayList<Button>(), 36, "Purchase Tokens");
         updateButtons();
-        instance = this;
-    }
-
-    @Override
-    public ChestInterface getParent() {
-        return getInstance();
-    }
-
-    public static TokenPurchaseInterface getInstance() {
-        return instance;
     }
 
     @Override
@@ -106,6 +91,12 @@ public class TokenPurchaseInterface extends ChestInterface {
                 }
             }
         };
+    }
+
+    @Override
+    public void cleanUp() {
+        super.cleanUp();
+        player = null;
     }
 
 }

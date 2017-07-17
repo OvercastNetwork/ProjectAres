@@ -35,7 +35,7 @@ public class ChestOptionsPageInterface extends SinglePageInterface {
     }
 
     public ChestOptionsPageInterface(Player player, List<Button> buttons, int size, String title, Interface parent, int i, Object... data) {
-        super(player, buttons, size, title + (i > 1 ? " - " + i : ""), parent, 1, data);
+        super(player, buttons, size, title + (i > 1 ? " - " + i : ""),  1, data);
     }
 
     @Override
@@ -78,9 +78,7 @@ public class ChestOptionsPageInterface extends SinglePageInterface {
             if (buttons.size() != 0) {
                 ArrayList<Button> currentButtons = new ArrayList<>();
                 for (Button button : getDefaultButtons()) {
-                    if (button.equals(this.lastPageButton)) {
-                        button.setIcon(button.getIcon().setSize(page - 1));
-                    } else if (button.equals(this.nextPageButton)) {
+                    if (button.equals(this.nextPageButton)) {
                         button.setIcon(button.getIcon().setSize(page + 1));
                     }
                     button.setSlot(button.getSlot());
@@ -139,7 +137,6 @@ public class ChestOptionsPageInterface extends SinglePageInterface {
             EmptyButton button = new EmptyButton(integer);
             defaultButtons.add(button);
         }
-        defaultButtons.add(this.lastPageButton);
         defaultButtons.add(this.nextPageButton);
     }
 

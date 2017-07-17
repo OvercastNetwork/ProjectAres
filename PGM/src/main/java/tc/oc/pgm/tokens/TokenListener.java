@@ -33,10 +33,11 @@ public class TokenListener implements Listener {
     @EventHandler
     public void onObserverInteract(ObserverInteractEvent event) {
         if (event.getClickType() == ClickType.RIGHT) {
-            ItemStack main = MainTokenButton.getInstance().getIcon().create();
+            MainTokenButton button = new MainTokenButton();
+            ItemStack main = button.getIcon().create();
             //isSimilar so that stacks of the item will still open the menu
             if (event.getPlayer().getBukkit().getItemInHand().isSimilar(main)) {
-                MainTokenButton.getInstance().function(event.getPlayer().getBukkit());
+                button.function(event.getPlayer().getBukkit());
             }
         }
     }

@@ -7,15 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class MainTokenButton extends Button {
-    private static MainTokenButton instance;
 
     public MainTokenButton() {
         super(13);
-        instance = this;
-    }
-
-    public static MainTokenButton getInstance() {
-        return instance;
     }
 
     @Override

@@ -1,24 +1,19 @@
 package tc.oc.pgm.listeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.event.EventBus;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.player.PlayerQuitEvent;
 import tc.oc.commons.bukkit.event.InterfaceOpenEvent;
 import tc.oc.commons.bukkit.gui.Interface;
 import tc.oc.commons.bukkit.gui.InterfaceManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.pgm.events.ObserverInteractEvent;
-import tc.oc.pgm.tokens.gui.MainTokenButton;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -81,6 +76,11 @@ public class InterfaceListener implements Listener, PluginFacet {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerleave(PlayerQuitEvent event) {
+        InterfaceManager.cleanUp(event.getPlayer());
     }
 
 }
