@@ -27,6 +27,7 @@ import tc.oc.commons.bukkit.chat.UserTextComponentRenderer;
 import tc.oc.commons.bukkit.commands.*;
 import tc.oc.commons.bukkit.debug.LeakListener;
 import tc.oc.commons.bukkit.event.targeted.TargetedEventManifest;
+import tc.oc.commons.bukkit.flairs.FlairConfiguration;
 import tc.oc.commons.bukkit.format.ServerFormatter;
 import tc.oc.commons.bukkit.freeze.PlayerFreezer;
 import tc.oc.commons.bukkit.inject.BukkitPluginManifest;
@@ -120,6 +121,7 @@ public final class CommonsBukkitManifest extends HybridManifest {
         expose(TicketDisplay.class);
         expose(TicketListener.class);
 
+        bindAndExpose(FlairConfiguration.class);
         bindAndExpose(PlayerAppearanceChanger.class);
         bindAndExpose(UserFinder.class);
         bindAndExpose(Teleporter.class);

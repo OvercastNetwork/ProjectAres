@@ -1,6 +1,6 @@
 package tc.oc.pgm;
 
-import tc.oc.commons.bukkit.chat.FlairRenderer;
+import tc.oc.commons.bukkit.flairs.FlairRenderer;
 import tc.oc.commons.bukkit.nick.UsernameRenderer;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.plugin.PluginFacetBinder;

@@ -9,7 +9,10 @@ restart:
 # Nicknames
 nicks:
   enabled: true
+
+flairs:
   overhead-flair: false
+  max-flairs: -1
 
 # AFK auto-kicker
 afk:

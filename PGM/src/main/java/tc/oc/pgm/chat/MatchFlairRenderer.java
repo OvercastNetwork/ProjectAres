@@ -6,7 +6,8 @@ import javax.inject.Singleton;
 import net.md_5.bungee.api.ChatColor;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.minecraft.MinecraftService;
-import tc.oc.commons.bukkit.chat.FlairRenderer;
+import tc.oc.commons.bukkit.flairs.FlairConfiguration;
+import tc.oc.commons.bukkit.flairs.FlairRenderer;
 import tc.oc.commons.bukkit.chat.NameFlag;
 import tc.oc.commons.bukkit.chat.NameType;
 import tc.oc.commons.bukkit.nick.Identity;
@@ -23,8 +24,8 @@ public class MatchFlairRenderer extends FlairRenderer {
 
     private final MatchManager matchManager;
 
-    @Inject MatchFlairRenderer(MinecraftService minecraftService, BukkitUserStore userStore, MatchManager matchManager) {
-        super(minecraftService, userStore);
+    @Inject MatchFlairRenderer(MinecraftService minecraftService, BukkitUserStore userStore, MatchManager matchManager, FlairConfiguration flairConfiguration) {
+        super(minecraftService, userStore, flairConfiguration);
         this.matchManager = matchManager;
     }
 
