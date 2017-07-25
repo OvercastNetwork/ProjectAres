@@ -2,6 +2,7 @@ package tc.oc.commons.core.restart;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -17,6 +18,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import sun.misc.Signal;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.MinecraftService;
@@ -60,6 +62,7 @@ public class RestartManager implements PluginFacet, Tickable {
         this.eventBus = eventBus;
         this.threads = threads;
         this.startTime = Instant.now();
+        onSignal(this.config.stopSignals());
     }
 
     @Override
@@ -160,6 +163,15 @@ public class RestartManager implements PluginFacet, Tickable {
         }
     }
 
+    private void requestRestartInternal(Instant time, String reason, int priority) {
+        logger.info("Restart requested at " + time +
+                    ", with " + priority +
+                    " priority, because \"" + reason + '"');
+        currentRequest = new RequestRestartEvent(logger, reason, priority, this::restartIfRequested);
+        eventBus.post(currentRequest);
+        restartIfRequested();
+    }
+
     public ListenableFuture<?> cancelRestart() {
         if(this.isRestartRequested()) {
             return minecraftService.updateLocalServer(new ServerDoc.Restart() {
@@ -202,12 +214,7 @@ public class RestartManager implements PluginFacet, Tickable {
         }
 
         if(newTime != null) {
-            logger.info("Restart requested at " + newTime +
-                        ", with " + newPriority +
-                        " priority, because \"" + newReason + '"');
-            currentRequest = new RequestRestartEvent(logger, newReason, newPriority, this::restartIfRequested);
-            eventBus.post(currentRequest);
-            restartIfRequested();
+            requestRestartInternal(newTime, newReason, newPriority);
         }
     }
 
@@ -235,5 +242,29 @@ public class RestartManager implements PluginFacet, Tickable {
         } else {
             return false;
         }
+    }
+
+    private void onSignal(Collection<String> signals) {
+        signals.stream()
+               .map(Signal::new)
+               .forEach(signal -> Signal.handle(signal, s -> {
+                   requestRestartInternal(Instant.now(), "Received signal " + s.getName() + " (" + s.getNumber() + ") from system", Integer.MAX_VALUE);
+                   try {
+                       Thread.sleep(currentRequest.deferrals()
+                                                  .stream()
+                                                  .filter(deferral -> deferral.predictedDelay() != null)
+                                                  .map(RequestRestartEvent.Deferral::predictedDelay)
+                                                  .findFirst()
+                                                  .orElse(Duration.ZERO)
+                                                  .toMillis() + 1L);
+                   } catch(InterruptedException e) {
+                       if(!minecraftServer.isStopping()) {
+                           logger.severe(s.getName() + " signal is unable to wait for restart");
+                       }
+                   }
+                   if(!restartIfRequested() && !minecraftServer.isStopping()) {
+                       minecraftServer.stop();
+                   }
+               }));
     }
 }

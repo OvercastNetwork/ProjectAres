@@ -142,7 +142,7 @@ public class RestartListener implements PluginFacet, Listener {
     public void onRequestRestart(RequestRestartEvent event) {
         if(!server.isSuspended()) {
             logger.info("Deferring restart");
-            deferral = event.defer(getClass().getName());
+            deferral = event.defer(getClass().getName(), config.time());
             checkCountdown(mm.needCurrentMatch());
         }
     }

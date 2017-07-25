@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import java.time.Duration;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 import tc.oc.commons.core.configuration.ConfigUtils;
 import tc.oc.commons.core.exception.ExceptionHandler;
 import tc.oc.minecraft.api.configuration.Configuration;
@@ -54,5 +57,12 @@ public class RestartConfiguration {
      */
     public int kickLimit() {
         return config.getInt("kick-limit", Integer.MAX_VALUE);
+    }
+
+    /**
+     * Restart the server when any of the given stop signals are received from the system.
+     */
+    public Set<String> stopSignals() {
+        return ConfigUtils.getStringSet(config, "stop-signals", Sets.newHashSet("INT", "TERM"));
     }
 }
