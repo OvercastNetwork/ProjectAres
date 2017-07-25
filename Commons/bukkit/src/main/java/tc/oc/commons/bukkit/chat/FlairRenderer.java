@@ -1,6 +1,7 @@
 package tc.oc.commons.bukkit.chat;
 
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -29,7 +30,15 @@ public class FlairRenderer implements PartialNameRenderer {
     @Override
     public String getLegacyName(Identity identity, NameType type) {
         if(!(type.style.contains(NameFlag.FLAIR) && type.reveal)) return "";
+        return getFlairs(identity).reduce("", String::concat);
+    }
 
+    @Override
+    public BaseComponent getComponentName(Identity identity, NameType type) {
+        return Components.fromLegacyText(getLegacyName(identity, type));
+    }
+
+    public Stream<String> getFlairs(Identity identity) {
         final UserDoc.Identity user;
         if(identity.getPlayerId() instanceof UserDoc.Identity) {
             // Flair may already be stashed inside the Identity
@@ -37,19 +46,18 @@ public class FlairRenderer implements PartialNameRenderer {
         } else {
             user = userStore.tryUser(identity.getPlayerId());
         }
-        if(user == null) return "";
+        if(user == null) return Stream.empty();
 
         final Set<String> realms = ImmutableSet.copyOf(minecraftService.getLocalServer().realms());
 
         return user.minecraft_flair()
-                   .stream()
-                   .filter(flair -> realms.contains(flair.realm))
-                   .map(flair -> flair.text)
-                   .reduce("", String::concat);
+                .stream()
+                .filter(flair -> realms.contains(flair.realm))
+                .map(flair -> flair.text);
     }
 
-    @Override
-    public BaseComponent getComponentName(Identity identity, NameType type) {
-        return Components.fromLegacyText(getLegacyName(identity, type));
+    public int getNumberOfFlairs(Identity identity) {
+        return (int) getFlairs(identity).count();
     }
+
 }
