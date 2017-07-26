@@ -11,8 +11,8 @@ nicks:
   enabled: true
 
 flairs:
-  overhead-flair: false
-  max-flairs: -1
+  overhead: false
+  limit: -1
 
 # AFK auto-kicker
 afk:
