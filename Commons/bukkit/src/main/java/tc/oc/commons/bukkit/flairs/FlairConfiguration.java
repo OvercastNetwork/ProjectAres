@@ -16,10 +16,10 @@ public class FlairConfiguration {
     }
 
     public boolean overheadFlair() {
-        return config.getBoolean("overhead-flair", false);
+        return config.getBoolean("overhead", false);
     }
 
     public int maxFlairs() {
-        return config.getInt("max-flairs", -1);
+        return config.getInt("limit", -1);
     }
 }
