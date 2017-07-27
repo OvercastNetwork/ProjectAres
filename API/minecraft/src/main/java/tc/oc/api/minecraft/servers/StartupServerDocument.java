@@ -1,9 +1,14 @@
 package tc.oc.api.minecraft.servers;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -51,8 +56,23 @@ public class StartupServerDocument implements ServerDoc.Startup {
         }
     });
 
+    private final Lazy<String> ip = Lazy.from(() -> {
+       try {
+           URL url = new URL("http://checkip.amazonaws.com");
+           return new BufferedReader(new InputStreamReader(url.openStream())).readLine();
+       } catch(IOException e) {
+           logger.log(Level.SEVERE, "Unable to find external ip", e);
+           return minecraftServer.getAddress().getHostName();
+       }
+    });
+
     @Override public boolean online() {
         return true;
+    }
+
+    @Override
+    public String ip() {
+        return ip.get();
     }
 
     @Override public Integer current_port() {

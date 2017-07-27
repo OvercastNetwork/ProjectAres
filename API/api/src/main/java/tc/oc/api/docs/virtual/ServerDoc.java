@@ -50,7 +50,8 @@ public interface ServerDoc {
     }
 
     @Serialize
-    interface CurrentPort extends Partial {
+    interface Ip extends Partial {
+        String ip();
         Integer current_port();
     }
 
@@ -95,7 +96,7 @@ public interface ServerDoc {
      * Startup info sent to the API
      */
     @Serialize
-    interface Startup extends Online, CurrentPort {
+    interface Startup extends Online, Ip {
         @Nullable DeployInfo deploy_info();
         Map<String, String> plugin_versions();
         Set<Integer> protocol_versions();
