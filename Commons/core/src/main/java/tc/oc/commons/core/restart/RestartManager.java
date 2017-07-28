@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,6 @@ public class RestartManager implements PluginFacet, Tickable {
         this.eventBus = eventBus;
         this.threads = threads;
         this.startTime = Instant.now();
-        onSignal(this.config.stopSignals());
     }
 
     @Override
@@ -85,6 +85,8 @@ public class RestartManager implements PluginFacet, Tickable {
                 TimeUnit.MILLISECONDS
             );
         }
+        // Enable listeners for stop signals
+        onSignal(this.config.stopSignals());
     }
 
     @Override
@@ -248,20 +250,35 @@ public class RestartManager implements PluginFacet, Tickable {
         signals.stream()
                .map(Signal::new)
                .forEach(signal -> Signal.handle(signal, s -> {
-                   requestRestartInternal(Instant.now(), "Received signal " + s.getName() + " (" + s.getNumber() + ") from system", Integer.MAX_VALUE);
+                   String reason = "Received signal " + s.getName() + " (" + s.getNumber() + ") from system";
+                   int priority = config.stopSignalPriority();
                    try {
-                       Thread.sleep(currentRequest.deferrals()
-                                                  .stream()
-                                                  .filter(deferral -> deferral.predictedDelay() != null)
-                                                  .map(RequestRestartEvent.Deferral::predictedDelay)
-                                                  .findFirst()
-                                                  .orElse(Duration.ZERO)
-                                                  .toMillis() + 1L);
+                       // Attempt to send restart request to the api
+                       requestRestart(reason, priority).get();
+                       // Wait for restart to sync back to the server
+                       boolean success = true;
+                       Instant start = Instant.now();
+                       while(currentRequest == null || !currentRequest.reason().equals(reason)) {
+                           Thread.sleep(Duration.ofSeconds(1).toMillis());
+                           if(Duration.between(start, Instant.now()).getSeconds() > 5) {
+                               logger.warning("Unable to request a " + signal.getName() + " signal restart to the api");
+                               success = false;
+                           }
+                       }
+                       if(!success) throw new InterruptedException();
+                   } catch(InterruptedException | ExecutionException e) {
+                       // Fallback to sending the request via local server events
+                       requestRestartInternal(Instant.now(), reason, priority);
+                   }
+                   try {
+                       // Sleep until maximum timeout before forcibly stopping the server
+                       Thread.sleep(config.stopSignalTimeout().toMillis());
                    } catch(InterruptedException e) {
                        if(!minecraftServer.isStopping()) {
                            logger.severe(s.getName() + " signal is unable to wait for restart");
                        }
                    }
+                   // Stop the server is all other restart attempts have failed
                    if(!restartIfRequested() && !minecraftServer.isStopping()) {
                        minecraftServer.stop();
                    }

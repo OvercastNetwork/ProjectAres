@@ -1,7 +1,5 @@
 package tc.oc.commons.core.restart;
 
-import javax.annotation.Nullable;
-import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -41,23 +39,17 @@ public class RequestRestartEvent {
     }
 
     public Deferral defer(String deferrerName) {
-        return defer(deferrerName, null);
-    }
-
-    public Deferral defer(String deferrerName, @Nullable Duration predictedDelay) {
         logger.info("Restart deferred by " + deferrerName);
-        Deferral deferral = new Deferral(deferrerName, predictedDelay);
+        Deferral deferral = new Deferral(deferrerName);
         deferrals.add(deferral);
         return deferral;
     }
 
     public class Deferral {
         private final String deferrerName;
-        private final Duration predictedDelay;
 
-        public Deferral(String deferrerName, @Nullable Duration predictedDelay) {
+        public Deferral(String deferrerName) {
             this.deferrerName = deferrerName;
-            this.predictedDelay = predictedDelay;
         }
 
         public RequestRestartEvent request() {
@@ -66,10 +58,6 @@ public class RequestRestartEvent {
 
         public String deferrerName() {
             return deferrerName;
-        }
-
-        public Duration predictedDelay() {
-            return predictedDelay;
         }
 
         /**
