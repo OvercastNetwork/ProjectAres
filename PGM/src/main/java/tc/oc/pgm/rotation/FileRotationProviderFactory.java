@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import javax.inject.Inject;
 
@@ -35,9 +36,14 @@ public class FileRotationProviderFactory {
 
             int priority = provider.getInt("priority", 0);
             int count = provider.getInt("count", 0);
+            Optional<ServerDoc.Rotation> next = minecraftService.getLocalServer()
+                                                                .rotations()
+                                                                .stream()
+                                                                .filter(rot -> rot.name().equals(name) && mapLibrary.getMapByNameOrId(rot.next_map_id()).isPresent())
+                                                                .findFirst();
 
             if(Files.isRegularFile(rotationFile)) {
-                providers.add(new RotationProviderInfo(new FileRotationProvider(mapLibrary, name, rotationFile, dataPath), name, priority, count));
+                providers.add(new RotationProviderInfo(new FileRotationProvider(mapLibrary, name, rotationFile, dataPath, next), name, priority, count));
             } else if(minecraftService.getLocalServer().startup_visibility() == ServerDoc.Visibility.PUBLIC) {
                 // This is not a perfect way to decide whether or not to throw an error, but it's the best we can do right now
                 mapLibrary.getLogger().severe("Missing rotation file: " + rotationFile);

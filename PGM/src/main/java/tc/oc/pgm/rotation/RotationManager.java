@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -22,6 +24,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.bukkit.configuration.Configuration;
+import tc.oc.api.docs.virtual.ServerDoc;
+import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.commons.core.logging.ClassLogger;
 import tc.oc.pgm.map.PGMMap;
 
@@ -30,13 +34,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RotationManager {
 
     private final Logger logger;
+    private final MinecraftService minecraftService;
     private final Configuration config;
     private final SortedSet<RotationProviderInfo> providers;
     private String currentRotationName;
     private RotationState defaultRotation;
 
-    public RotationManager(Logger logger, Configuration config, PGMMap defaultMap, Collection<RotationProviderInfo> providers) {
+    public RotationManager(Logger logger, MinecraftService minecraftService, Configuration config, PGMMap defaultMap, Collection<RotationProviderInfo> providers) {
         this.logger = ClassLogger.get(checkNotNull(logger, "logger"), getClass());
+        this.minecraftService = minecraftService;
         this.config = config;
         this.providers = Collections.synchronizedSortedSet(Sets.newTreeSet(providers));
 
@@ -85,6 +91,16 @@ public class RotationManager {
         for(RotationProviderInfo info : this.providers) {
             info.provider.saveRotation(name, rotation);
         }
+
+        minecraftService.updateLocalServer((ServerDoc.Rotations) () ->
+            getRotations().entrySet()
+                          .stream()
+                          .map(entry -> new ServerDoc.Rotation() {
+                              public String name() { return entry.getKey(); }
+                              public String next_map_id() { return entry.getValue().getNext().getId().slug(); }
+                          })
+                          .sorted(Comparator.comparing(ServerDoc.Rotation::name, (r1, r2) -> r1.equals(name) ? -1 : 1))
+                          .collect(Collectors.toList()));
     }
 
     public @Nonnull String getCurrentRotationName() {
@@ -136,7 +152,10 @@ public class RotationManager {
      */
     public boolean load(PGMMap defaultMap) {
         this.defaultRotation = new RotationState(Collections.singletonList(defaultMap), 0);
-        this.currentRotationName = config.getString("rotation.default-name", "default");
+
+        List<ServerDoc.Rotation> rotations = minecraftService.getLocalServer().rotations();
+        this.currentRotationName = rotations.isEmpty() ? config.getString("rotation.default-name", "default") : rotations.get(0).name();
+
 
         logger.info("Loading rotations from " + providers.size() +
                     " providers. Fallback map is '" + defaultRotation.getMaps().get(0).getName() +

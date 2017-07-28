@@ -20,6 +20,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.EventBus;
+import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.api.util.Permissions;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.pgm.PGM;
@@ -48,6 +49,7 @@ public class MatchManager implements MatchFinder {
     private final FileRotationProviderFactory fileRotationProviderFactory;
     private final EventBus eventBus;
     private final MatchLoader matchLoader;
+    private final MinecraftService minecraftService;
     private @Nullable RotationManager rotationManager;
 
     /** Custom set next map. */
@@ -64,7 +66,8 @@ public class MatchManager implements MatchFinder {
                          MapErrorTracker mapErrorTracker,
                          FileRotationProviderFactory fileRotationProviderFactory,
                          EventBus eventBus,
-                         MatchLoader matchLoader) throws MapNotFoundException {
+                         MatchLoader matchLoader,
+                         MinecraftService minecraftService) throws MapNotFoundException {
 
         this.pluginDataFolder = pluginDataFolder;
         this.mapErrorTracker = mapErrorTracker;
@@ -75,6 +78,7 @@ public class MatchManager implements MatchFinder {
         this.mapLoader = mapLoader;
         this.eventBus = eventBus;
         this.matchLoader = matchLoader;
+        this.minecraftService = minecraftService;
     }
 
     @Override
@@ -126,6 +130,7 @@ public class MatchManager implements MatchFinder {
         if(rotationManager == null) {
             rotationManager = new RotationManager(
                 log,
+                minecraftService,
                 config.get(),
                 mapLibrary.getMaps().iterator().next(),
                 fileRotationProviderFactory.parse(

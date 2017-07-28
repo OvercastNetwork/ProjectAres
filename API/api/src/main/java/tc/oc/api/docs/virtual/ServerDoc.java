@@ -106,7 +106,7 @@ public interface ServerDoc {
      * Startup info received from the API
      */
     @Serialize
-    interface Configuration extends Partial {
+    interface Configuration extends Rotations {
         String settings_profile();
         Map<UUID, String> operators();
         @Nullable Team team();
@@ -117,7 +117,6 @@ public interface ServerDoc {
         Visibility startup_visibility();
         boolean whitelist_enabled();
         boolean waiting_room();
-
         @Nullable String resource_pack_url();
         @Nullable String resource_pack_sha1();
         boolean resource_pack_fast_update();
@@ -140,6 +139,17 @@ public interface ServerDoc {
     @Serialize
     interface Mutation extends Partial {
         Set<String> queued_mutations();
+    }
+
+    @Serialize
+    interface Rotations extends Partial {
+        List<Rotation> rotations();
+    }
+
+    @Serialize
+    interface Rotation extends Document {
+        String name();
+        String next_map_id();
     }
 
     /**

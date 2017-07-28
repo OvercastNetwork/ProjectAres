@@ -282,4 +282,9 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     public Set<String> queued_mutations() {
         return mutations != null ? mutations.queued_mutations() : Collections.emptySet();
     }
+
+    @Override
+    public List<ServerDoc.Rotation> rotations() {
+        return Collections.emptyList();
+    }
 }

@@ -209,7 +209,13 @@ public class MapCommands {
         final RotationState rotation = CommandUtils.getRotation(args.getFlag('n'), sender);
         int page = args.getInteger(0, 1);
 
-        new PrettyPaginatedResult<PGMMap>(PGMTranslations.get().t("command.map.currentRotation.title", sender) + "(" + ChatColor.DARK_AQUA + PGM.getMatchManager().getRotationManager().getCurrentRotationName() + ChatColor.RESET + ")") {
+        String header = PGMTranslations.get().t("command.map.currentRotation.title", sender);
+        String name = PGM.getMatchManager().getRotationManager().getCurrentRotationName();
+        if(!name.equalsIgnoreCase("default")) {
+            header += " (" + ChatColor.DARK_AQUA + name + ChatColor.RESET + ")";
+        }
+
+        new PrettyPaginatedResult<PGMMap>(header) {
             @Override public String format(PGMMap map, int index) {
                 ChatColor color = index == rotation.getNextId() ? ChatColor.DARK_AQUA : ChatColor.WHITE;
                 return color.toString() + (index + 1) + ". " + map.getInfo().getShortDescription(sender);
