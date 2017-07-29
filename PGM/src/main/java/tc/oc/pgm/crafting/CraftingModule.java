@@ -84,7 +84,8 @@ public class CraftingModule implements MapModule, MatchModuleFactory<CraftingMat
                 }
             }
 
-            return customRecipes.isEmpty() && disabledRecipes.isEmpty() ? null : new CraftingModule(customRecipes, disabledRecipes);
+            //return customRecipes.isEmpty() && disabledRecipes.isEmpty() ? null : new CraftingModule(customRecipes, disabledRecipes);
+            return null;
         }
 
         private ItemStack parseRecipeResult(MapModuleContext context, Element elRecipe) throws InvalidXMLException {
