@@ -15,6 +15,7 @@ import tc.oc.pgm.itemkeep.ItemKeepManifest;
 import tc.oc.pgm.kits.KitManifest;
 import tc.oc.pgm.lane.LaneManifest;
 import tc.oc.pgm.blitz.BlitzManifest;
+import tc.oc.pgm.legacy.LegacyManifest;
 import tc.oc.pgm.loot.LootManifest;
 import tc.oc.pgm.menu.MenuManifest;
 import tc.oc.pgm.modes.ObjectiveModeManifest;
@@ -57,6 +58,7 @@ public class PGMModulesManifest extends HybridManifest {
         install(new TNTManifest());
         install(new TutorialManifest());
         install(new FlagManifest());
+        install(new LegacyManifest());
         install(new LootManifest());
         install(new TerrainManifest());
         install(new CoreManifest());
