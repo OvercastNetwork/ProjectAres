@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.inventory.ItemStack;
 import tc.oc.commons.bukkit.localization.Translations;
 import tc.oc.commons.core.logging.Loggers;
@@ -133,6 +134,14 @@ public class PGMListener implements PluginFacet, Listener {
             if (caught.getItemStack().getType() != Material.RAW_FISH) {
                 caught.setItemStack(new ItemStack(Material.RAW_FISH));
             }
+        }
+    }
+
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void onEnterVehicle(VehicleEnterEvent event) {
+        if (!(event.getActor() instanceof Player)) {
+            event.setCancelled(true);
         }
     }
 }
