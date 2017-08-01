@@ -21,19 +21,19 @@ import tc.oc.pgm.events.MatchEndEvent;
 import java.util.logging.Logger;
 
 public class DynamicRotationListener implements PluginFacet, Listener {
-    
+
     private final Logger logger;
     private final Audiences audiences;
     private final OnlinePlayers players;
     private final ConfigurationSection config;
-    
+
     @Inject DynamicRotationListener(Loggers loggers, Audiences audiences, OnlinePlayers players, Configuration config) {
         this.logger = loggers.get(getClass());
         this.audiences = audiences;
         this.players = players;
         this.config = config.getConfigurationSection("rotation");
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMatchEnd(MatchEndEvent event) {
         RotationManager rotationManager = PGM.getMatchManager().getRotationManager();
@@ -41,8 +41,8 @@ public class DynamicRotationListener implements PluginFacet, Listener {
         // Ignore if dynamic rotations are disabled or if there is only one rotation available
         if (!config.getBoolean("dynamic", false) || rotationManager.getRotations().size() <= 1) return;
 
-        int playerCount = players.count();
-        
+        int playerCount = players.count() + Math.round(event.getMatch().getObservingPlayers().size() / 2);
+
         // Get appropriate rotation
         RotationProviderInfo rotation = rotationManager.getProviders().stream()
                 .filter(info -> playerCount >= info.count).findFirst().orElse(null);
@@ -52,22 +52,24 @@ public class DynamicRotationListener implements PluginFacet, Listener {
         } else {
             RotationState rotState = rotation.provider.getRotation(rotation.name);
 
+            String oldRotation = rotationManager.getCurrentRotationName();
             if (rotState == null) {
                 logger.warning("'" + rotation.name + "' rotation provider doesn't have a rotation with it's own name");
             } else if (!rotationManager.getCurrentRotationName().equals(rotation.name)) {
                 rotationManager.setRotation(rotation.name, rotState);
                 rotationManager.setCurrentRotationName(rotation.name);
-    
+
                 logger.info("Changing to \"" + rotation.name + "\" rotation...");
-                sendRotationChangeMessage(audiences.localServer());
+                sendRotationChangeMessage(audiences.localServer(), oldRotation, rotation.name);
             }
         }
     }
 
-    private void sendRotationChangeMessage(Audience audience) {
-        audience.sendMessage(new HeaderComponent(ChatColor.RED));
-        audience.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.title"), ChatColor.GOLD));
-        audience.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.info"), ChatColor.YELLOW));
-        audience.sendMessage(new HeaderComponent(ChatColor.RED));
+    private void sendRotationChangeMessage(Audience audience, String previous, String current) {
+        audience.sendMessage(new HeaderComponent(ChatColor.AQUA, new TranslatableComponent("rotation.change.broadcast.change")));
+        audience.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.previous", ChatColor.AQUA + previous), ChatColor.DARK_AQUA));
+        audience.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.current", ChatColor.AQUA + current), ChatColor.DARK_AQUA));
+        audience.sendMessage(new Component(new TranslatableComponent("rotation.change.broadcast.info"), ChatColor.WHITE));
+        audience.sendMessage(new HeaderComponent(ChatColor.DARK_AQUA));
     }
 }
