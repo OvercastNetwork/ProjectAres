@@ -56,7 +56,7 @@ public class MainMenuInterface extends ChestInterface {
                 , 15) {
             @Override
             public void function(Player player) {
-                player.openInventory(new SettingsInterface(player).getInventory());
+                player.openInventory(new SettingsTypeInterface(player).getInventory());
             }
         });
 

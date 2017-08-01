@@ -31,20 +31,19 @@ import java.util.*;
 
 public class SettingsInterface extends SinglePageInterface {
 
-    public SettingsInterface(Player player) {
-        super(player, new ArrayList<>(), 54, "Settings");
+    SettingMenuHelper.SettingType settingType;
+
+    public SettingsInterface(Player player, SettingMenuHelper.SettingType settingType) {
+        super(player, new ArrayList<>(), 54, settingType.toString() + "Settings");
+        this.settingType = settingType;
         update();
     }
 
     @Override
     public void setButtons() {
         List<Button> buttons = new ArrayList<>();
-        List<Setting> settings = Lists.newArrayList(PlayerSettings.getRegistry().getSettings());
-        Collections.sort(settings, new Comparator<Setting>() {
-            public int compare(Setting s1, Setting s2) {
-                return s1.getName().compareTo(s2.getName());
-            }
-        });
+        List<Setting> settings = SettingMenuHelper.getAllOfType(settingType);
+        Collections.sort(settings, (s1, s2) -> s1.getName().compareTo(s2.getName()));
 
         for(Iterator<Setting> it = settings.iterator(); it.hasNext(); ) {
             Setting setting = it.next();

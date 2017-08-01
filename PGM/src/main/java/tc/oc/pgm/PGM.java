@@ -38,6 +38,7 @@ import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchLoader;
 import tc.oc.pgm.match.MatchManager;
 import tc.oc.pgm.match.MatchPlayer;
+import tc.oc.pgm.menu.gui.SettingMenuHelper;
 import tc.oc.pgm.pollablemaps.PollableMaps;
 import tc.oc.pgm.polls.PollListener;
 import tc.oc.pgm.polls.PollManager;
@@ -173,6 +174,7 @@ public final class PGM extends JavaPlugin {
         navigatorInterface.setOpenButtonSlot(Slot.Hotbar.forPosition(7));
 
         new MainTokenButton();
+        SettingMenuHelper.initializeSettings();
     }
 
     @Override
