@@ -8,7 +8,6 @@ import me.anxuiz.settings.bukkit.PlayerSettings;
 import me.anxuiz.settings.bukkit.plugin.Permissions;
 import me.anxuiz.settings.types.BooleanType;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Material;
