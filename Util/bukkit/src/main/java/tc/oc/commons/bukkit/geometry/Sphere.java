@@ -1,7 +1,5 @@
 package tc.oc.commons.bukkit.geometry;
 
-import org.bukkit.geometry.Cuboid;
-import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 
 /**

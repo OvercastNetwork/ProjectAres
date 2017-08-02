@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import com.sk89q.minecraft.util.commands.CommandsManager;
 import tc.oc.commons.core.logging.Loggers;

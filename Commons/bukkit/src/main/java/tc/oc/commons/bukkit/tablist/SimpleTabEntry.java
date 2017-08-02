@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.tablist;
 
 import org.bukkit.GameMode;
-import org.bukkit.Skin;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;

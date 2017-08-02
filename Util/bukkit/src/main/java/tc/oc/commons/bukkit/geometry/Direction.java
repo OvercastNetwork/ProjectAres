@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.geometry;
 
 import org.bukkit.Location;
-import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 
 public class Direction {

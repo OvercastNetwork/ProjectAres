@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-import org.bukkit.EntityLocation;
 import org.bukkit.entity.Player;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.commons.bukkit.chat.NameStyle;

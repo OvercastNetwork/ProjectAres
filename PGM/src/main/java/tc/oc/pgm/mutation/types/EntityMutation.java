@@ -9,7 +9,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.player.PlayerSpawnEntityEvent;
 import org.bukkit.inventory.EntityEquipment;
 import tc.oc.commons.core.collection.WeakHashSet;
 import tc.oc.pgm.events.MatchPlayerDeathEvent;

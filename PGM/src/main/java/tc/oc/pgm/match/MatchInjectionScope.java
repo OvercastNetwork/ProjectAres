@@ -4,7 +4,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
 import org.bukkit.World;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.inject.InjectionScopable;

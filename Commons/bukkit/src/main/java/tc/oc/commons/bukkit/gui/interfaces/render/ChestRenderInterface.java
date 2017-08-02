@@ -1,6 +1,5 @@
 package tc.oc.commons.bukkit.gui.interfaces.render;
 
-import tc.oc.commons.bukkit.gui.Interface;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.bukkit.gui.interfaces.ChestInterface;
 import tc.oc.commons.bukkit.util.ItemCreator;

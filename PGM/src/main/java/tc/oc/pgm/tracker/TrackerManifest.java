@@ -1,7 +1,6 @@
 package tc.oc.pgm.tracker;
 
 import com.google.inject.multibindings.Multibinder;
-import tc.oc.commons.bukkit.inventory.Slot;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.inject.Manifest;
 import tc.oc.pgm.match.MatchScope;

@@ -21,7 +21,7 @@ public class BoatMutation extends KitMutation {
 
     public BoatMutation(Match match) {
         super(match, true, BOAT);
-        vehicles = new HashSet<Vehicle>();
+        vehicles = new HashSet<>();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

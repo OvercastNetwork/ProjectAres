@@ -1,6 +1,5 @@
 package tc.oc.pgm.regions;
 
-import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 
 import java.util.Random;

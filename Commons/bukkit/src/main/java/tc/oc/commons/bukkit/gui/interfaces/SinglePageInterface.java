@@ -1,6 +1,5 @@
 package tc.oc.commons.bukkit.gui.interfaces;
 
-import tc.oc.commons.bukkit.gui.Interface;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.bukkit.gui.buttons.empty.EmptyButton;
 import tc.oc.commons.bukkit.gui.buttons.nextPage.NextPageButton;

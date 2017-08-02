@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 import tc.oc.commons.core.IterableUtils;
 

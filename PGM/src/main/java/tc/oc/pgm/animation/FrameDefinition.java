@@ -1,11 +1,6 @@
 package tc.oc.pgm.animation;
 
 import org.bukkit.World;
-import org.bukkit.block.BlockImage;
-import org.bukkit.geometry.Cuboid;
-import org.bukkit.region.BlockRegion;
-import org.bukkit.region.CuboidBlockRegion;
-import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import tc.oc.pgm.features.FeatureDefinition;
 import tc.oc.pgm.features.FeatureFactory;

@@ -18,7 +18,7 @@ public class PollableMaps {
     private List<PGMMap> maps;
 
     public PollableMaps() {
-        maps = new ArrayList<PGMMap>();
+        maps = new ArrayList<>();
         loadPollableMaps();
     }
 

@@ -16,7 +16,7 @@ public class Consume {
         this.durable = durable;
         this.exclusive = exclusive;
         this.autoDelete = autoDelete;
-        this.arguments = arguments != null ? arguments : Collections.<String, Object>emptyMap();
+        this.arguments = arguments != null ? arguments : Collections.emptyMap();
     }
 
     public String name() {

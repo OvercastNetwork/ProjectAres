@@ -2,7 +2,6 @@ package tc.oc.pgm.regions;
 
 import java.util.stream.Stream;
 
-import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 
 public class Complement extends Region.Impl {

@@ -14,7 +14,7 @@ public interface Hologram {
      * @param plugin The plugin responsible for the hologram.
      * @param content The content to be displayed.
      */
-    public void setContent(Plugin plugin, HologramContent content);
+    void setContent(Plugin plugin, HologramContent content);
 
     /**
      * Displays the hologram to the specified player.
@@ -22,14 +22,14 @@ public interface Hologram {
      * @param player The player.
      * @throws java.lang.IllegalStateException If no content has been set.
      */
-    public void show(Player player) throws IllegalStateException;
+    void show(Player player) throws IllegalStateException;
 
     /**
      * Hides the hologram from the specified player.
      *
      * @param player The player.
      */
-    public void hide(Player player);
+    void hide(Player player);
 
-    public HologramContent getContent();
+    HologramContent getContent();
 }

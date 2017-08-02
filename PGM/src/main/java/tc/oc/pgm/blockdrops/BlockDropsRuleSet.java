@@ -31,7 +31,7 @@ public class BlockDropsRuleSet {
     private final ImmutableList<BlockDropsRule> rules;
 
     public BlockDropsRuleSet() {
-        this(ImmutableList.<BlockDropsRule>of());
+        this(ImmutableList.of());
     }
 
     public BlockDropsRuleSet(List<BlockDropsRule> rules) {

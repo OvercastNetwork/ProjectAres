@@ -7,10 +7,8 @@ import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.Skin;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.attribute.ItemAttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -20,7 +18,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Dye;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Wool;
-import tc.oc.commons.bukkit.inventory.Slot;
 import tc.oc.commons.core.ListUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;

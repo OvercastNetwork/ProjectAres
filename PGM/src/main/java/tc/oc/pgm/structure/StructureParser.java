@@ -3,7 +3,6 @@ package tc.oc.pgm.structure;
 import java.util.Optional;
 import javax.inject.Inject;
 
-import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import org.jdom2.Document;
 import org.jdom2.Element;

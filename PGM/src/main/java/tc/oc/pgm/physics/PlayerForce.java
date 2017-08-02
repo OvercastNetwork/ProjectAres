@@ -1,6 +1,5 @@
 package tc.oc.pgm.physics;
 
-import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import tc.oc.pgm.match.MatchPlayer;
 

@@ -34,11 +34,11 @@ public class DefaultMapAdapter<K, V> implements Map<K, V> {
     }
 
     public DefaultMapAdapter(final V defaultValue, boolean putDefault) {
-        this(new HashMap<K, V>(), defaultValue, putDefault);
+        this(new HashMap<>(), defaultValue, putDefault);
     }
 
     public DefaultMapAdapter(DefaultProvider<? super K, ? extends V> defaultProvider, boolean putDefault) {
-        this(new HashMap<K, V>(), defaultProvider, putDefault);
+        this(new HashMap<>(), defaultProvider, putDefault);
     }
 
     public DefaultMapAdapter(Map<K, V> map, final V defaultValue) {

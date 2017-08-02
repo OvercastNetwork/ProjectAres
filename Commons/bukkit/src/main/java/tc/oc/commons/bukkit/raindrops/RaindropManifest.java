@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.raindrops;
 
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.permissions.PermissionBinder;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.plugin.PluginFacetBinder;
 

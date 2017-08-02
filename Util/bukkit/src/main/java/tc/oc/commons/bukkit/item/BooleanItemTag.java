@@ -1,7 +1,5 @@
 package tc.oc.commons.bukkit.item;
 
-import net.minecraft.server.NBTTagCompound;
-
 public class BooleanItemTag extends ItemTag<Boolean> {
 
     public BooleanItemTag(String name, Boolean defaultValue) {

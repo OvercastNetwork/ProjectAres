@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.util.RayBlockIntersection;
 
 /**
  * Player punched a block.

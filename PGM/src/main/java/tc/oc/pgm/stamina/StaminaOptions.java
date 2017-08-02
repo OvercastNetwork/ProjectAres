@@ -5,7 +5,6 @@ import java.util.Set;
 
 import tc.oc.pgm.stamina.mutators.StaminaMutator;
 import tc.oc.pgm.stamina.symptoms.StaminaSymptom;
-import tc.oc.pgm.utils.NumericModifier;
 
 public class StaminaOptions {
 

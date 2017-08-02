@@ -16,7 +16,6 @@ import javax.inject.Singleton;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventBus;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.pgm.events.CycleEvent;
 import tc.oc.pgm.events.MapArchiveEvent;
@@ -44,7 +43,7 @@ public class MatchLoader implements MatchFinder {
     private final EventBus eventBus;
 
     /** Matches that are currently running. */
-    private final Map<World, Match> matches = new HashMap<World, Match>();
+    private final Map<World, Match> matches = new HashMap<>();
 
     @Inject MatchLoader(Loggers loggers,
                         Provider<WorldManager> worldManager,

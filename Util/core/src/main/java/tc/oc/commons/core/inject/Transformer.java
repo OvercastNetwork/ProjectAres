@@ -2,9 +2,6 @@ package tc.oc.commons.core.inject;
 
 import javax.inject.Provider;
 
-import com.google.inject.TypeLiteral;
-import com.google.inject.util.Types;
-
 @FunctionalInterface
 public interface Transformer<T> {
     /**

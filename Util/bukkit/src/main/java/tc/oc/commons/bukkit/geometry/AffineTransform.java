@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import org.bukkit.Location;
-import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 
 /**

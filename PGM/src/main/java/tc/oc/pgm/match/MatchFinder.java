@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-import org.bukkit.Physical;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

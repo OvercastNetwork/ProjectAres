@@ -1,7 +1,6 @@
 package tc.oc.pgm.structure;
 
 import org.bukkit.World;
-import org.bukkit.region.BlockRegion;
 import org.bukkit.util.Vector;
 import tc.oc.pgm.features.Feature;
 

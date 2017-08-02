@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableList;
-import org.bukkit.event.EventBus;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Range;
 import net.md_5.bungee.api.chat.BaseComponent;
-import org.bukkit.WorldCreator;
 import org.jdom2.Document;
 import tc.oc.api.docs.virtual.MapDoc;
 import tc.oc.pgm.xml.InvalidXMLException;

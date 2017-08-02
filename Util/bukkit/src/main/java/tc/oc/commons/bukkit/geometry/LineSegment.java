@@ -1,6 +1,5 @@
 package tc.oc.commons.bukkit.geometry;
 
-import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 
 import static com.google.common.base.Preconditions.checkNotNull;

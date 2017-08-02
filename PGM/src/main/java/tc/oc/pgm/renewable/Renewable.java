@@ -15,7 +15,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.geometry.Vec3;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.BlockVector;
 import tc.oc.commons.bukkit.util.BlockFaces;

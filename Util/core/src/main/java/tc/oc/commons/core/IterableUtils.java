@@ -1,7 +1,6 @@
 package tc.oc.commons.core;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,7 +29,6 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import com.google.common.reflect.TypeToken;
 import tc.oc.commons.core.reflect.Methods;
-import tc.oc.commons.core.util.Comparators;
 import tc.oc.commons.core.util.IteratorUtils;
 import tc.oc.commons.core.util.Streams;
 import tc.oc.commons.core.util.ThrowingConsumer;

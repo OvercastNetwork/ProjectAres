@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.PlayerAction;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

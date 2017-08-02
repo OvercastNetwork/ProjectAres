@@ -4,7 +4,6 @@ import java.util.OptionalDouble;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.geometry.Vec3;
 
 /**
  * The only purpose of this class is to allow callers of {@link PointProvider#getPoint} to

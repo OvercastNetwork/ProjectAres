@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.ServerSuspendEvent;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.logging.Loggers;

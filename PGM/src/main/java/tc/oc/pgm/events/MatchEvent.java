@@ -1,6 +1,5 @@
 package tc.oc.pgm.events;
 
-import org.bukkit.Physical;
 import org.bukkit.World;
 import org.bukkit.event.Event;
 

@@ -1,8 +1,6 @@
 package tc.oc.pgm.filters.query;
 
-import org.bukkit.EntityLocation;
 import org.bukkit.Location;
-import org.bukkit.util.ImVector;
 
 public class PlayerQueryWithLocation implements ForwardingPlayerQuery {
 

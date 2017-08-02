@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PotionEffectRemoveEvent;
 import org.bukkit.potion.PotionEffectType;
 import tc.oc.commons.core.logging.ClassLogger;
 import tc.oc.commons.core.util.TimeUtils;

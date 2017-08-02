@@ -1,6 +1,5 @@
 package tc.oc.pgm.listeners;
 
-import org.bukkit.event.EventBus;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.player.PlayerQuitEvent;
 import tc.oc.commons.bukkit.event.InterfaceOpenEvent;

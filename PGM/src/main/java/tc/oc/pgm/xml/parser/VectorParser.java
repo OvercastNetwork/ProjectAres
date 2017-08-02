@@ -3,7 +3,6 @@ package tc.oc.pgm.xml.parser;
 import javax.inject.Inject;
 
 import com.google.common.cache.LoadingCache;
-import org.bukkit.util.ImVector;
 import tc.oc.commons.core.util.CacheUtils;
 import tc.oc.pgm.xml.InvalidXMLException;
 import tc.oc.pgm.xml.Node;

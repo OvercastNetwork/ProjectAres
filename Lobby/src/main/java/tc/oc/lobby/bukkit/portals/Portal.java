@@ -1,7 +1,6 @@
 package tc.oc.lobby.bukkit.portals;
 
 import com.google.common.base.Preconditions;
-import org.bukkit.geometry.Cuboid;
 import tc.oc.commons.bukkit.teleport.Navigator;
 
 public class Portal {

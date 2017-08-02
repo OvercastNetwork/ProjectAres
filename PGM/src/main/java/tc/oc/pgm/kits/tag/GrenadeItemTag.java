@@ -1,6 +1,5 @@
 package tc.oc.pgm.kits.tag;
 
-import net.minecraft.server.NBTTagCompound;
 import tc.oc.commons.bukkit.item.BooleanItemTag;
 import tc.oc.commons.bukkit.item.FloatItemTag;
 import tc.oc.commons.bukkit.item.ItemTag;

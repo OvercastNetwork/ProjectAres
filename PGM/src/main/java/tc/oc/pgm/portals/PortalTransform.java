@@ -1,9 +1,7 @@
 package tc.oc.pgm.portals;
 
 import java.util.Optional;
-import javax.annotation.Nullable;
 
-import org.bukkit.EntityLocation;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 import tc.oc.pgm.PGM;
