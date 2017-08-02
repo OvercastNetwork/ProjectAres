@@ -13,7 +13,11 @@ import tc.oc.commons.bukkit.gui.interfaces.SinglePageInterface;
 import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 
 public class SettingsInterface extends SinglePageInterface {
 
@@ -65,6 +69,8 @@ public class SettingsInterface extends SinglePageInterface {
     @Override
     public void setDefaultButtons() {
         defaultButtons.clear();
+
+        // "Go back" button
         defaultButtons.add(new Button(new ItemCreator(Material.WOOL)
                 .setData(14)
                 .setName(ChatColor.GREEN + "Go Back"), 49) {
@@ -73,6 +79,8 @@ public class SettingsInterface extends SinglePageInterface {
                 player.openInventory(new MainMenuInterface(player).getInventory());
             }
         });
+
+        // Create empty buttons at unused slots
         for (Integer integer : new Integer[]{
                  0,  1,  2,  3,  4,  5,  6,  7,  8,
                  9,                             17,

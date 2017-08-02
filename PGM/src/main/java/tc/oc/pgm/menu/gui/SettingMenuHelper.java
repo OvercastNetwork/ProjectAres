@@ -32,15 +32,12 @@ public class SettingMenuHelper {
         for (Setting s : misc) { settings.put(s,SettingType.MISC); }
     }
 
-    public static List<Setting> getAllOfType (SettingType settingType) {
+    public static List<Setting> getAllOfType(SettingType settingType) {
         return PlayerSettings.getRegistry().getSettings().stream().filter(setting -> getSettingType(setting) == settingType).collect(Collectors.toList());
     }
 
     private static SettingType getSettingType(Setting setting) {
-        if (settings.get(setting) != null) {
-            return settings.get(setting);
-        }
-        return SettingType.MISC;
+        return settings.getOrDefault(setting, SettingType.MISC);
     }
 
     public enum SettingType {
