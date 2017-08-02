@@ -3,6 +3,7 @@ package tc.oc.pgm.match;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.bukkit.EntityLocation;
 import tc.oc.commons.bukkit.nick.Identity;
 
 /**

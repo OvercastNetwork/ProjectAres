@@ -6,6 +6,7 @@ import tc.oc.commons.core.random.MutableEntropy;
 import tc.oc.commons.core.random.SaltedEntropy;
 
 import static org.junit.Assert.*;
+import static tc.oc.test.Assert.*;
 
 public class SaltedEntropyTest {
 

@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.registry.Key;
 import tc.oc.commons.bukkit.item.ItemUtils;
 import tc.oc.commons.bukkit.util.NMSHacks;
+import tc.oc.commons.core.inspect.Inspectable;
 import tc.oc.commons.core.util.MapUtils;
 
 public interface ItemKit extends Kit {

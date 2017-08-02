@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventBus;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.Trophy;
 import tc.oc.api.docs.User;

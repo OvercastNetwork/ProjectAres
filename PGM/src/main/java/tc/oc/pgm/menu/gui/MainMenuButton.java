@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
+import tc.oc.pgm.tokens.gui.MainTokenMenu;
 
 public class MainMenuButton extends Button {
 

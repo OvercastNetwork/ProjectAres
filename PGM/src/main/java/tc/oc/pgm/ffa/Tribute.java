@@ -181,7 +181,7 @@ public class Tribute implements Competitor {
     @Override
     public Set<PlayerId> getPastPlayers() {
         return getMatch().isCommitted() ? Collections.singleton(playerId)
-                                        : Collections.emptySet();
+                                        : Collections.<PlayerId>emptySet();
     }
 
     @Override

@@ -85,7 +85,7 @@ public class DocumentSerializationTest extends ApiTest {
             }
 
             @Override public List<List<Integer>> values() {
-                return ImmutableList.of(
+                return ImmutableList.<List<Integer>>of(
                     ImmutableList.of(1, 2, 3),
                     ImmutableList.of(4, 5, 6)
                 );

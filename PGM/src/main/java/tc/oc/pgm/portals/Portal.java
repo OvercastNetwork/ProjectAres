@@ -1,5 +1,6 @@
 package tc.oc.pgm.portals;
 
+import org.bukkit.EntityLocation;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;

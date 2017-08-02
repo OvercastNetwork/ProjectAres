@@ -30,6 +30,7 @@ import com.google.inject.spi.InjectionPoint;
 import com.google.inject.spi.ModuleAnnotatedMethodScanner;
 import tc.oc.commons.core.reflect.FieldDelegate;
 import tc.oc.commons.core.reflect.Types;
+import tc.oc.commons.core.util.Optionals;
 import tc.oc.commons.core.util.ThrowingFunction;
 import tc.oc.commons.core.util.ThrowingRunnable;
 import tc.oc.commons.core.util.ThrowingSupplier;

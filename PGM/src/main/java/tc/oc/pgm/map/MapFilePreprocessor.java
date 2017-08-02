@@ -161,11 +161,11 @@ public class MapFilePreprocessor {
             boolean expected = XMLUtils.parseBoolean(attr);
             boolean actual = getEnvironment(attr.getName(), Boolean.class, attr);
             if(expected != actual) {
-                return invert ? el.cloneContent() : Collections.emptyList();
+                return invert ? el.cloneContent() : Collections.<Content>emptyList();
             }
         }
 
-        return invert ? Collections.emptyList() : el.cloneContent();
+        return invert ? Collections.<Content>emptyList() : el.cloneContent();
     }
 
     private void processChildren(Path file, Element parent) throws InvalidXMLException {

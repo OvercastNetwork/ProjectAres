@@ -7,6 +7,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.minecraft.server.Packet;
+import net.minecraft.server.PacketPlayOutPlayerInfo;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.chat.ComponentRenderContext;

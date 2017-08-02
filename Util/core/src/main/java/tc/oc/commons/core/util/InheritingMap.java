@@ -24,7 +24,7 @@ public class InheritingMap<K, V> extends ForwardingMap<K, V> {
     private final Map<K, V> map, parent;
 
     public InheritingMap(Map<K, V> parent) {
-        this(new HashMap<>(), parent);
+        this(new HashMap<K, V>(), parent);
     }
 
     public InheritingMap(Map<K, V> map, Map<K, V> parent) {

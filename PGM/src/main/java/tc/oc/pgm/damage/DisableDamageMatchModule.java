@@ -5,6 +5,7 @@ import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Sets;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,6 +19,8 @@ import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchScope;
 import tc.oc.pgm.match.ParticipantState;
 import tc.oc.pgm.match.PlayerRelation;
+import tc.oc.pgm.mutation.Mutation;
+import tc.oc.pgm.mutation.MutationMatchModule;
 import tc.oc.pgm.tracker.BlockResolver;
 import tc.oc.pgm.tracker.EventResolver;
 import tc.oc.pgm.tracker.damage.DamageInfo;

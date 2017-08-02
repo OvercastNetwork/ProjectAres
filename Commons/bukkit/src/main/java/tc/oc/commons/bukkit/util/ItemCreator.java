@@ -1,7 +1,9 @@
 package tc.oc.commons.bukkit.util;
 
+import net.minecraft.server.NBTTagCompound;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

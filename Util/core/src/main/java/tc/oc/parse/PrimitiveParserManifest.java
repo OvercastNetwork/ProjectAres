@@ -2,6 +2,7 @@ package tc.oc.parse;
 
 import com.google.inject.TypeLiteral;
 import tc.oc.commons.core.inject.KeyedManifest;
+import tc.oc.commons.core.inject.Manifest;
 import tc.oc.commons.core.util.Pair;
 import tc.oc.parse.xml.NodeParser;
 import tc.oc.parse.xml.PrimitiveNodeParser;

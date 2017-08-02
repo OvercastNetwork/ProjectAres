@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import gnu.trove.set.TLongSet;
 import gnu.trove.set.hash.TLongHashSet;
+import org.bukkit.EntityLocation;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;

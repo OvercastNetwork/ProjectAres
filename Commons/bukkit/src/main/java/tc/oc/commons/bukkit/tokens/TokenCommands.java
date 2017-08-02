@@ -79,22 +79,14 @@ public class TokenCommands implements Commands {
                 CommandFutureCallback.onSuccess(sender, args, result -> {
                     result.user.player_id();
                     String type = args.getString(1).toLowerCase();
-                    switch (type) {
-                        case "setnext":
-                        case "map":
-                            TokenUtil.giveMapTokens(result.user, numberOfTokens);
-                            break;
-                        case "mutation":
-                        case "mt":
-                            TokenUtil.giveMutationTokens(result.user, numberOfTokens);
-                            break;
-                        case "droplets":
-                        case "raindrops":
-                        case "rds":
-                            RaindropUtil.giveRaindrops(result.user, numberOfTokens, null);
-                            break;
-                        default:
-                            throw new CommandUsageException(ChatColor.RED + "/givetokens [player] [setnext|mutation] [count]");
+                    if (type.equals("setnext") || type.equals("map")) {
+                        TokenUtil.giveMapTokens(result.user, numberOfTokens);
+                    } else if (type.equals("mutation") || type.equals("mt")) {
+                        TokenUtil.giveMutationTokens(result.user, numberOfTokens);
+                    } else if (type.equals("droplets") || type.equals("raindrops") || type.equals("rds")) {
+                        RaindropUtil.giveRaindrops(result.user, numberOfTokens, null);
+                    } else {
+                        throw new CommandUsageException(ChatColor.RED + "/givetokens [player] [setnext|mutation] [count]");
                     }
                 })
         );

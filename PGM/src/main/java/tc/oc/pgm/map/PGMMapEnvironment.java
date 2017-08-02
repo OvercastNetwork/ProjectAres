@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import tc.oc.commons.bukkit.configuration.ConfigUtils;
 import tc.oc.commons.core.util.Holidays;
 
 import static tc.oc.commons.core.util.Holidays.Holiday;

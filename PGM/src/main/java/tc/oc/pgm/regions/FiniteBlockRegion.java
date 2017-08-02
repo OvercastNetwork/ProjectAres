@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.BlockVector;
+import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 import tc.oc.api.docs.SemanticVersion;
 import tc.oc.commons.bukkit.util.BlockVectorSet;

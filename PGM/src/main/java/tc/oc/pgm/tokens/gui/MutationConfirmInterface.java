@@ -22,7 +22,7 @@ public class MutationConfirmInterface extends ChestInterface {
     private Mutation mutation;
 
     public MutationConfirmInterface(Player player, Mutation mutation) {
-        super(player, new ArrayList<>(), 27, "Confirmation Menu");
+        super(player, new ArrayList<Button>(), 27, "Confirmation Menu");
         updateButtons();
         this.mutation = mutation;
     }

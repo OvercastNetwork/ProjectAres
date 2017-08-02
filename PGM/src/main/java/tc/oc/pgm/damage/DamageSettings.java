@@ -3,6 +3,9 @@ package tc.oc.pgm.damage;
 import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.BooleanType;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import tc.oc.commons.bukkit.util.ItemCreator;
 
 public class DamageSettings {
 

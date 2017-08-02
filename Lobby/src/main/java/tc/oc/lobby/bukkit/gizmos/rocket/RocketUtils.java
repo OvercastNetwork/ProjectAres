@@ -3,7 +3,10 @@ package tc.oc.lobby.bukkit.gizmos.rocket;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.server.Packet;
+import net.minecraft.server.PacketPlayOutEntity;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;

@@ -3,6 +3,11 @@ package tc.oc.api.bukkit.friends;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import tc.oc.api.docs.UserId;
+import tc.oc.commons.core.util.Predicates;
+
 /**
  * Map of friend relationships for currently online players.
  * At least one of the two given players must be online to guarantee no false negatives.

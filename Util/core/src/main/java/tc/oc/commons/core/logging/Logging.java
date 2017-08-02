@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.sk89q.minecraft.util.commands.CommandException;

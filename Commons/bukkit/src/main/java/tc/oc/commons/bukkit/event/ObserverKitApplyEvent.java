@@ -1,6 +1,7 @@
 package tc.oc.commons.bukkit.event;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EntityAction;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 

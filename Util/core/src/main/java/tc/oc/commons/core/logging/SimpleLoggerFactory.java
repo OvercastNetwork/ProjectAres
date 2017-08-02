@@ -1,6 +1,7 @@
 package tc.oc.commons.core.logging;
 
 import java.util.logging.Logger;
+import javax.annotation.Nullable;
 
 public class SimpleLoggerFactory extends ClassLoggerFactory {
 

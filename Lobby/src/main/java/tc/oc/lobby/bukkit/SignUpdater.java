@@ -38,6 +38,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.material.MaterialData;
+import org.bukkit.util.RayBlockIntersection;
 import tc.oc.api.docs.Arena;
 import tc.oc.api.docs.Game;
 import tc.oc.api.docs.Server;

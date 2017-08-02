@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 import java.time.Duration;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
+import tc.oc.pgm.victory.VictoryCalculator;
 import tc.oc.pgm.victory.VictoryMatchModule;
 
 public class TimeLimitMatchModule extends MatchModule {

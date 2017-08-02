@@ -12,6 +12,7 @@ import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.PGMTranslations;
+import tc.oc.pgm.menu.gui.MainMenuInterface;
 import tc.oc.pgm.mutation.Mutation;
 import tc.oc.pgm.mutation.MutationMatchModule;
 import tc.oc.pgm.mutation.command.MutationCommands;

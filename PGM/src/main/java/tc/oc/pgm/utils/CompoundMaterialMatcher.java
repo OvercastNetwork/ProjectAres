@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.util.ImmutableMaterialSet;
 
 public class CompoundMaterialMatcher implements MaterialMatcher {
 

@@ -1,8 +1,10 @@
 package tc.oc.commons.bukkit.event;
 
+import org.bukkit.Physical;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.EntityAction;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;

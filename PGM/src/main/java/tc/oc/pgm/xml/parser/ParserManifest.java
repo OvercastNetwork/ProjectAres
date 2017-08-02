@@ -8,6 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.material.MaterialData;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import java.time.Duration;
 import tc.oc.commons.bukkit.localization.MessageTemplate;

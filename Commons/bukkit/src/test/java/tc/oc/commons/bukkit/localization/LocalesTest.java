@@ -8,6 +8,7 @@ import org.junit.Test;
 import tc.oc.commons.core.localization.Locales;
 
 import static tc.oc.test.Assert.*;
+import static org.junit.Assert.*;
 
 public class LocalesTest {
 

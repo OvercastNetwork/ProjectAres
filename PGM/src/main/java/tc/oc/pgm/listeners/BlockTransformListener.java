@@ -21,15 +21,20 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.EntityAction;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventBus;
 import org.bukkit.event.EventException;
+import org.bukkit.event.EventHandlerMeta;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.EventRegistry;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockFadeEvent;
+import org.bukkit.event.block.BlockFallEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockGrowEvent;
@@ -42,6 +47,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ExplosionPrimeByEntityEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -408,7 +414,7 @@ public class BlockTransformListener implements PluginFacet, Listener {
 
     @EventWrapper
     public void onBlockPistonRetract(final BlockPistonRetractEvent event) {
-        this.onPistonMove(event, event.getBlocks(), new HashMap<>());
+        this.onPistonMove(event, event.getBlocks(), new HashMap<Block, BlockState>());
     }
 
     // -----------------------------

@@ -2,6 +2,8 @@ package tc.oc.pgm.regions;
 
 import java.util.Random;
 
+import org.bukkit.geometry.Cuboid;
+import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 
 import static com.google.common.base.Preconditions.checkArgument;

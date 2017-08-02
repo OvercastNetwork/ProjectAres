@@ -3,6 +3,7 @@ package tc.oc.pgm.filters;
 import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
+import org.bukkit.inventory.ImItemStack;
 import org.bukkit.inventory.ItemStack;
 import tc.oc.commons.core.inspect.Inspectable;
 import tc.oc.pgm.kits.tag.ItemTags;

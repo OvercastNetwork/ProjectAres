@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.Multimap;
 import tc.oc.pgm.match.Competitor;
+import tc.oc.pgm.match.Match;
 import tc.oc.pgm.victory.AbstractVictoryCondition;
 
 // TODO: Break this down into multiple chainable conditions i.e. completions, touches, proximity, etc.

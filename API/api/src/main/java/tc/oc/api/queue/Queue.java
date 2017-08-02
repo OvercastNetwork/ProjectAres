@@ -126,7 +126,7 @@ public class Queue implements MessageQueue, Connectable, Suspendable {
         logger.fine("Declaring queue");
         client.getChannel().queueDeclare(consume.name(), consume.durable(), consume.exclusive(), consume.autoDelete(), consume.arguments());
         dispatcher = new MultiDispatcher();
-        consumerTag = client.getChannel().basicConsume(consume.name(), false, "", false, true, Collections.emptyMap(), dispatcher);
+        consumerTag = client.getChannel().basicConsume(consume.name(), false, "", false, true, Collections.<String, Object>emptyMap(), dispatcher);
     }
 
     @Override

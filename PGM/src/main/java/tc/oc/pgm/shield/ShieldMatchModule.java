@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PotionEffectRemoveEvent;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;

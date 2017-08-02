@@ -7,6 +7,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerUseUnknownEntityEvent;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;

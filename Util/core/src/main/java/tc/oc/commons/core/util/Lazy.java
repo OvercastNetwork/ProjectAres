@@ -75,7 +75,7 @@ public class Lazy<T> implements Supplier<T>, Provider<T> {
     }
 
     public static <T> Lazy<T> expiring(Duration maxAge, Supplier<T> supplier) {
-        return new Expiring<>(maxAge, supplier);
+        return new Expiring<T>(maxAge, supplier);
     }
 
     private static class Expiring<T> extends Lazy<T> {

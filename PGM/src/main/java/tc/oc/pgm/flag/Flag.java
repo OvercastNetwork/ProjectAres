@@ -122,7 +122,7 @@ public class Flag extends TouchableGoal<FlagDefinition> implements Listener {
         final TeamMatchModule tmm = match.getMatchModule(TeamMatchModule.class);
 
         this.owner = definition.owner()
-                               .map(tmm::team) // Do not use a method ref here, it will NPE if tmm is null
+                               .map(def -> tmm.team(def)) // Do not use a method ref here, it will NPE if tmm is null
                                .orElse(null);
 
         this.capturers = Lazy.from(
@@ -136,7 +136,7 @@ public class Flag extends TouchableGoal<FlagDefinition> implements Listener {
             () -> nets.stream()
                       .flatMap(net -> Optionals.stream(net.returnPost()
                                                           .flatMap(Post::owner)))
-                      .map(tmm::team)
+                      .map(def -> tmm.team(def))
                       .collect(Collectors.toSet())
         );
 
@@ -145,7 +145,7 @@ public class Flag extends TouchableGoal<FlagDefinition> implements Listener {
                       .flatMap(net -> Optionals.stream(net.returnPost()))
                       .filter(Post::isPermanent)
                       .flatMap(post -> Optionals.stream(post.owner()))
-                      .map(tmm::team)
+                      .map(def -> tmm.team(def))
                       .collect(Collectors.toSet())
         );
 

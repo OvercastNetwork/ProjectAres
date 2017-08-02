@@ -14,6 +14,7 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockFallEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitTask;
 import tc.oc.commons.bukkit.util.LongDeque;

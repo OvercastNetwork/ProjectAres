@@ -16,7 +16,7 @@ import java.util.List;
 public class MainTokenMenu extends ChestInterface {
 
     public MainTokenMenu(Player player) {
-        super(player, new ArrayList<>(), 36, "Token Menu");
+        super(player, new ArrayList<Button>(), 36, "Token Menu");
         updateButtons();
     }
 

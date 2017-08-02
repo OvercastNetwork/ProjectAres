@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerSkinPartsChangeEvent;
 import org.bukkit.plugin.Plugin;
 import tc.oc.commons.bukkit.nick.PlayerIdentityChangeEvent;
 import tc.oc.commons.core.logging.ClassLogger;
@@ -48,7 +49,7 @@ public class TabManager implements Listener {
     final DefaultMapAdapter<Player, TabView> enabledViews;
 
     final DefaultMapAdapter<Player, TabEntry> playerEntries;
-    final Map<Integer, TabEntry> blankEntries = new DefaultMapAdapter<>(new BlankTabEntry.Factory(), true);
+    final Map<Integer, TabEntry> blankEntries = new DefaultMapAdapter<Integer, TabEntry>(new BlankTabEntry.Factory(), true);
 
     boolean dirty;
 

@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.geometry.Cuboid;
 import tc.oc.commons.bukkit.util.BlockUtils;
 import tc.oc.commons.bukkit.util.BukkitUtils;
 import tc.oc.pgm.controlpoint.events.ControllerChangeEvent;

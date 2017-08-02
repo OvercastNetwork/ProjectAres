@@ -1,14 +1,19 @@
 package tc.oc.pgm.tokens;
 
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import tc.oc.commons.bukkit.chat.NameStyle;
+import tc.oc.commons.bukkit.event.ObserverKitApplyEvent;
 import tc.oc.commons.bukkit.raindrops.RaindropConstants;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
+import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.util.Comparables;
 import tc.oc.pgm.Config;
 import tc.oc.pgm.events.MatchEndEvent;

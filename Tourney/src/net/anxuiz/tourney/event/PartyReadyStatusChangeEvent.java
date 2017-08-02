@@ -1,6 +1,7 @@
 package net.anxuiz.tourney.event;
 
 import com.google.common.base.Preconditions;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import tc.oc.pgm.events.MatchEvent;
 import tc.oc.pgm.match.Party;

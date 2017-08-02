@@ -2,6 +2,8 @@ package tc.oc.pgm.regions;
 
 import java.util.Random;
 
+import org.bukkit.geometry.Cuboid;
+import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 
 public class CuboidRegion extends Region.Impl {

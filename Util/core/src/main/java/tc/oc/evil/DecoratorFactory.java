@@ -1,6 +1,8 @@
 package tc.oc.evil;
 
 import java.util.concurrent.ExecutionException;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;

@@ -18,7 +18,7 @@ import java.util.WeakHashMap;
 public class LivingEntityMapAdapter<V> extends ListeningMapAdapter<LivingEntity, V> implements Listener {
 
     public LivingEntityMapAdapter(Plugin plugin) {
-        super(new WeakHashMap<>(), plugin);
+        super(new WeakHashMap<LivingEntity, V>(), plugin);
     }
 
     @Override

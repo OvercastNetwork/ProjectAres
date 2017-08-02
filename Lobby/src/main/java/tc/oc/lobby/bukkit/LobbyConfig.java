@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 import tc.oc.commons.bukkit.configuration.ConfigUtils;
 import tc.oc.commons.bukkit.logging.MapdevLogger;

@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.ExplosionPrimeByEntityEvent;
 import tc.oc.pgm.listeners.BlockTransformListener;
 
 /**

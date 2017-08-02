@@ -8,6 +8,7 @@ import com.google.common.collect.Collections2;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.util.ImmutableMaterialSet;
 import tc.oc.commons.core.inspect.Inspectable;
 
 public class BlockMaterialMatcher extends Inspectable.Impl implements MaterialMatcher {

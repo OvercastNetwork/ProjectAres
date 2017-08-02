@@ -3,7 +3,9 @@ package tc.oc.pgm.filters.query;
 import java.util.Objects;
 import java.util.Set;
 
+import org.bukkit.EntityLocation;
 import org.bukkit.Location;
+import org.bukkit.PoseFlag;
 
 public interface IEntityQuery extends IEntityTypeQuery, ILocationQuery, IPoseQuery {
 

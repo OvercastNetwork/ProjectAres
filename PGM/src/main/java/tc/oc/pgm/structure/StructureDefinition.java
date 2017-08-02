@@ -3,6 +3,11 @@ package tc.oc.pgm.structure;
 import javax.annotation.Nullable;
 
 import org.bukkit.World;
+import org.bukkit.block.BlockImage;
+import org.bukkit.region.BlockRegion;
+import org.bukkit.region.CuboidBlockRegion;
+import org.bukkit.geometry.Cuboid;
+import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import tc.oc.pgm.features.FeatureDefinition;
 import tc.oc.pgm.features.FeatureFactory;

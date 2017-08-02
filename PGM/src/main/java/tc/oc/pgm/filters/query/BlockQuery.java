@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.material.MaterialData;
+import org.bukkit.util.ImVector;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.match.Match;
 

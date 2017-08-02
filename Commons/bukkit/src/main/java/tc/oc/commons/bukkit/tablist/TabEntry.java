@@ -2,6 +2,7 @@ package tc.oc.commons.bukkit.tablist;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.GameMode;
+import org.bukkit.Skin;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;

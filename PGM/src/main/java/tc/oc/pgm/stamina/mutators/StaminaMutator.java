@@ -3,7 +3,7 @@ package tc.oc.pgm.stamina.mutators;
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.pgm.utils.NumericModifier;
 
-public interface StaminaMutator {
+public abstract interface StaminaMutator {
 
     String getName();
 

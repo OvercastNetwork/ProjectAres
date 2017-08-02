@@ -5,6 +5,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.material.MaterialData;
 import org.bukkit.util.BlockVector;
+import org.bukkit.geometry.Cuboid;
+import org.bukkit.geometry.Vec3;
 import tc.oc.commons.core.util.DefaultMapAdapter;
 
 import java.util.HashMap;
@@ -40,7 +42,7 @@ public class BlockImage {
         blockData = new byte[this.volume];
 
         if(keepCounts) {
-            this.blockCounts = new DefaultMapAdapter<>(new HashMap<>(), 0);
+            this.blockCounts = new DefaultMapAdapter<>(new HashMap<MaterialData, Integer>(), 0);
         } else {
             this.blockCounts = null;
         }

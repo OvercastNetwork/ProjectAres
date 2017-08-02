@@ -6,10 +6,12 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import com.google.common.collect.Range;
+import org.bukkit.PoseFlag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.inventory.ImItemStack;
 import org.jdom2.Element;
 import tc.oc.api.docs.SemanticVersion;
 import tc.oc.commons.bukkit.localization.MessageTemplate;

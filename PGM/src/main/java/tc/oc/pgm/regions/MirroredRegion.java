@@ -2,6 +2,8 @@ package tc.oc.pgm.regions;
 
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
+
 public class MirroredRegion extends TransformedRegion {
     // Reflection plane equation is: v · normal = offset
     private final @Inspect Vector normal; // unit normal

@@ -4,9 +4,19 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventBus;
 import tc.oc.api.bukkit.event.UserUpdateEvent;
 import tc.oc.api.bukkit.friends.OnlineFriends;
+import tc.oc.api.docs.User;
+import tc.oc.api.docs.UserId;
+import tc.oc.api.minecraft.users.UserStore;
+import tc.oc.api.users.UserService;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
 
 @Singleton
 public class BukkitUserStore extends UserStore<Player> implements OnlinePlayers, OnlineFriends {

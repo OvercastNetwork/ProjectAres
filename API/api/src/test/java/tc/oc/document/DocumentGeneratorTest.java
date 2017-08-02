@@ -14,6 +14,7 @@ import tc.oc.api.document.DocumentGenerator;
 import tc.oc.api.document.DocumentRegistry;
 
 import static org.junit.Assert.*;
+import static tc.oc.test.Assert.*;
 
 @Serialize interface Empty extends Document {}
 @Serialize interface RequiredPrimitive extends Document { int woot(); }

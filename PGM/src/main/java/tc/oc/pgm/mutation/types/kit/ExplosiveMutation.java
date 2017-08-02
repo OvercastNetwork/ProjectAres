@@ -53,7 +53,7 @@ public class ExplosiveMutation extends KitMutation {
 
     @Override
     public void remove(MatchPlayer player) {
-        player.getInventory().all(Material.BOW).values().forEach(bow -> FIRE_BOW.item().getEnchantments().keySet().forEach(bow::removeEnchantment));
+        player.getInventory().all(Material.BOW).values().forEach(bow -> FIRE_BOW.item().getEnchantments().keySet().forEach(enchantment -> bow.removeEnchantment(enchantment)));
         super.remove(player);
     }
 

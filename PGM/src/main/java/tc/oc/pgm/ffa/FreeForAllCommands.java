@@ -3,8 +3,10 @@ package tc.oc.pgm.ffa;
 import com.sk89q.minecraft.util.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import tc.oc.pgm.PGM;
 import tc.oc.pgm.commands.CommandUtils;
 import tc.oc.pgm.match.MatchPlayer;
+import tc.oc.pgm.teams.Team;
 
 public class FreeForAllCommands {
     private FreeForAllCommands() {}

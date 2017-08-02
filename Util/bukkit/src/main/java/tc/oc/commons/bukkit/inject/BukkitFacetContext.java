@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 
+import org.bukkit.event.EventRegistry;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import tc.oc.commons.bukkit.event.targeted.TargetedEventBus;

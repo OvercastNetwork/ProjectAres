@@ -11,6 +11,8 @@ import javax.inject.Singleton;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.event.Event;
+import org.bukkit.event.EventHandlerMeta;
+import org.bukkit.event.EventRegistry;
 import org.bukkit.event.Listener;
 import tc.oc.commons.bukkit.event.BukkitEventHandlerScanner;
 import tc.oc.commons.bukkit.event.EventHandlerInfo;

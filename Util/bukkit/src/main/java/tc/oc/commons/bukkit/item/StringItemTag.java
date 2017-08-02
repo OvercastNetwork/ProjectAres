@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.item;
 
+import net.minecraft.server.NBTTagCompound;
+
 public class StringItemTag extends ItemTag<String> {
 
     public StringItemTag(String name, String defaultValue) {

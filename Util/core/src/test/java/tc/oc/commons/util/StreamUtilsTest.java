@@ -6,6 +6,7 @@ import org.junit.Test;
 import tc.oc.commons.core.util.Streams;
 
 import static org.junit.Assert.*;
+import static tc.oc.test.Assert.*;
 
 public class StreamUtilsTest {
 

@@ -14,5 +14,5 @@ public interface RotationTransformation {
      *
      * @throws NullPointerException if state is null
      */
-    @Nonnull RotationState apply(@Nonnull RotationState state);
+    public @Nonnull RotationState apply(@Nonnull RotationState state);
 }

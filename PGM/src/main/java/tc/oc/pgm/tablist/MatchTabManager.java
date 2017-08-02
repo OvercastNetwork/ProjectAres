@@ -16,6 +16,7 @@ import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.ffa.Tribute;
 import tc.oc.pgm.events.MatchPlayerDeathEvent;
+import tc.oc.pgm.events.PlayerPartyChangeEvent;
 import tc.oc.pgm.ffa.events.MatchResizeEvent;
 import tc.oc.pgm.spawns.events.ParticipantSpawnEvent;
 import tc.oc.pgm.teams.Team;

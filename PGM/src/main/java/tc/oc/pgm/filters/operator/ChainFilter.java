@@ -26,7 +26,7 @@ public class ChainFilter extends MultiFilterFunction {
      * Return a reversed chain, so later filters have priority over earlier ones
      */
     public static Filter reverse(List<? extends Filter> filters) {
-        return IterableUtils.unify(filters, StaticFilter.ABSTAIN, multi -> new ChainFilter(Lists.reverse(ImmutableList.copyOf(multi))));
+        return IterableUtils.<Filter>unify(filters, StaticFilter.ABSTAIN, multi -> new ChainFilter(Lists.reverse(ImmutableList.copyOf(multi))));
     }
 
     @Override

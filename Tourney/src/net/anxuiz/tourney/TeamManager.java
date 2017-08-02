@@ -18,6 +18,7 @@ import net.anxuiz.tourney.event.EntrantRegisterEvent;
 import net.anxuiz.tourney.event.EntrantUnregisterEvent;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventBus;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.Entrant;
 import tc.oc.api.docs.PlayerId;

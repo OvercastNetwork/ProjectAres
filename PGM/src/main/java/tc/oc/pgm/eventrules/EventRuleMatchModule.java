@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.BlockVector;
+import org.bukkit.util.Vector;
 import tc.oc.commons.bukkit.event.CoarsePlayerMoveEvent;
 import tc.oc.commons.bukkit.event.GeneralizingEvent;
 import tc.oc.commons.bukkit.util.BlockStateUtils;

@@ -13,6 +13,8 @@ import tc.oc.api.message.types.FindMultiRequest;
 import tc.oc.api.message.types.FindMultiResponse;
 import tc.oc.api.message.types.FindRequest;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 public class HttpQueryService<Complete extends Model> implements QueryService<Complete> {
 
     @Inject private ModelMeta<Complete, ?> meta;

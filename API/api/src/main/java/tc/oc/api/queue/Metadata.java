@@ -20,7 +20,7 @@ public class Metadata extends AMQP.BasicProperties {
     public static final String MODEL_NAME = "model_name";
 
     public static Map<String, Object> nonNullHeaders(Map<String, Object> headers) {
-        return headers != null ? headers : Collections.emptyMap();
+        return headers != null ? headers : Collections.<String, Object>emptyMap();
     }
 
     public static Map<String, Object> getHeaders(AMQP.BasicProperties props) {

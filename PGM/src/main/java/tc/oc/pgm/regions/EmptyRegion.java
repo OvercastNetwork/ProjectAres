@@ -1,5 +1,6 @@
 package tc.oc.pgm.regions;
 
+import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 
 public class EmptyRegion extends Region.Impl {

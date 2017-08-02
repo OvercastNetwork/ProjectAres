@@ -11,6 +11,7 @@ import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.SemanticVersion;
 import tc.oc.api.docs.UserId;
 import tc.oc.api.docs.virtual.MapDoc;
+import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.commons.core.inject.Manifest;
 
 public class TypeAdaptersManifest extends Manifest {

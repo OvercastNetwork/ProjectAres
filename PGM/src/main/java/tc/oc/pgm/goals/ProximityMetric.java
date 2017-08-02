@@ -7,7 +7,7 @@ import tc.oc.pgm.xml.InvalidXMLException;
 import tc.oc.pgm.xml.Node;
 
 public class ProximityMetric {
-    public enum Type {
+    public static enum Type {
         CLOSEST_PLAYER("closest player"),
         CLOSEST_BLOCK("closest block"),
         CLOSEST_KILL("closest kill");

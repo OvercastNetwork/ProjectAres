@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerSuspendEvent;
 import tc.oc.commons.core.IterableUtils;
 import tc.oc.commons.core.concurrent.SerializingExecutor;
 import tc.oc.commons.core.logging.Loggers;

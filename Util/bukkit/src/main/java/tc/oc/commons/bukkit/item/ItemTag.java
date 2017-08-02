@@ -3,6 +3,7 @@ package tc.oc.commons.bukkit.item;
 import java.util.Objects;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.server.NBTTagCompound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tc.oc.commons.bukkit.util.NBTUtils;

@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
+import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 
 public abstract class TransformedRegion extends Region.Impl {

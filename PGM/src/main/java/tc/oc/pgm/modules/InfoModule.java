@@ -143,7 +143,7 @@ public class InfoModule implements MapModule, WorldConfigurator {
 
             List<Contributor> contributors = readContributorList(root, "contributors", "contributor");
 
-            List<String> rules = new ArrayList<>();
+            List<String> rules = new ArrayList<String>();
             for(Element parent : root.getChildren("rules")) {
                 for(Element rule : parent.getChildren("rule")) {
                     rules.add(rule.getTextNormalize());
@@ -161,7 +161,7 @@ public class InfoModule implements MapModule, WorldConfigurator {
     }
 
     private static List<Contributor> readContributorList(Element root, String topLevelTag, String tag) throws InvalidXMLException {
-        List<Contributor> contribs = new ArrayList<>();
+        List<Contributor> contribs = new ArrayList<Contributor>();
         for(Element parent : root.getChildren(topLevelTag)) {
             for(Element child : parent.getChildren(tag)) {
                 String name = XMLUtils.getNormalizedNullableText(child);

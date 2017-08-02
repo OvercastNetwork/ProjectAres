@@ -2,6 +2,7 @@ package tc.oc.pgm.animation;
 
 import com.google.inject.assistedinject.Assisted;
 import org.bukkit.World;
+import org.bukkit.util.ImVector;
 import tc.oc.commons.core.inject.InnerFactory;
 import tc.oc.pgm.features.FeatureDefinition;
 import tc.oc.pgm.features.FeatureFactory;

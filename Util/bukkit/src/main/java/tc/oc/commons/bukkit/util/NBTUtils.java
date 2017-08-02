@@ -2,6 +2,9 @@ package tc.oc.commons.bukkit.util;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.server.NBTBase;
+import net.minecraft.server.NBTTagCompound;
+import org.bukkit.craftbukkit.inventory.CraftMetaItem;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tc.oc.commons.bukkit.item.ItemUtils;

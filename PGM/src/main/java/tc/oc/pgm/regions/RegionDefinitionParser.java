@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.google.common.collect.Range;
+import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import org.jdom2.Attribute;
 import org.jdom2.Element;

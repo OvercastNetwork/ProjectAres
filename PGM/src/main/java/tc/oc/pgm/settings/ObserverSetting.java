@@ -4,6 +4,8 @@ import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.EnumType;
 import me.anxuiz.settings.types.Name;
+import org.bukkit.Material;
+import tc.oc.commons.bukkit.util.ItemCreator;
 
 public class ObserverSetting {
     private static final Setting inst = new SettingBuilder()
@@ -13,7 +15,7 @@ public class ObserverSetting {
                 "ALL: show all observers\n" +
                 "FRIENDS: show friend observers\n" +
                 "NONE: show no observers")
-        .type(new EnumType<>("Observer Options", Options.class))
+        .type(new EnumType<Options>("Observer Options", Options.class))
         .defaultValue(Options.ALL).get();
 
     public static Setting get() {

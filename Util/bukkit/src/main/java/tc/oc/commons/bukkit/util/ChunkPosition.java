@@ -6,6 +6,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.geometry.Vec3;
 import tc.oc.commons.core.util.Utils;
 
 public class ChunkPosition {

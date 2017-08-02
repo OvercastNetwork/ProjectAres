@@ -1,6 +1,7 @@
 package tc.oc.pgm.animation;
 
 import com.google.common.collect.Range;
+import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import org.jdom2.Document;
 import org.jdom2.Element;

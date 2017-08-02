@@ -1,5 +1,6 @@
 package tc.oc.pgm.filters.query;
 
+import org.bukkit.EntityLocation;
 import org.bukkit.entity.Entity;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.match.Match;

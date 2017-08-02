@@ -197,7 +197,7 @@ public class HttpClient implements Connectable {
             }
         }
 
-        return this.executorService.submit(new RequestCallable<>(request, returnType, options));
+        return this.executorService.submit(new RequestCallable<T>(request, returnType, options));
     }
 
     @Override

@@ -319,8 +319,8 @@ public class TeamMatchModule extends MatchModule implements Listener, JoinHandle
         return Team.withChange(joining, null, () -> {
             final Function<Team, JoinResult> queryJoin = memoize(team -> team.queryJoin(joining, priorityKick, false));
             return shuffledTeams()
-                .sorted(Comparator.comparing(queryJoin, Comparator.comparing(JoinResult::isAllowed, Comparators.firstIf())
-                                                                  .thenComparing(JoinResult::priorityKickRequired, Comparators.lastIf()))
+                .sorted(Comparator.<Team, JoinResult>comparing(queryJoin, Comparator.comparing(JoinResult::isAllowed, Comparators.firstIf())
+                                                                                    .thenComparing(JoinResult::priorityKickRequired, Comparators.lastIf()))
                                   .<Fraction>thenComparing((Team team) -> team.getFullness(Team::getMinPlayers))
                                   .<Fraction>thenComparing((Team team) -> team.getFullness(Team::getMaxOverfill)))
                 .map(queryJoin);

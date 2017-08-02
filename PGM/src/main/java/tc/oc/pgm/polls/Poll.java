@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
 public abstract class Poll implements Runnable {
-    protected final Map<String, Boolean> votes = new HashMap<>();
+    protected final Map<String, Boolean> votes = new HashMap<String, Boolean>();
     protected final long startTime = System.currentTimeMillis();
     protected final PollManager pollManager;
     protected final Server server;

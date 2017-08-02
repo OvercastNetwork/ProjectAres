@@ -4,6 +4,7 @@ import org.junit.Test;
 import tc.oc.commons.core.reflect.Delegates;
 
 import static org.junit.Assert.*;
+import static tc.oc.test.Assert.*;
 
 public class DelegatesTest {
 

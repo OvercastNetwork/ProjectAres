@@ -12,6 +12,7 @@ import tc.oc.commons.core.event.EventUtils;
 import tc.oc.commons.core.util.ExceptionUtils;
 import tc.oc.commons.core.util.Streams;
 import tc.oc.minecraft.api.event.Enableable;
+import tc.oc.minecraft.api.event.Listener;
 import tc.oc.minecraft.api.plugin.Plugin;
 
 public class PluginFacetLoader implements Enableable {

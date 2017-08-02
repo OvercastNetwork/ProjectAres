@@ -5,7 +5,9 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Skin;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerSkinPartsChangeEvent;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.nick.Identity;

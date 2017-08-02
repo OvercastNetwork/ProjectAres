@@ -3,6 +3,7 @@ package tc.oc.pgm.projectile;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import com.google.inject.Inject;
 import org.bukkit.entity.Entity;
 import org.bukkit.potion.PotionEffect;
 import java.time.Duration;

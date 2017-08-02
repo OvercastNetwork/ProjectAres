@@ -8,8 +8,10 @@ import javax.inject.Inject;
 
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.EntityAction;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.bukkit.event.PlayerAction;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
 import tc.oc.commons.bukkit.event.UserEvent;

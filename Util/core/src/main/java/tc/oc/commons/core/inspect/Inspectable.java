@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Maps;
 import tc.oc.commons.core.stream.BiStream;
 import tc.oc.commons.core.util.Chain;
 import tc.oc.commons.core.util.Optionals;

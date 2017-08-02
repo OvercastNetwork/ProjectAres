@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
+import tc.oc.commons.bukkit.util.NMSHacks;
 import tc.oc.pgm.match.MatchScope;
 
 @ListenerScope(MatchScope.RUNNING)

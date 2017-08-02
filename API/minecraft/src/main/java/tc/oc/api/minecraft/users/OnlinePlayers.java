@@ -6,6 +6,8 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
+import tc.oc.api.docs.PlayerId;
+import tc.oc.api.docs.User;
 import tc.oc.api.docs.UserId;
 import tc.oc.minecraft.api.entity.Player;
 

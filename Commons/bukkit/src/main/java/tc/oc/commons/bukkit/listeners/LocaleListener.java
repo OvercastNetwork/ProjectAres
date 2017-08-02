@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLocaleChangeEvent;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.users.UserService;

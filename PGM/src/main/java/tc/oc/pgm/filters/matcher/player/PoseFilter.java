@@ -1,6 +1,7 @@
 package tc.oc.pgm.filters.matcher.player;
 
 import com.google.common.cache.LoadingCache;
+import org.bukkit.PoseFlag;
 import tc.oc.commons.core.util.CacheUtils;
 import tc.oc.pgm.filters.Filter;
 import tc.oc.pgm.filters.matcher.TypedFilter;

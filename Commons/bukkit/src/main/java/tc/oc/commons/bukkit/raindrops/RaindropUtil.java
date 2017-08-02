@@ -8,6 +8,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventBus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import java.time.Duration;

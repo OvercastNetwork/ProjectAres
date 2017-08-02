@@ -76,7 +76,7 @@ public abstract class ModuleContext<Base, Scope extends Annotation> implements M
     private <T> T getInstance(Key<T> key) {
         // Check the store directly first, so we can avoid a scope change most of the time
         return injectionStore.provide(key, () ->
-            this.asCurrentScope(
+            this.<T, RuntimeException>asCurrentScope(
                 () -> injector.getInstance(key)
             )
         );

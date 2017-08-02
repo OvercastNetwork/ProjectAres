@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.item;
 
+import net.minecraft.server.NBTTagCompound;
+
 public class FloatItemTag extends ItemTag<Float> {
 
     public FloatItemTag(String name, Float defaultValue) {

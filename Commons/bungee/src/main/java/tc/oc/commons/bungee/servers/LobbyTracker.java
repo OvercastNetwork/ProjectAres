@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -18,6 +19,8 @@ import tc.oc.api.model.ModelListener;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.stream.BiStream;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Track available lobbies and choose the best lobby to receive players at any given time

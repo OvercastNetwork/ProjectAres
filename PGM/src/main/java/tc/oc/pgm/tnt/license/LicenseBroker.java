@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.bukkit.event.EventBus;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.UserId;

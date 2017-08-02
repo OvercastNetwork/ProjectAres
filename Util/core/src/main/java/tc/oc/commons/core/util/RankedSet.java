@@ -45,7 +45,7 @@ public class RankedSet<E> extends ForwardingSet<E> {
     }
 
     public RankedSet(Comparator<E> comparator) {
-        this(new HashSet<>(), comparator);
+        this(new HashSet<E>(), comparator);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class RankedSet<E> extends ForwardingSet<E> {
     public Set<E> getRank(int rank) {
         freshenRanking();
         return rank < ranks.size() ? ranks.get(rank)
-                                   : Collections.emptySet();
+                                   : Collections.<E>emptySet();
     }
 
     /**

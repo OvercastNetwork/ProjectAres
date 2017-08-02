@@ -10,6 +10,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.geometry.Cuboid;
+import org.bukkit.geometry.Ray;
 import tc.oc.commons.bukkit.util.NMSHacks;
 import tc.oc.pgm.map.MapInfo;
 import tc.oc.pgm.match.Match;

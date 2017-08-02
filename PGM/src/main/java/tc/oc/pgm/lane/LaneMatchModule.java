@@ -9,6 +9,7 @@ import com.google.common.collect.ObjectArrays;
 import com.google.common.collect.Sets;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.ChatColor;
+import org.bukkit.EntityLocation;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;

@@ -3,6 +3,7 @@ package tc.oc.pgm.menu;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.pgm.match.inject.MatchBinders;
 import tc.oc.pgm.match.inject.MatchScoped;
+import tc.oc.pgm.tokens.TokenListener;
 
 public class MenuManifest extends HybridManifest implements MatchBinders {
     @Override

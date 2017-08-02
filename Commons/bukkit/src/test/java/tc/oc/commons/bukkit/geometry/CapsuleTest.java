@@ -1,5 +1,6 @@
 package tc.oc.commons.bukkit.geometry;
 
+import org.bukkit.util.ImVector;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

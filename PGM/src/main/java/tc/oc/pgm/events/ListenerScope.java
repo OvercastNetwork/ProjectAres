@@ -12,5 +12,5 @@ import tc.oc.pgm.match.MatchScope;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Inherited
 public @interface ListenerScope {
-    MatchScope value();
+    public MatchScope value();
 }

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import tc.oc.pgm.match.Competitor;
+import tc.oc.pgm.match.Match;
 import tc.oc.pgm.victory.AbstractVictoryCondition;
 
 public class ScoreVictoryCondition extends AbstractVictoryCondition {

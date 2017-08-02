@@ -24,6 +24,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Consumer;
+import org.bukkit.util.ImmutableMaterialSet;
 
 public class ItemUtils {
     private ItemUtils() {}

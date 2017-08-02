@@ -41,7 +41,7 @@ public class ToolsMutation extends KitMutation{
         List<ItemStack> hotbar = Slot.Hotbar.hotbar()
                 .map(slot -> slot.getItem(player.getInventory()))
                 .collect(Collectors.toList());
-        List<ItemStack> toolsSaved = new ArrayList<>();
+        List<ItemStack> toolsSaved = new ArrayList<ItemStack>();
         for(ItemStack item : hotbar) {
             if(item != null && ItemUtils.isTool(item)) {
                 toolsSaved.add(item);

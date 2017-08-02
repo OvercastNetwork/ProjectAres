@@ -1,5 +1,6 @@
 package tc.oc.lobby.bukkit.portals;
 
+import org.bukkit.geometry.Cuboid;
 import tc.oc.commons.bukkit.config.ExternalConfiguration;
 import tc.oc.commons.bukkit.configuration.ConfigUtils;
 import tc.oc.commons.bukkit.teleport.Navigator;

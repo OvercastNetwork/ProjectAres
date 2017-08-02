@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerOnGroundEvent;
 import tc.oc.commons.bukkit.util.Materials;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.pgm.events.ListenerScope;

@@ -20,7 +20,7 @@ public class LinkedHashMultimap<K, V> extends ForwardingSetMultimap<K, V> {
         new Supplier<Set<V>>() {
             @Override
             public Set<V> get() {
-                return new LinkedHashSet<>();
+                return new LinkedHashSet<V>();
             }
         }
     );

@@ -2,6 +2,7 @@ package tc.oc.pgm.filters.query;
 
 import java.util.Optional;
 
+import org.bukkit.EntityLocation;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;

@@ -6,6 +6,7 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
 import org.bukkit.ChatColor;
+import org.bukkit.Skin;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.commons.core.commands.Commands;

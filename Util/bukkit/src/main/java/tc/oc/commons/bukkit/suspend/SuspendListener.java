@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerSuspendEvent;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.ThrowingConsumer;
 import tc.oc.minecraft.suspend.Suspendable;

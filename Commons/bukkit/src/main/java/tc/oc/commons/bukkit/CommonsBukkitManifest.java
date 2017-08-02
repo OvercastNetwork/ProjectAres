@@ -63,6 +63,7 @@ import tc.oc.commons.bukkit.respack.ResourcePackManager;
 import tc.oc.commons.bukkit.restart.RestartCommands;
 import tc.oc.commons.bukkit.sessions.SessionListener;
 import tc.oc.commons.bukkit.settings.SettingManifest;
+import tc.oc.commons.bukkit.stats.StatsCommands;
 import tc.oc.commons.bukkit.stats.StatsManifest;
 import tc.oc.commons.bukkit.suspend.SuspendListener;
 import tc.oc.commons.bukkit.tablist.PlayerTabEntry;

@@ -3,6 +3,7 @@ package tc.oc.pgm.wool;
 import javax.inject.Inject;
 
 import org.bukkit.DyeColor;
+import org.bukkit.util.ImVector;
 import org.bukkit.util.Vector;
 import org.jdom2.Element;
 import tc.oc.api.docs.SemanticVersion;

@@ -2,6 +2,7 @@ package tc.oc.pgm.regions;
 
 import java.util.stream.Stream;
 
+import org.bukkit.geometry.Cuboid;
 import org.bukkit.util.Vector;
 
 public class NegativeRegion extends Region.Impl {

@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.flairs;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;

@@ -1,5 +1,14 @@
 package tc.oc.api.bukkit.users;
 
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import tc.oc.api.docs.PlayerId;
+import tc.oc.api.docs.UserId;
+
 public class Users {
 
     @Inject private static BukkitUserStore userStore;

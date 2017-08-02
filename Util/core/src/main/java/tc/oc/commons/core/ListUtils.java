@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import gnu.trove.list.TIntList;
 import com.google.common.reflect.TypeToken;
 import tc.oc.commons.core.reflect.Methods;

@@ -16,7 +16,7 @@ import java.util.List;
 public class TokenPurchaseInterface extends ChestInterface {
 
     public TokenPurchaseInterface(Player player) {
-        super(player, new ArrayList<>(), 36, "Purchase Tokens");
+        super(player, new ArrayList<Button>(), 36, "Purchase Tokens");
         updateButtons();
     }
 
