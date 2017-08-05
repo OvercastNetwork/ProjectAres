@@ -30,7 +30,7 @@ public class ClassCommands implements Commands {
     }
 
     @Command(
-        aliases = { "class", "selectclass", "c", "cl" },
+        aliases = { "class", "selectclass", "c", "cl", "klasse" },
         desc = "Selects or views the player class",
         min = 0,
         max = -1

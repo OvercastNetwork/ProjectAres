@@ -18,7 +18,7 @@ import tc.oc.pgm.teams.TeamMatchModule;
 @Singleton
 public class JoinCommands implements Commands {
     @Command(
-        aliases = { "join" },
+        aliases = { "join", "jugar", "jouer", "spielen"},
         desc = "Joins the current match",
         usage = "[team] - defaults to random",
         flags = "f",
