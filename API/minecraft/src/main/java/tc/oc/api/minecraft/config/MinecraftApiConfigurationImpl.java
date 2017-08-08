@@ -38,6 +38,11 @@ public class MinecraftApiConfigurationImpl implements MinecraftApiConfiguration 
     }
 
     @Override
+    public boolean publishIp() {
+        return config.getBoolean("server.publishIp", true);
+    }
+
+    @Override
     public String primaryQueueName() {
         return "server." + serverId();
     }

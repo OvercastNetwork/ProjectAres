@@ -20,6 +20,7 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import tc.oc.api.docs.virtual.DeployInfo;
 import tc.oc.api.docs.virtual.ServerDoc;
+import tc.oc.api.minecraft.config.MinecraftApiConfiguration;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.commons.core.util.Lazy;
 import tc.oc.minecraft.api.plugin.PluginFinder;
@@ -31,6 +32,7 @@ public class StartupServerDocument implements ServerDoc.Startup {
     @Inject private Gson gson;
     @Inject private LocalServer minecraftServer;
     @Inject private PluginFinder pluginFinder;
+    @Inject private MinecraftApiConfiguration configuration;
 
     private Logger logger;
     @Inject void init(Loggers loggers) {
@@ -72,7 +74,7 @@ public class StartupServerDocument implements ServerDoc.Startup {
 
     @Override
     public String ip() {
-        return ip.get();
+        return configuration.publishIp() ? ip.get() : null;
     }
 
     @Override public Integer current_port() {

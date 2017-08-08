@@ -12,4 +12,6 @@ public interface MinecraftApiConfiguration extends ApiConfiguration {
     String box();
 
     ServerDoc.Role role();
+
+    boolean publishIp();
 }
