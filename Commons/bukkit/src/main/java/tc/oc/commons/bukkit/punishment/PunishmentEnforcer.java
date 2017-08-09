@@ -105,7 +105,9 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
                 break;
         }
 
-        punishmentService.update(punishment._id(), (PunishmentDoc.Enforce) () -> true);
+        if(!punishment.off_record()) {
+            punishmentService.update(punishment._id(), (PunishmentDoc.Enforce) () -> true);
+        }
     }
 
     private void announce(Punishment punishment) {
@@ -121,7 +123,7 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
     public boolean viewable(CommandSender sender, Punishment punishment, boolean announced) {
         if(viewByIdentity(sender, punishment)) {
             if(announced) {
-                return viewByType(sender, punishment) && viewBySetting(sender, punishment) && viewByIdentity(sender, punishment);
+                return viewByType(sender, punishment) && viewBySetting(sender, punishment) && viewByIdentity(sender, punishment) && viewByRecord(sender, punishment);
             } else {
                 return viewByLookup(sender, punishment);
             }
@@ -143,6 +145,13 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
             default:
                 return false;
         }
+    }
+    
+    private boolean viewByRecord(CommandSender sender, Punishment punishment) {
+        if(punishment.off_record()) {
+            return localServer._id().equals(punishment.server_id());   
+        }
+        return true;
     }
 
     private boolean viewByType(CommandSender sender, Punishment punishment) {
