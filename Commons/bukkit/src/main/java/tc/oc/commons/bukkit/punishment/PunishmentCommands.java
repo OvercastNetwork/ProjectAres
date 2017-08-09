@@ -34,6 +34,7 @@ import static tc.oc.api.docs.virtual.PunishmentDoc.Type;
 import static tc.oc.api.docs.virtual.PunishmentDoc.Type.*;
 import static tc.oc.commons.bukkit.commands.UserFinder.Default.NULL;
 import static tc.oc.commons.bukkit.commands.UserFinder.Default.SENDER;
+import static tc.oc.commons.bukkit.commands.UserFinder.Scope;
 import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromFlag;
 import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromType;
 
@@ -90,9 +91,10 @@ public class PunishmentCommands implements Commands {
         final boolean auto = flag('a', args, sender);
         final boolean silent = flag('s', args, sender);
         final boolean offrecord = flag('o', args, sender);
+        final Scope scope = punishmentCreator.offRecord() ? Scope.LOCAL : Scope.ALL;
         if(permission(sender, type)) {
             syncExecutor.callback(
-                userFinder.findUser(sender, args, 0),
+                userFinder.findUser(sender, args, 0, scope),
                 response -> {
                     punishmentCreator.create(
                         punisher,
