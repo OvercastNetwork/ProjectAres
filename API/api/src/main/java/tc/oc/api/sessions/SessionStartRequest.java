@@ -15,5 +15,7 @@ public interface SessionStartRequest extends Document {
 
     InetAddress ip();
 
+    String version();
+
     @Nullable String previous_session_id();
 }

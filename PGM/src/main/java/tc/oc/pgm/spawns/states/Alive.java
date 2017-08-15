@@ -165,7 +165,7 @@ public class Alive extends Participating {
 
         playDeathEffect(killer);
 
-        transition(new Dead(player));
+        transition(new Dead(player, killer));
     }
 
     private void playDeathEffect(@Nullable ParticipantState killer) {

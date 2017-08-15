@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.commons.bukkit.event.CoarsePlayerMoveEvent;
 import tc.oc.commons.bukkit.freeze.PlayerFreezer;
 import tc.oc.commons.core.util.Comparables;
@@ -22,6 +23,7 @@ import tc.oc.pgm.start.PreMatchCountdown;
 public abstract class State {
 
     @Inject protected static PlayerFreezer freezer; // HACK
+    @Inject protected static BukkitUserStore userStore;
 
     protected final Match match;
     protected final SpawnMatchModule smm;

@@ -14,6 +14,7 @@ public interface SessionDoc {
     interface Complete extends Model, Partial {
         String family_id();
         String server_id();
+        @Nullable String version();
         PlayerId user();
         @Nullable String nickname();
         @Nullable String nickname_lower();

@@ -36,6 +36,7 @@ import tc.oc.api.sessions.SessionChange;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
+import tc.oc.commons.bukkit.event.UserLoginEvent;
 import tc.oc.commons.bukkit.format.ServerFormatter;
 import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
@@ -152,8 +153,12 @@ public class JoinMessageAnnouncer implements MessageListener, Listener, PluginFa
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(PlayerJoinEvent event) {
+    public void preJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onJoin(UserLoginEvent event) {
         final User user = userStore.getUser(event.getPlayer());
         final SessionChange change = pendingJoins.getIfPresent(user);
         if(change != null) {

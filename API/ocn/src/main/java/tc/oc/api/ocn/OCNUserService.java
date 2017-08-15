@@ -72,23 +72,23 @@ class OCNUserService extends HttpModelService<User, UserDoc.Partial> implements 
     }
 
     @Override
-    public ListenableFuture<UserUpdateResponse> creditRaindrops(UserId userId, CreditRaindropsRequest request) {
-        return handleUserUpdate(client().post(memberUri(userId, "credit_raindrops"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
-    }
-
-    @Override
     public ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request) {
         return handleUpdate(client().post(memberUri(userId, "purchase_gizmo"), request, User.class, HttpOption.INFINITE_RETRY));
     }
 
     @Override
-    public ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, CreditMaptokensRequest request) {
-        return handleUserUpdate(client().post(memberUri(userId, "credit_maptokens"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
+    public ListenableFuture<UserUpdateResponse> creditTokens(UserId userId, CreditTokensRequest request) {
+        return handleUserUpdate(client().post(memberUri(userId, "credit_tokens"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
     }
 
     @Override
-    public ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, CreditMutationtokensRequest request) {
-        return handleUserUpdate(client().post(memberUri(userId, "credit_mutationtokens"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
+    public ListenableFuture<User> changeGroup(UserId userId, ChangeGroupRequest request) {
+        return handleUpdate(client().post(memberUri(userId, "change_group"), request, User.class, HttpOption.INFINITE_RETRY));
+    }
+
+    @Override
+    public ListenableFuture<FriendJoinResponse> joinFriend(UserId userId, FriendJoinRequest request) {
+        return client().post(memberUri(userId, "join_friend"), request, FriendJoinResponse.class, HttpOption.INFINITE_RETRY);
     }
 
     @Override

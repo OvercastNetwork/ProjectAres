@@ -22,6 +22,7 @@ public interface PunishmentDoc {
         boolean silent();
         boolean automatic();
         boolean active();
+        boolean off_record();
     }
 
     @Serialize
@@ -29,7 +30,6 @@ public interface PunishmentDoc {
         @Nullable String punisher_id();
         @Nullable String punished_id();
         @Nullable Type type();
-        boolean off_record();
     }
 
     @Serialize
