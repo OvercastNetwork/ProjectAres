@@ -3,6 +3,7 @@ package tc.oc.commons.bukkit.tokens;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.PlayerId;
+import tc.oc.api.users.CreditTokensRequest;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.util.SyncPlayerExecutorFactory;
 import tc.oc.api.docs.User;
@@ -24,7 +25,7 @@ public class TokenUtil {
 
     public static void giveMapTokens(PlayerId playerId, int count) {
         playerExecutorFactory.queued(playerId).callback(
-                userService.creditMaptokens(playerId, count),
+                userService.creditTokens(playerId, CreditTokensRequest.maps(count)),
                 (player, update) -> {}
         );
 
@@ -32,7 +33,7 @@ public class TokenUtil {
 
     public static void giveMutationTokens(PlayerId playerId, int count) {
         playerExecutorFactory.queued(playerId).callback(
-                userService.creditMutationtokens(playerId, count),
+                userService.creditTokens(playerId, CreditTokensRequest.mutations(count)),
                 (player, update) -> {}
         );
     }

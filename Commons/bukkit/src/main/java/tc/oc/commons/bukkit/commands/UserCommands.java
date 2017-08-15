@@ -11,8 +11,15 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import tc.oc.api.bukkit.users.Users;
+import tc.oc.api.docs.Friendship;
 import tc.oc.api.docs.PlayerId;
+import tc.oc.api.docs.User;
+import tc.oc.api.friendships.FriendshipRequest;
+import tc.oc.api.friendships.FriendshipService;
 import tc.oc.api.minecraft.MinecraftService;
+import tc.oc.commons.bukkit.chat.Links;
+import tc.oc.commons.bukkit.chat.PlayerComponent;
+import tc.oc.commons.core.util.Lazy;
 import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.sessions.SessionService;
 import tc.oc.commons.bukkit.chat.BukkitAudiences;
@@ -35,14 +42,16 @@ public class UserCommands implements Commands {
     private final MinecraftService minecraftService;
     private final SyncExecutor syncExecutor;
     private final SessionService sessionService;
+    private final FriendshipService friendshipService;
     private final UserFinder userFinder;
     private final IdentityProvider identityProvider;
     private final UserFormatter userFormatter;
 
-    @Inject UserCommands(MinecraftService minecraftService, SyncExecutor syncExecutor, SessionService sessionService, UserFinder userFinder, IdentityProvider identityProvider, UserFormatter userFormatter) {
+    @Inject UserCommands(MinecraftService minecraftService, SyncExecutor syncExecutor, SessionService sessionService, FriendshipService friendshipService, UserFinder userFinder, IdentityProvider identityProvider, UserFormatter userFormatter) {
         this.minecraftService = minecraftService;
         this.syncExecutor = syncExecutor;
         this.sessionService = sessionService;
+        this.friendshipService = friendshipService;
         this.userFinder = userFinder;
         this.identityProvider = identityProvider;
         this.userFormatter = userFormatter;
@@ -66,13 +75,13 @@ public class UserCommands implements Commands {
     }
 
     @Command(
-        aliases = { "friends", "fr", "fs" },
+        aliases = { "friends", "frs" },
         usage = "[page #]",
         desc = "Shows what servers your friends are on",
         min = 0,
         max = 1
     )
-    @CommandPermissions("projectares.friends.view")
+    @CommandPermissions("ocn.friend.list")
     public void friends(final CommandContext args, final CommandSender sender) throws CommandException {
         final PlayerId playerId = Users.playerId(CommandUtils.senderToPlayer(sender));
         final int page = args.getInteger(0, 1);
@@ -90,6 +99,95 @@ public class UserCommands implements Commands {
                     }
                 }.display(sender, userFormatter.formatSessions(result.documents()), page);
             })
+        );
+    }
+
+    @Command(
+        aliases = { "friend", "fr" },
+        usage = "<player>",
+        desc = "Send a friend request to a player",
+        min = 1,
+        max = 1
+    )
+    @CommandPermissions("ocn.friend.request")
+    public void friend(final CommandContext args, final CommandSender sender) throws CommandException {
+        User friender = userFinder.getLocalUser(CommandUtils.senderToPlayer(sender));
+        Audience audience = BukkitAudiences.getAudience(sender);
+        syncExecutor.callback(
+            userFinder.findUser(sender, args, 0),
+            response -> {
+                Lazy<PlayerComponent> friended = Lazy.from(
+                    () -> new PlayerComponent(identityProvider.currentIdentity(response.user))
+                );
+                if(response.disguised) {
+                    // If player is disguised pretend they do not accept friends
+                    audience.sendWarning(new TranslatableComponent(
+                        "friend.request.not_accepting",
+                        friended.get()
+                    ), false);
+                } else {
+                    syncExecutor.callback(
+                        friendshipService.create(FriendshipRequest.create(
+                            friender.player_id(),
+                            response.user.player_id()
+                        )),
+                        response1 -> {
+                            if(response1.success()) {
+                                Friendship friendship = response1.friendships().get(0);
+                                audience.sendMessage(new TranslatableComponent(
+                                    "friend.request." + (friendship.accepted() ? "accepted" : "sent"),
+                                    friended.get()
+                                ));
+                            } else {
+                                audience.sendWarning(new TranslatableComponent(
+                                    "friend.request." + response1.error(),
+                                    friended.get(),
+                                    Links.shopLink(true)
+                                ), false);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    @Command(
+        aliases = { "unfriend", "unfr" },
+        usage = "<player>",
+        desc = "Withdraw a friend request or unfriend a current friend",
+        min = 1,
+        max = 1
+    )
+    @CommandPermissions("ocn.friend.request")
+    public void unfriend(final CommandContext args, final CommandSender sender) throws CommandException {
+        User friender = userFinder.getLocalUser(CommandUtils.senderToPlayer(sender));
+        Audience audience = BukkitAudiences.getAudience(sender);
+        syncExecutor.callback(
+            userFinder.findUser(sender, args, 0),
+            response -> {
+                boolean were = friender.friends().contains(response.user);
+                syncExecutor.callback(
+                    friendshipService.destroy(FriendshipRequest.create(
+                        friender.player_id(),
+                        response.user.player_id()
+                    )),
+                    response1 -> {
+                        PlayerComponent friended = new PlayerComponent(identityProvider.currentIdentity(response.user));
+                        if(response1.success()) {
+                            audience.sendMessage(new TranslatableComponent(
+                                "friend.unrequest." + (were ? "success" : "withdraw"),
+                                friended
+                            ));
+                        } else {
+                            audience.sendWarning(new TranslatableComponent(
+                                "friend.unrequest." + response1.error(),
+                                friended
+                            ), false);
+                        }
+                    }
+                );
+            }
         );
     }
 

@@ -195,6 +195,7 @@ public final class CommonsBukkitManifest extends HybridManifest {
         facets.register(WindowManager.class);
         facets.register(AppealAlertListener.class);
         facets.register(SuspendListener.class);
+        facets.register(GroupCommands.Parent.class);
 
         // DataDog
         facets.register(TickReporter.class);

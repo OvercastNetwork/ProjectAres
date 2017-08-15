@@ -108,8 +108,7 @@ class LocalUserService extends NullModelService<User, UserDoc.Partial> implement
         return Futures.immediateFuture(null);
     }
 
-    @Override
-    public ListenableFuture<UserUpdateResponse> creditRaindrops(UserId userId, CreditRaindropsRequest request) {
+    private ListenableFuture<UserUpdateResponse> update(UserId userId) {
         return FutureUtils.mapSync(find(userId), user -> new UserUpdateResponse() {
             @Override
             public boolean success() {
@@ -119,6 +118,31 @@ class LocalUserService extends NullModelService<User, UserDoc.Partial> implement
             @Override
             public User user() {
                 return user;
+            }
+        });
+    }
+
+    @Override
+    public ListenableFuture<UserUpdateResponse> creditTokens(UserId userId, CreditTokensRequest request) {
+        return update(userId);
+    }
+
+    @Override
+    public ListenableFuture<User> changeGroup(UserId userId, ChangeGroupRequest request) {
+        return find(userId);
+    }
+
+    @Override
+    public ListenableFuture<FriendJoinResponse> joinFriend(UserId userId, FriendJoinRequest request) {
+        return Futures.immediateFuture(new FriendJoinResponse() {
+            @Override
+            public boolean authorized() {
+                return false;
+            }
+
+            @Override
+            public String message() {
+                return null;
             }
         });
     }
@@ -126,36 +150,6 @@ class LocalUserService extends NullModelService<User, UserDoc.Partial> implement
     @Override
     public ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request) {
         return find(userId);
-    }
-
-    @Override
-    public ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, CreditMaptokensRequest request) {
-        return FutureUtils.mapSync(find(userId), user -> new UserUpdateResponse() {
-            @Override
-            public boolean success() {
-                return true;
-            }
-
-            @Override
-            public User user() {
-                return user;
-            }
-        });
-    }
-
-    @Override
-    public ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, CreditMutationtokensRequest request) {
-        return FutureUtils.mapSync(find(userId), user -> new UserUpdateResponse() {
-            @Override
-            public boolean success() {
-                return true;
-            }
-
-            @Override
-            public User user() {
-                return user;
-            }
-        });
     }
 
     @Override

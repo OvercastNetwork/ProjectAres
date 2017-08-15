@@ -31,23 +31,23 @@ public class NullUserService extends NullModelService<User, UserDoc.Partial> imp
     }
 
     @Override
-    public ListenableFuture<UserUpdateResponse> creditRaindrops(UserId userId, CreditRaindropsRequest request) {
+    public ListenableFuture<UserUpdateResponse> creditTokens(UserId userId, CreditTokensRequest request) {
         return Futures.immediateFuture(UserUpdateResponse.FAILURE);
+    }
+
+    @Override
+    public ListenableFuture<User> changeGroup(UserId userId, ChangeGroupRequest request) {
+        return Futures.immediateFailedFuture(new NotFound());
+    }
+
+    @Override
+    public ListenableFuture<FriendJoinResponse> joinFriend(UserId userId, FriendJoinRequest request) {
+        return Futures.immediateFailedFuture(new NotFound());
     }
 
     @Override
     public ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request) {
         return Futures.immediateFailedFuture(new NotFound());
-    }
-
-    @Override
-    public ListenableFuture<UserUpdateResponse> creditMaptokens(UserId userId, CreditMaptokensRequest request) {
-        return Futures.immediateFuture(UserUpdateResponse.FAILURE);
-    }
-
-    @Override
-    public ListenableFuture<UserUpdateResponse> creditMutationtokens(UserId userId, CreditMutationtokensRequest request) {
-        return Futures.immediateFuture(UserUpdateResponse.FAILURE);
     }
 
     @Override

@@ -79,12 +79,13 @@ public interface UserDoc {
      * Stuff we get from the API on login, and keep around for plugins to use
      */
     @Serialize
-    interface Login extends Identity, Locale, Trophies, License.Complete {
+    interface Login extends Identity, Locale, Trophies, DefaultServer, FriendTokens, DeathScreen, License.Complete {
         int raindrops();
         int maptokens();
         int mutationtokens();
         String mc_last_sign_in_ip();
         @Nullable Date trial_expires_at();
+        @Nullable Instant nickname_updated_at();
         Map<String, Map<String, Map<String, Object>>> stats_value();
         Map<String, Map<String, Boolean>> mc_permissions_by_realm();
         Map<String, Map<String, String>> mc_settings_by_profile();
@@ -111,5 +112,21 @@ public interface UserDoc {
     @Serialize
     interface ResourcePackResponse extends Partial {
         UserDoc.ResourcePackStatus resource_pack_status();
+    }
+
+    @Serialize
+    interface DefaultServer extends Partial {
+        @Nullable String default_server_id();
+    }
+
+    @Serialize
+    interface DeathScreen extends Partial {
+        String death_screen();
+    }
+
+    @Serialize
+    interface FriendTokens extends Partial {
+        int friend_tokens_limit();
+        int friend_tokens_concurrent();
     }
 }

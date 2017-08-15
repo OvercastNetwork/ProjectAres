@@ -13,6 +13,7 @@ import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.api.docs.virtual.PunishmentDoc;
 import tc.oc.api.docs.virtual.ReportDoc;
 import tc.oc.api.engagement.EngagementService;
+import tc.oc.api.friendships.FriendshipService;
 import tc.oc.api.games.TicketService;
 import tc.oc.api.maps.MapService;
 import tc.oc.api.model.ModelBinders;
@@ -58,7 +59,6 @@ public class OCNModelsManifest extends HybridManifest implements ModelBinders {
         bindModel(Objective.class, model -> {
             model.bindService().to(model.httpService());
         });
-
         publicBinder().install(new Manifest() {
             @Override protected void configure() {
                 // Specialized AMQP services
@@ -72,6 +72,7 @@ public class OCNModelsManifest extends HybridManifest implements ModelBinders {
                 forOptional(TournamentService.class).setBinding().to(OCNTournamentService.class);
                 forOptional(UserService.class).setBinding().to(OCNUserService.class);
                 forOptional(WhisperService.class).setBinding().to(OCNWhisperService.class);
+                forOptional(FriendshipService.class).setBinding().to(OCNFriendshipService.class);
             }
         });
     }

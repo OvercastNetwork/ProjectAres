@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.nick;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -27,11 +29,14 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.exceptions.UnprocessableEntity;
+import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.commons.core.formatting.PeriodFormats;
 import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.chat.Audiences;
@@ -58,9 +63,11 @@ public class NicknameCommands implements Listener, Commands {
     public static final String PERMISSION_ANY = PERMISSION + ".any";
     public static final String PERMISSION_ANY_SET = PERMISSION_ANY + ".set";
     public static final String PERMISSION_ANY_GET = PERMISSION_ANY + ".get";
+    public static final String PERMISSION_UNLIMITED = PERMISSION + ".unlimited";
 
     private final NicknameConfiguration config;
     private final SyncExecutor syncExecutor;
+    private final BukkitUserStore userStore;
     private final UserService userService;
     private final Audiences audiences;
     private final IdentityProvider identities;
@@ -71,6 +78,7 @@ public class NicknameCommands implements Listener, Commands {
 
     @Inject NicknameCommands(NicknameConfiguration config,
                              SyncExecutor syncExecutor,
+                             BukkitUserStore userStore,
                              UserService userService,
                              Audiences audiences,
                              IdentityProvider identities,
@@ -80,6 +88,7 @@ public class NicknameCommands implements Listener, Commands {
                              Plugin plugin) {
         this.config = config;
         this.syncExecutor = syncExecutor;
+        this.userStore = userStore;
         this.userService = userService;
         this.audiences = audiences;
         this.identities = identities;
@@ -99,7 +108,8 @@ public class NicknameCommands implements Listener, Commands {
             PERMISSION_ANY,
             PERMISSION_ANY_GET,
             PERMISSION_ANY_SET,
-            PERMISSION_IMMEDIATE
+            PERMISSION_IMMEDIATE,
+            PERMISSION_UNLIMITED
         ).forEach(name -> {
             final Permission permission = new Permission(name, PermissionDefault.FALSE);
             pluginManager.addPermission(permission);
@@ -120,6 +130,17 @@ public class NicknameCommands implements Listener, Commands {
 
         if(immediate) {
             CommandUtils.assertPermission(sender, PERMISSION_IMMEDIATE);
+        }
+
+        if(sender instanceof Player) {
+            Instant updatedAt = userStore.getUser((Player) sender).nickname_updated_at();
+            Instant nextAt = updatedAt == null ? Instant.now() : updatedAt.plus(Duration.ofDays(1));
+            if(!sender.hasPermission(PERMISSION_UNLIMITED) && nextAt.isAfter(Instant.now())) {
+                throw new TranslatableCommandException(
+                    "command.nick.mustWait",
+                    PeriodFormats.relativeFutureApproximate(nextAt)
+                );
+            }
         }
     }
 

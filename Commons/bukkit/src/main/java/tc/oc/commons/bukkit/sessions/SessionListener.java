@@ -17,6 +17,7 @@ import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.Session;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.sessions.SessionService;
 import tc.oc.api.sessions.SessionStartRequest;
@@ -68,6 +69,11 @@ public class SessionListener implements Listener, PluginFacet {
                 @Override
                 public InetAddress ip() {
                     return player.getAddress().getAddress();
+                }
+
+                @Override
+                public String version() {
+                    return MinecraftVersion.describeProtocol(player.getProtocolVersion());
                 }
 
                 @Override

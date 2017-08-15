@@ -2,6 +2,7 @@ package tc.oc.api;
 
 import tc.oc.api.document.DocumentsManifest;
 import tc.oc.api.engagement.EngagementModelManifest;
+import tc.oc.api.friendships.FriendshipModelManifest;
 import tc.oc.api.games.GameModelManifest;
 import tc.oc.api.http.HttpManifest;
 import tc.oc.api.maps.MapModelManifest;
@@ -44,5 +45,6 @@ public final class ApiManifest extends HybridManifest {
         install(new WhisperModelManifest());
         install(new TrophyModelManifest());
         install(new TournamentModelManifest());
+        install(new FriendshipModelManifest());
     }
 }

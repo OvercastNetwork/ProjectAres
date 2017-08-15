@@ -1,5 +1,6 @@
 package tc.oc.commons.bukkit.commands;
 
+import com.google.common.util.concurrent.Futures;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -11,8 +12,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
+import tc.oc.api.docs.User;
+import tc.oc.api.docs.virtual.UserDoc;
+import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.HeaderComponent;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
@@ -20,9 +25,11 @@ import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.Commands;
+import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.commons.core.stream.Collectors;
 import tc.oc.commons.core.util.Streams;
 import tc.oc.minecraft.protocol.MinecraftVersion;
+import tc.oc.minecraft.scheduler.Sync;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -38,13 +45,18 @@ import java.util.stream.Stream;
  */
 public class MiscCommands implements Commands {
 
+    private final Flexecutor flexecutor;
+    private final UserService userService;
     private final BukkitUserStore userStore;
+    private final UserFinder userFinder;
     private final IdentityProvider identityProvider;
     private final Audiences audiences;
 
-    @Inject
-    MiscCommands(BukkitUserStore userStore, IdentityProvider identityProvider, Audiences audiences) {
+    @Inject MiscCommands(@Sync Flexecutor flexecutor, UserService userService, BukkitUserStore userStore, UserFinder userFinder, IdentityProvider identityProvider, Audiences audiences) {
+        this.flexecutor = flexecutor;
+        this.userService = userService;
         this.userStore = userStore;
+        this.userFinder = userFinder;
         this.identityProvider = identityProvider;
         this.audiences = audiences;
     }
@@ -106,6 +118,34 @@ public class MiscCommands implements Commands {
     public void noGravity(final CommandContext args, final CommandSender sender) throws CommandException {
         Player player = CommandUtils.getPlayerOrSelf(args, sender, 0);
         player.setGravity(!player.hasGravity());
+    }
+
+    @Command(
+            aliases = { "join-friend-tokens" },
+            usage = "<player> <concurrent> <limit>",
+            desc = "Change the join friend tokens limit for a premium player",
+            min = 3
+    )
+    public void joinFriend(final CommandContext args, final CommandSender sender) throws CommandException {
+        if(!(sender instanceof ConsoleCommandSender)) throw new CommandPermissionsException();
+        int concurrent = args.getInteger(1, 1);
+        int limit = args.getInteger(2, 3);
+        flexecutor.callback(
+            userFinder.findLocalPlayer(sender, args, 0),
+            response -> {
+                userService.update(response.user, new UserDoc.FriendTokens() {
+                    @Override
+                    public int friend_tokens_limit() {
+                        return limit;
+                    }
+
+                    @Override
+                    public int friend_tokens_concurrent() {
+                        return concurrent;
+                    }
+                });
+            }
+        );
     }
 
     @Command(

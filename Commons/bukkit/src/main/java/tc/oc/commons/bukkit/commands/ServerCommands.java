@@ -5,19 +5,26 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import javax.inject.Inject;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissions;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.Server;
+import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.ServerDoc;
+import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.servers.ServerStore;
+import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.Paginator;
 import tc.oc.commons.bukkit.chat.WarningComponent;
@@ -27,22 +34,31 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.commons.core.formatting.StringUtils;
+import tc.oc.commons.core.util.Pair;
+import tc.oc.minecraft.scheduler.Sync;
 
 public class ServerCommands implements Commands {
 
+    private final Flexecutor flexecutor;
     private final Server localServer;
     private final ServerStore serverStore;
     private final ServerFormatter formatter = ServerFormatter.light;
     private final Teleporter teleporter;
+    private final BukkitUserStore userStore;
+    private final UserService userService;
     private final Audiences audiences;
 
     private static final Comparator<Server> FULLNESS = Comparator.comparing(Server::num_online).reversed();
 
-    @Inject ServerCommands(Server localServer, ServerStore serverStore, Teleporter teleporter, Audiences audiences) {
+    @Inject ServerCommands(@Sync Flexecutor flexecutor, Server localServer, ServerStore serverStore, Teleporter teleporter, BukkitUserStore userStore, UserService userService, Audiences audiences) {
+        this.flexecutor = flexecutor;
         this.localServer = localServer;
         this.serverStore = serverStore;
         this.teleporter = teleporter;
+        this.userStore = userStore;
+        this.userService = userService;
         this.audiences = audiences;
     }
 
@@ -90,16 +106,86 @@ public class ServerCommands implements Commands {
         flags = "bd:"
     )
     public List<String> server(CommandContext args, final CommandSender sender) throws CommandException {
+        Pair<Server, List<String>> response = find(args, sender, user -> teleporter.showCurrentServer(sender));
+        if(response != null) {
+            Server route = response.first;
+            List<String> suggestions = response.second;
+            if(suggestions != null) {
+                return suggestions;
+            } else if(route != null) {
+                if(route.equals(localServer)) {
+                    teleporter.showCurrentServer(sender);
+                } else {
+                    teleporter.remoteTeleport(CommandUtils.senderToPlayer(sender), route);
+                }
+            } else {
+                teleporter.sendToLobby(CommandUtils.senderToPlayer(sender), false);
+            }
+        }
+        return null;
+    }
+
+    @Command(
+        aliases = { "default-server", "def-srv" },
+        desc = "Set your default server when connecting to the network",
+        usage = "[-d datacenter] [name]",
+        flags = "bd:"
+    )
+    @CommandPermissions("ocn.default-server")
+    public List<String> defaultServer(final CommandContext args, CommandSender sender) throws CommandException {
+        Pair<Server, List<String>> response = find(args, sender, user -> {
+            audiences.get(sender).sendMessage(
+                new Component(
+                    new TranslatableComponent(
+                        "command.server.defaultServer.get",
+                        serverStore.tryId(user.default_server_id())
+                                   .map(server -> new Component(formatter.nameWithDatacenter(server)))
+                                   .orElse(new Component("Automatic", ChatColor.GREEN))
+                    ), ChatColor.DARK_PURPLE
+                )
+            );
+        });
+        if(response != null) {
+            Server route = response.first;
+            List<String> suggestions = response.second;
+            if(suggestions != null) {
+                return suggestions;
+            } else if(route != null) {
+                flexecutor.callback(
+                    userService.update(
+                        userStore.playerId(CommandUtils.senderToPlayer(sender)),
+                        (UserDoc.DefaultServer) route::_id
+                    ), user -> {
+                        audiences.get(sender).sendMessage(
+                            new Component(
+                                new TranslatableComponent(
+                                    "command.server.defaultServer.set",
+                                    new Component(formatter.nameWithDatacenter(route))
+                                ), ChatColor.DARK_PURPLE
+                            )
+                        );
+                    }
+                );
+            } else {
+                teleporter.showCurrentServer(sender);
+            }
+        }
+        return null;
+    }
+
+    public Pair<Server, List<String>> find(CommandContext args, CommandSender sender, Consumer<User> show) throws CommandException {
         if(args.getSuggestionContext() != null) {
-            return StringUtils.complete(args.getJoinedStrings(0),
+            return Pair.create(null, StringUtils.complete(args.getJoinedStrings(0),
                                         serverStore.all()
                                                    .filter(teleporter::isConnectable)
-                                                   .map(Server::name));
+                                                   .map(Server::name)));
         }
 
-        // Show current server
+        // Return current server
         if(args.argsLength() == 0) {
-            teleporter.showCurrentServer(sender);
+            if(sender instanceof Player) {
+                show.accept(userStore.getUser((Player) sender));
+            }
             return null;
         }
 
@@ -111,8 +197,7 @@ public class ServerCommands implements Commands {
             if(byBungee == null) {
                 throw new TranslatableCommandException("command.serverNotFound");
             }
-            teleporter.remoteTeleport(player, byBungee);
-            return null;
+            return Pair.create(byBungee, null);
         }
 
         // Search by name/datacenter
@@ -129,16 +214,14 @@ public class ServerCommands implements Commands {
 
         // Special aliases for the lobby
         if(name.equals("lobby") || name.equals("hub")) {
-            teleporter.remoteTeleport(player, datacenter, null, null);
-            return null;
+            return Pair.create(null, null);
         }
 
         final Set<Server> connectable = serverStore.subset(teleporter::isConnectable);
         final List<Server> partial = new ArrayList<>();
         for(Server server : connectable) {
             if(server.name().equalsIgnoreCase(name)) {
-                teleporter.remoteTeleport(player, server);
-                return null;
+                return Pair.create(server, null);
             }
             if(StringUtils.startsWithIgnoreCase(server.name(), name)) {
                 partial.add(server);

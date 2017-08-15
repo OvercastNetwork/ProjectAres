@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
 import java.time.Duration;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.PlayerId;
+import tc.oc.api.users.CreditTokensRequest;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.util.NMSHacks;
@@ -103,7 +104,7 @@ public class RaindropUtil {
         if(save) {
             final int finalDelta = delta;
             playerExecutorFactory.queued(playerId).callback(
-                userService.creditRaindrops(playerId, finalDelta),
+                userService.creditTokens(playerId, CreditTokensRequest.raindrops(finalDelta)),
                 (player, update) -> {
                     if(update.success()) {
                         showRaindrops(player, finalDelta, multiplier, reason, show);
