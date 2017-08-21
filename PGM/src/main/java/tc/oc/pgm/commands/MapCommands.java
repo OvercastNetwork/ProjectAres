@@ -232,6 +232,20 @@ public class MapCommands implements Commands {
             }
         }
 
+        List<Organization> organizations = mapInfo.getNamedOrganizations();
+        if(organizations.size() == 1) {
+            audience.sendMessage(new Component(
+                    mapInfoLabel("command.map.mapInfo.organizationSingular"),
+                    formatContribution(organizations.get(0))
+            ));
+        } else if(!organizations.isEmpty()) {
+            audience.sendMessage(mapInfoLabel("command.map.mapInfo.organizationPlural"));
+            for(Contributor organization : organizations) {
+                audience.sendMessage(new Component("  ").extra(formatContribution(organization)));
+            }
+        }
+
+
         if(mapInfo.rules.size() > 0) {
             audience.sendMessage(mapInfoLabel("command.map.mapInfo.rules"));
 
