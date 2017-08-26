@@ -144,6 +144,8 @@ public class LoginListener implements Listener, PluginFacet {
             final Player player = event.getPlayer();
             final UUID uuid = player.getUniqueId();
 
+            player.setGravity(true);
+
             this.logins.cleanUp();
             final LoginResponse response = this.logins.getIfPresent(uuid);
             this.logins.invalidate(uuid);

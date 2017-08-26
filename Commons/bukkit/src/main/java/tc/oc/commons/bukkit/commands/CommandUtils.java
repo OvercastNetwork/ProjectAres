@@ -124,14 +124,14 @@ public abstract class CommandUtils {
     }
 
     public static Duration getDuration(CommandContext args, int index, Duration def) throws CommandException {
-        return args.argsLength() > index ? getDuration(args.getString(index), null) : def;
+        return getDuration(args.getString(index, null), def);
     }
 
-    public static @Nullable Duration getDuration(@Nullable String text) throws CommandException {
+    public static @Nullable Duration getDuration(String text) throws CommandException {
         return getDuration(text, null);
     }
 
-    public static Duration getDuration(@Nullable String text, Duration def) throws CommandException {
+    public static Duration getDuration(String text, Duration def) throws CommandException {
         if(text == null) {
             return def;
         } else {
@@ -139,6 +139,26 @@ public abstract class CommandUtils {
                 return TimeUtils.parseDuration(text);
             } catch(DateTimeParseException e) {
                 throw new TranslatableCommandException("command.error.invalidTimePeriod", text);
+            }
+        }
+    }
+
+    public static @Nullable <E extends Enum<E>> E getEnum(CommandContext args, CommandSender sender, int index, Class<E> type) throws CommandException {
+        return getEnum(args, sender, index, type, null);
+    }
+
+    public static <E extends Enum<E>> E getEnum(CommandContext args, CommandSender sender, int index, Class<E> type, E def) throws CommandException {
+        return getEnum(args.getString(index, null), sender, type, def);
+    }
+
+    public static <E extends Enum<E>> E getEnum(String text, CommandSender sender, Class<E> type, E def) throws CommandException {
+        if(text == null) {
+            return def;
+        } else {
+            try {
+                return Enum.valueOf(type, text.toUpperCase().replace(' ', '_'));
+            } catch(IllegalArgumentException e) {
+                throw newCommandException(sender, new TranslatableComponent("command.error.invalidEnum", text));
             }
         }
     }

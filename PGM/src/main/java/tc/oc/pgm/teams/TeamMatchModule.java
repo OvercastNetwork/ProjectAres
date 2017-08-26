@@ -260,7 +260,7 @@ public class TeamMatchModule extends MatchModule implements Listener, JoinHandle
 
         if(Optionals.equals(newTeam, player.partyMaybe())) return true;
 
-        if(getMatch().setPlayerParty(player, newTeam)) {
+        if(getMatch().setPlayerParty(player, newTeam, true)) {
             setAutoJoin(player, autoJoin);
             return true;
         } else {
@@ -546,7 +546,7 @@ public class TeamMatchModule extends MatchModule implements Listener, JoinHandle
         if(kickTo instanceof Team) {
             return forceJoin(kickMe, (Team) kickTo);
         } else {
-            return getMatch().setPlayerParty(kickMe, kickTo);
+            return getMatch().setPlayerParty(kickMe, kickTo, false);
         }
     }
 

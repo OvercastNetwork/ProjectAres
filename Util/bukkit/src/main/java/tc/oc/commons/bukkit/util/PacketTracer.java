@@ -185,9 +185,13 @@ public class PacketTracer extends PacketDataSerializer {
         @Override
         protected void encode(ChannelHandlerContext context, Packet packet, ByteBuf buffer) throws Exception {
             final NetworkManager networkManager = context.pipeline().get(NetworkManager.class);
-            final Integer id = context.channel().attr(NetworkManager.c).get().a(EnumProtocolDirection.CLIENTBOUND, packet, networkManager.protocolVersion);
+            final Integer id = context.channel().attr(NetworkManager.c).get().a(EnumProtocolDirection.CLIENTBOUND, packet);
+
             if (id == null) {
-                throw new IOException("Cannot encode unregistered packet class " + packet.getClass());
+                final Integer latestId = context.channel().attr(NetworkManager.c).get().a(EnumProtocolDirection.CLIENTBOUND, packet);
+                if (latestId == null) {
+                    throw new IOException("Cannot encode unregistered packet class " + packet.getClass());
+                }
             } else {
                 try {
                     final PacketTracer dumper = new PacketTracer(buffer, logger, client);
@@ -216,10 +220,13 @@ public class PacketTracer extends PacketDataSerializer {
                 final PacketTracer dumper = new PacketTracer(buffer, logger, client);
                 final int id = dumper.g(); // read VarInt
                 final NetworkManager networkManager = context.pipeline().get(NetworkManager.class);
-                final Packet packet = context.channel().attr(NetworkManager.c).get().a(EnumProtocolDirection.SERVERBOUND, id, networkManager.protocolVersion);
+                final Packet packet = context.channel().attr(NetworkManager.c).get().a(EnumProtocolDirection.SERVERBOUND, id);
 
                 if (packet == null) {
-                    throw new IOException("Cannot decode unregistered packet ID " + id);
+                    final Packet latestPacket = context.channel().attr(NetworkManager.c).get().a(EnumProtocolDirection.SERVERBOUND, id);
+                    if (latestPacket == null) {
+                        throw new IOException("Cannot decode unregistered packet ID " + id);
+                    }
                 } else {
                     packet.a(dumper); // read packet
 

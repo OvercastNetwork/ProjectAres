@@ -8,7 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Skin;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.ItemAttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,6 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.Dye;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Wool;
+import tc.oc.commons.bukkit.inventory.Slot;
 import tc.oc.commons.core.ListUtils;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -113,6 +118,38 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
         return self();
     }
 
+    public S knockBackRestistance(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE.getName(),
+                amount, AttributeModifier.Operation.ADD_NUMBER)));
+        return self();
+    }
+
+    public S speed(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED.getName(),
+                amount, AttributeModifier.Operation.ADD_SCALAR)));
+        return self();
+    }
+
+    public S health(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_MAX_HEALTH.getName(),
+                amount, AttributeModifier.Operation.ADD_NUMBER)));
+        return self();
+    }
+
+    public S armor(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_ARMOR,
+                new ItemAttributeModifier(slot,
+                        new AttributeModifier(Attribute.GENERIC_ARMOR.getName(),
+                                amount, AttributeModifier.Operation.ADD_NUMBER)));
+        return self();
+    }
+
     public S name(String name) {
         meta().setDisplayName(name);
         return self();
@@ -123,7 +160,7 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
      */
     public S lore(String lore) {
         meta().setLore(meta().hasLore() ? ListUtils.append(meta().getLore(), lore)
-                                        : Collections.singletonList(lore));
+                : Collections.singletonList(lore));
         return self();
     }
 
@@ -170,6 +207,16 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
 
     public S skin(String name, UUID uuid, Skin skin) {
         meta(SkullMeta.class).setOwner(name, uuid, skin);
+        return self();
+    }
+
+    public S shareable(boolean yes) {
+        new BooleanItemTag("prevent-sharing", false).set(stack, !yes);
+        return self();
+    }
+
+    public S locked(boolean yes) {
+        new BooleanItemTag("locked", false).set(stack, !yes);
         return self();
     }
 }

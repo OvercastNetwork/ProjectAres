@@ -26,7 +26,7 @@ public class FriendlyFireRefundMatchModule extends MatchModule implements Listen
     public void handleFriendlyFire(EntityDamageByEntityEvent event) {
         if(event.isCancelled() && event.getDamager() instanceof Arrow) {
             Arrow arrow = (Arrow) event.getDamager();
-            if(arrow.getPickupRule() == Arrow.PickupRule.ALLOWED && arrow.getShooter() != null && arrow.getShooter() instanceof Player){
+            if(arrow.getPickupStatus() == Arrow.PickupStatus.ALLOWED && arrow.getShooter() != null && arrow.getShooter() instanceof Player){
                 Player owner = (Player) arrow.getShooter();
                 owner.getInventory().addItem(new ItemStack(Material.ARROW));
                 arrow.remove();

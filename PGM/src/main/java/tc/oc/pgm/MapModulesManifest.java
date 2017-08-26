@@ -1,7 +1,6 @@
 package tc.oc.pgm;
 
 import tc.oc.commons.core.inject.HybridManifest;
-import tc.oc.pgm.blitz.BlitzModule;
 import tc.oc.pgm.blockdrops.BlockDropsModule;
 import tc.oc.pgm.crafting.CraftingModule;
 import tc.oc.pgm.eventrules.EventRuleModule;
@@ -13,19 +12,10 @@ import tc.oc.pgm.goals.GoalModule;
 import tc.oc.pgm.hunger.HungerModule;
 import tc.oc.pgm.itemmeta.ItemModifyModule;
 import tc.oc.pgm.killreward.KillRewardModule;
+import tc.oc.pgm.blitz.BlitzModule;
 import tc.oc.pgm.map.MapModuleFactory;
 import tc.oc.pgm.map.StaticMethodMapModuleFactory;
-import tc.oc.pgm.modules.DiscardPotionBottlesModule;
-import tc.oc.pgm.modules.FriendlyFireRefundModule;
-import tc.oc.pgm.modules.InfoModule;
-import tc.oc.pgm.modules.InternalModule;
-import tc.oc.pgm.modules.ItemDestroyModule;
-import tc.oc.pgm.modules.MaxBuildHeightModule;
-import tc.oc.pgm.modules.MobsModule;
-import tc.oc.pgm.modules.ModifyBowProjectileModule;
-import tc.oc.pgm.modules.PlayableRegionModule;
-import tc.oc.pgm.modules.TimeLockModule;
-import tc.oc.pgm.modules.ToolRepairModule;
+import tc.oc.pgm.modules.*;
 import tc.oc.pgm.mutation.MutationMapModule;
 import tc.oc.pgm.pickup.PickupModule;
 import tc.oc.pgm.portals.PortalModule;
@@ -55,6 +45,7 @@ public class MapModulesManifest extends HybridManifest {
         install(new ProjectileModule.Factory());
         install(new SpawnModule.Factory());
         install(new TimeLimitModule.Factory());
+        install(new BlitzModule.Factory());
 
         // MapModules with static parse methods
         install(new StaticMethodMapModuleFactory<EventRuleModule>(){});
@@ -65,10 +56,10 @@ public class MapModulesManifest extends HybridManifest {
         install(new StaticMethodMapModuleFactory<ToolRepairModule>(){});
         install(new StaticMethodMapModuleFactory<PortalModule>(){});
         install(new StaticMethodMapModuleFactory<MaxBuildHeightModule>(){});
+        install(new StaticMethodMapModuleFactory<FlyingBoatModule>(){});
         install(new StaticMethodMapModuleFactory<ModifyBowProjectileModule>(){});
         install(new StaticMethodMapModuleFactory<MobsModule>(){});
         install(new StaticMethodMapModuleFactory<HungerModule>(){});
-        install(new StaticMethodMapModuleFactory<BlitzModule>(){});
         install(new StaticMethodMapModuleFactory<KillRewardModule>(){});
         install(new StaticMethodMapModuleFactory<GhostSquadronModule>(){});
         install(new StaticMethodMapModuleFactory<RageModule>(){});

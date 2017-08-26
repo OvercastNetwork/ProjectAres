@@ -19,11 +19,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
+import tc.oc.api.docs.SemanticVersion;
 import tc.oc.api.util.Permissions;
 import tc.oc.commons.bukkit.util.BlockVectorSet;
 import tc.oc.commons.bukkit.util.ChunkPosition;
 import tc.oc.commons.bukkit.util.NMSHacks;
 import tc.oc.pgm.events.ListenerScope;
+import tc.oc.pgm.map.MapProto;
+import tc.oc.pgm.map.ProtoVersions;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchScope;
@@ -35,8 +38,9 @@ public class WorldProblemMatchModule extends MatchModule implements Listener {
 
     private final Set<ChunkPosition> repairedChunks = new HashSet<>();
     private final BlockVectorSet block36Locations = new BlockVectorSet();
-
-    private @Inject World world;
+    
+    @Inject private @MapProto SemanticVersion proto;
+    @Inject private World world;
 
     @Inject WorldProblemMatchModule(Match match) {
         super(match);
@@ -99,13 +103,14 @@ public class WorldProblemMatchModule extends MatchModule implements Listener {
                     ironDoor.setType(Material.BARRIER, false);
                 }
             }
-
-            // Remove all block 36 and remember the ones at y=0 so VoidFilter can check them
-            for(Block block36 : chunk.getBlocks(Material.PISTON_MOVING_PIECE)) {
-                if(block36.getY() == 0) {
-                    block36Locations.add(block36.getX(), block36.getY(), block36.getZ());
+            if (proto.isOlderThan(ProtoVersions.ENABLE_BLOCK_36)) {
+                // Remove all block 36 and remember the ones at y=0 so VoidFilter can check them
+                for(Block block36 : chunk.getBlocks(Material.PISTON_MOVING_PIECE)) {
+                    if(block36.getY() == 0) {
+                        block36Locations.add(block36.getX(), block36.getY(), block36.getZ());
+                    }
+                    block36.setType(Material.AIR, false);
                 }
-                block36.setType(Material.AIR, false);
             }
         }
     }

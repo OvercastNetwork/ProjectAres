@@ -54,6 +54,7 @@ public class Utils {
         player.setAllowFlight(player.hasPermission("lobby.fly"));
         player.setWalkSpeed(0.2f);
         player.setFlySpeed(0.1f);
+        player.setGravity(true);
         player.setPotionParticles(false);
         player.hideTitle();
         player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 15, 0.5, 0.5, 0.5, 0);
@@ -62,7 +63,7 @@ public class Utils {
     public static ItemStack getGhastTear(Player player, int count) {
         ItemStack raindrops = new ItemStack(Material.GHAST_TEAR);
         ItemMeta meta = raindrops.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + "Raindrops" + ChatColor.DARK_PURPLE + " | " + ChatColor.WHITE + String.format("%,d", count));
+        meta.setDisplayName(ChatColor.AQUA + "Droplets" + ChatColor.DARK_PURPLE + " | " + ChatColor.WHITE + String.format("%,d", count));
         raindrops.setItemMeta(meta);
 
         return raindrops;

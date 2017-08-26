@@ -79,9 +79,25 @@ environment:
   ranked: false
 
 rotation:
+  dynamic: false
   default-name: default
   initial-wait: 20000
   providers: {}
+
+tokens:
+  enabled: true
+  mvp-chance: 0.03
+  winning-chance: 0.0025
+  losing-chance: 0.001
+  sn-chance: 0.25
+
+mvp:
+  enabled: true
+
+poll:
+  enabled: true
+  maps:
+    path:
 
 map:
   sources: {}

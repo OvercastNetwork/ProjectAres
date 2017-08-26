@@ -117,9 +117,8 @@ public class RenderedBossBar implements BossBar {
     @Override
     public void addPlayer(Player player) {
         if(!views.containsKey(player)) {
-            final BossBar view = bossBarFactory.createBossBar(renderer.render(title, player), color, style, flags.toArray(new BarFlag[flags.size()]));
+            final BossBar view = bossBarFactory.createBossBar(player, renderer.render(title, player), color, style, flags.toArray(new BarFlag[flags.size()]));
             view.setVisible(visibile);
-            view.addPlayer(player);
             views.put(player, view);
         }
     }

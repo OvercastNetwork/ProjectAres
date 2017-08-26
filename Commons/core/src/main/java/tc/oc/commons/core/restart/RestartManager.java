@@ -2,9 +2,11 @@ package tc.oc.commons.core.restart;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +19,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import sun.misc.Signal;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.MinecraftService;
@@ -82,6 +85,8 @@ public class RestartManager implements PluginFacet, Tickable {
                 TimeUnit.MILLISECONDS
             );
         }
+        // Enable listeners for stop signals
+        onSignal(this.config.stopSignals());
     }
 
     @Override
@@ -160,6 +165,15 @@ public class RestartManager implements PluginFacet, Tickable {
         }
     }
 
+    private void requestRestartInternal(Instant time, String reason, int priority) {
+        logger.info("Restart requested at " + time +
+                    ", with " + priority +
+                    " priority, because \"" + reason + '"');
+        currentRequest = new RequestRestartEvent(logger, reason, priority, this::restartIfRequested);
+        eventBus.post(currentRequest);
+        restartIfRequested();
+    }
+
     public ListenableFuture<?> cancelRestart() {
         if(this.isRestartRequested()) {
             return minecraftService.updateLocalServer(new ServerDoc.Restart() {
@@ -202,12 +216,7 @@ public class RestartManager implements PluginFacet, Tickable {
         }
 
         if(newTime != null) {
-            logger.info("Restart requested at " + newTime +
-                        ", with " + newPriority +
-                        " priority, because \"" + newReason + '"');
-            currentRequest = new RequestRestartEvent(logger, newReason, newPriority, this::restartIfRequested);
-            eventBus.post(currentRequest);
-            restartIfRequested();
+            requestRestartInternal(newTime, newReason, newPriority);
         }
     }
 
@@ -235,5 +244,44 @@ public class RestartManager implements PluginFacet, Tickable {
         } else {
             return false;
         }
+    }
+
+    private void onSignal(Collection<String> signals) {
+        signals.stream()
+               .map(Signal::new)
+               .forEach(signal -> Signal.handle(signal, s -> {
+                   String reason = "Received signal " + s.getName() + " (" + s.getNumber() + ") from system";
+                   int priority = config.stopSignalPriority();
+                   try {
+                       // Attempt to send restart request to the api
+                       requestRestart(reason, priority).get();
+                       // Wait for restart to sync back to the server
+                       boolean success = true;
+                       Instant start = Instant.now();
+                       while(currentRequest == null || !currentRequest.reason().equals(reason)) {
+                           Thread.sleep(Duration.ofSeconds(1).toMillis());
+                           if(Duration.between(start, Instant.now()).getSeconds() > 5) {
+                               logger.warning("Unable to request a " + signal.getName() + " signal restart to the api");
+                               success = false;
+                           }
+                       }
+                       if(!success) throw new InterruptedException();
+                   } catch(InterruptedException | ExecutionException e) {
+                       // Fallback to sending the request via local server events
+                       requestRestartInternal(Instant.now(), reason, priority);
+                   }
+                   try {
+                       // Sleep until maximum timeout before forcibly stopping the server
+                       Thread.sleep(config.stopSignalTimeout().toMillis());
+                   } catch(InterruptedException e) {
+                       if(!minecraftServer.isStopping()) {
+                           logger.severe(s.getName() + " signal is unable to wait for restart");
+                       }
+                   }
+                   // Stop the server is all other restart attempts have failed
+                   if(!restartIfRequested() && !minecraftServer.isStopping()) {
+                       minecraftServer.stop();
+                   }
+               }));
     }
 }

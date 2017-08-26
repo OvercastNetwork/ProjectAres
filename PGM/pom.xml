@@ -5,7 +5,7 @@
         <groupId>tc.oc</groupId>
         <artifactId>ProjectAres</artifactId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.11-SNAPSHOT</version>
+        <version>1.12-SNAPSHOT</version>
     </parent>
 
     <!-- Parent Project Information -->
@@ -39,7 +39,6 @@
             <artifactId>chatmoderator</artifactId>
             <version>1.9-SNAPSHOT</version>
         </dependency>
-
 
         <!-- Testing -->
 

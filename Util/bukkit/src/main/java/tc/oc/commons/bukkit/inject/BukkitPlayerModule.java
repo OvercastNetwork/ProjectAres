@@ -7,6 +7,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 
 /**
  * Binds various services provided through a {@link Player} (but does not bind {@link Player} itself)
@@ -25,5 +26,9 @@ public class BukkitPlayerModule extends AbstractModule {
 
     @Provides UUID uuid(Player player) {
         return player.getUniqueId();
+    }
+
+    @Provides MinecraftVersion version(Player player) {
+        return MinecraftVersion.byProtocol(player.getProtocolVersion());
     }
 }

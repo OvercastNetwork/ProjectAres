@@ -15,7 +15,7 @@ public class MatchMutationFilter extends TypedFilter.Impl<IMatchQuery> {
     @Override
     public boolean matches(IMatchQuery query) {
         return query.module(MutationMatchModule.class)
-                    .filter(mmm -> mmm.getActiveMutations().contains(mutation))
+                    .filter(mmm -> mmm.enabled(mutation))
                     .isPresent();
     }
 }

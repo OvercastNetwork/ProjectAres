@@ -16,6 +16,8 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import java.time.Instant;
+
+import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.commons.core.logging.ClassLogger;
 import tc.oc.commons.core.util.Joiners;
 import tc.oc.pgm.PGM;
@@ -32,8 +34,9 @@ public class FileRotationProvider extends AbstractRotationProvider {
     private final String name;
     private final Path rotationFile;
     private final Path dataPath;
+    private final Optional<ServerDoc.Rotation> rotationApi;
 
-    public FileRotationProvider(MapLibrary mapLibrary, String name, Path rotationFile, Path dataPath) {
+    public FileRotationProvider(MapLibrary mapLibrary, String name, Path rotationFile, Path dataPath, Optional<ServerDoc.Rotation> rotationApi) {
         Preconditions.checkNotNull(mapLibrary, "map manager");
         Preconditions.checkNotNull(rotationFile, "rotation path");
         Preconditions.checkNotNull(dataPath, "data path");
@@ -46,6 +49,7 @@ public class FileRotationProvider extends AbstractRotationProvider {
         this.name = name;
         this.rotationFile = rotationFile;
         this.dataPath = dataPath;
+        this.rotationApi = rotationApi;
     }
 
     Path nextIdFile() {
@@ -54,7 +58,7 @@ public class FileRotationProvider extends AbstractRotationProvider {
 
     @Override
     public @Nonnull Future<?> loadRotations() {
-        return getExecutorService().submit((Runnable) () -> {
+        return getExecutorService().submit(() -> {
             try {
                 setRotation(name, loadRotationFromDisk(), Instant.now());
             } catch(IOException e) {
@@ -64,8 +68,8 @@ public class FileRotationProvider extends AbstractRotationProvider {
     }
 
     private RotationState loadRotationFromDisk() throws IOException {
-        int nextId = this.parseNextId();
         List<PGMMap> maps = this.parseRotationNames();
+        int nextId = this.parseNextId(maps);
 
         if(maps.isEmpty()) {
             throw new IOException(String.format("Rotation '%s' was empty!", name));
@@ -80,13 +84,17 @@ public class FileRotationProvider extends AbstractRotationProvider {
         return new RotationState(maps, nextId);
     }
 
-    private int parseNextId() {
+    private int parseNextId(List<PGMMap> maps) {
         List<String> lines;
         try {
             lines = Files.readAllLines(nextIdFile(), Charsets.UTF_8);
         } catch (IOException e) {
-            this.logger.warning("Failed to read next id from " + nextIdFile().toString());
-            return DEFAULT_NEXTID;
+            return rotationApi.map(rot -> maps.indexOf(mapLibrary.getMapByNameOrId(rot.next_map_id()).get()))
+                              .flatMap(index -> Optional.ofNullable(index >= 0 ? index : null))
+                              .orElseGet(() -> {
+                this.logger.warning("Failed to read next id from " + nextIdFile().toString());
+                return DEFAULT_NEXTID;
+            });
         }
 
         for(String line : lines) {
@@ -125,11 +133,7 @@ public class FileRotationProvider extends AbstractRotationProvider {
     @Override
     public Future<?> saveRotation(@Nonnull final String name, @Nonnull final RotationState rotation) {
         this.setRotation(name, rotation);
-        return getExecutorService().submit(new Runnable() {
-            @Override public void run() {
-                FileRotationProvider.this.saveRotationToDisk(name, rotation);
-            }
-        });
+        return getExecutorService().submit(() -> saveRotationToDisk(name, rotation));
     }
 
     private void saveRotationToDisk(@Nonnull String name, @Nonnull RotationState rotation) {

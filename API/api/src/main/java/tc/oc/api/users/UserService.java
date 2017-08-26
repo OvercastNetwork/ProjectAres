@@ -19,11 +19,11 @@ public interface UserService extends ModelService<User, UserDoc.Partial> {
 
     ListenableFuture<?> logout(LogoutRequest request);
 
-    default ListenableFuture<UserUpdateResponse> creditRaindrops(UserId userId, int raindrops) {
-        return creditRaindrops(userId, () -> raindrops);
-    }
+    ListenableFuture<UserUpdateResponse> creditTokens(UserId userId, CreditTokensRequest request);
 
-    ListenableFuture<UserUpdateResponse> creditRaindrops(UserId userId, CreditRaindropsRequest request);
+    ListenableFuture<User> changeGroup(UserId userId, ChangeGroupRequest request);
+
+    ListenableFuture<FriendJoinResponse> joinFriend(UserId userId, FriendJoinRequest request);
 
     ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request);
 

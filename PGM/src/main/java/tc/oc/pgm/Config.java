@@ -8,6 +8,9 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import tc.oc.commons.bukkit.configuration.ConfigUtils;
 import tc.oc.commons.core.util.TimeUtils;
@@ -25,6 +28,47 @@ public class Config {
 
     public static int minimumPlayers() {
         return getConfiguration().getInt("minimum-players", 1);
+    }
+
+    public static class MVP {
+        public static boolean enabled() {
+            return getConfiguration().getBoolean("mvp.enabled", true);
+        }
+    }
+
+    public static class Token {
+        public static boolean enabled() {
+            return getConfiguration().getBoolean("tokens.enabled", true);
+        }
+
+        public static double mvpChance() {
+            return getConfiguration().getDouble("tokens.mvp-chance", 0.03);
+        }
+
+        public static double winningChance() {
+            return getConfiguration().getDouble("tokens.winning-chance", 0.0025);
+        }
+
+        public static double losingChance() {
+            return getConfiguration().getDouble("tokens.losing-chance", 0.001);
+        }
+
+        public static double setNextTokenChange() {
+            return getConfiguration().getDouble("tokens.sn-chance", 0.25);
+        }
+
+    }
+
+    public static class Poll {
+        public static Path getPollAbleMapPath() {
+            Path pollPath = Paths.get(getConfiguration().getString("poll.maps.path", "default.txt"));
+            if(!pollPath.isAbsolute()) pollPath = PGM.getMatchManager().getPluginDataFolder().resolve(pollPath);
+            return pollPath;
+        }
+
+        public static boolean enabled() {
+            return getConfiguration().getBoolean("poll.enabled", true);
+        }
     }
 
     public static class Broadcast {

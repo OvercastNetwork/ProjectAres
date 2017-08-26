@@ -179,7 +179,7 @@ public class JoinMatchModule extends MatchModule implements Listener, JoinHandle
     public boolean observe(MatchPlayer leaving) {
         final Party observers = getMatch().getDefaultParty();
         leaving.sendMessage(new TranslatableComponent("team.join", observers.getComponentName()));
-        return getMatch().setPlayerParty(leaving, observers);
+        return getMatch().setPlayerParty(leaving, observers, false);
     }
 
     public boolean requestObserve(MatchPlayer leaving) {
@@ -216,7 +216,7 @@ public class JoinMatchModule extends MatchModule implements Listener, JoinHandle
     }
 
     public boolean queueToJoin(MatchPlayer joining) {
-        boolean joined = getMatch().setPlayerParty(joining, queuedParticipants);
+        boolean joined = getMatch().setPlayerParty(joining, queuedParticipants, false);
         if(joined) {
             joining.sendMessage(new TranslatableComponent("ffa.join"));
         }
@@ -255,7 +255,7 @@ public class JoinMatchModule extends MatchModule implements Listener, JoinHandle
 
     public boolean cancelQueuedJoin(MatchPlayer joining) {
         if(!isQueuedToJoin(joining)) return false;
-        if(getMatch().setPlayerParty(joining, getMatch().getDefaultParty())) {
+        if(getMatch().setPlayerParty(joining, getMatch().getDefaultParty(), false)) {
             joining.sendMessage(new Component(new TranslatableComponent("team.join.deferred.cancel"), ChatColor.YELLOW));
             return true;
         } else {
@@ -273,7 +273,7 @@ public class JoinMatchModule extends MatchModule implements Listener, JoinHandle
 
         // Send any leftover players to obs
         for(MatchPlayer joining : queue.getOrderedPlayers()) {
-            getMatch().setPlayerParty(joining, getMatch().getDefaultParty());
+            getMatch().setPlayerParty(joining, getMatch().getDefaultParty(), false);
         }
     }
 
@@ -304,7 +304,7 @@ public class JoinMatchModule extends MatchModule implements Listener, JoinHandle
             final Competitor competitor = getMatch().getLastCompetitor(event.getPlayerId());
             if(competitor != null) {
                 // Committed player is reconnecting
-                getMatch().setPlayerParty(event.getPlayer(), competitor);
+                getMatch().setPlayerParty(event.getPlayer(), competitor, false);
                 return;
             }
         }

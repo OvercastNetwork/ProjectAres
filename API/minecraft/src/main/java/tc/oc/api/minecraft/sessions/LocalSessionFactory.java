@@ -13,6 +13,7 @@ import tc.oc.api.docs.Session;
 import tc.oc.api.docs.UserId;
 import tc.oc.api.minecraft.users.UserStore;
 import tc.oc.minecraft.api.entity.Player;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 
 @Singleton
 public class LocalSessionFactory {
@@ -39,6 +40,13 @@ public class LocalSessionFactory {
             @Override
             public String server_id() {
                 return localServer._id();
+            }
+
+            @Override
+            public String version() {
+                return userStore.byUserId(userId)
+                                .map(player -> MinecraftVersion.describeProtocol(player.getProtocolVersion()))
+                                .orElse(null);
             }
 
             @Override

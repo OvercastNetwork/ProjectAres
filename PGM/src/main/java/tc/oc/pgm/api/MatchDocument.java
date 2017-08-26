@@ -19,9 +19,9 @@ import tc.oc.api.docs.virtual.Model;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.commons.core.stream.Collectors;
 import tc.oc.commons.core.util.Streams;
-import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.goals.GoalMatchModule;
 import tc.oc.pgm.join.JoinMatchModule;
+import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.match.Competitor;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchState;
@@ -36,10 +36,10 @@ public class MatchDocument extends AbstractModel implements MatchDoc {
     private final VictoryMatchModule victory;
     private final Optional<MutationMatchModule> mutations;
     private final Optional<GoalMatchModule> goals;
-    private final Optional<BlitzMatchModule> blitz;
+    private final BlitzMatchModule blitz;
     private final Optional<JoinMatchModule> join;
 
-    @Inject MatchDocument(ServerDoc.Identity localServer, MapDoc map, Match match, VictoryMatchModule victory, Optional<MutationMatchModule> mutations, Optional<GoalMatchModule> goals, Optional<BlitzMatchModule> blitz, Optional<JoinMatchModule> join) {
+    @Inject MatchDocument(ServerDoc.Identity localServer, MapDoc map, Match match, VictoryMatchModule victory, Optional<MutationMatchModule> mutations, Optional<GoalMatchModule> goals, BlitzMatchModule blitz, Optional<JoinMatchModule> join) {
         this.match = match;
         this.localServer = localServer;
         this.map = map;
@@ -87,7 +87,7 @@ public class MatchDocument extends AbstractModel implements MatchDoc {
 
     @Override
     public boolean join_mid_match() {
-        return !blitz.isPresent() && join.isPresent() && join.get().canJoinMid();
+        return !blitz.activated() && join.isPresent() && join.get().canJoinMid();
     }
 
     @Override public MapDoc map() {
@@ -120,10 +120,10 @@ public class MatchDocument extends AbstractModel implements MatchDoc {
     }
 
     @Override
-    public Set<Mutation> mutations() {
-        return mutations.map(mmm -> mmm.getHistoricalMutations()
+    public Set<String> mutations() {
+        return mutations.map(mmm -> mmm.mutationsHistorical()
                                        .stream()
-                                       .map(tc.oc.pgm.mutation.Mutation::toApi)
+                                       .map(tc.oc.pgm.mutation.Mutation::name)
                                        .collect(Collectors.toImmutableSet()))
                         .orElse(ImmutableSet.of());
     }

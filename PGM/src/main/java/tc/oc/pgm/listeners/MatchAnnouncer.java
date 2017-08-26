@@ -164,11 +164,11 @@ public class MatchAnnouncer implements PluginFacet, Listener {
         }
 
         final MutationMatchModule mmm = viewer.getMatch().getMatchModule(MutationMatchModule.class);
-        if(mmm != null && mmm.getActiveMutations().size() > 0) {
+        if(mmm != null && mmm.mutationsActive().size() > 0) {
             viewer.sendMessage(
                 new Component(" ", ChatColor.DARK_GRAY).extra(
                     new TranslatableComponent("broadcast.welcomeMessage.mutations",
-                                              new ListComponent(Collections2.transform(mmm.getActiveMutations(), Mutation.toComponent(ChatColor.GREEN)))
+                                              new ListComponent(Collections2.transform(mmm.mutationsActive(), Mutation.toComponent(ChatColor.GREEN)))
                     )
                 )
             );

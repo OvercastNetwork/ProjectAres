@@ -2,6 +2,7 @@ package tc.oc.pgm.score;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import net.md_5.bungee.api.ChatColor;
@@ -15,10 +16,7 @@ import tc.oc.commons.core.util.DefaultMapAdapter;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.events.MatchPlayerDeathEvent;
 import tc.oc.pgm.events.MatchScoreChangeEvent;
-import tc.oc.pgm.match.Competitor;
-import tc.oc.pgm.match.Match;
-import tc.oc.pgm.match.MatchModule;
-import tc.oc.pgm.match.MatchScope;
+import tc.oc.pgm.match.*;
 import tc.oc.pgm.victory.VictoryMatchModule;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -86,6 +84,10 @@ public class ScoreMatchModule extends MatchModule implements Listener {
     }
 
     public void incrementScore(Competitor competitor, double amount) {
+        this.incrementScore(competitor, amount, null);
+    }
+
+    public void incrementScore(Competitor competitor, double amount, Optional<MatchPlayer> player) {
         double oldScore = this.scores.get(competitor);
         double newScore = oldScore  + amount;
 
@@ -93,7 +95,7 @@ public class ScoreMatchModule extends MatchModule implements Listener {
             newScore = this.config.scoreLimit.get();
         }
 
-        MatchScoreChangeEvent event = new MatchScoreChangeEvent(competitor.getMatch(), competitor, oldScore, newScore);
+        MatchScoreChangeEvent event = new MatchScoreChangeEvent(competitor.getMatch(), competitor, player, oldScore, newScore);
         this.match.getServer().getPluginManager().callEvent(event);
 
         this.scores.put(competitor, event.getNewScore());

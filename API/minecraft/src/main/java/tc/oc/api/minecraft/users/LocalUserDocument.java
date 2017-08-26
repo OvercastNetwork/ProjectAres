@@ -41,6 +41,11 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     }
 
     @Override
+    public Instant nickname_updated_at() {
+        return null;
+    }
+
+    @Override
     public @Nullable String mc_locale() {
         return null;
     }
@@ -81,6 +86,16 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     }
 
     @Override
+    public int maptokens() {
+        return 0;
+    }
+
+    @Override
+    public int mutationtokens() {
+        return 0;
+    }
+
+    @Override
     public String mc_last_sign_in_ip() {
         return ip;
     }
@@ -88,6 +103,11 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     @Override
     public @Nullable Date trial_expires_at() {
         return null;
+    }
+
+    @Override
+    public Map<String, Map<String, Map<String, Object>>> stats_value() {
+        return Collections.emptyMap();
     }
 
     @Override
@@ -120,5 +140,25 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     @Override
     public int enemy_kills() {
         return 0;
+    }
+
+    @Override
+    public String default_server_id() {
+        return null;
+    }
+
+    @Override
+    public int friend_tokens_limit() {
+        return 0;
+    }
+
+    @Override
+    public int friend_tokens_concurrent() {
+        return 1;
+    }
+
+    @Override
+    public String death_screen() {
+        return null;
     }
 }

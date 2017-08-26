@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import tc.oc.commons.bukkit.util.NMSHacks;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 import tc.oc.pgm.flag.Flag;
 import tc.oc.pgm.flag.Post;
 import tc.oc.pgm.flag.event.FlagCaptureEvent;
@@ -67,7 +68,7 @@ public abstract class Spawned extends BaseState {
     }
 
     protected boolean canSeeParticles(Player player) {
-        return true;
+        return MinecraftVersion.atLeast(MinecraftVersion.MINECRAFT_1_8, player.getProtocolVersion());
     }
 
     @Override

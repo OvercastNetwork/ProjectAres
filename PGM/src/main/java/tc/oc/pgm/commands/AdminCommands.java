@@ -18,6 +18,10 @@ import tc.oc.commons.core.restart.RestartManager;
 import tc.oc.commons.core.util.TimeUtils;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.PGMTranslations;
+import tc.oc.pgm.blitz.BlitzMatchModule;
+import tc.oc.pgm.blitz.BlitzMatchModuleImpl;
+import tc.oc.pgm.blitz.BlitzProperties;
+import tc.oc.pgm.blitz.Lives;
 import tc.oc.pgm.map.PGMMap;
 import tc.oc.pgm.match.Competitor;
 import tc.oc.pgm.match.Match;
@@ -223,4 +227,26 @@ public class AdminCommands implements Commands {
 
         sender.sendMessage(ChatColor.GREEN + PGMTranslations.get().t("command.admin.pgm", sender));
     }
+
+    @Command(
+            aliases = {"blitz"},
+            desc = "Enable blitz on the fly",
+            usage = "<lives> <type>",
+            min = 0,
+            max = 2
+    )
+    @CommandPermissions("pgm.blitz")
+    public void blitz(CommandContext args, CommandSender sender) throws CommandException {
+        Match match = CommandUtils.getMatch(sender);
+        BlitzMatchModule blitz = match.needMatchModule(BlitzMatchModuleImpl.class);
+        if(blitz.activated()) {
+            blitz.deactivate();
+        }
+        int lives = args.getInteger(0, 1);
+        Lives.Type type = tc.oc.commons.bukkit.commands.CommandUtils.getEnum(args, sender, 1, Lives.Type.class, Lives.Type.INDIVIDUAL);
+        if(lives >= 1) {
+            blitz.activate(BlitzProperties.create(match, lives, type));
+        }
+    }
+
 }

@@ -5,6 +5,6 @@ import tc.oc.api.message.types.Reply;
 
 @Serialize
 public interface BadNickname extends Reply {
-    enum Problem { TAKEN, INVALID }
+    enum Problem { TAKEN, INVALID, THROTTLE }
     Problem problem();
 }

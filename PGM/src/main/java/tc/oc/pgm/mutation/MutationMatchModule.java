@@ -1,6 +1,5 @@
 package tc.oc.pgm.mutation;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -10,15 +9,15 @@ import tc.oc.commons.core.random.RandomUtils;
 import tc.oc.pgm.Config;
 import tc.oc.pgm.match.*;
 import tc.oc.pgm.mutation.command.MutationCommands;
-import tc.oc.pgm.mutation.submodule.MutationModule;
+import tc.oc.pgm.mutation.types.MutationModule;
 import tc.oc.commons.core.random.ImmutableWeightedRandomChooser;
 
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 
 public class MutationMatchModule extends MatchModule {
-    // TODO: send remote mutation alerts via an AMQP message
 
     /**
      * Chance that a mutation event will occur.
@@ -63,39 +62,36 @@ public class MutationMatchModule extends MatchModule {
         this.chance = options.chance;
         this.amount = options.amount;
         this.weightedSelector = new ImmutableWeightedRandomChooser<>(options.weights);
-        this.mutations = getDefaultMutations();
+        this.mutations = mutationsDefault();
         this.history = new HashSet<>();
         this.modules = new HashMap<>();
     }
 
-    public final ImmutableMap<Mutation, Boolean> getMutations() {
+    public final ImmutableMap<Mutation, Boolean> mutations() {
         return ImmutableMap.copyOf(mutations);
     }
 
-    public final ImmutableSet<Mutation> getActiveMutations() {
-        return ImmutableSet.copyOf(Collections2.filter(getMutations().keySet(), new Predicate<Mutation>() {
-            @Override
-            public boolean apply(Mutation mutation) {
-                return mutations.get(mutation);
-            }
-        }));
+    public final ImmutableSet<Mutation> mutationsActive() {
+        return ImmutableSet.copyOf(Collections2.filter(mutations().keySet(), mutations::get));
     }
 
-    public final ImmutableSet<Mutation> getHistoricalMutations() {
+    public final ImmutableSet<Mutation> mutationsHistorical() {
         return ImmutableSet.copyOf(history);
     }
 
-    public final ImmutableSet<MutationModule> getMutationModules() {
+    private Map<Mutation, Boolean> mutationsDefault() {
+        Map<Mutation, Boolean> defaults = new HashMap<>();
+        MapUtils.putAll(defaults, Sets.newHashSet(Mutation.values()), false);
+        return defaults;
+    }
+
+    public final ImmutableSet<MutationModule> mutationModules() {
         return ImmutableSet.copyOf(modules.values());
     }
 
     @Override
-    public boolean shouldLoad() {
-        return Config.Mutations.enabled();
-    }
-
-    @Override
     public void load() {
+        if(!Config.Mutations.enabled()) return;
         Random random = match.getRandom();
         // Check if the api has any queued mutations
         Collection<Mutation> queuedMutations = mutationQueue.mutations();
@@ -113,7 +109,7 @@ public class MutationMatchModule extends MatchModule {
             mutationQueue.clear();
         }
         // Load the mutation modules for this match
-        for(Mutation mutation : getActiveMutations()) {
+        for(Mutation mutation : mutationsActive()) {
             try {
                 mutate(mutation);
             } catch (Throwable throwable) {
@@ -124,43 +120,40 @@ public class MutationMatchModule extends MatchModule {
 
     @Override
     public void enable() {
-        for(MutationModule module : modules.values()) {
-            module.enable(match.isRunning());
-        }
+        modules.values().forEach(MutationModule::enable);
     }
 
     @Override
     public void disable() {
-        for(MutationModule module : modules.values()) {
-            module.disable(match.isRunning());
-        }
+        modules.values().forEach(MutationModule::disable);
+    }
+
+    public void register(Mutation mutation, boolean load) {
+        mutations.put(mutation, load);
     }
 
     public void mutate(Mutation mutation) throws Throwable {
-        Class<? extends MutationModule> clazz = mutation.getModuleClass();
-        if(clazz == null || (match.isRunning() && !mutation.isChangeable())) return;
-        MutationModule module = modules.containsKey(clazz) ? modules.get(clazz) : mutation.getModuleClass().getDeclaredConstructor(Match.class).newInstance(match);
+        Class<? extends MutationModule> loader = mutation.loader();
+        if(loader == null) return;
+        MutationModule module = modules.containsKey(loader) ? modules.get(loader) : loader.getDeclaredConstructor(Match.class).newInstance(match);
         if(mutations.get(mutation)) {
-            module.enable(match.isRunning());
-            modules.put(clazz, module);
+            module.enable();
+            modules.put(loader, module);
             mutations.put(mutation, true);
             history.add(mutation);
         } else {
-            module.disable(match.isRunning());
-            modules.remove(clazz);
+            module.disable();
+            modules.remove(loader);
             mutations.put(mutation, false);
         }
     }
 
-    private Map<Mutation, Boolean> getDefaultMutations() {
-        Map<Mutation, Boolean> defaults = new HashMap<>();
-        MapUtils.putAll(defaults, Sets.newHashSet(Mutation.values()), false);
-        return defaults;
+    public boolean enabled() {
+        return !mutationsActive().isEmpty();
     }
 
-    public static boolean check(Match match, Mutation mutation) {
-        return Config.Mutations.enabled() &&
-                match.hasMatchModule(MutationMatchModule.class) &&
-                match.getMatchModule(MutationMatchModule.class).getActiveMutations().contains(mutation);
+    public boolean enabled(Mutation... mutations) {
+        return mutationsActive().stream().anyMatch(m1 -> Stream.of(mutations).anyMatch(m2 -> m2.equals(m1)));
     }
+
 }

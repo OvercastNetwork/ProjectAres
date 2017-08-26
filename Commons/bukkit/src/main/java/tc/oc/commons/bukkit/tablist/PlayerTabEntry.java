@@ -76,7 +76,7 @@ public class PlayerTabEntry extends DynamicTabEntry {
     @Override
     public @Nullable Skin getSkin(TabView view) {
         final Identity identity = identityProvider.currentIdentity(player);
-        return identity.isDisguised(view.getViewer()) ? null : player.getSkin();
+        return identity.isDisguised(view.getViewer()) ? player.getFakeSkin(view.getViewer()) : player.getSkin();
     }
 
     // Dispatched by TabManager

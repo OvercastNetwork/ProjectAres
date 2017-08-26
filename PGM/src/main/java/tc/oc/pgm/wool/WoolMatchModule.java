@@ -187,6 +187,8 @@ public class WoolMatchModule extends MatchModule implements Listener {
 
     @EventHandler
     public void handleWoolCrafting(PrepareItemCraftEvent event) {
+        if(event.getRecipe() == null) return;
+
         ItemStack result = event.getRecipe().getResult();
         InventoryHolder holder = event.getInventory().getHolder();
 

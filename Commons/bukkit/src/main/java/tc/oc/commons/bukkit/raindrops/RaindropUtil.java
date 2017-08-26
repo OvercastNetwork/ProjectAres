@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
 import java.time.Duration;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.PlayerId;
+import tc.oc.api.users.CreditTokensRequest;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.util.NMSHacks;
@@ -103,7 +104,7 @@ public class RaindropUtil {
         if(save) {
             final int finalDelta = delta;
             playerExecutorFactory.queued(playerId).callback(
-                userService.creditRaindrops(playerId, finalDelta),
+                userService.creditTokens(playerId, CreditTokensRequest.raindrops(finalDelta)),
                 (player, update) -> {
                     if(update.success()) {
                         showRaindrops(player, finalDelta, multiplier, reason, show);
@@ -156,7 +157,7 @@ public class RaindropUtil {
     private static BaseComponent raindropsMessage(int count, int multiplier, @Nullable BaseComponent reason) {
         Component message = new Component(ChatColor.GRAY);
         message.extra(new Component((count > 0 ? "+" : "") + count, ChatColor.GREEN, ChatColor.BOLD),
-                      new Component(" Raindrop" + (count == 1 || count == -1 ? "" : "s"), ChatColor.AQUA));
+                new Component(" Droplet" + (count == 1 || count == -1 ? "" : "s"), ChatColor.AQUA));
         if(multiplier != 100) {
             message.extra(new Component(" | ", ChatColor.DARK_PURPLE),
                           new Component((multiplier / 100f) + "x", ChatColor.GOLD, ChatColor.ITALIC));

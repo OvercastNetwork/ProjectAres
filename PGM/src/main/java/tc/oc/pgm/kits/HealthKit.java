@@ -1,13 +1,11 @@
 package tc.oc.pgm.kits;
 
-import com.google.common.base.Preconditions;
 import tc.oc.pgm.match.MatchPlayer;
 
 public class HealthKit extends Kit.Impl {
     protected final int halfHearts;
 
     public HealthKit(int halfHearts) {
-        Preconditions.checkArgument(0 < halfHearts && halfHearts <= 20, "halfHearts must be greater than 0 and less than or equal to 20");
         this.halfHearts = halfHearts;
     }
 

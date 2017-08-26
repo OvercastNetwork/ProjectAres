@@ -26,6 +26,7 @@ import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchScope;
+import tc.oc.pgm.projectile.EntityLaunchEvent;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -100,6 +101,21 @@ public class TNTMatchModule extends MatchModule implements Listener {
                     inHand.setAmount(inHand.getAmount() - 1);
                 }
                 event.getPlayer().getInventory().setItem(event.getHand(), inHand);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void handleInstantActivation(EntityLaunchEvent event) {
+        if(event.getEntity() instanceof TNTPrimed) {
+            TNTPrimed tnt = (TNTPrimed) event.getEntity();
+
+            if(this.properties.fuse != null) {
+                tnt.setFuseTicks(this.getFuseTicks());
+            }
+
+            if(this.properties.power != null) {
+                tnt.setYield(this.properties.power); // Note: not related to EntityExplodeEvent.yield
             }
         }
     }

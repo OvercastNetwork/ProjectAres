@@ -20,6 +20,7 @@ import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.BooleanType;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -27,6 +28,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.commons.bukkit.settings.SettingManagerProvider;
+import tc.oc.commons.bukkit.util.ItemCreator;
 import tc.oc.commons.core.commands.Commands;
 
 @Singleton

@@ -19,6 +19,7 @@ public class Joining extends Spawning {
     @Override
     public void enterState() {
         player.setVisible(false);
+        bukkit.setGravity(true);
 
         super.enterState();
         trySpawn();

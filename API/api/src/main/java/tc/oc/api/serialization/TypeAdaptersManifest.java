@@ -33,7 +33,5 @@ public class TypeAdaptersManifest extends Manifest {
 
         gson.bindAdapter(new TypeLiteral<Set<MapDoc.Gamemode>>(){})
                .to(new TypeLiteral<LenientEnumSetTypeAdapter<MapDoc.Gamemode>>(){});
-        gson.bindAdapter(new TypeLiteral<Set<MatchDoc.Mutation>>(){})
-               .to(new TypeLiteral<LenientEnumSetTypeAdapter<MatchDoc.Mutation>>(){});
     }
 }

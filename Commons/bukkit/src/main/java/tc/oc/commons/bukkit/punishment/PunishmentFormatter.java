@@ -65,7 +65,7 @@ public class PunishmentFormatter {
 
         return ImmutableList.of(
             Components.join(Components.space(), parts),
-            new Component(" > ").extra(new Component(punishment.reason(), ChatColor.YELLOW))
+            new Component(" > ").extra(new Component(punishment.reason(), punishment.stale() ? ChatColor.GRAY : ChatColor.YELLOW))
         );
 
     }

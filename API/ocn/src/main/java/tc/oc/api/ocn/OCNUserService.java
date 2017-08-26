@@ -15,17 +15,7 @@ import tc.oc.api.message.types.PlayerTeleportRequest;
 import tc.oc.api.minecraft.users.UserStore;
 import tc.oc.api.model.HttpModelService;
 import tc.oc.api.queue.Exchange;
-import tc.oc.api.users.ChangeClassRequest;
-import tc.oc.api.users.ChangeSettingRequest;
-import tc.oc.api.users.CreditRaindropsRequest;
-import tc.oc.api.users.LoginRequest;
-import tc.oc.api.users.LoginResponse;
-import tc.oc.api.users.LogoutRequest;
-import tc.oc.api.users.PurchaseGizmoRequest;
-import tc.oc.api.users.UserSearchRequest;
-import tc.oc.api.users.UserSearchResponse;
-import tc.oc.api.users.UserService;
-import tc.oc.api.users.UserUpdateResponse;
+import tc.oc.api.users.*;
 import tc.oc.commons.core.concurrent.FutureUtils;
 import tc.oc.minecraft.api.entity.Player;
 
@@ -82,13 +72,23 @@ class OCNUserService extends HttpModelService<User, UserDoc.Partial> implements 
     }
 
     @Override
-    public ListenableFuture<UserUpdateResponse> creditRaindrops(UserId userId, CreditRaindropsRequest request) {
-        return handleUserUpdate(client().post(memberUri(userId, "credit_raindrops"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
+    public ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request) {
+        return handleUpdate(client().post(memberUri(userId, "purchase_gizmo"), request, User.class, HttpOption.INFINITE_RETRY));
     }
 
     @Override
-    public ListenableFuture<User> purchaseGizmo(UserId userId, PurchaseGizmoRequest request) {
-        return handleUpdate(client().post(memberUri(userId, "purchase_gizmo"), request, User.class, HttpOption.INFINITE_RETRY));
+    public ListenableFuture<UserUpdateResponse> creditTokens(UserId userId, CreditTokensRequest request) {
+        return handleUserUpdate(client().post(memberUri(userId, "credit_tokens"), request, UserUpdateResponse.class, HttpOption.INFINITE_RETRY));
+    }
+
+    @Override
+    public ListenableFuture<User> changeGroup(UserId userId, ChangeGroupRequest request) {
+        return handleUpdate(client().post(memberUri(userId, "change_group"), request, User.class, HttpOption.INFINITE_RETRY));
+    }
+
+    @Override
+    public ListenableFuture<FriendJoinResponse> joinFriend(UserId userId, FriendJoinRequest request) {
+        return client().post(memberUri(userId, "join_friend"), request, FriendJoinResponse.class, HttpOption.INFINITE_RETRY);
     }
 
     @Override

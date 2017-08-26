@@ -147,10 +147,9 @@ public class PlayerListener implements PluginFacet, Listener {
                     new Component(ChatColor.GOLD, ChatColor.BOLD).extra(generalFormatter.publicHostname())
                 ));
 
-            final BossBar bar = bossBarFactory.createBossBar(renderer.render(news, player), BarColor.BLUE, BarStyle.SOLID);
+            final BossBar bar = bossBarFactory.createBossBar(player, renderer.render(news, player), BarColor.BLUE, BarStyle.SOLID);
             bar.setProgress(1);
-            bar.addPlayer(player);
-            bar.show();
+            bar.setVisible(true);
         }
 
         if(!player.hasPermission("lobby.disabled-permissions-exempt")) {
@@ -189,42 +188,6 @@ public class PlayerListener implements PluginFacet, Listener {
                     new Component(GREEN).translate("navigator.title")
                 )
         );
-
-        if(user.trial_expires_at() != null) {
-            final Instant expires = TimeUtils.toInstant(user.trial_expires_at());
-            final Instant now = Instant.now();
-
-            if(expires.isAfter(now)) {
-                long days = TimeUtils.daysRoundingUp(Duration.between(now, expires));
-                final String key;
-                if(days <= 1) {
-                    key = "trial.remaining.singular";
-                    days = 1;
-                } else {
-                    key = "trial.remaining.plural";
-                }
-
-                audience.sendMessage(
-                    new Component(DARK_PURPLE)
-                        .translate(
-                            key,
-                            new Component(LIGHT_PURPLE).translate("trial.freeTrial"),
-                            new Component(days, LIGHT_PURPLE)
-                        )
-                        .extra(" ")
-                        .translate(
-                            "trial.details",
-                            new Component(LIGHT_PURPLE).translate("trial.joinFull"),
-                            new Component(LIGHT_PURPLE).translate("trial.chooseTeam")
-                        )
-                        .extra(" ")
-                        .translate(
-                            "trial.upgrade",
-                            Links.shopLink()
-                        )
-                );
-            }
-        }
 
         audience.sendMessage(new HeaderComponent(
             new Component(ChatColor.GREEN)

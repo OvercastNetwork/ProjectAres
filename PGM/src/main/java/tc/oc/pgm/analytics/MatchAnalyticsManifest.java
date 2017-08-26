@@ -8,8 +8,9 @@ import tc.oc.pgm.match.inject.MatchScoped;
 public class MatchAnalyticsManifest extends HybridManifest {
     @Override
     protected void configure() {
-        new PluginFacetBinder(binder())
-            .register(MatchPlayerReporter.class);
+        final PluginFacetBinder facets = new PluginFacetBinder(binder());
+        facets.register(MatchPlayerReporter.class);
+        facets.register(PlayerVersionLogger.class);
 
         bind(MatchTagger.class).in(MatchScoped.class);
         expose(MatchTagger.class);

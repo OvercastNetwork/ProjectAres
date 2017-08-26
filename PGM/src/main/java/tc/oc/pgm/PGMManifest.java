@@ -1,9 +1,10 @@
 package tc.oc.pgm;
 
-import tc.oc.commons.bukkit.chat.FlairRenderer;
+import tc.oc.commons.bukkit.flairs.FlairRenderer;
 import tc.oc.commons.bukkit.nick.UsernameRenderer;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.plugin.PluginFacetBinder;
+import tc.oc.minecraft.api.event.ListenerBinder;
 import tc.oc.pgm.analytics.MatchAnalyticsManifest;
 import tc.oc.pgm.antigrief.DefuseListener;
 import tc.oc.pgm.chat.MatchFlairRenderer;
@@ -11,12 +12,14 @@ import tc.oc.pgm.chat.MatchNameInvalidator;
 import tc.oc.pgm.chat.MatchUsernameRenderer;
 import tc.oc.pgm.commands.AdminCommands;
 import tc.oc.pgm.commands.MatchCommands;
+import tc.oc.pgm.commands.PollCommands;
 import tc.oc.pgm.debug.PGMLeakListener;
 import tc.oc.pgm.development.MapDevelopmentCommands;
 import tc.oc.pgm.development.MapErrorTracker;
 import tc.oc.pgm.freeze.FreezeCommands;
 import tc.oc.pgm.freeze.FreezeListener;
 import tc.oc.pgm.listeners.BlockTransformListener;
+import tc.oc.pgm.listeners.InterfaceListener;
 import tc.oc.pgm.listeners.MatchAnnouncer;
 import tc.oc.pgm.listeners.PGMListener;
 import tc.oc.pgm.listing.ListingManifest;
@@ -33,6 +36,7 @@ import tc.oc.pgm.match.MatchPlayerEventRouter;
 import tc.oc.pgm.module.MatchModulesManifest;
 import tc.oc.pgm.mutation.command.MutationCommands;
 import tc.oc.pgm.restart.RestartListener;
+import tc.oc.pgm.rotation.DynamicRotationListener;
 import tc.oc.pgm.settings.Settings;
 import tc.oc.pgm.spawns.states.State;
 import tc.oc.pgm.tnt.license.LicenseBroker;
@@ -65,6 +69,7 @@ public final class PGMManifest extends HybridManifest {
 
         bind(MapLibrary.class).to(MapLibraryImpl.class);
         bind(MapLoader.class).to(MapLoaderImpl.class);
+        new ListenerBinder(binder()).bindListener().to(DynamicRotationListener.class);
 
         // Tourney needs this
         expose(MapLibrary.class);
@@ -76,6 +81,7 @@ public final class PGMManifest extends HybridManifest {
 
         final PluginFacetBinder facets = new PluginFacetBinder(binder());
         facets.register(AdminCommands.class);
+        facets.register(PollCommands.class);
         facets.register(MatchNameInvalidator.class);
         facets.register(MapDevelopmentCommands.class);
         facets.register(MapErrorTracker.class);
@@ -94,7 +100,9 @@ public final class PGMManifest extends HybridManifest {
         facets.register(DefuseListener.class);
         facets.register(FreezeCommands.class);
         facets.register(FreezeListener.class);
+        facets.register(InterfaceListener.class);
 
         requestStaticInjection(State.class);
+        requestStaticInjection(PollCommands.class);
     }
 }

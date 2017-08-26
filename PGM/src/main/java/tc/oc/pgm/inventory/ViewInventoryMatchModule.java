@@ -38,17 +38,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
-import tc.oc.api.bukkit.users.Users;
 import tc.oc.commons.bukkit.util.BukkitUtils;
 import tc.oc.commons.core.commands.CommandBinder;
 import tc.oc.pgm.PGMTranslations;
-import tc.oc.pgm.blitz.BlitzMatchModule;
+import tc.oc.pgm.blitz.BlitzMatchModuleImpl;
 import tc.oc.pgm.doublejump.DoubleJumpMatchModule;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.events.ObserverInteractEvent;
 import tc.oc.pgm.events.PlayerBlockTransformEvent;
 import tc.oc.pgm.events.PlayerPartyChangeEvent;
 import tc.oc.pgm.kits.WalkSpeedKit;
+import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchScope;
@@ -269,9 +269,9 @@ public class ViewInventoryMatchModule extends MatchModule implements Listener {
 
         MatchPlayer matchHolder = this.match.getPlayer(holder);
         if (matchHolder != null && matchHolder.isParticipating()) {
-            BlitzMatchModule module = matchHolder.getMatch().getMatchModule(BlitzMatchModule.class);
-            if (module != null) {
-                int livesLeft = module.lifeManager.getLives(Users.playerId(holder));
+            BlitzMatchModule module = matchHolder.getMatch().getMatchModule(BlitzMatchModuleImpl.class);
+            if(module != null && module.activated() && module.lives(matchHolder).isPresent()) {
+                int livesLeft = module.livesCount(matchHolder);
                 ItemStack lives = new ItemStack(Material.EGG, livesLeft);
                 ItemMeta lifeMeta = lives.getItemMeta();
                 lifeMeta.addItemFlags(ItemFlag.values());

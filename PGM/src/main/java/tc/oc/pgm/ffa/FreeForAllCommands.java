@@ -1,13 +1,12 @@
 package tc.oc.pgm.ffa;
 
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissions;
-import com.sk89q.minecraft.util.commands.NestedCommand;
+import com.sk89q.minecraft.util.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import tc.oc.pgm.PGM;
 import tc.oc.pgm.commands.CommandUtils;
+import tc.oc.pgm.match.MatchPlayer;
+import tc.oc.pgm.teams.Team;
 
 public class FreeForAllCommands {
     private FreeForAllCommands() {}
@@ -70,6 +69,20 @@ public class FreeForAllCommands {
 
         sender.sendMessage(ChatColor.WHITE + "Maximum players is now " + ChatColor.AQUA + ffa.getMaxPlayers() +
                            ChatColor.WHITE + " and overfill is " + ChatColor.AQUA + ffa.getMaxOverfill());
+    }
+
+    @Command(
+            aliases = {"force"},
+            desc = "Force a player to participate in the match.",
+            usage = "<player>",
+            min = 1,
+            max = 2
+    )
+    @CommandPermissions("pgm.team.force")
+    public static void force(CommandContext args, CommandSender sender) throws CommandException, SuggestException {
+        MatchPlayer player = CommandUtils.findSingleMatchPlayer(args, sender, 0);
+        FreeForAllMatchModule ffa = CommandUtils.getMatchModule(FreeForAllMatchModule.class, sender);
+        ffa.forceJoin(player);
     }
 
 }
