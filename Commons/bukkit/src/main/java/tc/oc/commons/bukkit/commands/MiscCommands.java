@@ -149,6 +149,25 @@ public class MiscCommands implements Commands {
     }
 
     @Command(
+            aliases = { "change-death-screen" },
+            usage = "<player> <+1/-1>",
+            desc = "Allow a player to change their death screen",
+            min = 2
+    )
+    public void deathScreen(final CommandContext args, final CommandSender sender) throws CommandException {
+        if(!(sender instanceof ConsoleCommandSender)) throw new CommandPermissionsException();
+        boolean enable = args.getInteger(1, +1) > 0;
+        flexecutor.callback(
+            userFinder.findLocalPlayer(sender, args, 0),
+            response -> {
+                if((response.user.death_screen() == null) != enable) {
+                    userService.update(response.user, (UserDoc.DeathScreen) () -> enable ? "default" : null);
+                }
+            }
+        );
+    }
+
+    @Command(
             aliases = { "sudo" },
             usage = "<player> [command... (rand|mode|near|color|*)=value]",
             desc = "Run a command as console or another player",
