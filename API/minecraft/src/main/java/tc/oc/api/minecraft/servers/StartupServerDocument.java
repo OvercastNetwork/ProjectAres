@@ -72,11 +72,6 @@ public class StartupServerDocument implements ServerDoc.Startup {
         return true;
     }
 
-    @Override
-    public String ip() {
-        return configuration.publishIp() ? ip.get() : null;
-    }
-
     @Override public Integer current_port() {
         return minecraftServer.getAddress().getPort();
     }
@@ -91,5 +86,9 @@ public class StartupServerDocument implements ServerDoc.Startup {
 
     @Override public Set<Integer> protocol_versions() {
         return minecraftServer.getProtocolVersions();
+    }
+
+    public String ip() {
+        return ip.get();
     }
 }
