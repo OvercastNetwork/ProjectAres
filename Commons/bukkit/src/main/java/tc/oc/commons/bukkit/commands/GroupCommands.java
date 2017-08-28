@@ -19,6 +19,7 @@ import tc.oc.commons.core.util.ThrowingBiConsumer;
 import tc.oc.minecraft.scheduler.Sync;
 
 import javax.inject.Inject;
+import java.time.Duration;
 import java.time.Instant;
 
 public class GroupCommands implements NestedCommands {
@@ -64,7 +65,8 @@ public class GroupCommands implements NestedCommands {
                         }
                         public Instant end() {
                             try {
-                                return add ? Instant.now().plus(CommandUtils.getDuration(args, 2, null)) : null;
+                                Duration duration = CommandUtils.getDuration(args, 2, null);
+                                return add && duration != null ? Instant.now().plus(duration) : null;
                             } catch(CommandException e) {
                                 return null;
                             }
