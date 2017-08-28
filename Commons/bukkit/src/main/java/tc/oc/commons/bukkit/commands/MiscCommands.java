@@ -68,7 +68,7 @@ public class MiscCommands implements Commands {
             min = 0,
             max = 1
     )
-    @CommandPermissions("ocn.developer")
+    @CommandPermissions("ocn.version")
     public void listPlayerVersions(final CommandContext args, final CommandSender sender) throws CommandException {
         Audience audience = audiences.get(sender);
         if (args.hasFlag('a')) {
