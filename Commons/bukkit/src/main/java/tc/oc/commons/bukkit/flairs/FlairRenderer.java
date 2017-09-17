@@ -59,7 +59,7 @@ public class FlairRenderer implements PartialNameRenderer {
 
         return user.minecraft_flair()
                 .stream()
-                .filter(flair -> realms.contains(flair.realm))
+                .filter(flair -> realms.contains(flair.realm) && flair.text != null && !flair.text.isEmpty())
                 .sorted((flair1, flair2) -> flair1.priority - flair2.priority)
                 .limit(flairConfiguration.maxFlairs() < 0 ? Long.MAX_VALUE : flairConfiguration.maxFlairs())
                 .sorted((flair1, flair2) -> flair2.priority - flair1.priority)
