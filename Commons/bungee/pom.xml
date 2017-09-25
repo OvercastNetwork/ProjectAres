@@ -8,7 +8,7 @@
         <artifactId>commons</artifactId>
         <groupId>tc.oc</groupId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.12.1-SNAPSHOT</version>
+        <version>1.12.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>commons-bungee</artifactId>

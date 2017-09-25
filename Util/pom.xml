@@ -8,7 +8,7 @@
         <groupId>tc.oc</groupId>
         <artifactId>ProjectAres</artifactId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.12.1-SNAPSHOT</version>
+        <version>1.12.2-SNAPSHOT</version>
         <!-- Don't use $global.version because we want to be able to use this in other projects -->
     </parent>
 

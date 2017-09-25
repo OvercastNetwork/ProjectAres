@@ -13,6 +13,7 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
+import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -79,11 +80,12 @@ public class ServerCommands implements Commands {
         aliases = { "servers", "srvs" },
         desc = "Show a listing of all servers on the network",
         usage = "[page]",
+        flags = "a",
         min = 0,
         max = 1
     )
     public void servers(final CommandContext args, final CommandSender sender) throws CommandException {
-        final List<Server> servers = new ArrayList<>(serverStore.subset(teleporter::isVisible));
+        final List<Server> servers = new ArrayList<>(serverStore.subset(args.hasFlag('a') && sender.hasPermission("ocn.see-all-servers") ? teleporter::isConnectable : teleporter::isVisible));
         Collections.sort(servers, FULLNESS);
 
         new Paginator<Server>() {

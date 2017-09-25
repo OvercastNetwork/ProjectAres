@@ -8,7 +8,7 @@
         <artifactId>util</artifactId>
         <groupId>tc.oc</groupId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.12.1-SNAPSHOT</version>
+        <version>1.12.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>util-bukkit</artifactId>
@@ -34,14 +34,14 @@
         <dependency>
             <groupId>tc.oc</groupId>
             <artifactId>sportbukkit-api</artifactId>
-            <version>1.12.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <!-- This dependency is NOT transitive, no clue why -->
             <groupId>tc.oc</groupId>
             <artifactId>sportbukkit</artifactId>
-            <version>1.12.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- Bukkit plugins/libraries -->

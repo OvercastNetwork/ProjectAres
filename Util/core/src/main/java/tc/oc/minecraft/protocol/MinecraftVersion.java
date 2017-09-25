@@ -24,7 +24,8 @@ public enum MinecraftVersion {
     MINECRAFT_1_11(315, 1, 11, 0),
     MINECRAFT_1_11_1(316, 1, 11, 1),
     MINECRAFT_1_12(335, 1, 12, 0),
-    MINECRAFT_1_12_1(338, 1, 12, 1);
+    MINECRAFT_1_12_1(338, 1, 12, 1),
+    MINECRAFT_1_12_2(340, 1, 12, 2);
 
     private final int protocol;
     private final int major;
