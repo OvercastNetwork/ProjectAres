@@ -39,7 +39,7 @@ public class MinecraftApiConfigurationImpl implements MinecraftApiConfiguration 
 
     @Override
     public boolean publishIp() {
-        return config.getBoolean("server.publishIp", true);
+        return config.getBoolean("server.publishIp", false);
     }
 
     @Override
