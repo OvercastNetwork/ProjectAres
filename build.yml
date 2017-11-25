@@ -1,0 +1,88 @@
+timeout: 1h
+steps:
+  - id: git
+    name: gcr.io/cloud-builders/git
+    args:
+      - clone
+      - https://github.com/StratusNetwork/docker.git
+  - id: base
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --tag=minecraft:base
+      - --cache-from=gcr.io/$PROJECT_ID/minecraft:base-$BRANCH_NAME
+      - --build-arg=BRANCH_BASE=$_BRANCH_BASE
+      - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - docker/minecraft
+    wait_for:
+      - git
+  - id: base-post
+    name: gcr.io/cloud-builders/docker
+    args:
+      - tag
+      - minecraft:base
+      - gcr.io/$PROJECT_ID/minecraft:base-$BRANCH_NAME
+    wait_for:
+      - base
+  - id: shared
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --tag=minecraft:shared
+      - --cache-from=gcr.io/$PROJECT_ID/minecraft:shared-$BRANCH_NAME
+      - --build-arg=BRANCH_BASE=$_BRANCH_BASE
+      - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - docker/minecraft/shared
+    wait_for:
+      - base
+  - id: shared-post
+    name: gcr.io/cloud-builders/docker
+    args:
+      - tag
+      - minecraft:shared
+      - gcr.io/$PROJECT_ID/minecraft:shared-$BRANCH_NAME
+    wait_for:
+      - shared
+  - id: bukkit
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --tag=minecraft:bukkit
+      - --cache-from=gcr.io/$PROJECT_ID/minecraft:bukkit-$BRANCH_NAME
+      - --build-arg=BRANCH_BASE=$_BRANCH_BASE
+      - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - docker/minecraft/bukkit
+    wait_for:
+      - shared
+  - id: bukkit-post
+    name: gcr.io/cloud-builders/docker
+    args:
+      - tag
+      - minecraft:bukkit
+      - gcr.io/$PROJECT_ID/minecraft:bukkit-$BRANCH_NAME
+    wait_for:
+      - bukkit
+  - id: bungee
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --tag=minecraft:bungee
+      - --cache-from=gcr.io/$PROJECT_ID/minecraft:bungee-$BRANCH_NAME
+      - --build-arg=BRANCH_BASE=$_BRANCH_BASE
+      - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - docker/minecraft/bungee
+    wait_for:
+      - shared
+  - id: bungee-post
+    name: gcr.io/cloud-builders/docker
+    args:
+      - tag
+      - minecraft:bungee
+      - gcr.io/$PROJECT_ID/minecraft:bungee-$BRANCH_NAME
+    wait_for:
+      - bungee
+images:
+  - gcr.io/$PROJECT_ID/minecraft:base-$BRANCH_NAME
+  - gcr.io/$PROJECT_ID/minecraft:shared-$BRANCH_NAME
+  - gcr.io/$PROJECT_ID/minecraft:bukkit-$BRANCH_NAME
+  - gcr.io/$PROJECT_ID/minecraft:bungee-$BRANCH_NAME
