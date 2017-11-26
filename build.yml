@@ -5,6 +5,13 @@ steps:
     args:
       - clone
       - https://github.com/StratusNetwork/docker.git
+  - id: base-pre
+    name: gcr.io/cloud-builders/docker
+    args:
+      - pull
+      - gcr.io/$PROJECT_ID/minecraft:base-$BRANCH_NAME
+    wait_for:
+      - git
   - id: base
     name: gcr.io/cloud-builders/docker
     args:
@@ -15,13 +22,20 @@ steps:
       - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
       - docker/minecraft
     wait_for:
-      - git
+      - base-pre
   - id: base-post
     name: gcr.io/cloud-builders/docker
     args:
       - tag
       - minecraft:base
       - gcr.io/$PROJECT_ID/minecraft:base-$BRANCH_NAME
+    wait_for:
+      - base
+  - id: shared-pre
+    name: gcr.io/cloud-builders/docker
+    args:
+      - pull
+      - gcr.io/$PROJECT_ID/minecraft:shared-$BRANCH_NAME
     wait_for:
       - base
   - id: shared
@@ -34,7 +48,7 @@ steps:
       - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
       - docker/minecraft/shared
     wait_for:
-      - base
+      - shared-pre
   - id: shared-post
     name: gcr.io/cloud-builders/docker
     args:
