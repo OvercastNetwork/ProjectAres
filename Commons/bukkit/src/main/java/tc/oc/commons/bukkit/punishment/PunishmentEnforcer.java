@@ -116,7 +116,7 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
                .filter(player -> viewable(player, punishment, true))
                .forEach(player -> audiences.get(player).sendMessages(
                    punishmentFormatter.format(punishment, true,
-                                              !punishment.server_id().equals(localServer._id()))
+                                              !localServer._id().equals(punishment.server_id())
                ));
     }
 
