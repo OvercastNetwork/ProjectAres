@@ -20,6 +20,7 @@ steps:
       - --cache-from=gcr.io/$PROJECT_ID/minecraft:base-$BRANCH_NAME
       - --build-arg=BRANCH_BASE=$_BRANCH_BASE
       - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - --build-arg=AUTH=$_AUTH
       - docker/minecraft
     wait_for:
       - base-pre
@@ -46,6 +47,7 @@ steps:
       - --cache-from=gcr.io/$PROJECT_ID/minecraft:shared-$BRANCH_NAME
       - --build-arg=BRANCH_BASE=$_BRANCH_BASE
       - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - --build-arg=AUTH=$_AUTH
       - docker/minecraft/shared
     wait_for:
       - shared-pre
@@ -65,6 +67,7 @@ steps:
       - --cache-from=gcr.io/$PROJECT_ID/minecraft:bukkit-$BRANCH_NAME
       - --build-arg=BRANCH_BASE=$_BRANCH_BASE
       - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - --build-arg=AUTH=$_AUTH
       - docker/minecraft/bukkit
     wait_for:
       - shared
@@ -84,6 +87,7 @@ steps:
       - --cache-from=gcr.io/$PROJECT_ID/minecraft:bungee-$BRANCH_NAME
       - --build-arg=BRANCH_BASE=$_BRANCH_BASE
       - --build-arg=BRANCH_PLUGINS=$BRANCH_NAME
+      - --build-arg=AUTH=$_AUTH
       - docker/minecraft/bungee
     wait_for:
       - shared
