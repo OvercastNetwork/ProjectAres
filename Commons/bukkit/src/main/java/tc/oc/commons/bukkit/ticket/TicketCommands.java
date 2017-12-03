@@ -48,7 +48,7 @@ public class TicketCommands implements Commands {
     }
 
     @Command(
-        aliases = { "leave", "quit" },
+        aliases = { "quit" },
         desc = "Leave the game you are currently playing, or waiting to play",
         min = 0,
         max = 0

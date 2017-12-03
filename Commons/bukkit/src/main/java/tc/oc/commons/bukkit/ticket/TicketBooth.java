@@ -199,19 +199,20 @@ public class TicketBooth {
         final PlayerId playerId = userStore.playerId(player);
         final Game game = currentGame(playerId);
         if(game == null) {
-            audience.sendMessage(gameFormatter.notPlaying());
+            //audience.sendMessage(gameFormatter.notPlaying());
             return;
         }
-
-        syncExecutor.callback(
-            sendPlayRequest(playerId, null),
-            CommandFutureCallback.onSuccess(player, reply -> {
-                audience.sendMessage(gameFormatter.left(game));
-                if(returnToLobby) {
-                    serverChanger.sendPlayerToLobby(player, true);
-                }
-            })
-        );
+        if(game != null) {
+            syncExecutor.callback(
+                sendPlayRequest(playerId, null),
+                CommandFutureCallback.onSuccess(player, reply -> {
+                    audience.sendMessage(gameFormatter.left(game));
+                    if(returnToLobby) {
+                        serverChanger.sendPlayerToLobby(player, true);
+                    }
+                })
+            );
+        }
     }
 
     public void playLocalGame(Player player) {

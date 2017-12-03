@@ -133,7 +133,7 @@ public class JoinCommands implements Commands {
     public static final String OBSERVE_COMMAND = "observe";
 
     @Command(
-        aliases = { OBSERVE_COMMAND, "obs", "spectate" },
+        aliases = { OBSERVE_COMMAND, "obs", "spectate", "leave" },
         desc = "Observe the current match",
         min = 0,
         max = 0
