@@ -111,6 +111,7 @@ public interface ServerDoc {
      */
     @Serialize
     interface Configuration extends Rotations {
+        String domain();
         String settings_profile();
         Map<UUID, String> operators();
         @Nullable Team team();

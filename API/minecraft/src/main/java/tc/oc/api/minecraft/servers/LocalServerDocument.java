@@ -155,6 +155,11 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     }
 
     @Override
+    public String domain() {
+        return "play.stratus.network";
+    }
+
+    @Override
     public String settings_profile() {
         return "public";
     }

@@ -25,6 +25,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import java.time.Duration;
+
+import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.util.NullCommandSender;
@@ -76,6 +78,7 @@ public class SidebarMatchModule extends MatchModule implements Listener {
 
     @Inject private List<MonumentWoolFactory> wools;
     @Inject private BlitzMatchModule blitz;
+    @Inject private MinecraftService minecraftService;
 
     private final String legacyTitle;
 
@@ -469,6 +472,11 @@ public class SidebarMatchModule extends MatchModule implements Listener {
                         }
                     }
                 }
+            }
+
+            if(Config.Scoreboard.showIp()) {
+                rows.add("");
+                rows.add(ChatColor.AQUA + minecraftService.getLocalServer().domain());
             }
 
             // Need at least one row for the sidebar to show
