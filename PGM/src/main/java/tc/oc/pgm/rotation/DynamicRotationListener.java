@@ -17,6 +17,7 @@ import tc.oc.commons.core.logging.Loggers;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.events.MatchEndEvent;
+import tc.oc.pgm.mutation.MutationQueue;
 
 import java.util.logging.Logger;
 
@@ -26,12 +27,14 @@ public class DynamicRotationListener implements PluginFacet, Listener {
     private final Audiences audiences;
     private final OnlinePlayers players;
     private final ConfigurationSection config;
+    private final MutationQueue mutationQueue;
 
-    @Inject DynamicRotationListener(Loggers loggers, Audiences audiences, OnlinePlayers players, Configuration config) {
+    @Inject DynamicRotationListener(Loggers loggers, Audiences audiences, OnlinePlayers players, Configuration config, MutationQueue mutationQueue) {
         this.logger = loggers.get(getClass());
         this.audiences = audiences;
         this.players = players;
         this.config = config.getConfigurationSection("rotation");
+        this.mutationQueue = mutationQueue;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -40,6 +43,9 @@ public class DynamicRotationListener implements PluginFacet, Listener {
 
         // Ignore if dynamic rotations are disabled or if there is only one rotation available
         if (!config.getBoolean("dynamic", false) || rotationManager.getRotations().size() <= 1) return;
+        
+        // If a mutation was set for the next map, don't change it yet.
+        if (mutationQueue.isEmpty()) return;
 
         int playerCount = players.count() + Math.round(event.getMatch().getObservingPlayers().size() / 2);
 
