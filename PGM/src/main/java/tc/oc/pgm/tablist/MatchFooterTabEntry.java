@@ -3,19 +3,18 @@ package tc.oc.pgm.tablist;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.api.docs.Server;
-import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.commons.core.scheduler.Task;
 import tc.oc.commons.bukkit.tablist.DynamicTabEntry;
 import tc.oc.commons.bukkit.tablist.TabView;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.formatting.PeriodFormats;
+import tc.oc.pgm.Config;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchScope;
 import tc.oc.pgm.PGMTranslations;
 import tc.oc.commons.core.util.DefaultProvider;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 
 public class MatchFooterTabEntry extends DynamicTabEntry {
 
@@ -25,8 +24,6 @@ public class MatchFooterTabEntry extends DynamicTabEntry {
             return new MatchFooterTabEntry(key);
         }
     }
-
-    @Inject private static MinecraftService minecraftService;
 
     private final Match match;
     private @Nullable Task tickTask;
@@ -61,9 +58,8 @@ public class MatchFooterTabEntry extends DynamicTabEntry {
     public BaseComponent getContent(TabView view) {
         Component content = new Component(ChatColor.DARK_GRAY);
 
-        Server server = minecraftService.getLocalServer();
-        String datacenter = server.datacenter();
-        String name = server.name();
+        String datacenter = Config.PlayerList.datacenter();
+        String server = Config.PlayerList.server();
 
         if(datacenter != null) {
             content.extra(new Component(datacenter, ChatColor.WHITE, ChatColor.BOLD),
@@ -73,9 +69,9 @@ public class MatchFooterTabEntry extends DynamicTabEntry {
         content.extra(new Component(PGMTranslations.get().t("command.match.matchInfo.time", view.getViewer()) + ": ", ChatColor.GRAY),
                       new Component(PeriodFormats.formatColons(this.match.runningTime()), this.match.isRunning() ? ChatColor.GREEN : ChatColor.GOLD));
 
-        if(name != null) {
+        if(server != null) {
             content.extra(new Component(" - "),
-                          new Component(name, ChatColor.WHITE, ChatColor.BOLD));
+                          new Component(server, ChatColor.WHITE, ChatColor.BOLD));
         }
 
         return content;
