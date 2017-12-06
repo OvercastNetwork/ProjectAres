@@ -1,4 +1,4 @@
-timeout: 30m
+timeout: 15m
 steps:
   - id: clone
     name: gcr.io/cloud-builders/git
@@ -38,78 +38,13 @@ steps:
       - -rn
       - .m2
       - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME
-  - id: bukkit-base
-    name: gcr.io/cloud-builders/docker
+  - id: docker-deploy
+    name: gcr.io/cloud-builders/gcloud
     args:
-      - build
-      - --tag=minecraft:bukkit-base
-      - --file=docker/minecraft/bukkit/Dockerfile-base
-      - --build-arg=PROJECT_ID=$PROJECT_ID
-      - --build-arg=BRANCH=$BRANCH_NAME
-      - --build-arg=VERSION=$_VERSION
-      - --build-arg=SPORTBUKKIT_VERSION=$_SPORTBUKKIT_VERSION
-      - docker/minecraft/bukkit
-    wait_for:
-      - m2-deploy
-  - id: bukkit-shared
-    name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - --tag=minecraft:bukkit-shared
-      - --build-arg=BASE=bukkit
-      - docker/minecraft/shared
-    wait_for:
-      - bukkit-base 
-  - id: bukkit
-    name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - --tag=minecraft:bukkit
-      - --tag=gcr.io/$PROJECT_ID/minecraft:bukkit-$BRANCH_NAME
-      - docker/minecraft/bukkit
-    wait_for:
-      - bukkit-shared
-  - id: cloudy
-    name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - --tag=minecraft:cloudy
-      - --tag=gcr.io/$PROJECT_ID/minecraft:cloudy-$BRANCH_NAME
-      - docker/minecraft/cloudy
-    wait_for:
-      - bukkit
-  - id: bungee-base
-    name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - --tag=minecraft:bungee-base
-      - --file=docker/minecraft/bungee/Dockerfile-base
-      - --build-arg=PROJECT_ID=$PROJECT_ID
-      - --build-arg=BRANCH=$BRANCH_NAME
-      - --build-arg=VERSION=$_VERSION
-      - --build-arg=BUNGEECORD_VERSION=$_BUNGEECORD_VERSION
-      - docker/minecraft/bungee
-    wait_for:
-      - m2-deploy
-  - id: bungee-shared
-    name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - --tag=minecraft:bungee-shared
-      - --build-arg=BASE=bungee
-      - docker/minecraft/shared
-    wait_for:
-      - bungee-base
-  - id: bungee
-    name: gcr.io/cloud-builders/docker
-    args:
-      - build
-      - --tag=minecraft:bungee
-      - --tag=gcr.io/$PROJECT_ID/minecraft:bungee-$BRANCH_NAME
-      - docker/minecraft/bungee
-    wait_for:
-      - bungee-shared
-images:
-  - gcr.io/$PROJECT_ID/minecraft:bukkit-$BRANCH_NAME
-  - gcr.io/$PROJECT_ID/minecraft:bungee-$BRANCH_NAME
-  - gcr.io/$PROJECT_ID/minecraft:cloudy-$BRANCH_NAME
+      - container
+      - builds
+      - submit
+      - --async
+      - --no-source
+      - --substitutions=_BRANCH=$BRANCH_NAME,_VERSION=$_VERSION,_SPORTBUKKIT_VERSION=$_SPORTBUKKIT_VERSION,_BUNGEECORD_VERSION=$_BUNGEECORD_VERSION
+      - --config=docker/build.yml
