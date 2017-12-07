@@ -116,7 +116,7 @@ public class ReportCommands implements Commands, Listener {
             userFinder.findLocalPlayer(sender, args, 0),
             CommandFutureCallback.onSuccess(sender, args, response -> {
                 if(response.player().hasPermission(ReportPermissions.EXEMPT) && !sender.hasPermission(ReportPermissions.OVERRIDE)) {
-                    throw new TranslatableCommandException("command.report.exempt");
+                    throw new TranslatableCommandException("command.report.exempt", new PlayerComponent(identities.createIdentity(response)));
                 }
 
                 senderLastReport.put(sender, Instant.now());
