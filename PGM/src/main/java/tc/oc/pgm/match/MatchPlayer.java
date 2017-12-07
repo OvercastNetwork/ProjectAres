@@ -429,6 +429,7 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
         bukkit.setSlowNaturalRegeneration(true);
         bukkit.setAllowFlight(false);
         bukkit.setFlying(false);
+        bukkit.setGliding(false);
         bukkit.setSneaking(false);
         bukkit.setSprinting(false);
         bukkit.setFlySpeed(0.1f);
