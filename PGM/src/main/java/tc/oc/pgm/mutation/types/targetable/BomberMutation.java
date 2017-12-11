@@ -36,7 +36,6 @@ public class BomberMutation extends EntityMutation<TNTPrimed> implements TargetM
                 TNTPrimed tnt = spawn(location, TNTPrimed.class);
                 tnt.setGlowing(true);
                 tnt.setIsIncendiary(false);
-                tnt.setYield(0);
                 tnt.setFuseTicks(200);
                 tnt.setVelocity(
                         new Vector(
