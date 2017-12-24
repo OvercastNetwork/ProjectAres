@@ -39,6 +39,7 @@ import tc.oc.pgm.restart.RestartListener;
 import tc.oc.pgm.rotation.DynamicRotationListener;
 import tc.oc.pgm.settings.Settings;
 import tc.oc.pgm.spawns.states.State;
+import tc.oc.pgm.tablist.MatchFooterTabEntry;
 import tc.oc.pgm.tnt.license.LicenseBroker;
 import tc.oc.pgm.tnt.license.LicenseCommands;
 import tc.oc.pgm.tnt.license.LicenseMonitor;
@@ -104,5 +105,6 @@ public final class PGMManifest extends HybridManifest {
 
         requestStaticInjection(State.class);
         requestStaticInjection(PollCommands.class);
+        requestStaticInjection(MatchFooterTabEntry.class);
     }
 }

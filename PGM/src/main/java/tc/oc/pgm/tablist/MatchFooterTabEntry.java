@@ -3,11 +3,13 @@ package tc.oc.pgm.tablist;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.api.docs.Server;
+import tc.oc.api.minecraft.servers.LocalServerDocument;
 import tc.oc.commons.core.scheduler.Task;
 import tc.oc.commons.bukkit.tablist.DynamicTabEntry;
 import tc.oc.commons.bukkit.tablist.TabView;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.formatting.PeriodFormats;
+import tc.oc.minecraft.api.server.LocalServer;
 import tc.oc.pgm.Config;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchScope;
@@ -15,6 +17,7 @@ import tc.oc.pgm.PGMTranslations;
 import tc.oc.commons.core.util.DefaultProvider;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 
 public class MatchFooterTabEntry extends DynamicTabEntry {
 
@@ -24,6 +27,7 @@ public class MatchFooterTabEntry extends DynamicTabEntry {
             return new MatchFooterTabEntry(key);
         }
     }
+    @Inject private static LocalServerDocument document;
 
     private final Match match;
     private @Nullable Task tickTask;
@@ -58,11 +62,11 @@ public class MatchFooterTabEntry extends DynamicTabEntry {
     public BaseComponent getContent(TabView view) {
         Component content = new Component(ChatColor.DARK_GRAY);
 
-        String datacenter = Config.PlayerList.datacenter();
+        String domain = document.domain();
         String server = Config.PlayerList.server();
 
-        if(datacenter != null) {
-            content.extra(new Component(datacenter, ChatColor.WHITE, ChatColor.BOLD),
+        if(domain != null) {
+            content.extra(new Component(domain, ChatColor.WHITE, ChatColor.BOLD),
                           new Component(" - "));
         }
 
