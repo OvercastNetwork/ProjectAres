@@ -19,6 +19,7 @@ import tc.oc.pgm.legacy.LegacyManifest;
 import tc.oc.pgm.loot.LootManifest;
 import tc.oc.pgm.menu.MenuManifest;
 import tc.oc.pgm.modes.ObjectiveModeManifest;
+import tc.oc.pgm.payload.PayloadManifest;
 import tc.oc.pgm.physics.PlayerPhysicsManifest;
 import tc.oc.pgm.picker.PickerManifest;
 import tc.oc.pgm.playerstats.StatsManifest;
@@ -65,6 +66,7 @@ public class PGMModulesManifest extends HybridManifest {
         install(new DestroyableManifest());
         install(new WoolManifest());
         install(new ControlPointManifest());
+        install(new PayloadManifest());
         install(new LaneManifest());
         install(new BroadcastManifest());
         install(new StatsManifest());
