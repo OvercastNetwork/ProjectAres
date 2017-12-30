@@ -53,6 +53,8 @@ public interface PayloadDefinition extends OwnableGoalDefinition<Payload>, Gamem
 
     boolean hasNeutralState();
 
+    boolean hasFriendlyCheckpoints();
+
     float getRadius();
 
     float getHeight();
@@ -117,6 +119,8 @@ class PayloadDefinitionImpl extends OwnableGoalDefinitionImpl<Payload> implement
     // NOTE: points always start in an unowned state, regardless of this value
     private final boolean neutralState;
 
+    private final boolean friendlyCheckpoints;
+
     //The radius of the control point of the payload
     private final float radius;
 
@@ -158,6 +162,7 @@ class PayloadDefinitionImpl extends OwnableGoalDefinitionImpl<Payload> implement
                                  TeamFactory owner,
                                  CaptureCondition captureCondition,
                                  boolean neutralState,
+                                 boolean friendlyCheckpoints,
                                  float radius,
                                  float height,
                                  MaterialPattern checkpointMaterial,
@@ -181,6 +186,7 @@ class PayloadDefinitionImpl extends OwnableGoalDefinitionImpl<Payload> implement
         this.initialOwner = initialOwner;
         this.captureCondition = captureCondition;
         this.neutralState = neutralState;
+        this.friendlyCheckpoints = friendlyCheckpoints;
         this.radius = radius;
         this.height = height;
         this.checkpointMaterial = checkpointMaterial;
@@ -289,6 +295,11 @@ class PayloadDefinitionImpl extends OwnableGoalDefinitionImpl<Payload> implement
     @Override
     public boolean hasNeutralState() {
         return this.neutralState;
+    }
+
+    @Override
+    public boolean hasFriendlyCheckpoints() {
+        return this.friendlyCheckpoints;
     }
 
     @Override

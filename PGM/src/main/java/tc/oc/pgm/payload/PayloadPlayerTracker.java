@@ -88,7 +88,7 @@ public class PayloadPlayerTracker implements Listener {
         if(!MatchPlayers.canInteract(player)) return;
 
         if(isOnPoint(player, to)) { //Determine if they are in the height
-            this.playersOnPoint.add(player); //TODO!!! Since the point is moving, if the player stands still, the payload will keep moving no matter what.
+            this.playersOnPoint.add(player);
         } else {
             this.playersOnPoint.remove(player);
         }

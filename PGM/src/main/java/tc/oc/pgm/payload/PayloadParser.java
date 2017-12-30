@@ -70,6 +70,7 @@ public final class PayloadParser implements FeatureDefinitionParser<PayloadDefin
         }
 
         boolean neutralState = XMLUtils.parseBoolean(elPayload.getAttribute("neutral-state"), true);
+        boolean friendlyCheckpoints = XMLUtils.parseBoolean(elPayload.getAttribute("friendly-checkpoints"), false);
         float radius = XMLUtils.parseNumber(elPayload.getAttribute("radius"), Float.class, 5f);
         float height = XMLUtils.parseNumber(elPayload.getAttribute("height"), Float.class, 3f);
         MaterialPattern checkpointMaterial = XMLUtils.parseMaterialPattern(Node.fromAttr(elPayload, "checkpoint-material"));
@@ -91,7 +92,7 @@ public final class PayloadParser implements FeatureDefinitionParser<PayloadDefin
             name, required, visible,
             location, spawnLocation, yaw, captureFilter, playerFilter,
             timeToCapture, timeMultiplier, recoveryRate, decayRate, emptyDecayRate, initialOwner, owner, captureCondition,
-            neutralState, radius, height, checkpointMaterial, friendlySpeed, enemySpeed, points, friendlyPoints, showProgress
+            neutralState, friendlyCheckpoints, radius, height, checkpointMaterial, friendlySpeed, enemySpeed, points, friendlyPoints, showProgress
         );
     }
 }

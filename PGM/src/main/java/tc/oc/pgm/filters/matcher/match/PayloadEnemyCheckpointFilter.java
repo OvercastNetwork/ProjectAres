@@ -38,8 +38,13 @@ public class PayloadEnemyCheckpointFilter extends TypedFilter.Impl<IMatchQuery> 
 
     @Override
     public boolean matches(IMatchQuery query) {
-        Payload s = query.feature(payload);
+        Payload p = query.feature(payload);
 
-        return this.checkpointRange.contains(s.getCheckpointCount());
+        for (int i = checkpointRange.lowerEndpoint(); i <= checkpointRange.upperEndpoint(); i++) {
+            if (p.enemyReachedCheckpoints.contains(p.allCheckpoints.get(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

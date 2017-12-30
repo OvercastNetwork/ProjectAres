@@ -33,8 +33,13 @@ public class PayloadFriendlyCheckpointFilter extends TypedFilter.Impl<IMatchQuer
 
     @Override
     public boolean matches(IMatchQuery query) {
-        Payload s = query.feature(payload);
+        Payload p = query.feature(payload);
 
-        return this.checkpointRange.contains(s.getCheckpointCount());
+        for (int i = checkpointRange.lowerEndpoint(); i <= checkpointRange.upperEndpoint(); i++) {
+            if (p.friendlyReachedCheckpoints.contains(p.allCheckpoints.get(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 }

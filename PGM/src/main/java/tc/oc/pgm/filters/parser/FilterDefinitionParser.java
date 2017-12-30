@@ -350,6 +350,12 @@ public class FilterDefinitionParser extends MagicMethodFeatureParser<Filter> imp
                                             XMLUtils.parseNumericRange(new Node(el), Integer.class));
     }
 
+    @MethodParser("payload-friendly-checkpoint")
+    public PayloadFriendlyCheckpointFilter parseFriendlyPayloadCheckpoint(Element el) throws InvalidXMLException {
+        return new PayloadFriendlyCheckpointFilter(features.reference(Node.fromAttr(el, "payload-id"), PayloadDefinition.class),
+                                            XMLUtils.parseNumericRange(new Node(el), Integer.class));
+    }
+
     protected FlagStateFilter parseFlagState(Element el, Class<? extends State> state) throws InvalidXMLException {
         return new FlagStateFilter(features.reference(new Node(el), FlagDefinition.class),
                                    Node.tryAttr(el, "post").map(rethrowFunction(attr -> features.reference(attr, Post.class))),
