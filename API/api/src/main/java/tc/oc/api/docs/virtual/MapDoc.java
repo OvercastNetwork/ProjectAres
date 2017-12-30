@@ -43,7 +43,7 @@ public interface MapDoc extends Model {
     enum Genre { OBJECTIVES, DEATHMATCH, OTHER }
     Genre genre();
 
-    enum Gamemode { tdm, ctw, ctf, dtc, dtm, ad, koth, blitz, rage, scorebox, arcade, gs, ffa, mixed, skywars, survival }
+    enum Gamemode { tdm, ctw, ctf, dtc, dtm, ad, koth, blitz, rage, scorebox, arcade, gs, ffa, mixed, skywars, survival, payload }
     Set<Gamemode> gamemode();
 
     List<Team> teams();
