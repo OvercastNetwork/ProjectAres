@@ -19,6 +19,7 @@ public abstract class ControllableGoalDefinitionImpl extends GoalDefinitionImpl 
     private final double multiplierTime;
     private final double recoveryRate;
     private final double decayRate;
+    private final double neutralRate;
     private final Optional<TeamFactory> initialOwner;
     private final CaptureCondition captureCondition;
     private final boolean neutralState;
@@ -37,6 +38,7 @@ public abstract class ControllableGoalDefinitionImpl extends GoalDefinitionImpl 
                                           double multiplierTime,
                                           double recoveryRate,
                                           double decayRate,
+                                          double neutralRate,
                                           Optional<TeamFactory> initialOwner,
                                           CaptureCondition captureCondition,
                                           boolean neutralState,
@@ -52,6 +54,7 @@ public abstract class ControllableGoalDefinitionImpl extends GoalDefinitionImpl 
         this.multiplierTime = multiplierTime;
         this.recoveryRate = recoveryRate;
         this.decayRate = decayRate;
+        this.neutralRate = neutralRate;
         this.initialOwner = initialOwner;
         this.captureCondition = captureCondition;
         this.neutralState = neutralState;
@@ -100,6 +103,11 @@ public abstract class ControllableGoalDefinitionImpl extends GoalDefinitionImpl 
     @Override
     public double recoveryRate() {
         return recoveryRate;
+    }
+
+    @Override
+    public double neutralRate() {
+        return neutralRate;
     }
 
     @Override

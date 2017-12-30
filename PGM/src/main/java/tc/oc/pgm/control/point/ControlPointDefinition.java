@@ -39,12 +39,12 @@ class ControlPointDefinitionImpl extends ControllableGoalDefinitionImpl implemen
     private final Region controllerDisplayRegion;
     private final Filter visualMaterials;
 
-    public ControlPointDefinitionImpl(String name, @Nullable Boolean required, boolean visible, Filter captureFilter, Filter defendFilter, Duration captureTime, double multiplierTime, double recoveryRate, double decayRate, Optional<TeamFactory> initialOwner, CaptureCondition captureCondition, boolean neutralState, boolean permanent, float pointsOwned, float pointsPerSecond, float pointsGrowth, boolean showProgress,
+    public ControlPointDefinitionImpl(String name, @Nullable Boolean required, boolean visible, Filter captureFilter, Filter defendFilter, Duration captureTime, double multiplierTime, double recoveryRate, double decayRate, double neutralRate, Optional<TeamFactory> initialOwner, CaptureCondition captureCondition, boolean neutralState, boolean permanent, float pointsOwned, float pointsPerSecond, float pointsGrowth, boolean showProgress,
                                       Region captureRegion,
                                       Region progressDisplayRegion,
                                       Region controllerDisplayRegion,
                                       Filter visualMaterials) {
-        super(name, required, visible, captureFilter, defendFilter, captureTime, multiplierTime, recoveryRate, decayRate, initialOwner, captureCondition, neutralState, permanent, pointsOwned, pointsPerSecond, pointsGrowth, showProgress);
+        super(name, required, visible, captureFilter, defendFilter, captureTime, multiplierTime, recoveryRate, decayRate, neutralRate, initialOwner, captureCondition, neutralState, permanent, pointsOwned, pointsPerSecond, pointsGrowth, showProgress);
         this.captureRegion = captureRegion;
         this.progressDisplayRegion = progressDisplayRegion;
         this.controllerDisplayRegion = controllerDisplayRegion;

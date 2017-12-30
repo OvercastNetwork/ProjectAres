@@ -98,6 +98,26 @@ public abstract class ControllableGoal<T extends ControllableGoalDefinition> ext
     }
 
     /**
+     * Get an approximate region of where the capture/control region of the goal is.
+     */
+    public abstract Region region();
+
+    /**
+     * Should the controllable goal track the given player at the given location.
+     */
+    protected abstract boolean tracking(MatchPlayer player, Location location);
+
+    /**
+     * Display progress of the controllable goal in the physical world.
+     */
+    protected abstract void displayProgress(Competitor controlling, Competitor capturing, double progress);
+
+    /**
+     * Reset progress of the controllable goal in the physical world to a new owning team.
+     */
+    protected abstract void displaySet(Competitor owner);
+
+    /**
      * The team that owns (is receiving points from) this goal,
      * or null if the goal is unowned.
      */
@@ -300,7 +320,7 @@ public abstract class ControllableGoal<T extends ControllableGoalDefinition> ext
             match.callEvent(new GoalCompleteEvent(this, owner != null, c -> c.equals(oldOwner), c -> c.equals(owner)));
             match.module(ScoreMatchModule.class).ifPresent(scores -> {
                 if(oldOwner != null) {
-                    scores.incrementScore(owner, definition.pointsOwned() * -1);
+                    scores.incrementScore(oldOwner, definition.pointsOwned() * -1);
                 }
                 if(owner != null) {
                     scores.incrementScore(owner, definition.pointsOwned());
@@ -362,6 +382,14 @@ public abstract class ControllableGoal<T extends ControllableGoalDefinition> ext
             // Point is not being captured and there is a dominant team that is not the owner, so they start capturing
             capturer = dominator;
             dominate(dominator, duration);
+        } else if(owner != null && definition.neutralRate() > 0) {
+            // Point has an owner and there are no players nearby, so it rolls back to neutral,
+            // even if the goal explicitly states it has no neutral state
+            if(players.stream().noneMatch(player -> canCapture(player.getCompetitor()))) {
+                rollback(duration);
+            } else {
+                recover(duration, dominator);
+            }
         }
     }
 
@@ -419,6 +447,18 @@ public abstract class ControllableGoal<T extends ControllableGoalDefinition> ext
     }
 
     /**
+     * The goal has no player controlling it and will revert to a neutral state.
+     */
+    private void rollback(Duration duration) {
+        duration = TimeUtils.multiply(duration, 1.0 / definition.neutralRate());
+        duration = addCaptureTime(duration);
+        if(duration != null) {
+            // If uncapture is complete, recurse with the dominant team's remaining time
+            owner = null;
+        }
+    }
+
+    /**
      * Increase the base amount of capture time by a certain amount.
      */
     private @Nullable Duration addCaptureTime(final Duration duration) {
@@ -447,27 +487,12 @@ public abstract class ControllableGoal<T extends ControllableGoalDefinition> ext
     }
 
     /**
-     * Get an approximate region of where the capture/control region of the goal is.
-     */
-    public abstract Region region();
-
-    /**
      * Reset and show progress of the controllable goal in the physical world for the first time.
      */
     public void display() {
         displaySet(owner);
         displayProgress(owner, capturer, getCompletion());
     }
-
-    /**
-     * Display progress of the controllable goal in the physical world.
-     */
-    protected abstract void displayProgress(Competitor controlling, Competitor capturing, double progress);
-
-    /**
-     * Reset progress of the controllable goal in the physical world to a new owning team.
-     */
-    protected abstract void displaySet(Competitor owner);
 
     /**
      * Update the tracked players that are on the controllable goal
@@ -481,11 +506,6 @@ public abstract class ControllableGoal<T extends ControllableGoalDefinition> ext
             players.remove(player);
         }
     }
-
-    /**
-     * Should the controllable goal track the given player at the given location.
-     */
-    protected abstract boolean tracking(MatchPlayer player, Location location);
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerMove(CoarsePlayerMoveEvent event) {

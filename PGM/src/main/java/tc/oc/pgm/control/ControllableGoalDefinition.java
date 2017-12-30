@@ -41,6 +41,11 @@ public interface ControllableGoalDefinition extends GoalDefinition, GamemodeFeat
     double recoveryRate();
 
     /**
+     * Relative rate at which progress will transition to neutral even if a neutral state if false.
+     */
+    double neutralRate();
+
+    /**
      * The team that initially controls the goal before the match starts.
      */
     Optional<TeamFactory> initialOwner();

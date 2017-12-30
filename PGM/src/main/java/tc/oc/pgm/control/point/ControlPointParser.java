@@ -81,6 +81,7 @@ public final class ControlPointParser implements FeatureDefinitionParser<Control
             decayRate = incremental ? 0D : Double.POSITIVE_INFINITY;
         }
         boolean neutralState = XMLUtils.parseBoolean(elControlPoint.getAttribute("neutral-state"), koth);
+        double neutralRate = XMLUtils.parseNumber(Node.fromAttr(elControlPoint, "rollback"), Double.class, Range.atLeast(0D), 0.0);
         boolean permanent = XMLUtils.parseBoolean(elControlPoint.getAttribute("permanent"), false);
         float pointsOwned = XMLUtils.parseNumber(elControlPoint.getAttribute("owner-points"), Float.class, 0f);
         float pointsPerSecond = XMLUtils.parseNumber(elControlPoint.getAttribute("points"), Float.class, 1f);
@@ -95,7 +96,7 @@ public final class ControlPointParser implements FeatureDefinitionParser<Control
                                ControlPointDefinition.CaptureCondition.EXCLUSIVE);
         return new ControlPointDefinitionImpl(
             name, required, visible, captureFilter, playerFilter,
-            timeToCapture, timeMultiplier, recoveryRate, decayRate,
+            timeToCapture, timeMultiplier, recoveryRate, decayRate, neutralRate,
             Optional.ofNullable(initialOwner), captureCondition, neutralState, permanent,
             pointsOwned, pointsPerSecond, pointsGrowth, showProgress,
             captureRegion, progressDisplayRegion, ownerDisplayRegion, visualMaterials
