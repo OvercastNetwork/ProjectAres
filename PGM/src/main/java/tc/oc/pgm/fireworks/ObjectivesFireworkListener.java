@@ -12,7 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.geometry.Cuboid;
 import tc.oc.commons.bukkit.util.BlockUtils;
 import tc.oc.commons.bukkit.util.BukkitUtils;
-import tc.oc.pgm.controlpoint.events.ControllerChangeEvent;
+import tc.oc.pgm.control.events.ControllableOwnerChangeEvent;
 import tc.oc.pgm.core.CoreLeakEvent;
 import tc.oc.pgm.destroyable.DestroyableDestroyedEvent;
 import tc.oc.pgm.flag.event.FlagCaptureEvent;
@@ -78,11 +78,11 @@ public class ObjectivesFireworkListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onHillCapture(final ControllerChangeEvent event) {
-        if(FireworksConfig.Goals.enabled() && event.getControlPoint().isVisible() && event.getNewController() != null) {
+    public void onHillCapture(final ControllableOwnerChangeEvent event) {
+        if(FireworksConfig.Goals.enabled() && event.controllable().isVisible() && event.newController() != null) {
             this.spawnFireworkDisplay(event.getMatch().getWorld(),
-                                      event.getControlPoint().getCaptureRegion(),
-                                      BukkitUtils.colorOf(event.getNewController().getColor()),
+                                      event.controllable().region(),
+                                      BukkitUtils.colorOf(event.newController().getColor()),
                                       8, 1, 2);
         }
     }

@@ -1,15 +1,15 @@
-package tc.oc.pgm.controlpoint;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+package tc.oc.pgm.control.point;
 
 import org.jdom2.Element;
 import tc.oc.pgm.utils.XMLUtils;
 import tc.oc.pgm.xml.Node;
 import tc.oc.pgm.xml.finder.NodeFinder;
 
-class ControlPointRootNodeFinder implements NodeFinder {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class ControlPointRootNodeFinder implements NodeFinder {
     @Override
     public Stream<Node> findNodes(Element parent, String name) {
         final List<Element> elements = new ArrayList<>();

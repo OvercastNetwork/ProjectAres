@@ -4,7 +4,7 @@ import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.pgm.animation.AnimationManifest;
 import tc.oc.pgm.broadcast.BroadcastManifest;
 import tc.oc.pgm.classes.ClassManifest;
-import tc.oc.pgm.controlpoint.ControlPointManifest;
+import tc.oc.pgm.control.ControllableGoalManifest;
 import tc.oc.pgm.core.CoreManifest;
 import tc.oc.pgm.damage.DamageManifest;
 import tc.oc.pgm.destroyable.DestroyableManifest;
@@ -65,7 +65,7 @@ public class PGMModulesManifest extends HybridManifest {
         install(new CoreManifest());
         install(new DestroyableManifest());
         install(new WoolManifest());
-        install(new ControlPointManifest());
+        install(new ControllableGoalManifest());
         install(new PayloadManifest());
         install(new LaneManifest());
         install(new BroadcastManifest());

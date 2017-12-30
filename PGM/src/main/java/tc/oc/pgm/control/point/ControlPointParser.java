@@ -1,12 +1,12 @@
-package tc.oc.pgm.controlpoint;
+package tc.oc.pgm.control.point;
 
 import java.time.Duration;
+import java.util.Optional;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import com.google.common.collect.Range;
 import org.bukkit.Material;
-import org.bukkit.util.Vector;
 import org.jdom2.Element;
 import tc.oc.pgm.features.FeatureDefinitionParser;
 import tc.oc.pgm.features.FeatureParser;
@@ -31,7 +31,6 @@ public final class ControlPointParser implements FeatureDefinitionParser<Control
                                                                           Material.STAINED_GLASS,
                                                                           Material.STAINED_GLASS_PANE)
                                                                       .map(material -> MaterialFilter.of(MaterialPattern.accepting(material))));
-
     private final RegionParser regionParser;
     private final FilterParser filterParser;
     private final FeatureParser<TeamFactory> teamParser;
@@ -45,7 +44,6 @@ public final class ControlPointParser implements FeatureDefinitionParser<Control
     @Override
     public ControlPointDefinition parseElement(Element elControlPoint) throws InvalidXMLException {
         final boolean koth = "hill".equals(elControlPoint.getName());
-
         Region captureRegion = regionParser.property(elControlPoint, "capture-region")
                                            .alias("capture")
                                            .union();
@@ -59,24 +57,18 @@ public final class ControlPointParser implements FeatureDefinitionParser<Control
                                                 .optionalUnion(null);
         Filter captureFilter = filterParser.property(elControlPoint, "capture-filter").optional(null);
         Filter playerFilter = filterParser.property(elControlPoint, "player-filter").optional(null);
-
         Filter visualMaterials = filterParser.property(elControlPoint, "visual-materials")
                                              .optionalMulti()
                                              .<Filter>map(AnyFilter::new)
                                              .orElse(VISUAL_MATERIALS);
-
         String name = elControlPoint.getAttributeValue("name", "Hill");
         TeamFactory initialOwner = teamParser.property(elControlPoint, "initial-owner").optional(null);
-        Vector capturableDisplayBeacon = XMLUtils.parseVector(elControlPoint.getAttribute("beacon"));
         Duration timeToCapture = XMLUtils.parseDuration(elControlPoint.getAttribute("capture-time"), Duration.ofSeconds(30));
-
         double timeMultiplier = XMLUtils.parseNumber(elControlPoint.getAttribute("time-multiplier"), Double.class, koth ? 0.1D : 0D);
-
         final double recoveryRate, decayRate;
         final Node attrIncremental = Node.fromAttr(elControlPoint, "incremental");
         final Node attrRecovery = Node.fromAttr(elControlPoint, "recovery");
         final Node attrDecay = Node.fromAttr(elControlPoint, "decay");
-
         if(attrIncremental == null) {
             recoveryRate = XMLUtils.parseNumber(attrRecovery, Double.class, Range.atLeast(0D), koth ? 1D : Double.POSITIVE_INFINITY);
             decayRate = XMLUtils.parseNumber(attrDecay, Double.class, Range.atLeast(0D), koth ? 0D : Double.POSITIVE_INFINITY);
@@ -88,7 +80,6 @@ public final class ControlPointParser implements FeatureDefinitionParser<Control
             recoveryRate = incremental ? 1D : Double.POSITIVE_INFINITY;
             decayRate = incremental ? 0D : Double.POSITIVE_INFINITY;
         }
-
         boolean neutralState = XMLUtils.parseBoolean(elControlPoint.getAttribute("neutral-state"), koth);
         boolean permanent = XMLUtils.parseBoolean(elControlPoint.getAttribute("permanent"), false);
         float pointsOwned = XMLUtils.parseNumber(elControlPoint.getAttribute("owner-points"), Float.class, 0f);
@@ -97,20 +88,18 @@ public final class ControlPointParser implements FeatureDefinitionParser<Control
         boolean showProgress = XMLUtils.parseBoolean(elControlPoint.getAttribute("show-progress"), koth);
         boolean visible = XMLUtils.parseBoolean(elControlPoint.getAttribute("show"), true);
         Boolean required = XMLUtils.parseBoolean(elControlPoint.getAttribute("required"), null);
-
         ControlPointDefinition.CaptureCondition captureCondition =
             XMLUtils.parseEnum(Node.fromAttr(elControlPoint, "capture-rule"),
                                ControlPointDefinition.CaptureCondition.class,
                                "capture rule",
                                ControlPointDefinition.CaptureCondition.EXCLUSIVE);
-
         return new ControlPointDefinitionImpl(
-            name, required, visible,
-            captureRegion, captureFilter, playerFilter,
-            progressDisplayRegion, ownerDisplayRegion, visualMaterials,
-            capturableDisplayBeacon == null ? null : capturableDisplayBeacon.toBlockVector(),
-            timeToCapture, timeMultiplier, recoveryRate, decayRate, initialOwner, captureCondition,
-            neutralState, permanent, pointsOwned, pointsPerSecond, pointsGrowth, showProgress
+            name, required, visible, captureFilter, playerFilter,
+            timeToCapture, timeMultiplier, recoveryRate, decayRate,
+            Optional.ofNullable(initialOwner), captureCondition, neutralState, permanent,
+            pointsOwned, pointsPerSecond, pointsGrowth, showProgress,
+            captureRegion, progressDisplayRegion, ownerDisplayRegion, visualMaterials
         );
     }
+
 }
