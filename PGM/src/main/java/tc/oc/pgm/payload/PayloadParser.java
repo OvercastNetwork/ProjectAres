@@ -48,7 +48,7 @@ public final class PayloadParser implements FeatureDefinitionParser<PayloadDefin
         TeamFactory owner = teamParser.property(elPayload, "owner").required();
         Duration timeToCapture = XMLUtils.parseDuration(elPayload.getAttribute("capture-time"), Duration.ofSeconds(30));
 
-        double timeMultiplier = XMLUtils.parseNumber(elPayload.getAttribute("time-multiplier"), Double.class,0D);
+        double timeMultiplier = XMLUtils.parseNumber(elPayload.getAttribute("time-multiplier"), Double.class, 0D);
 
         final double recoveryRate, decayRate;
         final Node attrIncremental = Node.fromAttr(elPayload, "incremental");
@@ -69,7 +69,7 @@ public final class PayloadParser implements FeatureDefinitionParser<PayloadDefin
             decayRate = incremental ? 0D : Double.POSITIVE_INFINITY;
         }
 
-        boolean neutralState = XMLUtils.parseBoolean(elPayload.getAttribute("neutral-state"), true);
+        boolean neutralState = XMLUtils.parseBoolean(elPayload.getAttribute("neutral-state"), false);
         boolean friendlyCheckpoints = XMLUtils.parseBoolean(elPayload.getAttribute("friendly-checkpoints"), false);
         float radius = XMLUtils.parseNumber(elPayload.getAttribute("radius"), Float.class, 5f);
         float height = XMLUtils.parseNumber(elPayload.getAttribute("height"), Float.class, 3f);
