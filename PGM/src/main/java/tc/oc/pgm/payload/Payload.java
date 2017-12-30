@@ -680,6 +680,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
         this.labelEntity.setCustomName(this.getColoredName());
         this.labelEntity.setCustomNameVisible(true);
         this.labelEntity.setInvulnerable(true);
+        this.labelEntity.setMarker(true);
         NMSHacks.enableArmorSlots(this.labelEntity, false);
     }
 
