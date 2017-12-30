@@ -6,15 +6,6 @@ steps:
       - clone
       - --depth=1
       - https://github.com/StratusNetwork/docker.git
-  - id: ensure
-    name: gcr.io/cloud-builders/gsutil
-    args:
-      - -mq
-      - cp
-      - -r
-      - README.md
-      - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME/$REPO_NAME
-    wait_for: ['-']
   - id: m2-download
     name: gcr.io/cloud-builders/gsutil
     args:
@@ -23,7 +14,6 @@ steps:
       - -r
       - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME/.m2
       - .
-    wait_for: ['-']
   - id: maven
     name: gcr.io/cloud-builders/mvn
     args:
@@ -35,7 +25,7 @@ steps:
     args:
       - -mq
       - cp
-      - -rn
+      - -r
       - .m2
       - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME
   - id: docker-deploy
