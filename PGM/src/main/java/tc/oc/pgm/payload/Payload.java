@@ -854,7 +854,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
 
         Location location = path.getLocation();
 
-        if (direction == null) {
+        /*if (direction == null) {
             differingX.add(-1.0);
             differingX.add(0.0);
             differingX.add(1.0);
@@ -879,7 +879,14 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
                 differingX.add(0.0);
                 differingZ.add(direction.equals(BlockFace.NORTH_WEST) || direction.equals(BlockFace.NORTH_EAST) ? 1.0 : -1.0);
             }
-        }
+        }*/
+
+        differingX.add(-1.0);
+        differingX.add(0.0);
+        differingX.add(1.0);
+        differingZ.add(-1.0);
+        differingZ.add(0.0);
+        differingZ.add(1.0);
 
         Location newLocation = location.clone();
         for (double x : differingX) {
