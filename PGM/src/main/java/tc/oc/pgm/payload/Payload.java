@@ -264,7 +264,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
         }
 
         double speed = isInEnemyControl() ? this.definition.getEnemySpeed() : this.definition.getFriendlySpeed();
-        if (!isInEnemyControl() && this.currentPath.hasNext() && this.currentPath.next().isCheckpoint() && !this.definition.hasFriendlyCheckpoints()) {
+        if (!isInEnemyControl() && this.currentPath.hasPrevious() && this.currentPath.previous().isCheckpoint() && !this.friendlyReachedCheckpoints.contains(this.currentPath)) {
             return;
         }
 
@@ -324,6 +324,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
                     match.sendMessage(message);
                 }
             } else if (isInEnemyControl() && this.enemyReachedCheckpoints.add(currentPath)) {
+                friendlyReachedCheckpoints.remove(currentPath);
                 final Component message = new Component(ChatColor.GRAY);
                 message.translate("match.payload.checkpoint",
                         this.getCurrentOwner().getComponentName());
@@ -837,7 +838,12 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
                 }
             } else if (currentPath.isCheckpoint()) {
                 this.allCheckpoints.add(lastPath);
-                boolean add = reachedMiddle ? this.friendlyReachedCheckpoints.add(lastPath) : this.enemyReachedCheckpoints.add(lastPath);
+                boolean add;
+                if (this.definition.hasFriendlyCheckpoints()) {
+                    add = reachedMiddle ? this.friendlyReachedCheckpoints.add(lastPath) : this.enemyReachedCheckpoints.add(lastPath);
+                } else {
+                    add = reachedMiddle ? this.enemyReachedCheckpoints.add(lastPath) : this.friendlyReachedCheckpoints.add(lastPath);
+                }
             }
             currentPath = nextPath;
             moreRails = currentPath.hasNext();
