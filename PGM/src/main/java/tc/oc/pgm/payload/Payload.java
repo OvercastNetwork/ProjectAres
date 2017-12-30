@@ -293,7 +293,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
         this.playerTracker.setLocation(payloadLocation);
 
         Location labelLocation = this.payloadEntity.getLocation().clone();
-        labelLocation.setY(labelLocation.getY() - 0.2);
+        labelLocation.setY(labelLocation.getY() + 1.0);
         this.labelEntity.teleport(labelLocation);
     }
 
@@ -671,7 +671,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
         this.payloadEntity.setSlowWhenEmpty(true);
 
         //Summon a label for it
-        this.labelEntity = this.payloadLocation.getWorld().spawn(this.payloadLocation.clone().add(0, 0.2, 0), ArmorStand.class);
+        this.labelEntity = this.payloadLocation.getWorld().spawn(this.payloadLocation.clone().add(0, 1, 0), ArmorStand.class);
         this.labelEntity.setVisible(false);
         this.labelEntity.setGravity(false);
         this.labelEntity.setRemoveWhenFarAway(false);
