@@ -6,6 +6,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
+import tc.oc.commons.core.chat.BlankComponent;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.util.BukkitUtils;
@@ -74,7 +75,7 @@ public abstract class ObservingParty extends MultiPlayerParty {
     @Override
     public BaseComponent getChatPrefix() {
         if(chatPrefix == null) {
-            chatPrefix = new Component("[Obs] ", getBungeeColor());
+            chatPrefix = BlankComponent.INSTANCE;
         }
         return chatPrefix;
     }

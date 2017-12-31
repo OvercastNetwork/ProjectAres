@@ -21,6 +21,7 @@ import java.time.Duration;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.commons.bukkit.chat.NameStyle;
+import tc.oc.commons.core.chat.BlankComponent;
 import tc.oc.commons.core.chat.ChatUtils;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.util.Comparables;
@@ -62,7 +63,7 @@ public class Team extends MultiPlayerParty implements Competitor, SluggedFeature
     private TeamMatchModule tmm;
     protected @Nullable String name = null;
     protected @Nullable Component componentName;
-    protected Component chatPrefix;
+    protected BaseComponent chatPrefix;
     protected Optional<Integer> minPlayers = Optional.empty(),
                                 maxPlayers = Optional.empty(),
                                 maxOverfill = Optional.empty();
@@ -256,7 +257,7 @@ public class Team extends MultiPlayerParty implements Competitor, SluggedFeature
     @Override
     public BaseComponent getChatPrefix() {
         if(chatPrefix == null) {
-            this.chatPrefix = new Component("[" + getShortName() + "] ", ChatUtils.convert(getColor()));
+            this.chatPrefix = BlankComponent.INSTANCE;
         }
         return chatPrefix;
     }
