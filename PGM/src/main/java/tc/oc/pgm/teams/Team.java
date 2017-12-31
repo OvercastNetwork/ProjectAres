@@ -257,7 +257,7 @@ public class Team extends MultiPlayerParty implements Competitor, SluggedFeature
     @Override
     public BaseComponent getChatPrefix() {
         if(chatPrefix == null) {
-            this.chatPrefix = BlankComponent.INSTANCE;
+            this.chatPrefix = new Component("(Team) ", ChatUtils.convert(getColor()));
         }
         return chatPrefix;
     }

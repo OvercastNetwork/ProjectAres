@@ -75,7 +75,7 @@ public abstract class ObservingParty extends MultiPlayerParty {
     @Override
     public BaseComponent getChatPrefix() {
         if(chatPrefix == null) {
-            chatPrefix = BlankComponent.INSTANCE;
+            chatPrefix = new Component("(Team) ", getBungeeColor());
         }
         return chatPrefix;
     }
