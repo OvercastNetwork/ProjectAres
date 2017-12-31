@@ -246,6 +246,8 @@ public class MiscCommands implements Commands {
             case "color":
                 ChatColor color = CommandUtils.getEnum(value, sender, ChatColor.class, ChatColor.WHITE);
                 return players.filter(p -> getFuzzyColor(p).equals(color));
+            case "perm":
+                return players.filter(p -> p.hasPermission(value));
             case "*":
                 return Streams.shuffle(players);
             default:
