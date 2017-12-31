@@ -5,7 +5,7 @@ steps:
     args:
       - clone
       - --depth=1
-      - https://github.com/StratusNetwork/docker.git
+      - https://github.com/Electroid/infrastructure.git
   - id: m2-download
     name: gcr.io/cloud-builders/gsutil
     args:
@@ -37,4 +37,4 @@ steps:
       - --async
       - --no-source
       - --substitutions=_BRANCH=$BRANCH_NAME,_VERSION=$_VERSION,_SPORTBUKKIT_VERSION=$_SPORTBUKKIT_VERSION,_BUNGEECORD_VERSION=$_BUNGEECORD_VERSION
-      - --config=docker/build.yml
+      - --config=infrastructure/docker/minecraft/build.yml
