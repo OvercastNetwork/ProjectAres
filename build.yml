@@ -3,7 +3,6 @@ steps:
   - id: git-init
     name: gcr.io/cloud-builders/git
     args:
-      - clone
       - init
       - .
   - id: git-add
