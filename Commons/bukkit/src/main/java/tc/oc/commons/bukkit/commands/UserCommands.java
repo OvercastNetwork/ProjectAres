@@ -18,6 +18,7 @@ import tc.oc.api.friendships.FriendshipRequest;
 import tc.oc.api.friendships.FriendshipService;
 import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.commons.bukkit.chat.Links;
+import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.core.util.Lazy;
 import tc.oc.minecraft.scheduler.SyncExecutor;
@@ -216,7 +217,7 @@ public class UserCommands implements Commands {
                         .extra(new Component(String.valueOf(result.documents().size()), ChatColor.AQUA))
                         .extra(")")
                 ));
-                userFormatter.formatSessions(result.documents()).forEach(audience::sendMessage);
+                userFormatter.formatSessions(result.documents(), NameStyle.COLOR).forEach(audience::sendMessage);
             })
         );
     }
