@@ -1,12 +1,26 @@
 timeout: 15m
 steps:
-  - id: clone
+  - id: git-init
     name: gcr.io/cloud-builders/git
     args:
       - clone
-      - --depth=1
-      - https://github.com/Electroid/infrastructure.git
+      - init
       - .
+  - id: git-add
+    name: gcr.io/cloud-builders/git
+    args:
+      - remote
+      - add
+      - -t
+      - \*
+      - -f
+      - origin
+      - https://github.com/Electroid/infrastructure.git
+  - id: git-checkout
+    name: gcr.io/cloud-builders/git
+    args:
+      - checkout
+      - master
   - id: m2-download
     name: gcr.io/cloud-builders/gsutil
     args:
