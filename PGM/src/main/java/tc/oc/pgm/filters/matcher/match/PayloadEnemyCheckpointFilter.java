@@ -3,13 +3,8 @@ package tc.oc.pgm.filters.matcher.match;
 import com.google.common.collect.Range;
 import tc.oc.pgm.filters.matcher.TypedFilter;
 import tc.oc.pgm.filters.query.IMatchQuery;
-import tc.oc.pgm.flag.FlagDefinition;
-import tc.oc.pgm.flag.Post;
-import tc.oc.pgm.flag.state.State;
 import tc.oc.pgm.payload.Payload;
 import tc.oc.pgm.payload.PayloadDefinition;
-
-import java.util.Optional;
 
 public class PayloadEnemyCheckpointFilter extends TypedFilter.Impl<IMatchQuery> {
 

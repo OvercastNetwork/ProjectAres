@@ -264,7 +264,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
         }
 
         double speed = isInEnemyControl() ? this.definition.getEnemySpeed() : this.definition.getFriendlySpeed();
-        if (!isInEnemyControl() && this.currentPath.hasPrevious() && this.currentPath.previous().isCheckpoint() && !this.friendlyReachedCheckpoints.contains(this.currentPath)) {
+        if (!isInEnemyControl() && this.currentPath.hasPrevious() && this.currentPath.previous().isCheckpoint() && !this.friendlyReachedCheckpoints.contains(this.currentPath) && !this.definition.hasFriendlyCheckpoints()) {
             return;
         }
 
