@@ -1,25 +1,11 @@
 timeout: 15m
 steps:
-  - id: git-init
+  - id: git
     name: gcr.io/cloud-builders/git
     args:
-      - init
-      - .
-  - id: git-add
-    name: gcr.io/cloud-builders/git
-    args:
-      - remote
-      - add
-      - -t
-      - \*
-      - -f
-      - origin
+      - clone
+      - --depth=1
       - https://github.com/Electroid/infrastructure.git
-  - id: git-checkout
-    name: gcr.io/cloud-builders/git
-    args:
-      - checkout
-      - master
   - id: m2-download
     name: gcr.io/cloud-builders/gsutil
     args:
@@ -44,6 +30,7 @@ steps:
       - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME
   - id: docker-deploy
     name: gcr.io/cloud-builders/gcloud
+    dir: infrastructure
     args:
       - container
       - builds
