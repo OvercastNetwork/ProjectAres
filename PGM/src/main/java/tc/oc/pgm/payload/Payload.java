@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Minecart;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Rails;
@@ -16,6 +17,7 @@ import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.util.Comparables;
 import tc.oc.commons.core.util.DefaultMapAdapter;
 import tc.oc.commons.core.util.TimeUtils;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 import tc.oc.pgm.goals.OwnedGoal;
 import tc.oc.pgm.goals.SimpleGoal;
 import tc.oc.pgm.goals.events.GoalCompleteEvent;
@@ -350,7 +352,7 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
     private double ANGLE_PER_STEP = TAU / PARTICLE_BASE_COUNT;
     private double ANGLE_PER_SUB_STEP = 0.75 * ANGLE_PER_STEP / PARTICLE_SUB_COUNT;
     private double MIN_HEIGHT_OFFSET = 0.5; // Starting height of the bottom most particle
-    private double HEIGHT_OFFSET = 0.75; // Vertical offset of each particle
+    private double HEIGHT_OFFSET = 0.25; // Vertical offset of each particle
 
     private void tickDisplay() {
         Color controllingColor = currentOwner != null ? currentOwner.getFullColor() : BukkitUtils.colorOf(COLOR_NEUTRAL_TEAM);
@@ -378,6 +380,21 @@ public class Payload extends OwnedGoal<PayloadDefinition> {
                 );
             }
         }
+
+        Object packet = NMSHacks.particlesPacket("ITEM_CRACK", true,
+                this.payloadLocation.clone().add(0, 56, 0).toVector(),
+                new Vector(0.15, 24, 0.15), // radius on each axis of the particle ball
+                0f, // initial horizontal velocity
+                40, // number of particles
+                Material.WOOL.getId(), BukkitUtils.chatColorToDyeColor(this.currentOwner != null ? this.currentOwner.getColor() : COLOR_NEUTRAL_TEAM).getWoolData());
+
+        for(Player player : this.getMatch().getServer().getOnlinePlayers()) {
+            if(this.canSeeParticles(player)) NMSHacks.sendPacket(player, packet);
+        }
+    }
+
+    protected boolean canSeeParticles(Player player) {
+        return MinecraftVersion.atLeast(MinecraftVersion.MINECRAFT_1_8, player.getProtocolVersion());
     }
 
     private double rgbToParticle(int rgb) {
