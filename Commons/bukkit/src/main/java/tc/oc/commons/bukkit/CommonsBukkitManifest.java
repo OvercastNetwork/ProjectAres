@@ -55,8 +55,7 @@ import tc.oc.commons.bukkit.nick.PlayerOrder;
 import tc.oc.commons.bukkit.nick.PlayerOrderCache;
 import tc.oc.commons.bukkit.punishment.PunishmentManifest;
 import tc.oc.commons.bukkit.raindrops.RaindropManifest;
-import tc.oc.commons.bukkit.report.ReportAnnouncer;
-import tc.oc.commons.bukkit.report.ReportCommands;
+import tc.oc.commons.bukkit.report.ReportManifest;
 import tc.oc.commons.bukkit.respack.ResourcePackCommands;
 import tc.oc.commons.bukkit.respack.ResourcePackListener;
 import tc.oc.commons.bukkit.respack.ResourcePackManager;
@@ -110,6 +109,7 @@ public final class CommonsBukkitManifest extends HybridManifest {
         install(new LocalizationManifest());
         install(new NavigatorManifest());
         install(new RaindropManifest());
+        install(new ReportManifest());
         install(new TokenManifest());
         install(new StatsManifest());
         install(new PunishmentManifest());
@@ -169,8 +169,6 @@ public final class CommonsBukkitManifest extends HybridManifest {
         facets.register(PlayerFreezer.class);
         facets.register(PlayerOrderCache.class);
         facets.register(PlayerServerChanger.class);
-        facets.register(ReportAnnouncer.class);
-        facets.register(ReportCommands.class);
         facets.register(ResourcePackCommands.class);
         facets.register(ResourcePackCommands.Parent.class);
         facets.register(ResourcePackListener.class);
