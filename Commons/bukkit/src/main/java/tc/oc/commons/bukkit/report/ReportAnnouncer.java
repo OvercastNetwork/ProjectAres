@@ -32,7 +32,7 @@ public class ReportAnnouncer implements PluginFacet, MessageListener {
             .type(new BooleanType())
             .defaultValue(true).get();
 
-    private static final BukkitSound REPORT_SOUND = new BukkitSound(Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 2);
+    private static final BukkitSound REPORT_SOUND = new BukkitSound(Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.6, 1.5);
 
     private final ReportConfiguration config;
     private final ReportFormatter reportFormatter;
