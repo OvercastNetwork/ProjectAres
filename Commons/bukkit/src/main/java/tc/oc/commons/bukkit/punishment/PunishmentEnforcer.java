@@ -123,7 +123,11 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
     public boolean viewable(CommandSender sender, Punishment punishment, boolean announced) {
         if(viewByIdentity(sender, punishment)) {
             if(announced) {
-                return viewByType(sender, punishment) && viewBySetting(sender, punishment) && viewByIdentity(sender, punishment) && viewByRecord(sender, punishment);
+                return viewByType(sender, punishment)
+                        && viewBySetting(sender, punishment)
+                        && viewByIdentity(sender, punishment)
+                        && viewByRecord(sender, punishment)
+                        && viewBySilent(sender, punishment);
             } else {
                 return viewByLookup(sender, punishment);
             }
@@ -171,4 +175,7 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
         return sender.hasPermission(punishment.stale() ? LOOK_UP_STALE : LOOK_UP);
     }
 
+    private boolean viewBySilent(CommandSender sender, Punishment punishment) {
+        return !punishment.silent() || sender.hasPermission(Permissions.STAFF);
+    }
 }
