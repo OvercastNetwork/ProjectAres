@@ -1,7 +1,7 @@
 package tc.oc.lobby.bukkit.gizmos.halloween;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -9,9 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import tc.oc.lobby.bukkit.Lobby;
 import tc.oc.lobby.bukkit.gizmos.Gizmo;
@@ -23,8 +21,8 @@ public class HeadlessHorsemanGizmo extends Gizmo implements Listener {
 
     public HeadlessHorsemanGizmo(String name, String prefix, String description, Material icon, int cost) {
         super(name, prefix, description, icon, cost);
-        this.mutated = new HashMap<>();
-        this.horseByPlayer = new HashMap<>();
+        this.mutated = new WeakHashMap<>();
+        this.horseByPlayer = new WeakHashMap<>();
     }
 
     @Override
@@ -34,8 +32,7 @@ public class HeadlessHorsemanGizmo extends Gizmo implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
-        if(e.getAction() == Action.PHYSICAL
-            || !(Gizmos.gizmoMap.get(e.getPlayer()) instanceof HeadlessHorsemanGizmo)
+        if(!(Gizmos.gizmoMap.get(e.getPlayer()) instanceof HeadlessHorsemanGizmo)
             || e.getItem() == null || e.getItem().getType() != this.getIcon()) return;
 
         final Player player = e.getPlayer();
@@ -49,14 +46,6 @@ public class HeadlessHorsemanGizmo extends Gizmo implements Listener {
             mutated.remove(player);
             horseByPlayer.remove(player);
         }
-    }
-
-    @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
-        mutated.remove(player);
-        horseByPlayer.get(player).despawn();
-        horseByPlayer.remove(player);
     }
 
     private void createEffect(Player viewer) {

@@ -35,7 +35,7 @@ public class HeadlessHorseman {
     private void mutate() {
         headlessHorse.spawn(viewer.getLocation(), (Class<AbstractHorse>) HORSE_TYPE.getEntityClass());
         ARMOR_MAP.forEach(this::colorAndEquip);
-        viewer.playSound(viewer.getLocation(), Sound.ENTITY_SKELETON_HORSE_DEATH, 1.5f, 1.5f);
+        viewer.playSound(viewer.getLocation(), Sound.ENTITY_SKELETON_HORSE_DEATH, 1.25f, 1.25f);
     }
 
     private void colorAndEquip(Slot slot, ItemStack item) {
@@ -51,6 +51,7 @@ public class HeadlessHorseman {
     public void restore() {
         headlessHorse.despawn();
         viewer.getInventory().armor().clear();
+        viewer.getInventory().setChestplate(new ItemStack(Material.ELYTRA));
         viewer.playSound(viewer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 1f, 1f);
     }
 
