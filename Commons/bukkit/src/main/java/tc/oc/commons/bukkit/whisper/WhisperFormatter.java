@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.Whisper;
+import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
@@ -97,7 +98,11 @@ public class WhisperFormatter {
             // will also know what server they are on. The former is unavoidable. The latter could be
             // avoided by saving a flag in the message indicating that the sender was disguised, but
             // that probably isn't worth the trouble. We might do it when we move PMs to the API.
-            from.extra(serverFormatter.nameWithDatacenter(serverStore.byId(whisper.server_id()))).extra(" ");
+            try {
+                from.extra(serverFormatter.nameWithDatacenter(serverStore.byId(whisper._id()))).extra(" ");
+            } catch(IllegalStateException e) {
+                // Send the message without the server of origin if the document cannot be found
+            }
         }
         from.extra(new PlayerComponent(sender, NameStyle.VERBOSE));
 
