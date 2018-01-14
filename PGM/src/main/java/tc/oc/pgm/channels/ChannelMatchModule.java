@@ -99,7 +99,7 @@ public class ChannelMatchModule extends MatchModule implements Listener {
         if(party instanceof MultiPlayerParty) {
             logger.fine("Creating channel for " + party);
 
-            String format = ComponentRenderers.toLegacyText(party.getChatPrefix(), NullCommandSender.INSTANCE) + "{1}§f: {3}";
+            String format = ComponentRenderers.toLegacyText(party.getChatPrefix(), NullCommandSender.INSTANCE) + "{1}§f: §7{3}";
 
             PartyChannel channel;
             if (getMatch().getPluginManager().getPlugin("ChatModerator") == null) {
