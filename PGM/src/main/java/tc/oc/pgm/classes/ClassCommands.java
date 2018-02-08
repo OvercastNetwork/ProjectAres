@@ -30,7 +30,7 @@ public class ClassCommands implements Commands {
     }
 
     @Command(
-        aliases = { "class", "selectclass", "c", "cl", "klasse" },
+        aliases = { "class", "selectclass", "c", "cl", "kit", "klasse" },
         desc = "Selects or views the player class",
         min = 0,
         max = -1
@@ -76,7 +76,7 @@ public class ClassCommands implements Commands {
     }
 
     @Command(
-        aliases = { "classlist", "classes", "listclasses", "cls" },
+        aliases = { "classlist", "classes", "listclasses", "cls", "kits" },
         desc = "Lists the classes available on this map",
         min = 0,
         max = 1
