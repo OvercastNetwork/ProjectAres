@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -28,7 +29,6 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerAttackEntityEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
@@ -42,6 +42,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.world.PortalCreateEvent;
+import tc.oc.api.util.Permissions;
 import tc.oc.commons.bukkit.event.AdventureModeInteractEvent;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.events.ObserverInteractEvent;
@@ -270,7 +271,8 @@ public class EventFilterMatchModule extends MatchModule implements Listener {
     // --------------------------
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onAttack(final PlayerAttackEntityEvent event) {
-        if(cancelUnlessInteracting(event, event.getPlayer())) {
+        Player player = event.getPlayer();
+        if(!(player.getGameMode() == GameMode.SPECTATOR && player.hasPermission(Permissions.STAFF)) && cancelUnlessInteracting(event, player)) {
             final MatchPlayer attacker = getMatch().getPlayer(event.getPlayer());
             if(attacker == null || attacker.isSpawned()) return;
             getMatch().callEvent(new ObserverInteractEvent(attacker, ClickType.LEFT, null, event.getLeftClicked(), event.getPlayer().getInventory().getItemInMainHand()));
