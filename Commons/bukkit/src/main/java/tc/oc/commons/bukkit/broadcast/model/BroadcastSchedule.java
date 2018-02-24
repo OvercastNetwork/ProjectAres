@@ -14,11 +14,13 @@ import tc.oc.minecraft.server.ServerFilter;
  */
 public class BroadcastSchedule extends Inspectable.Impl {
 
+    @Inspect private final Duration delay;
     @Inspect private final Duration interval;
     @Inspect private final ImmutableList<BroadcastSet> messages;
     @Inspect private final ServerFilter serverFilter;
 
-    public BroadcastSchedule(Duration interval, ServerFilter serverFilter, Stream<BroadcastSet> messages) {
+    public BroadcastSchedule(Duration delay, Duration interval, ServerFilter serverFilter, Stream<BroadcastSet> messages) {
+        this.delay = delay;
         this.interval = interval;
         this.serverFilter = serverFilter;
         this.messages = messages.collect(Collectors.toImmutableList());
@@ -29,6 +31,13 @@ public class BroadcastSchedule extends Inspectable.Impl {
      */
     public Duration interval() {
         return interval;
+    }
+
+    /**
+     * Time before first broadcast
+     */
+    public Duration delay() {
+        return delay;
     }
 
     /**

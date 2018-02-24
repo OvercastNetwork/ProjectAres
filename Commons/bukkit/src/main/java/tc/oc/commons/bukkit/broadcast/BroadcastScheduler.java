@@ -123,7 +123,7 @@ public class BroadcastScheduler implements PluginFacet {
                 set -> messageMapFactory.create(configPath.resolve(SOURCES_PATH).resolve(set.path()),
                                                 TRANSLATIONS_PATH.resolve(set.path())))
             );
-            this.task = scheduler.createRepeatingTask(schedule.interval(), this::dispatch);
+            this.task = scheduler.createRepeatingTask(schedule.delay(), schedule.interval(), this::dispatch);
         }
 
         void dispatch() {

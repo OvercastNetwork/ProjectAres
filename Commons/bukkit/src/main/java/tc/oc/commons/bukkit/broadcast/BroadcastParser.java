@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import java.time.Duration;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import tc.oc.commons.bukkit.broadcast.model.BroadcastPrefix;
@@ -44,8 +45,13 @@ public class BroadcastParser implements DocumentParser<List<BroadcastSchedule>> 
     }
 
     public BroadcastSchedule parseSchedule(Element el) throws ParseException {
+        Duration delay = Duration.ZERO;
+        Attr delayAttr = el.getAttributeNode("delay");
+        if (delayAttr != null) {
+            delay = durationParser.parse(delayAttr);
+        }
         return new BroadcastSchedule(
-            durationParser.parse(XML.requireAttr(el, "interval")),
+            delay, durationParser.parse(XML.requireAttr(el, "interval")),
             serverFilterParser.parse(el), XML.childrenNamed(el, "messages").map(this::parseMessages)
         );
     }
