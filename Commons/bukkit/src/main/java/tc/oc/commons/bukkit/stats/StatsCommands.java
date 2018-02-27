@@ -52,7 +52,7 @@ public class StatsCommands implements Commands {
                     Audience audience = audiences.get(sender);
 
                     audience.sendMessage(new HeaderComponent(new Component(ChatColor.AQUA)
-                            .translate("stats.list", new PlayerComponent(identityProvider.createIdentity(result.user, result.user.nickname())))));
+                            .translate("stats.list", new PlayerComponent(identityProvider.currentIdentity(result.user)))));
                     audience.sendMessage(new Component(ChatColor.AQUA)
                             .translate("stats.kills", new Component(String.format("%,d", (int)(double)stats.get("kills")), ChatColor.BLUE)));
                     audience.sendMessage(new Component(ChatColor.AQUA)
