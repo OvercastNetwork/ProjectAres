@@ -212,7 +212,7 @@ class PayloadDefinitionImpl extends OwnableGoalDefinitionImpl<Payload> implement
 
     @Override
     public Stream<MapDoc.Gamemode> gamemodes() {
-        return Stream.of(MapDoc.Gamemode.koth);
+        return Stream.of(MapDoc.Gamemode.payload);
     }
 
     @Override
