@@ -1,6 +1,7 @@
 package tc.oc.pgm;
 
 import tc.oc.commons.core.inject.HybridManifest;
+import tc.oc.pgm.beacon.BeaconModule;
 import tc.oc.pgm.blockdrops.BlockDropsModule;
 import tc.oc.pgm.crafting.CraftingModule;
 import tc.oc.pgm.eventrules.EventRuleModule;
@@ -41,6 +42,7 @@ public class MapModulesManifest extends HybridManifest {
         install(new CraftingModule.Factory());
         install(new ItemModifyModule.Factory());
         install(new PickupModule.Factory());
+        install(new BeaconModule.Factory());
         install(new GoalModule.Factory());
         install(new ProjectileModule.Factory());
         install(new SpawnModule.Factory());
