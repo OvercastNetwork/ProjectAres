@@ -1,6 +1,5 @@
 package tc.oc.commons.bukkit.commands;
 
-import com.google.common.util.concurrent.Futures;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -15,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
-import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.chat.Audiences;
@@ -88,6 +86,32 @@ public class MiscCommands implements Commands {
         } else {
             Player player = CommandUtils.getPlayerOrSelf(args, sender, 0);
             audience.sendMessage(new TranslatableComponent("list.player.version.singular.message", new PlayerComponent(identityProvider.createIdentity(player)), ChatColor.AQUA + MinecraftVersion.describeProtocol(player.getProtocolVersion(), false)));
+        }
+    }
+
+    @Command(
+            aliases = { "playerlocale", "locale" },
+            desc = "Shows statics on what locale players online are in",
+            flags = "a",
+            min = 0,
+            max = 1
+    )
+    @CommandPermissions("ocn.locale")
+    public void listPlayerLocales(final CommandContext args, final CommandSender sender) throws CommandException {
+        Audience audience = audiences.get(sender);
+        if (args.hasFlag('a')) {
+            Map<String, Long> playerLocaleMap = userStore.stream().collect(java.util.stream.Collectors.groupingBy(Player::getLocale, java.util.stream.Collectors.counting()));
+
+            audience.sendMessage(new HeaderComponent(new Component(ChatColor.AQUA).translate("list.player.locales.title")));
+            for (Map.Entry<String, Long> entry : playerLocaleMap.entrySet()) {
+                audience.sendMessage(new TranslatableComponent("list.player.locales.message." + (entry.getValue() == 1 ? "singular" : "plural"),
+                        ChatColor.AQUA + entry.getValue().toString(),
+                        ChatColor.AQUA + entry.getKey(),
+                        String.format("%.1f", 100 * entry.getValue() / (double) userStore.count()) + "%"));
+            }
+        } else {
+            Player player = CommandUtils.getPlayerOrSelf(args, sender, 0);
+            audience.sendMessage(new TranslatableComponent("list.player.locale.singular.message", new PlayerComponent(identityProvider.createIdentity(player)), ChatColor.AQUA + player.getLocale()));
         }
     }
 
