@@ -5,8 +5,7 @@ import javax.annotation.Nonnull;
 import com.google.common.base.Preconditions;
 
 public class RotationProviderInfo implements Comparable<RotationProviderInfo> {
-    public final @Nonnull
-    RotationProvider provider;
+    public final @Nonnull RotationProvider provider;
     public final int priority;
     public final int count;
     public final @Nonnull String name;

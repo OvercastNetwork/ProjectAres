@@ -1,5 +1,7 @@
 package tc.oc.pgm.rotation;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +13,8 @@ import javax.inject.Inject;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.yaml.snakeyaml.Yaml;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.pgm.map.MapLibrary;
@@ -24,32 +28,52 @@ public class FileRotationProviderFactory {
     }
 
     public Set<RotationProviderInfo> parse(MapLibrary mapLibrary, Path dataPath, Configuration config) {
-        ConfigurationSection base = config.getConfigurationSection("rotation.providers.file");
+        ConfigurationSection base = config.getConfigurationSection("rotation.providers");
         if(base == null) return Collections.emptySet();
-
         Set<RotationProviderInfo> providers = new HashSet<>();
-        for(String name : base.getKeys(false)) {
-            ConfigurationSection provider = base.getConfigurationSection(name);
-
-            Path rotationFile = Paths.get(provider.getString("path"));
-            if(!rotationFile.isAbsolute()) rotationFile = dataPath.resolve(rotationFile);
-
-            int priority = provider.getInt("priority", 0);
-            int count = provider.getInt("count", 0);
-            Optional<ServerDoc.Rotation> next = minecraftService.getLocalServer()
-                                                                .rotations()
-                                                                .stream()
-                                                                .filter(rot -> rot.name().equals(name) && mapLibrary.getMapByNameOrId(rot.next_map_id()).isPresent())
-                                                                .findFirst();
-
-            if(Files.isRegularFile(rotationFile)) {
-                providers.add(new RotationProviderInfo(new FileRotationProvider(mapLibrary, name, rotationFile, dataPath, next), name, priority, count));
-            } else if(minecraftService.getLocalServer().startup_visibility() == ServerDoc.Visibility.PUBLIC) {
-                // This is not a perfect way to decide whether or not to throw an error, but it's the best we can do right now
-                mapLibrary.getLogger().severe("Missing rotation file: " + rotationFile);
+        for(String pathString : base.getStringList("files")) {
+            Path path = Paths.get(pathString);
+            if(!path.isAbsolute()) path = dataPath.resolve(path);
+            File file = path.toFile();
+            if(file.isDirectory()) {
+                try {
+                    Files.walk(path)
+                         .filter(Files::isRegularFile)
+                         .filter(this::isYaml)
+                         .map(Path::toFile)
+                         .forEach(f -> providers.add(parse(mapLibrary, f, YamlConfiguration.loadConfiguration(f))));
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            } else if(file.isFile()) {
+                providers.add(parse(mapLibrary, file, YamlConfiguration.loadConfiguration(file)));
             }
         }
-
         return providers;
+    }
+
+    public RotationProviderInfo parse(MapLibrary mapLibrary, File file, YamlConfiguration yaml) {
+        String name = yaml.getString("name", "default");
+        int priority = yaml.getInt("priority", 0);
+        int count = yaml.getInt("count", 0);
+        boolean shuffle = yaml.getBoolean("shuffle", false);
+        Optional<ServerDoc.Rotation> next = minecraftService.getLocalServer()
+                .rotations()
+                .stream()
+                .filter(rot -> rot.name().equals(name) && mapLibrary.getMapByNameOrId(rot.next_map_id()).isPresent())
+                .findFirst();
+        return new RotationProviderInfo(
+            new FileRotationProvider(mapLibrary, name, Paths.get(file.getAbsolutePath()), next, shuffle),
+            name, priority, count
+        );
+    }
+
+    private boolean isYaml(Path path) {
+        try {
+            new YamlConfiguration().load(path.toFile());
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
     }
 }
