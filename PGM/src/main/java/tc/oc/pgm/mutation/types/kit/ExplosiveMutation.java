@@ -27,7 +27,6 @@ public class ExplosiveMutation extends KitMutation {
     public ExplosiveMutation(Match match) {
         super(match, false);
         this.rewards.add(new KillReward(TNT));
-        world().setGameRuleValue("doFireTick", "false");
     }
 
     @Override
