@@ -37,5 +37,5 @@ steps:
       - submit
       - --async
       - --no-source
-      - --substitutions=_BRANCH=$BRANCH_NAME,_VERSION=$_VERSION,_SPORTBUKKIT_VERSION=$_SPORTBUKKIT_VERSION,_BUNGEECORD_VERSION=$_BUNGEECORD_VERSION
-      - --config=docker/minecraft/build.yml
+      - --substitutions=_BRANCH=$BRANCH_NAME,_VERSION=$_VERSION,_BUKKIT_VERSION=$_BUKKIT_VERSION,_BUNGEE_VERSION=$_BUNGEE_VERSION
+      - --config=models/minecraft/build.yml
