@@ -23,7 +23,7 @@ import javax.inject.Singleton;
 @Singleton
 public class AdminChannel extends SimpleChannel implements PermissibleChannel {
 
-    public final static Permission PERMISSION = new Permission("ocn.chat.admin", PermissionDefault.OP);
+    public final static Permission PERMISSION = new Permission("chat.admin", PermissionDefault.OP);
     public final static Setting SETTING = new SettingBuilder()
             .name("AdminChat")
             .alias("ac")
