@@ -27,14 +27,6 @@ permissions:
   tablist.edit:
     description: Use the tab list commands
     default: op
-  chat.admin:
-    description: Allows sending and receiving of admin chat messages.
-    default: op
-    children:
-      chat.admin.send:
-        description: Allows sending of admin chat messages
-      chat.admin.receive:
-        description: Allows receiving of admin chat messages
   afk.forever:
     description: Do not kick for inactivity
   whitelist.edit:
@@ -54,7 +46,6 @@ permissions:
     description: Parent for perms that are always granted to console
     default: false
     children:
-      - chat.admin
       - skin.change
       - tablist.edit
       - server.visibility
