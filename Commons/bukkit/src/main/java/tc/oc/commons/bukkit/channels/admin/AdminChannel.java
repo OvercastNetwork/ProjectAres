@@ -38,11 +38,13 @@ public class AdminChannel extends SimpleChannel implements PermissibleChannel {
 
     private final SettingManagerProvider settings;
     private final PermissionRegistry permissions;
+    private final Server localServer;
     private final ServerStore serverStore;
 
-    @Inject AdminChannel(PermissionRegistry permissions, SettingManagerProvider settings, ServerStore serverStore) {
+    @Inject AdminChannel(PermissionRegistry permissions, SettingManagerProvider settings, Server localServer, ServerStore serverStore) {
         this.settings = settings;
         this.permissions = permissions;
+        this.localServer = localServer;
         this.serverStore = serverStore;
     }
 
@@ -70,16 +72,12 @@ public class AdminChannel extends SimpleChannel implements PermissibleChannel {
 
     @Override
     public BaseComponent format(Chat chat, PlayerComponent player, String message) {
-        BaseComponent stub;
-        if(chat.local()) {
-            stub = player;
-        } else {
+        Component component = new Component();
+        if(!localServer._id().equals(chat.server_id())) {
             final Server server = serverStore.byId(chat.server_id());
-            stub = ServerFormatter.light.nameWithDatacenter(server);
-            stub.addExtra(" ");
-            stub.addExtra(player);
+            component.extra(ServerFormatter.light.nameWithDatacenter(server)).extra(" ");
         }
-        return new Component(stub).extra(": ").extra(message);
+        return component.extra(player).extra(": ").extra(message);
     }
 
     @Override

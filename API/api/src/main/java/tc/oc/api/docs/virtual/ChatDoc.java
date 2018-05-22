@@ -34,7 +34,6 @@ public interface ChatDoc {
     @Serialize
     interface Complete extends Base {
         @Nullable PlayerId sender();
-        @Serialize(false) default boolean local() { return false; }
     }
 
     enum Type {
