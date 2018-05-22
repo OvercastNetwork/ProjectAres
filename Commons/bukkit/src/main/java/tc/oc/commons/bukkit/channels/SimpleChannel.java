@@ -11,6 +11,7 @@ import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.ChatCreator;
+import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.core.chat.Audience;
@@ -65,7 +66,10 @@ public abstract class SimpleChannel implements MultiAudience, Channel, PluginFac
         if(chatCache.getIfPresent(chat._id()) == null) {
             chatCache.put(chat._id(), true);
             sendMessage(format(
-                new PlayerComponent(identityProvider.currentOrConsoleIdentity(chat.sender())),
+                new PlayerComponent(
+                    identityProvider.currentOrConsoleIdentity(chat.sender()),
+                    NameStyle.FANCY
+                ),
                 chat.message()
             ));
         }
