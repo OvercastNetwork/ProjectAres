@@ -85,6 +85,7 @@ public class ChatCreator implements PluginFacet, Listener {
             public ChatDoc.Type type() { return chat.type(); }
             public Instant sent_at() { return chat.sent_at(); }
             public ChatDoc.Broadcast broadcast() { return chat.broadcast(); }
+            public boolean local() { return true; }
         };
     }
 

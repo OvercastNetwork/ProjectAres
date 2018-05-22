@@ -9,10 +9,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import tc.oc.api.docs.Chat;
+import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ChatDoc;
+import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.channels.PermissibleChannel;
 import tc.oc.commons.bukkit.channels.SimpleChannel;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
+import tc.oc.commons.bukkit.format.ServerFormatter;
 import tc.oc.commons.bukkit.permissions.PermissionRegistry;
 import tc.oc.commons.bukkit.settings.SettingManagerProvider;
 import tc.oc.commons.core.chat.Component;
@@ -34,10 +38,12 @@ public class AdminChannel extends SimpleChannel implements PermissibleChannel {
 
     private final SettingManagerProvider settings;
     private final PermissionRegistry permissions;
+    private final ServerStore serverStore;
 
-    @Inject AdminChannel(PermissionRegistry permissions, SettingManagerProvider settings) {
+    @Inject AdminChannel(PermissionRegistry permissions, SettingManagerProvider settings, ServerStore serverStore) {
         this.settings = settings;
         this.permissions = permissions;
+        this.serverStore = serverStore;
     }
 
     @Override
@@ -63,8 +69,17 @@ public class AdminChannel extends SimpleChannel implements PermissibleChannel {
     }
 
     @Override
-    public BaseComponent format(PlayerComponent player, String message) {
-        return new Component(player).extra(": ").extra(message);
+    public BaseComponent format(Chat chat, PlayerComponent player, String message) {
+        BaseComponent stub;
+        if(chat.local()) {
+            stub = player;
+        } else {
+            final Server server = serverStore.byId(chat.server_id());
+            stub = ServerFormatter.light.nameWithDatacenter(server);
+            stub.addExtra(" ");
+            stub.addExtra(player);
+        }
+        return new Component(stub).extra(": ").extra(message);
     }
 
     @Override

@@ -50,6 +50,13 @@ public class NameStyle extends ForwardingSet<NameFlag> {
     );
 
 
+    public static final NameStyle VERBOSE_SIMPLE = new NameStyle(
+        Sets.difference(
+            VERBOSE,
+            Sets.newHashSet(NameFlag.SELF, NameFlag.FRIEND)
+        )
+    );
+
     // Fancy minus mapmaker flair (for display in map credits)
     public static final NameStyle MAPMAKER = new NameStyle(
         Sets.difference(

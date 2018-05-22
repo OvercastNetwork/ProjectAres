@@ -2,6 +2,7 @@ package tc.oc.commons.bukkit.channels.server;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
+import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.commons.bukkit.channels.SimpleChannel;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
@@ -21,8 +22,8 @@ public class ServerChannel extends SimpleChannel {
     }
 
     @Override
-    public BaseComponent format(PlayerComponent player, String message) {
-        return new Component().extra("<").extra(player).extra(">: ").extra(message);
+    public BaseComponent format(Chat chat, PlayerComponent sender, String message) {
+        return new Component().extra("<").extra(sender).extra(">: ").extra(message);
     }
 
     @Override

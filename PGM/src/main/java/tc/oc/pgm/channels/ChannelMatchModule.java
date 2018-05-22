@@ -46,8 +46,12 @@ public class ChannelMatchModule extends MatchModule implements Listener {
     }
 
     @Override
-    public void unload() {
+    public void disable() {
         channelRouter.setTeamChannelFunction(null);
+    }
+
+    @Override
+    public void unload() {
         match.getParties().forEach(this::remove);
     }
 

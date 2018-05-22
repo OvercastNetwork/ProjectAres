@@ -3,6 +3,7 @@ package tc.oc.pgm.channels;
 import com.google.inject.assistedinject.Assisted;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
+import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.commons.bukkit.channels.SimpleChannel;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
@@ -39,7 +40,7 @@ public class PartyChannel extends SimpleChannel implements MultiAudience {
     }
 
     @Override
-    public BaseComponent format(PlayerComponent player, String message) {
+    public BaseComponent format(Chat chat, PlayerComponent player, String message) {
         return new Component(player).extra(": ").extra(message);
     }
 

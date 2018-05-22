@@ -3,6 +3,7 @@ package tc.oc.commons.bukkit.chat;
 import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ChatDoc;
+import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.message.MessageListener;
 import tc.oc.api.message.types.ModelUpdate;
 import tc.oc.api.queue.PrimaryQueue;
@@ -62,15 +63,13 @@ public class ChatAnnouncer implements PluginFacet, MessageListener {
     }
 
     public boolean shouldAnnounce(Chat chat) {
-        final Server origin = serverStore.byId(chat.server_id());
-        final boolean local = server.equals(origin);
-        final boolean remote = serverStore.canCommunicate(server._id(), origin._id());
+        final boolean remote = serverStore.canCommunicate(server._id(), chat.server_id());
         switch(chat.type()) {
             case SERVER:
             case TEAM:
-                return local;
+                return false;
             case ADMIN:
-                return local || remote;
+                return remote;
             case BROADCAST:
                 return shouldAnnounce(chat.broadcast());
         }
@@ -83,12 +82,14 @@ public class ChatAnnouncer implements PluginFacet, MessageListener {
             case SERVER:
                 return server._id().equalsIgnoreCase(destination);
             case FAMILY:
-                return server.family().equalsIgnoreCase(destination);
+                final String family = server.family();
+                return family == null || family.equalsIgnoreCase(destination);
             case GAME:
                 final String game = server.game_id();
                 return game == null || game.equalsIgnoreCase(destination);
             case NETWORK:
-                return server.network().name().equalsIgnoreCase(destination);
+                final ServerDoc.Network network = server.network();
+                return network == null || network.name().equalsIgnoreCase(destination);
             case GLOBAL:
                 return true;
         }

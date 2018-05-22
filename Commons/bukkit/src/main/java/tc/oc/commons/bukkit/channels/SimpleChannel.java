@@ -1,7 +1,5 @@
 package tc.oc.commons.bukkit.channels;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +19,6 @@ import tc.oc.commons.core.plugin.PluginFacet;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 public abstract class SimpleChannel implements MultiAudience, Channel, PluginFacet {
@@ -32,15 +29,9 @@ public abstract class SimpleChannel implements MultiAudience, Channel, PluginFac
     @Inject protected ChatCreator chatCreator;
     @Inject protected IdentityProvider identityProvider;
 
-    // Chat messages are sent to the local server before API verification.
-    // This prevents downtime or lockup from stopping all local server chat.
-    protected Cache<String, Boolean> chatCache = CacheBuilder.newBuilder()
-                                                             .expireAfterWrite(10, TimeUnit.MINUTES)
-                                                             .build();
-
     public abstract BaseComponent prefix();
 
-    public abstract BaseComponent format(PlayerComponent player, String message);
+    public abstract BaseComponent format(Chat chat, PlayerComponent sender, String message);
 
     @Override
     public void sendMessage(BaseComponent message) {
@@ -63,16 +54,13 @@ public abstract class SimpleChannel implements MultiAudience, Channel, PluginFac
 
     @Override
     public void show(Chat chat) {
-        if(chatCache.getIfPresent(chat._id()) == null) {
-            chatCache.put(chat._id(), true);
-            sendMessage(format(
-                new PlayerComponent(
-                    identityProvider.currentOrConsoleIdentity(chat.sender()),
-                    NameStyle.FANCY
-                ),
-                chat.message()
-            ));
-        }
+        sendMessage(format(
+            chat,
+            new PlayerComponent(
+                identityProvider.currentOrConsoleIdentity(chat.sender()),
+                NameStyle.VERBOSE_SIMPLE
+            ), chat.message()
+        ));
     }
 
     @Override
