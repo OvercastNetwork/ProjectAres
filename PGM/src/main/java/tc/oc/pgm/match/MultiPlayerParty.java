@@ -2,25 +2,18 @@ package tc.oc.pgm.match;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.Users;
 import tc.oc.api.docs.PlayerId;
-import tc.oc.commons.core.chat.AbstractMultiAudience;
 import tc.oc.commons.core.chat.Audience;
 
 public abstract class MultiPlayerParty implements Party {
 
     protected final Match match;
     private final Set<MatchPlayer> players = new HashSet<>();
-
-    private final Audience audience = new AbstractMultiAudience() {
-        @Override
-        protected Iterable<? extends Audience> getAudiences() {
-            return getPlayers();
-        }
-    };
 
     public MultiPlayerParty(Match match) {
         this.match = match;
@@ -64,7 +57,7 @@ public abstract class MultiPlayerParty implements Party {
     }
 
     @Override
-    public Audience audience() {
-        return audience;
+    public Stream<? extends Audience> audiences() {
+        return players();
     }
 }

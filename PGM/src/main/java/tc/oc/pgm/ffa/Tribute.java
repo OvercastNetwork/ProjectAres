@@ -2,6 +2,7 @@ package tc.oc.pgm.ffa;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
@@ -223,8 +224,8 @@ public class Tribute implements Competitor {
     }
 
     @Override
-    public Audience audience() {
-        return player != null ? player : NullAudience.INSTANCE;
+    public Stream<? extends Audience> audiences() {
+        return player != null ? Stream.of(player) : Stream.empty();
     }
 
     @Override

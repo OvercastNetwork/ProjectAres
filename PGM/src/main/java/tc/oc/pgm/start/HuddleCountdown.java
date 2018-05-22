@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import tc.oc.api.docs.virtual.ChatDoc;
+import tc.oc.commons.bukkit.channels.ChannelChatEvent;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.formatting.PeriodFormats;
 import tc.oc.commons.core.util.Comparables;
@@ -59,7 +61,7 @@ public class HuddleCountdown extends PreMatchCountdown implements Listener {
 
         if(Comparables.greaterThan(total, Duration.ZERO)) {
             getMatch().getCompetitors().stream().filter(competitor -> competitor instanceof Team).forEach(competitor -> {
-                competitor.audience().sendMessage(new Component(
+                competitor.sendMessage(new Component(
                     new TranslatableComponent("huddle.instructions",
                                               PeriodFormats.briefNaturalPrecise(total)),
                     ChatColor.YELLOW
@@ -69,12 +71,12 @@ public class HuddleCountdown extends PreMatchCountdown implements Listener {
     }
 
     @EventHandler
-    public void onChat(ChannelMessageEvent event) {
-        if(event.getChannel() == ChannelsPlugin.get().getGlobalChannel()) {
+    public void onChat(ChannelChatEvent event) {
+        if(event.channel().type().equals(ChatDoc.Type.SERVER)) {
             event.setCancelled(true);
-            MatchPlayer player = getMatch().getPlayer(event.getSender());
+            MatchPlayer player = getMatch().getPlayer(event.sender());
             if(player != null) {
-                player.sendWarning(new TranslatableComponent("huddle.globalChatDisabled"));
+                player.sendWarning(new TranslatableComponent("huddle.globalChatDisabled"), false);
             }
         }
     }

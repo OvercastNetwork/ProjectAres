@@ -167,7 +167,7 @@ public class MutationCommands implements NestedCommands {
                 }
         }
         Audience origin = audiences.get(sender);
-        Audience all = audiences.localServer();
+        Audience all = audiences.all();
         String message = message(!queued, value, mutations.size() == 1);
         ListComponent changed = new ListComponent(Collections2.transform(mutations, Mutation.toComponent(ChatColor.AQUA)));
         if(queued) {

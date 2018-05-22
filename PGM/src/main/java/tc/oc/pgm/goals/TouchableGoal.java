@@ -197,11 +197,11 @@ public abstract class TouchableGoal<T extends ProximityGoalDefinition> extends P
 
         if(toucher != null) {
             if(includeToucher) {
-                toucher.getAudience().sendMessage(getTouchMessage(toucher, true));
+                toucher.sendMessage(getTouchMessage(toucher, true));
             }
 
             if(getDeferTouches()) {
-                toucher.getAudience().sendMessage(new TranslatableComponent("match.touch.destroyable.deferredNotice"));
+                toucher.sendMessage(new TranslatableComponent("match.touch.destroyable.deferredNotice"));
             }
         }
     }

@@ -60,6 +60,11 @@ public interface Identity {
      */
     boolean isCurrent();
 
+    /**
+     * Does the identity belong to a console?
+     */
+    boolean isConsole();
+
     // Viewer-relative properties
 
     /**

@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.time.Instant;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.UserId;
-import tc.oc.commons.core.chat.Audience;
+import tc.oc.commons.core.chat.MultiAudience;
 import tc.oc.commons.core.inject.InjectionScopable;
 import tc.oc.commons.core.random.Entropy;
 import tc.oc.commons.core.util.ArrayUtils;
@@ -47,7 +47,7 @@ import tc.oc.pgm.module.ModuleLoadException;
 import tc.oc.pgm.time.TickClock;
 import tc.oc.pgm.time.TickTime;
 
-public interface Match extends Audience, IMatchQuery, Filterable<IMatchQuery>, MatchPlayerFinder, InjectionScopable<MatchScoped> {
+public interface Match extends MultiAudience, IMatchQuery, Filterable<IMatchQuery>, MatchPlayerFinder, InjectionScopable<MatchScoped> {
 
     /**
      * Unique ID for this match

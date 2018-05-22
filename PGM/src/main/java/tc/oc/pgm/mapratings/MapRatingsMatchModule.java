@@ -246,7 +246,7 @@ public class MapRatingsMatchModule extends MatchModule implements Listener {
         }
 
         if(oldScore != null && score == oldScore) {
-            player.sendWarning(PGMTranslations.t("rating.sameRating", player, score), true);
+            player.sendWarning(PGMTranslations.t("rating.sameRating", player, score), false);
             return;
         }
 

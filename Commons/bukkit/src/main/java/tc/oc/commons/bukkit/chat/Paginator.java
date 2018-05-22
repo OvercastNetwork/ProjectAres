@@ -52,7 +52,7 @@ public class Paginator<T> {
     }
 
     public void display(CommandSender sender, Collection<? extends T> results, int page) {
-        display(BukkitAudiences.getAudience(sender), results, page);
+        display(Audiences.Deprecated.get(sender), results, page);
     }
 
     public void display(Audience audience, Collection<? extends T> results, int page) {

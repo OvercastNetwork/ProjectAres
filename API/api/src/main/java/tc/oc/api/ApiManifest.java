@@ -1,5 +1,6 @@
 package tc.oc.api;
 
+import tc.oc.api.chat.ChatModelManifest;
 import tc.oc.api.document.DocumentsManifest;
 import tc.oc.api.engagement.EngagementModelManifest;
 import tc.oc.api.friendships.FriendshipModelManifest;
@@ -46,5 +47,6 @@ public final class ApiManifest extends HybridManifest {
         install(new TrophyModelManifest());
         install(new TournamentModelManifest());
         install(new FriendshipModelManifest());
+        install(new ChatModelManifest());
     }
 }

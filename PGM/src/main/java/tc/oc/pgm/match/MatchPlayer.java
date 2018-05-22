@@ -32,7 +32,7 @@ import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.User;
 import tc.oc.commons.bukkit.attribute.AttributeUtils;
-import tc.oc.commons.bukkit.chat.BukkitAudiences;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.Named;
@@ -77,6 +77,7 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
     @Inject private Server localServer;
     @Inject private OnlineFriends friendMap;
     @Inject private PlayerStates playerStates;
+    @Inject private Audiences audiences;
 
     @Inject MatchUserContext userContext;
 
@@ -90,7 +91,7 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
     private Logger logger;
     private SettingManager settings;
     private Audience audience;
-    @Inject private void init(Loggers loggers, SettingManagerProvider settingManagerProvider, BukkitAudiences audiences, Player player) {
+    @Inject private void init(Loggers loggers, SettingManagerProvider settingManagerProvider, Audiences audiences, Player player) {
         this.logger = loggers.get(match.getLogger(), getClass(), getName());
         this.settings = settingManagerProvider.getManager(player);
         this.audience = audiences.get(player);
@@ -519,19 +520,19 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
     }
 
     @Override
-    public Audience audience() {
-        return audience;
+    public Optional<Audience> audience() {
+        return Optional.ofNullable(audiences.get(bukkit));
     }
 
     @Override
     public void sendWarning(String message, boolean audible) {
-        audience().sendWarning(message, audible);
+        audience().get().sendWarning(message, audible);
         if(audible) playWarningSound();
     }
 
     @Override
     public void sendWarning(BaseComponent message, boolean audible) {
-        audience().sendWarning(message, audible);
+        audience().get().sendWarning(message, audible);
         if(audible) playWarningSound();
     }
 

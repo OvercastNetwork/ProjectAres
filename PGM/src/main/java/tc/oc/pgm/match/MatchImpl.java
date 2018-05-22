@@ -24,13 +24,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Range;
 import com.google.common.collect.SetMultimap;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -45,10 +42,8 @@ import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.UserId;
 import tc.oc.api.model.IdFactory;
-import tc.oc.commons.bukkit.chat.ConsoleAudience;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.core.chat.Audience;
-import tc.oc.commons.core.chat.ForwardingAudience;
-import tc.oc.commons.core.chat.MultiAudience;
 import tc.oc.commons.core.exception.ExceptionHandler;
 import tc.oc.commons.core.inject.ChildInjectorFactory;
 import tc.oc.commons.core.inject.FacetContext;
@@ -99,7 +94,7 @@ import tc.oc.pgm.utils.WorldTickRandom;
 
 import static com.google.common.base.Preconditions.*;
 
-public class MatchImpl implements Match, ForwardingAudience {
+public class MatchImpl implements Match {
 
     private Logger logger;
 
@@ -121,8 +116,7 @@ public class MatchImpl implements Match, ForwardingAudience {
     @Inject private FeatureDefinitionContext featureDefinitions;
     @Inject private World world;
 
-    @Inject private ConsoleAudience consoleAudience;
-    private Audience audience;
+    @Inject private Audiences audiences;
 
     // State management
     private final AtomicBoolean unloaded = new AtomicBoolean(true);     // true before loading starts and after unloading finishes
@@ -194,7 +188,6 @@ public class MatchImpl implements Match, ForwardingAudience {
         id = idFactory.newId();
         url = new URL("http", "localhost:3000", "/matches/" + id);
         loadTime = clock.now();
-        audience = new MultiAudience(Iterables.concat(ImmutableSet.of(consoleAudience), getPlayers()));
         setState(MatchState.Idle);
     }
 
@@ -265,8 +258,8 @@ public class MatchImpl implements Match, ForwardingAudience {
     }
 
     @Override
-    public Audience audience() {
-        return audience;
+    public Stream<Audience> audiences() {
+        return Stream.of(audiences.console(), audiences.filter(sender -> player(sender).isPresent()));
     }
 
 
@@ -926,22 +919,5 @@ public class MatchImpl implements Match, ForwardingAudience {
         } finally {
             partyChanges.remove(player);
         }
-    }
-
-
-    // --------------
-    // ---- Chat ----
-    // --------------
-
-    @Override
-    public void sendMessageExcept(BaseComponent message, MatchPlayer... except) {
-        consoleAudience.sendMessage(message);
-        Match.super.sendMessageExcept(message, except);
-    }
-
-    @Override
-    public void sendMessageExcept(BaseComponent message, MatchPlayerState... except) {
-        consoleAudience.sendMessage(message);
-        Match.super.sendMessageExcept(message, except);
     }
 }

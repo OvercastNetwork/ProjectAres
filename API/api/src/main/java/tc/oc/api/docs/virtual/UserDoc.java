@@ -43,6 +43,11 @@ public interface UserDoc {
         List<String> trophy_ids();
     }
 
+    @Serialize
+    interface Channel extends Partial {
+        @Nonnull ChatDoc.Type chat_channel();
+    }
+
     interface License {
 
         @Serialize
@@ -79,7 +84,7 @@ public interface UserDoc {
      * Stuff we get from the API on login, and keep around for plugins to use
      */
     @Serialize
-    interface Login extends Identity, Locale, Trophies, DefaultServer, FriendTokens, DeathScreen, License.Complete {
+    interface Login extends Identity, Locale, Trophies, DefaultServer, FriendTokens, DeathScreen, License.Complete, Channel {
         int raindrops();
         int maptokens();
         int mutationtokens();

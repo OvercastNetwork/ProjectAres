@@ -77,7 +77,7 @@ public class TeleportListener implements MessageListener, Listener, PluginFacet,
 
     @Override
     public void enable() {
-        permissionRegistry.addPermission(Teleporter.PERMISSION);
+        permissionRegistry.register(Teleporter.PERMISSION);
         primaryQueue.subscribe(this, syncExecutor);
         primaryQueue.bind(PlayerTeleportRequest.class);
     }

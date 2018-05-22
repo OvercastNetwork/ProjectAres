@@ -10,7 +10,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import org.bukkit.plugin.Plugin;
 import tc.oc.commons.bukkit.bossbar.BossBarFactory;
 import tc.oc.commons.bukkit.bossbar.BossBarFactoryImpl;
-import tc.oc.commons.bukkit.chat.BukkitAudiences;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.item.RenderedItemBuilder;
 import tc.oc.commons.bukkit.logging.BukkitLoggerFactory;
 import tc.oc.commons.bukkit.permissions.BukkitPermissionRegistry;
@@ -31,8 +31,8 @@ public class BukkitServerManifest extends SingletonManifest {
 
         bind(new TypeLiteral<PluginResolver<Plugin>>(){}).to(BukkitPluginResolver.class);
         bind(Loggers.class).to(BukkitLoggerFactory.class);
-        bind(tc.oc.commons.core.chat.Audiences.class).to(tc.oc.commons.bukkit.chat.Audiences.class);
-        bind(tc.oc.commons.bukkit.chat.Audiences.class).to(BukkitAudiences.class);
+        bind(tc.oc.commons.core.chat.Audiences.class).to(Audiences.class);
+        requestStaticInjection(Audiences.Deprecated.class);
         bind(PermissionRegistry.class).to(BukkitPermissionRegistry.class);
         bind(BossBarFactory.class).to(BossBarFactoryImpl.class);
     }

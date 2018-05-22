@@ -42,18 +42,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.rmsy.Channels</groupId>
-            <artifactId>Channels</artifactId>
-            <version>1.9-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
             <groupId>me.anxuiz</groupId>
             <artifactId>bukkit-settings</artifactId>
         </dependency>

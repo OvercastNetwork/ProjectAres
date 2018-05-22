@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.util.RayBlockIntersection;
 import org.bukkit.util.Vector;
-import tc.oc.commons.bukkit.chat.BukkitAudiences;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.event.BlockPunchEvent;
 import tc.oc.commons.bukkit.event.BlockTrampleEvent;
 import tc.oc.commons.bukkit.event.CoarsePlayerMoveEvent;
@@ -42,6 +42,7 @@ import tc.oc.commons.core.plugin.PluginFacet;
 public class PlayerMovementListener implements PluginFacet, Listener {
 
     protected final EventBus eventBus;
+    protected final Audiences audiences;
 
     // The last location of a player that has been used to generate
     // coarse movement events. If a player is not in this list, then
@@ -49,8 +50,9 @@ public class PlayerMovementListener implements PluginFacet, Listener {
     // on its own.
     private final Map<Player, EntityLocation> lastToLocation = new WeakHashMap<>();
 
-    @Inject PlayerMovementListener(EventBus eventBus) {
+    @Inject PlayerMovementListener(EventBus eventBus, Audiences audiences) {
         this.eventBus = eventBus;
+        this.audiences = audiences;
     }
 
     /**
@@ -257,7 +259,7 @@ public class PlayerMovementListener implements PluginFacet, Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void processCancelMessage(final CoarsePlayerMoveEvent event) {
         if(event.isCancelled() && event.getCancelMessage() != null) {
-            BukkitAudiences.getAudience(event.getPlayer()).sendWarning(event.getCancelMessage(), false);
+            audiences.get(event.getPlayer()).sendWarning(event.getCancelMessage(), false);
         }
     }
 }

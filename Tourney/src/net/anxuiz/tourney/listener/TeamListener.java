@@ -4,7 +4,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import com.github.rmsy.channels.ChannelsPlugin;
 import net.anxuiz.tourney.MatchManager;
 import net.anxuiz.tourney.TeamManager;
 import net.anxuiz.tourney.Tourney;
@@ -137,10 +136,6 @@ public class TeamListener implements Listener {
                 Team team = teamManagerProvider.get().getTeam(player);
                 if(team != null) {
                     event.getMatch().setPlayerParty(event.getPlayer(), team, false);
-                    ChannelsPlugin.get().getPlayerManager().setMembershipChannel(
-                        player,
-                        event.getMatch().needMatchModule(ChannelMatchModule.class).getChannel(team)
-                    );
                 }
             }
         }

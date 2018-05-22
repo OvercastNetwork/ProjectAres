@@ -224,6 +224,11 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     }
 
     @Override
+    public String cross_server_profile() {
+        return null;
+    }
+
+    @Override
     public Map<UUID, String> fake_usernames() {
         return Collections.emptyMap();
     }

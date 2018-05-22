@@ -11,6 +11,7 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.bukkit.chat.Named;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
+import tc.oc.commons.core.chat.MultiAudience;
 import tc.oc.pgm.filters.Filterable;
 import tc.oc.pgm.filters.query.IPartyQuery;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public interface Party extends Named, IPartyQuery, Filterable<IPartyQuery> {
+public interface Party extends Named, IPartyQuery, Filterable<IPartyQuery>, MultiAudience {
 
     enum Type { Participating, Observing }
 
@@ -155,8 +156,6 @@ public interface Party extends Named, IPartyQuery, Filterable<IPartyQuery> {
     default boolean isObserving() {
         return isObservingType() || !getMatch().isRunning();
     }
-
-    Audience audience();
 
     @Override
     default Optional<? extends Filterable<? super IPartyQuery>> filterableParent() {

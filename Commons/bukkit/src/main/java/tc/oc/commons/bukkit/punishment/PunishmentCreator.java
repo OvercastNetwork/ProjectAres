@@ -14,25 +14,22 @@ import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.api.docs.virtual.PunishmentDoc;
 import tc.oc.api.model.IdFactory;
 import tc.oc.api.model.ModelService;
-import tc.oc.commons.bukkit.report.ReportConfiguration;
 
 @Singleton
 public class PunishmentCreator {
 
-    private final ReportConfiguration config;
     private final ModelService<Punishment, PunishmentDoc.Partial> punishmentService;
     private final IdFactory idFactory;
     private final Server localServer;
 
-    @Inject PunishmentCreator(ReportConfiguration config, ModelService<Punishment, PunishmentDoc.Partial> punishmentService, IdFactory idFactory, Server localServer) {
-        this.config = config;
+    @Inject PunishmentCreator(ModelService<Punishment, PunishmentDoc.Partial> punishmentService, IdFactory idFactory, Server localServer) {
         this.punishmentService = punishmentService;
         this.idFactory = idFactory;
         this.localServer = localServer;
     }
 
     public boolean offRecord() {
-        return !config.crossServer();
+        return localServer.cross_server_profile() == null;
     }
 
     public ListenableFuture<Punishment> create(@Nullable PlayerId punisher, PlayerId punished, String reason, @Nullable PunishmentDoc.Type type, @Nullable Duration duration, boolean silent, boolean auto, boolean offrecord) {

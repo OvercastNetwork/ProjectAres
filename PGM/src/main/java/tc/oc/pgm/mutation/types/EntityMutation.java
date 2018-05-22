@@ -195,7 +195,7 @@ public class EntityMutation<E extends Entity> extends KitMutation {
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
     public void onPlayerSpawnEntity(PlayerSpawnEntityEvent event) {
-        match().participant(event.getPlayer())
+        match().participant((Entity) event.getPlayer())
                .ifPresent(player -> cast(event.getEntity(), type)
                .ifPresent(entity -> {
                    register(entity, player);

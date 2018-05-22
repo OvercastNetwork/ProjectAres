@@ -1,6 +1,7 @@
 package tc.oc.api.ocn;
 
 import tc.oc.api.docs.Arena;
+import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.Death;
 import tc.oc.api.docs.Game;
 import tc.oc.api.docs.Objective;
@@ -8,6 +9,7 @@ import tc.oc.api.docs.Participation;
 import tc.oc.api.docs.Punishment;
 import tc.oc.api.docs.Report;
 import tc.oc.api.docs.Trophy;
+import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.api.docs.virtual.DeathDoc;
 import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.api.docs.virtual.PunishmentDoc;
@@ -45,6 +47,9 @@ public class OCNModelsManifest extends HybridManifest implements ModelBinders {
             model.bindService().to(model.httpService());
         });
         bindModel(Punishment.class, PunishmentDoc.Partial.class, model -> {
+            model.bindService().to(model.httpService());
+        });
+        bindModel(Chat.class, ChatDoc.Partial.class, model -> {
             model.bindService().to(model.httpService());
         });
         bindModel(MatchDoc.class, model -> {

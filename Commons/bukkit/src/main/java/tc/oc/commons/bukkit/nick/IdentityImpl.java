@@ -72,6 +72,11 @@ public class IdentityImpl implements Identity {
     }
 
     @Override
+    public boolean isConsole() {
+        return false;
+    }
+
+    @Override
     public boolean isDead(CommandSender viewer) {
         if(!isOnline(viewer)) return false;
         Player player = onlinePlayers.find(playerId);

@@ -65,6 +65,11 @@ public class ConsoleIdentity implements Identity {
     }
 
     @Override
+    public boolean isConsole() {
+        return true;
+    }
+
+    @Override
     public String getName(CommandSender viewer) {
         return NAME;
     }

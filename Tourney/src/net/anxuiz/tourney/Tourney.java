@@ -76,7 +76,7 @@ public class Tourney extends JavaPlugin {
                     );
 
                     audiences.get(Bukkit.getConsoleSender()).sendMessage(message);
-                    audiences.withPermission(TourneyPermissions.REFEREE).sendMessage(message);
+                    audiences.permission(TourneyPermissions.REFEREE).sendMessage(message);
                 }
             }
         );

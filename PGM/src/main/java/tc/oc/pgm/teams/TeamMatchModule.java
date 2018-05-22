@@ -477,7 +477,7 @@ public class TeamMatchModule extends MatchModule implements Listener, JoinHandle
             MatchPlayer player = shortList.get(i);
             if(even && areTeamsEven() && shortList.size() - i < getTeams().size()) {
                 // Prevent join if even teams are required, and there aren't enough remaining players to go around
-                player.sendWarning(new TranslatableComponent("command.gameplay.join.uneven"));
+                player.sendWarning(new TranslatableComponent("command.gameplay.join.uneven"), false);
             } else {
                 join(player, request, queryJoin(player, request, true));
             }

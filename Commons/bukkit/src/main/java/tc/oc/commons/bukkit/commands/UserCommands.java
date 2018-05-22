@@ -17,13 +17,13 @@ import tc.oc.api.docs.User;
 import tc.oc.api.friendships.FriendshipRequest;
 import tc.oc.api.friendships.FriendshipService;
 import tc.oc.api.minecraft.MinecraftService;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.Links;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.core.util.Lazy;
 import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.sessions.SessionService;
-import tc.oc.commons.bukkit.chat.BukkitAudiences;
 import tc.oc.commons.bukkit.chat.ComponentPaginator;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.chat.HeaderComponent;
@@ -47,8 +47,9 @@ public class UserCommands implements Commands {
     private final UserFinder userFinder;
     private final IdentityProvider identityProvider;
     private final UserFormatter userFormatter;
+    private final Audiences audiences;
 
-    @Inject UserCommands(MinecraftService minecraftService, SyncExecutor syncExecutor, SessionService sessionService, FriendshipService friendshipService, UserFinder userFinder, IdentityProvider identityProvider, UserFormatter userFormatter) {
+    @Inject UserCommands(MinecraftService minecraftService, SyncExecutor syncExecutor, SessionService sessionService, FriendshipService friendshipService, UserFinder userFinder, IdentityProvider identityProvider, UserFormatter userFormatter, Audiences audiences) {
         this.minecraftService = minecraftService;
         this.syncExecutor = syncExecutor;
         this.sessionService = sessionService;
@@ -56,6 +57,7 @@ public class UserCommands implements Commands {
         this.userFinder = userFinder;
         this.identityProvider = identityProvider;
         this.userFormatter = userFormatter;
+        this.audiences = audiences;
     }
 
     @Command(
@@ -113,7 +115,7 @@ public class UserCommands implements Commands {
     @CommandPermissions("ocn.friend.request")
     public void friend(final CommandContext args, final CommandSender sender) throws CommandException {
         User friender = userFinder.getLocalUser(CommandUtils.senderToPlayer(sender));
-        Audience audience = BukkitAudiences.getAudience(sender);
+        Audience audience = audiences.get(sender);
         syncExecutor.callback(
             userFinder.findUser(sender, args, 0),
             response -> {
@@ -163,7 +165,7 @@ public class UserCommands implements Commands {
     @CommandPermissions("ocn.friend.request")
     public void unfriend(final CommandContext args, final CommandSender sender) throws CommandException {
         User friender = userFinder.getLocalUser(CommandUtils.senderToPlayer(sender));
-        Audience audience = BukkitAudiences.getAudience(sender);
+        Audience audience = audiences.get(sender);
         syncExecutor.callback(
             userFinder.findUser(sender, args, 0),
             response -> {
@@ -204,7 +206,7 @@ public class UserCommands implements Commands {
         syncExecutor.callback(
             sessionService.staff(minecraftService.getLocalServer().network(), identityProvider.revealAll(sender)),
             CommandFutureCallback.onSuccess(sender, args, result -> {
-                final Audience audience = BukkitAudiences.getAudience(sender);
+                final Audience audience = audiences.get(sender);
                 if(result.documents().isEmpty()) {
                     audience.sendMessage(new TranslatableComponent("command.staff.noStaffOnline"));
                     return;

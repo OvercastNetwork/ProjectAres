@@ -6,7 +6,7 @@ website: ${url}
 main: ${plugin.mainClass}
 prefix: ${plugin.prefix}
 isolate: true
-depend: [API, BukkitSettings, Channels]
+depend: [API, BukkitSettings]
 
 permissions:
   sudo:

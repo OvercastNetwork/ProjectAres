@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.google.common.collect.ImmutableSet;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.virtual.UserDoc;
@@ -37,6 +38,7 @@ public class FlairRenderer implements PartialNameRenderer {
     @Override
     public String getLegacyName(Identity identity, NameType type) {
         if(!(type.style.contains(NameFlag.FLAIR) && type.reveal)) return "";
+        if(identity.isConsole()) return ChatColor.GOLD + "❖";
         return getFlairs(identity).reduce("", String::concat);
     }
 

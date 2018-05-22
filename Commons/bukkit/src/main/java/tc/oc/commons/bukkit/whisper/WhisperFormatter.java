@@ -11,11 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.Whisper;
-import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
-import tc.oc.commons.bukkit.chat.ConsoleAudience;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.chat.UserTextComponent;
@@ -42,16 +40,14 @@ public class WhisperFormatter {
     private final Server localServer;
     private final SettingManagerProvider playerSettings;
     private final Audiences audiences;
-    private final ConsoleAudience consoleAudience;
 
-    @Inject WhisperFormatter(IdentityProvider identities, MiscFormatter miscFormatter, ServerStore serverStore, Server localServer, SettingManagerProvider playerSettings, Audiences audiences, ConsoleAudience consoleAudience) {
+    @Inject WhisperFormatter(IdentityProvider identities, MiscFormatter miscFormatter, ServerStore serverStore, Server localServer, SettingManagerProvider playerSettings, Audiences audiences) {
         this.identities = identities;
         this.miscFormatter = miscFormatter;
         this.serverStore = serverStore;
         this.localServer = localServer;
         this.playerSettings = playerSettings;
         this.audiences = audiences;
-        this.consoleAudience = consoleAudience;
         this.serverFormatter = ServerFormatter.dark;
     }
 
@@ -81,7 +77,7 @@ public class WhisperFormatter {
             .extra(new Component(new UserTextComponent(sender, whisper.content()), ChatColor.WHITE));
 
         audience.sendMessage(display);
-        consoleAudience.sendMessage(display);
+        audiences.console().sendMessage(display);
     }
 
     public void receive(Player viewer, Whisper whisper) {
@@ -135,7 +131,7 @@ public class WhisperFormatter {
 
         audience.sendMessage(display);
         if(!local) {
-            consoleAudience.sendMessage(display);
+            audiences.console().sendMessage(display);
         }
     }
 

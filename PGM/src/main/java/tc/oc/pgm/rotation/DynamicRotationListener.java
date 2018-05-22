@@ -66,7 +66,7 @@ public class DynamicRotationListener implements PluginFacet, Listener {
                 rotationManager.setCurrentRotationName(rotation.name);
 
                 logger.info("Changing to \"" + rotation.name + "\" rotation...");
-                sendRotationChangeMessage(audiences.localServer(), oldRotation, rotation.name);
+                sendRotationChangeMessage(audiences.all(), oldRotation, rotation.name);
             }
         }
     }

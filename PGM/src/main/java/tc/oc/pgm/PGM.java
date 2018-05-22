@@ -19,7 +19,6 @@ import tc.oc.commons.core.commands.CommandRegistry;
 import tc.oc.inject.ProtectedBinder;
 import tc.oc.minecraft.logging.BetterRaven;
 import tc.oc.pgm.antigrief.CraftingProtect;
-import tc.oc.pgm.channels.ChannelCommands;
 import tc.oc.pgm.commands.MapCommands;
 import tc.oc.pgm.commands.PollCommands;
 import tc.oc.pgm.commands.RotationControlCommands;
@@ -195,7 +194,6 @@ public final class PGM extends JavaPlugin {
 
     private void setupCommands() {
         commands.register(MapCommands.class);
-        commands.register(ChannelCommands.class);
         commands.register(PollCommands.class);
         commands.register(RotationEditCommands.RotationEditParent.class);
         commands.register(RotationControlCommands.RotationControlParent.class);

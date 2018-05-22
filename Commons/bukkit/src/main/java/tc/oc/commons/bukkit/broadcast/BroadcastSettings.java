@@ -59,7 +59,6 @@ public class BroadcastSettings {
                 break;
 
             case NEWS:
-            case ALERT:
                 setting = NEWS;
                 break;
 
@@ -72,6 +71,7 @@ public class BroadcastSettings {
                 setting = RANDOM;
                 break;
 
+            case ALERT:
             default:
                 return true;
         }

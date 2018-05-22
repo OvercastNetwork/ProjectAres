@@ -161,11 +161,8 @@ public class ReportCommands implements Commands, Listener {
                 final boolean crossServer = args.hasFlag('a');
 
                 ReportSearchRequest request = ReportSearchRequest.create(page, PER_PAGE);
-                request = crossServer ? request.forFamilies(reportConfiguration.families())
-                                      : request.forServer(localServer);
-                if(userResult != null) {
-                    request = request.forPlayer(userResult.user);
-                }
+                request = userResult != null ? request.forPlayer(userResult.user)
+                                             : request.forServer(localServer, crossServer);
 
                 syncExecutor.callback(
                     reportService.find(request),

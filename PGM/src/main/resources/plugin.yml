@@ -6,9 +6,6 @@ depend:
 - Commons
 - API
 - BukkitSettings
-- Channels
-softdepend:
-- ChatModerator
 authors:
 - Overcast Network
 

@@ -12,6 +12,7 @@ import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.core.chat.Audience;
+import tc.oc.commons.core.chat.ForwardingAudience;
 import tc.oc.commons.core.chat.NullAudience;
 import tc.oc.commons.core.util.Utils;
 import tc.oc.pgm.filters.query.IPlayerQuery;
@@ -21,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Represents a "snapshot" view of a {@link MatchPlayer}.
  */
-public class MatchPlayerState extends MatchEntityState implements IPlayerQuery {
+public class MatchPlayerState extends MatchEntityState implements IPlayerQuery, ForwardingAudience {
     protected final Identity identity;
     protected final Party party;
 
@@ -88,9 +89,9 @@ public class MatchPlayerState extends MatchEntityState implements IPlayerQuery {
         return getParty().isParticipating();
     }
 
-    public Audience getAudience() {
-        MatchPlayer matchPlayer = getMatchPlayer();
-        return matchPlayer == null ? NullAudience.INSTANCE : matchPlayer;
+    @Override
+    public Optional<Audience> audience() {
+        return Optional.ofNullable(getMatchPlayer());
     }
 
     @Override

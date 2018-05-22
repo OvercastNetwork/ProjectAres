@@ -84,7 +84,7 @@ public class UsernameRenderer implements PartialNameRenderer {
             rendered.setColor(getColor(identity, type));
         }
 
-        if(type.style.contains(NameFlag.TELEPORT)) {
+        if(!identity.isConsole() && type.style.contains(NameFlag.TELEPORT)) {
             Component dupe = rendered.duplicate();
             rendered.clickEvent(makeRemoteTeleportClickEvent(identity, identity.getNickname() != null && !type.reveal));
             rendered.hoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("tip.teleportTo", dupe));

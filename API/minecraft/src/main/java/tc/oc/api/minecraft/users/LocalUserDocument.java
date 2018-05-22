@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.SimplePlayerId;
 import tc.oc.api.docs.User;
+import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.minecraft.servers.DefaultPermissions;
 
@@ -160,5 +162,10 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     @Override
     public String death_screen() {
         return null;
+    }
+
+    @Override
+    public ChatDoc.Type chat_channel() {
+        return ChatDoc.Type.TEAM;
     }
 }

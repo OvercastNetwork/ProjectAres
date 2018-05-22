@@ -23,7 +23,7 @@ import org.bukkit.command.CommandSender;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.MapDoc;
 import tc.oc.api.util.Permissions;
-import tc.oc.commons.bukkit.chat.BukkitAudiences;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.ComponentRenderContext;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
@@ -166,7 +166,7 @@ public class MapCommands implements Commands {
         if(args.getSuggestionContext() != null) {
             return CommandUtils.completeMapName(args.getJoinedStrings(0));
         }
-        final Audience audience = BukkitAudiences.getAudience(sender);
+        final Audience audience = Audiences.Deprecated.get(sender);
         final PGMMap map;
         if(args.argsLength() > 0) {
             map = CommandUtils.getMap(args.getJoinedStrings(0), sender);

@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -25,14 +26,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import tc.oc.commons.bukkit.channels.AdminChannel;
+import tc.oc.commons.bukkit.channels.admin.AdminChannel;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.chat.ListComponent;
 import tc.oc.commons.bukkit.chat.NameStyle;
+import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.event.ObserverKitApplyEvent;
+import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.core.inject.Proxied;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.pgm.PGMTranslations;
+import tc.oc.pgm.match.Match;
+import tc.oc.pgm.match.MatchFinder;
 import tc.oc.pgm.match.MatchManager;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.ParticipantState;
@@ -43,9 +48,10 @@ public class DefuseListener implements PluginFacet, Listener {
     public static final Material DEFUSE_ITEM = Material.SHEARS;
     public static final int DEFUSE_SLOT = 4;
 
-    private final MatchManager mm;
-    private final EntityResolver entityResolver;
-    private final AdminChannel adminChannel;
+    @Inject MatchFinder mm;
+    @Inject AdminChannel adminChannel;
+    @Inject IdentityProvider identityProvider;
+    @Inject @Proxied EntityResolver entityResolver;
 
     @Inject DefuseListener(MatchManager mm, @Proxied EntityResolver entityResolver, AdminChannel adminChannel) {
         this.mm = mm;
@@ -72,10 +78,12 @@ public class DefuseListener implements PluginFacet, Listener {
         // check tnt
         if(!(entity instanceof TNTPrimed)) return;
 
-        TNTMatchModule tntmm = mm.getMatch(player.getWorld()).getMatchModule(TNTMatchModule.class);
+        final Match match = mm.needMatch((CommandSender) player);
+
+        TNTMatchModule tntmm = match.getMatchModule(TNTMatchModule.class);
         if(tntmm != null && !tntmm.getProperties().friendlyDefuse) return;
 
-        MatchPlayer clicker = this.mm.getPlayer(player);
+        MatchPlayer clicker = match.getPlayer(player);
         if(clicker == null || !clicker.canInteract()) return;
 
         // check water
@@ -86,17 +94,19 @@ public class DefuseListener implements PluginFacet, Listener {
         }
 
         // check owner
-        MatchPlayer owner = this.mm.getPlayer(entityResolver.getOwner(entity));
+        MatchPlayer owner = match.getPlayer(entityResolver.getOwner(entity));
         if(owner == null || (owner != clicker && owner.getParty() == clicker.getParty())) { // cannot defuse own TNT
             // defuse TNT
             entity.remove();
             if(owner != null) {
                 this.notifyDefuse(clicker, entity, ChatColor.RED + PGMTranslations.t("defuse.player", clicker, owner.getDisplayName(clicker) + ChatColor.RED));
-                adminChannel.broadcast(clicker.getDisplayName() +
-                                       ChatColor.WHITE + " defused " +
-                                       owner.getDisplayName()
-                                       + ChatColor.WHITE + "'s " +
-                                       ChatColor.DARK_RED + "TNT");
+                adminChannel.sendMessage(
+                    new TranslatableComponent(
+                        "defuse.broadcast",
+                        new PlayerComponent(identityProvider.currentIdentity(clicker.getPlayerId()), NameStyle.VERBOSE),
+                        new PlayerComponent(identityProvider.currentIdentity(owner.getPlayerId()), NameStyle.VERBOSE)
+                    )
+                );
             } else {
                 this.notifyDefuse(clicker, entity, ChatColor.RED + PGMTranslations.t("defuse.world", clicker));
             }

@@ -29,8 +29,6 @@ join-messages:
 reports:
   enabled: true
   cooldown: 0s
-  families: []
-  cross-server: true
 
 datadog:
   enabled: false

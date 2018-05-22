@@ -125,6 +125,7 @@ public interface ServerDoc {
         @Nullable String resource_pack_url();
         @Nullable String resource_pack_sha1();
         boolean resource_pack_fast_update();
+        @Nullable String cross_server_profile();
     }
 
     @Serialize

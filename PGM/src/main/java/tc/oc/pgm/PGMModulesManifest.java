@@ -1,5 +1,6 @@
 package tc.oc.pgm;
 
+import tc.oc.pgm.channels.ChannelManifest;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.pgm.animation.AnimationManifest;
 import tc.oc.pgm.broadcast.BroadcastManifest;
@@ -70,6 +71,7 @@ public class PGMModulesManifest extends HybridManifest {
         install(new LaneManifest());
         install(new BroadcastManifest());
         install(new StatsManifest());
+        install(new ChannelManifest());
         install(new RaindropManifest());
         install(new TokenManifest());
         install(new ObjectiveModeManifest());
