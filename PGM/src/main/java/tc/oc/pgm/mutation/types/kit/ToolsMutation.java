@@ -2,6 +2,7 @@ package tc.oc.pgm.mutation.types.kit;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import tc.oc.commons.bukkit.inventory.Slot;
 import tc.oc.commons.bukkit.item.ItemBuilder;
@@ -22,7 +23,7 @@ public class ToolsMutation extends KitMutation{
 
     final static FreeItemKit[] TOOLS = new FreeItemKit[] {
             new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_PICKAXE)).enchant(Enchantment.DIG_SPEED, 3).name("Quick Pick").unbreakable(true).get()),
-            new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_AXE)).enchant(Enchantment.DIG_SPEED, 3).name("Quick Axe").unbreakable(true).get()),
+            new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_AXE)).enchant(Enchantment.DIG_SPEED, 3).name("Quick Axe").unbreakable(true).attackDamage(5, EquipmentSlot.HAND).attackSpeed(-2.5, EquipmentSlot.HAND).get()),
             new FreeItemKit(new ItemBuilder(item(Material.DIAMOND_SPADE)).enchant(Enchantment.DIG_SPEED, 3).name("Quick Shovel").unbreakable(true).get()),
             new FreeItemKit(new ItemBuilder(item(Material.SHEARS)).enchant(Enchantment.DIG_SPEED, 3).name("Quick Shears").unbreakable(true).get()),
             new FreeItemKit(new ItemBuilder(item(Material.GLASS)).amount(64).get())

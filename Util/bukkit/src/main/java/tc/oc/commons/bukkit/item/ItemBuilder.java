@@ -145,8 +145,24 @@ public class ItemBuilder<S extends ItemBuilder<?>> {
     public S armor(double amount, EquipmentSlot slot) {
         meta().addAttributeModifier(Attribute.GENERIC_ARMOR,
                 new ItemAttributeModifier(slot,
-                        new AttributeModifier(Attribute.GENERIC_ARMOR.getName(),
-                                amount, AttributeModifier.Operation.ADD_NUMBER)));
+                new AttributeModifier(Attribute.GENERIC_ARMOR.getName(),
+                amount, AttributeModifier.Operation.ADD_NUMBER)));
+        return self();
+    }
+
+    public S attackDamage(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE.getName(),
+                amount, AttributeModifier.Operation.ADD_NUMBER)));
+        return self();
+    }
+
+    public S attackSpeed(double amount, EquipmentSlot slot) {
+        meta().addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+                new ItemAttributeModifier(slot,
+                new AttributeModifier(Attribute.GENERIC_ATTACK_SPEED.getName(),
+                amount, AttributeModifier.Operation.ADD_NUMBER)));
         return self();
     }
 
