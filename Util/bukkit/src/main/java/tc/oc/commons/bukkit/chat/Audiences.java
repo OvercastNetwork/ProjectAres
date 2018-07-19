@@ -110,7 +110,7 @@ public class Audiences extends AbstractAudiences<CommandSender> {
 
         @Override
         public void sendHotbarMessage(BaseComponent message) {
-            sender().sendMessage(ChatMessageType.ACTION_BAR, message);
+            sender().sendMessage(ChatMessageType.ACTION_BAR, ComponentRenderers.render(message, sender()));
         }
 
         @Override
