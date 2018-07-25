@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 public class PartyChannel extends SimpleChannel implements MultiAudience {
 
-    public static final String RECEIVE_ALL_PERMISSION = "pgm.chat.receive.all";
+    public static final String RECEIVE_ALL_PERMISSION = "pgm.chat.all.receive";
 
     public interface Factory {
         PartyChannel create(Party party);
