@@ -212,7 +212,7 @@ public class MiscCommands implements Commands {
         if(!sender.equals(other) && !sender.hasPermission("sudo.others")) {
             throw new CommandPermissionsException();
         }
-        String command = args.getRemainingString(index);
+        String command = args.getJoinedStrings(index);
         List<String> commands = getPermutations(sender, command);
         String explanation;
         if(commands.size() == 1) {

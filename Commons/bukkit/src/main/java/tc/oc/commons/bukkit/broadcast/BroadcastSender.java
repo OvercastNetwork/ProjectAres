@@ -118,14 +118,14 @@ public class BroadcastSender implements Commands {
         if(type == null) {
             type = ChatDoc.Destination.SERVER;
             destination = server._id();
-            message = args.getRemainingString(0);
+            message = args.getJoinedStrings(0);
         } else if(args.argsLength() >= 2) {
             if(type == ChatDoc.Destination.GLOBAL) {
                 destination = null;
-                message = args.getRemainingString(1);
+                message = args.getJoinedStrings(1);
             } else if(args.argsLength() >= 3) {
                 destination = args.getString(1);
-                message = args.getRemainingString(2);
+                message = args.getJoinedStrings(2);
                 if(!destinations.contains(destination)) {
                     throw newCommandException(sender, new WarningComponent("command.error.invalidOption", destination, destinations));
                 }

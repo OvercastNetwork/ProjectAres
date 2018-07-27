@@ -19,6 +19,7 @@ import tc.oc.commons.bukkit.inventory.ArmorType;
 import tc.oc.commons.core.IterableUtils;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 import tc.oc.pgm.events.PlayerLeavePartyEvent;
 import tc.oc.pgm.filters.query.PlayerQueryWithLocation;
 import tc.oc.pgm.flag.Flag;
@@ -167,9 +168,11 @@ public class Carried extends Spawned implements Missing {
     @Override
     public void tickRunning() {
         super.tickRunning();
-
         BaseComponent message = this.getMessage();
-        this.carrier.sendHotbarMessage(message);
+
+        if (MinecraftVersion.atLeast(MinecraftVersion.MINECRAFT_1_8, this.carrier.getBukkit().getProtocolVersion())) {
+            this.carrier.sendHotbarMessage(message);
+        }
 
         if(!Components.equals(message, this.lastMessage)) {
             this.lastMessage = message;

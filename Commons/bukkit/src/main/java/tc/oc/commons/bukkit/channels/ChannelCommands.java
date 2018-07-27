@@ -75,7 +75,7 @@ public class ChannelCommands implements Commands, Listener {
                     audiences.get(player).sendMessage(new TranslatableComponent("channels.default.set", typeName));
                 }
             } else {
-                channel.chat(sender, args.getRemainingString(0));
+                channel.chat(sender, args.getJoinedStrings(0));
             }
         } else {
             throw new CommandPermissionsException();

@@ -53,6 +53,8 @@ public class LegacyFlagPlayerFacet implements MatchPlayerFacet, Listener {
     protected void trackFlag(Flag flag) {
         if(lessThan(MINECRAFT_1_8, bukkit.getProtocolVersion())) {
             beams.put(flag, beams.getOrDefault(flag, new Beam(flag)));
+
+//            flag.getLocation().ifPresent(location -> bukkit.sendBlockChange(location, Material.AIR, (byte) 0));
         }
     }
 

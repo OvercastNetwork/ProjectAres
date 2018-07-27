@@ -87,7 +87,7 @@ public class PunishmentCommands implements Commands {
 
     public void create(CommandContext args, CommandSender sender, @Nullable Type type, @Nullable Duration duration) throws CommandException {
         final User punisher = userFinder.getLocalUser(sender);
-        final String reason = args.getRemainingString(duration == null ? 1 : 2);
+        final String reason = args.getJoinedStrings(duration == null ? 1 : 2);
         final boolean auto = flag('a', args, sender);
         final boolean silent = flag('s', args, sender);
         final boolean offrecord = flag('o', args, sender);
