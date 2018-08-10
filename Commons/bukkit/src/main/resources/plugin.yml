@@ -61,3 +61,7 @@ permissions:
     default: false
   ocn.broadcast.global:
     default: false
+  ocn.trophies.list:
+    default: false
+  ocn.trophies.modify:
+    default: false
