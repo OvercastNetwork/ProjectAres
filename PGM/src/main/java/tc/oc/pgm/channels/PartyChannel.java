@@ -62,9 +62,4 @@ public class PartyChannel extends SimpleChannel implements MultiAudience {
                (sender.hasPermission(RECEIVE_ALL_PERMISSION) && player.isObserving());
     }
 
-    @Override
-    public Stream<? extends Audience> audiences() {
-        return party.players();
-    }
-
 }
