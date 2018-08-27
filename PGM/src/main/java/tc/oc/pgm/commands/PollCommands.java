@@ -232,7 +232,6 @@ public class PollCommands implements Commands {
             }
             pollManager.startPoll(poll);
             Bukkit.getServer().broadcastMessage(Poll.boldAqua + poll.getInitiator() + Poll.normalize + " has started a poll " + poll.getDescriptionMessage());
-            Bukkit.broadcast(Poll.tutorialMessage());
         }
     }
 }
