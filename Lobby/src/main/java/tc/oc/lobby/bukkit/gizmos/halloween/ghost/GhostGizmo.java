@@ -17,6 +17,7 @@ import tc.oc.lobby.bukkit.gizmos.Gizmos;
 import tc.oc.lobby.bukkit.gizmos.halloween.HalloweenGizmo;
 
 public class GhostGizmo extends HalloweenGizmo implements Listener {
+
     private final OnlinePlayerMapAdapter<Instant> coolDowns = new OnlinePlayerMapAdapter<>(Lobby.get());
     private static final Duration COOLDOWN = Duration.ofMinutes(1);
 
