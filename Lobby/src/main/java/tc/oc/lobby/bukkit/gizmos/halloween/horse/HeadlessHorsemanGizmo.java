@@ -35,6 +35,11 @@ public class HeadlessHorsemanGizmo extends HalloweenGizmo implements Listener {
         Bukkit.getPluginManager().registerEvents(this, Lobby.get());
     }
 
+    @Override
+    public boolean canPurchase(Player player) {
+        return player.hasPermission("lobby.gizmo.buy.horse") || player.isOp();
+    }
+
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
         if(!(Gizmos.gizmoMap.get(e.getPlayer()) instanceof HeadlessHorsemanGizmo)
