@@ -15,6 +15,8 @@ import tc.oc.commons.bukkit.tokens.TokenUtil;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.commons.core.restart.RestartManager;
+import tc.oc.parse.ParseException;
+import tc.oc.parse.primitive.BooleanParser;
 import tc.oc.pgm.Config;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.map.PGMMap;
@@ -37,8 +39,13 @@ import static tc.oc.commons.bukkit.commands.CommandUtils.newCommandException;
 
 public class PollCommands implements Commands {
 
+    private static final String VOTE_FOR = ChatColor.GREEN + "in favor of";
+    private static final String VOTE_AGAINST = ChatColor.RED + "against";
+
     @Inject
     private static RestartManager restartManager;
+    @Inject
+    private static BooleanParser booleanParser;
 
     @Command(
         aliases = {"poll"},
@@ -62,15 +69,14 @@ public class PollCommands implements Commands {
         Player voter = tc.oc.commons.bukkit.commands.CommandUtils.senderToPlayer(sender);
         Poll currentPoll = PGM.getPollManager().getPoll();
         if(currentPoll != null) {
-            if(args.getString(0).equalsIgnoreCase("yes")) {
-                currentPoll.voteFor(voter.getName());
-                sender.sendMessage(ChatColor.GREEN + "You have voted for the current poll.");
-            } else if (args.getString(0).equalsIgnoreCase("no")) {
-                currentPoll.voteAgainst(voter.getName());
-                sender.sendMessage(ChatColor.RED + "You have voted against the current poll.");
-            } else {
-                throw new CommandException("Accepted values: yes|no");
+            boolean vote;
+            try {
+                vote = booleanParser.parse(args.getString(0));
+            } catch (ParseException e) {
+                throw new CommandException("Please vote yes or no!");
             }
+            currentPoll.vote(vote, voter.getName());
+            sender.sendMessage(ChatColor.AQUA + "You voted " + (vote ? VOTE_FOR : VOTE_AGAINST) + ChatColor.AQUA + " the current poll.");
         } else {
             throw new CommandException("There is currently no poll running.");
         }
@@ -226,7 +232,6 @@ public class PollCommands implements Commands {
             }
             pollManager.startPoll(poll);
             Bukkit.getServer().broadcastMessage(Poll.boldAqua + poll.getInitiator() + Poll.normalize + " has started a poll " + poll.getDescriptionMessage());
-            Bukkit.broadcastMessage(Poll.tutorialMessage());
         }
     }
 }

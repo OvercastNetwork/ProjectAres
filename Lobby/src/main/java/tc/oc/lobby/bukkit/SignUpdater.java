@@ -1,5 +1,7 @@
 package tc.oc.lobby.bukkit;
 
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -16,9 +18,6 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableSet;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;

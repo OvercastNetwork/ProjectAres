@@ -1,9 +1,8 @@
 package tc.oc.lobby.bukkit.gizmos.rocket;
 
+import java.util.Iterator;
 import org.bukkit.util.Vector;
 import tc.oc.lobby.bukkit.gizmos.Gizmos;
-
-import java.util.Iterator;
 
 public class RocketTask implements Runnable{
     @Override

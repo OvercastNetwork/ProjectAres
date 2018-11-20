@@ -1,7 +1,7 @@
 package tc.oc.lobby.bukkit.gizmos.popper;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
-
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,17 +11,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import com.google.common.collect.Maps;
 import org.bukkit.event.player.PlayerQuitEvent;
 import tc.oc.api.bukkit.users.Users;
+import tc.oc.commons.bukkit.raindrops.RaindropUtil;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.lobby.bukkit.Lobby;
 import tc.oc.lobby.bukkit.LobbyTranslations;
 import tc.oc.lobby.bukkit.gizmos.Gizmo;
 import tc.oc.lobby.bukkit.gizmos.GizmoConfig;
 import tc.oc.lobby.bukkit.gizmos.Gizmos;
-import tc.oc.commons.bukkit.raindrops.RaindropUtil;
 
 public class PopperGizmo extends Gizmo implements Listener {
     public Map<Player, Integer> poppedCount = Maps.newHashMap();

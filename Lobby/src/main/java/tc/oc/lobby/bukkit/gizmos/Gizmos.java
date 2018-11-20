@@ -1,10 +1,9 @@
 package tc.oc.lobby.bukkit.gizmos;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,7 +19,8 @@ import tc.oc.lobby.bukkit.LobbyTranslations;
 import tc.oc.lobby.bukkit.gizmos.chicken.ChickenGizmo;
 import tc.oc.lobby.bukkit.gizmos.empty.EmptyGizmo;
 import tc.oc.lobby.bukkit.gizmos.gun.GunGizmo;
-import tc.oc.lobby.bukkit.gizmos.halloween.HeadlessHorsemanGizmo;
+import tc.oc.lobby.bukkit.gizmos.halloween.ghost.GhostGizmo;
+import tc.oc.lobby.bukkit.gizmos.halloween.horse.HeadlessHorsemanGizmo;
 import tc.oc.lobby.bukkit.gizmos.launcher.LauncherGizmo;
 import tc.oc.lobby.bukkit.gizmos.popper.PopperGizmo;
 import tc.oc.lobby.bukkit.gizmos.rocket.RocketGizmo;
@@ -32,10 +32,10 @@ public class Gizmos implements Listener {
     public static GunGizmo gunGizmo = new GunGizmo("Raindrop Gun", ChatColor.AQUA.toString(), "Gift raindrops with a punch :D", Material.IRON_HOE, 7500);
     public static ChickenGizmo chickenGizmo = new ChickenGizmo("Chickenifier5000", ChatColor.YELLOW.toString(), "bok B'GAWK", Material.EGG, 10000);
     public static LauncherGizmo launcherGizmo = new LauncherGizmo("Murica", ChatColor.RED.toString(), "Show your pride!", Material.FEATHER, 17760);
-    //TODO: Replace cost and handle permissions
-    public static HeadlessHorsemanGizmo headlessHorsemanGizmo = new HeadlessHorsemanGizmo("The Headless Horseman", ChatColor.RED.toString(), "You have been taken over by the darkness...", Material.NETHER_STAR, 999999);
+    public static HeadlessHorsemanGizmo headlessHorsemanGizmo = new HeadlessHorsemanGizmo("The Headless Horseman", ChatColor.RED.toString(), "You have been taken over by the darkness...", Material.NETHER_STAR);
+    public static GhostGizmo ghostGizmo = new GhostGizmo("Ghosts", ChatColor.RED.toString(), "Surround yourself in ghosts!", Material.BONE);
 
-    public static final List<Gizmo> gizmos = Lists.newArrayList(emptyGizmo, popperGizmo, rocketGizmo, gunGizmo, chickenGizmo, launcherGizmo, headlessHorsemanGizmo);
+    public static final List<Gizmo> gizmos = Lists.newArrayList(emptyGizmo, popperGizmo, rocketGizmo, gunGizmo, chickenGizmo, launcherGizmo, headlessHorsemanGizmo, ghostGizmo);
     public static Map<Player, Gizmo> gizmoMap = Maps.newHashMap();
     public static Map<Player, Gizmo> purchasingMap = Maps.newHashMap();
 

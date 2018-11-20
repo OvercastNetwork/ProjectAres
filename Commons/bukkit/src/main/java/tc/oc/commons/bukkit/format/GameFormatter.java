@@ -210,7 +210,10 @@ public class GameFormatter {
     }
 
     public void sendList(Audience audience, Collection<Game> games) {
-        if(games.isEmpty()) return;
+        if(games.isEmpty()) {
+            audience.sendMessage(new WarningComponent("game.none"));
+            return;
+        }
 
         audience.sendMessage(
             new Component(

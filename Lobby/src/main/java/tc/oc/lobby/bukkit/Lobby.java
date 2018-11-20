@@ -1,7 +1,6 @@
 package tc.oc.lobby.bukkit;
 
 import javax.inject.Inject;
-
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;

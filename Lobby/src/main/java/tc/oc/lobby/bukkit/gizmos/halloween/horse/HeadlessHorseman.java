@@ -1,4 +1,4 @@
-package tc.oc.lobby.bukkit.gizmos.halloween;
+package tc.oc.lobby.bukkit.gizmos.halloween.horse;
 
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.Color;

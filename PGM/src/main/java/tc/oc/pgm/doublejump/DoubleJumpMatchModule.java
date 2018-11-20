@@ -113,7 +113,9 @@ public class DoubleJumpMatchModule extends MatchModule implements Listener {
 
             impulse.setY(0.75 + Math.abs(impulse.getY()) * 0.5);
             impulse.multiply(jumper.kit.power / 3f);
-            event.getPlayer().applyImpulse(impulse, true);
+            // HACK: Shiny broke the impulse API
+            // event.getPlayer().applyImpulse(impulse, true);
+            event.getPlayer().setVelocity(player.getVelocity().plus(impulse));
 
             player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 0.5f, 1.8f);
         }

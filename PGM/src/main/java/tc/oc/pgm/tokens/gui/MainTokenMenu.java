@@ -1,6 +1,7 @@
 package tc.oc.pgm.tokens.gui;
 
 import org.bukkit.ChatColor;
+import tc.oc.commons.bukkit.chat.WarningComponent;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.bukkit.gui.interfaces.ChestInterface;
 import tc.oc.commons.bukkit.tokens.TokenUtil;
@@ -8,6 +9,7 @@ import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import tc.oc.pgm.Config;
 import tc.oc.pgm.menu.gui.MainMenuInterface;
 
 import java.util.ArrayList;
@@ -51,7 +53,11 @@ public class MainTokenMenu extends ChestInterface {
                 , 15) {
             @Override
             public void function(Player player) {
-                player.openInventory(new MutationTokenInterface(player).getInventory());
+                if (Config.Poll.enabled()) {
+                    player.openInventory(new MutationTokenInterface(player).getInventory());
+                } else {
+                    player.sendMessage(new WarningComponent("poll.disabled"));
+                }
             }
         });
 

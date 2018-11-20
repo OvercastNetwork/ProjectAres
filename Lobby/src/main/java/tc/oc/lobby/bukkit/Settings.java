@@ -1,16 +1,12 @@
 package tc.oc.lobby.bukkit;
 
-import me.anxuiz.settings.*;
-import me.anxuiz.settings.bukkit.PlayerSettingCallback;
+import me.anxuiz.settings.Setting;
+import me.anxuiz.settings.SettingBuilder;
+import me.anxuiz.settings.SettingCallbackManager;
+import me.anxuiz.settings.SettingRegistry;
+import me.anxuiz.settings.TypeParseException;
 import me.anxuiz.settings.bukkit.PlayerSettings;
 import me.anxuiz.settings.types.EnumType;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import tc.oc.commons.bukkit.hologram.Hologram;
-import tc.oc.commons.bukkit.hologram.content.HologramAnimation;
-import tc.oc.commons.bukkit.util.ItemCreator;
-
-import javax.annotation.Nonnull;
 
 public class Settings {
 

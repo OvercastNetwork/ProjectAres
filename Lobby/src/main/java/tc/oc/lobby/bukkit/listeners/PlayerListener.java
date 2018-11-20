@@ -1,11 +1,19 @@
 package tc.oc.lobby.bukkit.listeners;
 
+import static net.md_5.bungee.api.ChatColor.AQUA;
+import static net.md_5.bungee.api.ChatColor.DARK_AQUA;
+import static net.md_5.bungee.api.ChatColor.DARK_PURPLE;
+import static net.md_5.bungee.api.ChatColor.GOLD;
+import static net.md_5.bungee.api.ChatColor.GREEN;
+import static net.md_5.bungee.api.ChatColor.LIGHT_PURPLE;
+
+import com.google.common.eventbus.Subscribe;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Random;
 import java.util.logging.Level;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import com.google.common.eventbus.Subscribe;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Location;
@@ -24,11 +32,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.geometry.Cuboid;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
-import java.time.Duration;
-import java.time.Instant;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.ServerDoc;
@@ -38,6 +44,7 @@ import tc.oc.commons.bukkit.bossbar.BossBarFactory;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.ComponentRenderContext;
 import tc.oc.commons.bukkit.chat.HeaderComponent;
+import tc.oc.commons.bukkit.chat.Links;
 import tc.oc.commons.bukkit.event.ObserverKitApplyEvent;
 import tc.oc.commons.bukkit.event.UserLoginEvent;
 import tc.oc.commons.core.chat.Audience;
@@ -49,9 +56,6 @@ import tc.oc.commons.core.restart.RequestRestartEvent;
 import tc.oc.commons.core.util.TimeUtils;
 import tc.oc.lobby.bukkit.LobbyConfig;
 import tc.oc.lobby.bukkit.Utils;
-import tc.oc.commons.bukkit.chat.Links;
-
-import static net.md_5.bungee.api.ChatColor.*;
 
 public class PlayerListener implements PluginFacet, Listener {
     class SignUpdate implements ServerDoc.StatusUpdate {

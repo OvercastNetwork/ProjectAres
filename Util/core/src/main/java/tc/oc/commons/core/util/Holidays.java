@@ -7,6 +7,8 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import tc.oc.commons.core.stream.Collectors;
 
+import javax.annotation.Nullable;
+
 public interface Holidays {
 
     ZoneOffset ZONE = ZoneOffset.UTC;
@@ -15,13 +17,13 @@ public interface Holidays {
 
         public final String key;
         public final MonthDay start;
-        public final MonthDay end;
+        @Nullable public final MonthDay end;
 
         Holiday(String key, MonthDay date) {
-            this(key, date, date);
+            this(key, date, null);
         }
 
-        Holiday(String key, MonthDay start, MonthDay end) {
+        Holiday(String key, MonthDay start, @Nullable MonthDay end) {
             this.key = key;
             this.start = start;
             this.end = end;
@@ -29,8 +31,10 @@ public interface Holidays {
 
         public boolean isNow() {
             final MonthDay now = MonthDay.now(ZONE);
-            return !(start.isBefore(end) ? now.isBefore(start) || now.isAfter(end)
-                                         : now.isBefore(start) && now.isAfter(end));
+            if (end != null) {
+                return !(now.isBefore(start) || now.isAfter(end));
+            } else 
+                return start.equals(now);
         }
 
     }

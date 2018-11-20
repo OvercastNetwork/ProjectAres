@@ -1,8 +1,7 @@
 package tc.oc.lobby.bukkit.gizmos;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tc.oc.lobby.bukkit.LobbyTranslations;
-import tc.oc.lobby.bukkit.gizmos.halloween.HeadlessHorsemanGizmo;
+import tc.oc.lobby.bukkit.gizmos.halloween.HalloweenGizmo;
 import tc.oc.lobby.bukkit.listeners.RaindropsListener;
 
 public abstract class Gizmo implements Listener {
@@ -29,7 +28,7 @@ public abstract class Gizmo implements Listener {
 
         this.initialize();
     }
-
+ 
     protected abstract void initialize();
 
     public String getName(Player viewer) {
@@ -61,7 +60,7 @@ public abstract class Gizmo implements Listener {
     }
 
     public String getCostText(Player player) {
-        if (this.getClass().isInstance(HeadlessHorsemanGizmo.class)) {
+        if (this instanceof HalloweenGizmo) {
             return ChatColor.YELLOW + LobbyTranslations.get().t("gizmo.specialEvent", player);
         } else if(this.getClass().isInstance(Gizmos.purchasingMap.get(player))) {
             return ChatColor.GOLD + LobbyTranslations.get().t("gizmo.purchasing", player);
@@ -77,7 +76,7 @@ public abstract class Gizmo implements Listener {
     }
 
     public boolean ownsGizmo(Player player) {
-        if(cost <= 0) {
+        if(cost <= 0 && (!(this instanceof HalloweenGizmo))) {
             return true;
         } else {
             return player.hasPermission(this.getPermissionNode());

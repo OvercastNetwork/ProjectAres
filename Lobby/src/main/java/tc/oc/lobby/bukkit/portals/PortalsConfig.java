@@ -1,18 +1,17 @@
 package tc.oc.lobby.bukkit.portals;
 
-import org.bukkit.geometry.Cuboid;
-import tc.oc.commons.bukkit.config.ExternalConfiguration;
-import tc.oc.commons.bukkit.configuration.ConfigUtils;
-import tc.oc.commons.bukkit.teleport.Navigator;
-import tc.oc.commons.core.logging.Loggers;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import org.bukkit.geometry.Cuboid;
+import tc.oc.commons.bukkit.config.ExternalConfiguration;
+import tc.oc.commons.bukkit.configuration.ConfigUtils;
+import tc.oc.commons.bukkit.teleport.Navigator;
+import tc.oc.commons.core.logging.Loggers;
 
 @Singleton
 public class PortalsConfig extends ExternalConfiguration {

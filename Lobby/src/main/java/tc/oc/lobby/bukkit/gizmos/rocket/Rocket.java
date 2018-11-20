@@ -1,12 +1,10 @@
 package tc.oc.lobby.bukkit.gizmos.rocket;
 
+import com.google.common.collect.Lists;
 import java.util.List;
-
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-
-import com.google.common.collect.Lists;
 
 public class Rocket {
     public Rocket(Player observer, Player victim, List<Firework> fireworks) {

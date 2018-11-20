@@ -1,10 +1,9 @@
 package tc.oc.lobby.bukkit.listeners;
 
+import com.google.common.collect.Maps;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.collect.Maps;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

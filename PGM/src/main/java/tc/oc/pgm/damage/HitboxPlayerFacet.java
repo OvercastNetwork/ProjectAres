@@ -78,7 +78,7 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
             final Location location = player.getLocation();
             final double radius = width / 2;
             return Cuboid.between(location.position().minus(radius, 0, radius),
-                                  location.position().plus(radius, PLAYER_HEIGHT, radius));
+                    location.position().plus(radius, PLAYER_HEIGHT, radius));
         } else {
             return player.getBoundingBox();
         }
@@ -151,9 +151,9 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
     private boolean isAttacker(Player attacker) {
         final MatchPlayer mp = match.getPlayer(attacker);
         return mp != null &&
-               mp.canInteract() &&
-               (mapInfo.friendlyFire ||
-                !mp.getParty().equals(matchPlayer.getParty()));
+                mp.canInteract() &&
+                (mapInfo.friendlyFire ||
+                        !mp.getParty().equals(matchPlayer.getParty()));
     }
 
     private void updateFakeLocations(Location c) {
