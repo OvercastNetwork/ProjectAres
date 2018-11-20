@@ -3,6 +3,8 @@ ProjectAres
 
 Custom Bukkit/Bungee plugins used by the former Overcast Network
 
+**NOTE**: This repository is no longer maintained, but you can still contribute to [forks](https://github.com/OvercastNetwork/ProjectAres/network).
+
 # License
 
 ProjectAres is free software: you can redistribute it and/or modify it
