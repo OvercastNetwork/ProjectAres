@@ -32,7 +32,6 @@ steps:
     name: gcr.io/cloud-builders/gcloud
     dir: infrastructure
     args:
-      - container
       - builds
       - submit
       - --async
