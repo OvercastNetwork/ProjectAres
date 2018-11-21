@@ -280,6 +280,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <configuration>
+                    <!-- Fix for Surefire-1588 -->
+                    <useSystemClassLoader>false</useSystemClassLoader>
                     <!-- Tests that use the Bukkit runtime will generate log files here -->
                     <workingDirectory>${basedir}/target/test-server</workingDirectory>
                 </configuration>
