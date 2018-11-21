@@ -22,7 +22,7 @@ public class GoalCommands {
     private GoalCommands() {}
 
     @Command(
-        aliases = {"proximity"},
+        aliases = {"proximity", "prox"},
         desc = "Show stats about how close each competitor has been to each objective",
         min = 0,
         max = 0
