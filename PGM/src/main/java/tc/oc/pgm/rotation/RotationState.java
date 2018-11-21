@@ -43,7 +43,7 @@ public final class RotationState {
 
     
     private Lazy<Integer> averageNeededPlayers = Lazy.from(() ->
-            (int) getMaps().stream().mapToInt(map -> map.getContext().playerLimitAverage()).average().orElse(0));
+            (int) getMaps().stream().mapToInt(map -> map.getPersistentContext().playerLimitAverage()).average().orElse(0));
     
     /**
      * Gets the approximate number of players supposed to be playing the rotation maps.

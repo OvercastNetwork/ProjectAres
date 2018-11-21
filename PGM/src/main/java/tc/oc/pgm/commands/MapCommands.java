@@ -174,7 +174,7 @@ public class MapCommands implements Commands {
             map = CommandUtils.getMatch(sender).getMap();
         }
 
-        final InfoModule infoModule = map.getContext().needModule(InfoModule.class);
+        final InfoModule infoModule = map.getPersistentContext().getInfoModule();
         final MapInfo mapInfo = infoModule.getMapInfo();
 
         audience.sendMessage(mapInfo.getFormattedMapTitle());
@@ -243,16 +243,7 @@ public class MapCommands implements Commands {
             }
         }
 
-        int maxPlayers = map.getContext()
-                            .features()
-                            .all(TeamFactory.class)
-                            .mapToInt(TeamFactory::getMaxPlayers)
-                            .sum();
-
-        FreeForAllModule ffam = map.getContext().getModule(FreeForAllModule.class);
-        if(ffam != null) {
-            maxPlayers += ffam.getOptions().maxPlayers;
-        }
+        int maxPlayers = map.getPersistentContext().playerLimits().upperEndpoint();
 
         audience.sendMessage(new Component(
             mapInfoLabel("command.map.mapInfo.playerLimit"),
@@ -261,7 +252,7 @@ public class MapCommands implements Commands {
 
         if(sender.hasPermission(Permissions.MAPDEV)) {
             audience.sendMessage(new Component(mapInfoLabel("command.map.mapInfo.genre"), new Component(mapInfo.getLocalizedGenre(), ChatColor.GOLD)));
-            audience.sendMessage(new Component(mapInfoLabel("command.map.mapInfo.proto"), new Component(map.getContext().getProto().toString(), ChatColor.GOLD)));
+            audience.sendMessage(new Component(mapInfoLabel("command.map.mapInfo.proto"), new Component(map.getPersistentContext().getProto().toString(), ChatColor.GOLD)));
             audience.sendMessage(new Component(mapInfoLabel("command.map.mapInfo.folder"), new Component(map.getFolder().getRelativePath().toString(), ChatColor.GOLD)));
             audience.sendMessage(new Component(mapInfoLabel("command.map.mapInfo.source"), new Component(map.getSource().getPath().toString(), ChatColor.GOLD)));
         }

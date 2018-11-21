@@ -59,6 +59,7 @@ import tc.oc.pgm.map.MapConfiguration;
 import tc.oc.pgm.map.MapDefinition;
 import tc.oc.pgm.map.MapLibrary;
 import tc.oc.pgm.map.MapLogRecord;
+import tc.oc.pgm.map.MapModuleContext;
 import tc.oc.pgm.map.MapNotFoundException;
 import tc.oc.pgm.map.PGMMap;
 import tc.oc.pgm.match.Match;
@@ -205,7 +206,10 @@ public class MapDevelopmentCommands implements Commands {
         final Optional<String> typeFilter = CommandUtils.flag(args, 't').map(String::toLowerCase);
         final Optional<String> idFilter = CommandUtils.flag(args, 'i').map(String::toLowerCase);
 
-        Stream<? extends FeatureDefinition> features = map.getContext().features().all();
+        MapModuleContext context = map.getContext().orElseThrow(() ->
+                new IllegalStateException("The map modules are currently unloaded."));
+
+        Stream<? extends FeatureDefinition> features = context.features().all();
         if(typeFilter.isPresent()) {
             features = features.filter(f -> f.inspectType().toLowerCase().contains(typeFilter.get()));
         }
@@ -222,7 +226,7 @@ public class MapDevelopmentCommands implements Commands {
             feature.inspectIdentity().ifPresent(id -> c.extra(" ").extra(new Component(id, ChatColor.YELLOW)));
 
             if(locate) {
-                final Element element = map.getContext().features().definitionNode(feature);
+                final Element element = context.features().definitionNode(feature);
                 if(element != null) {
                     c.extra(" ").extra(new Component(new Node(element).describeWithLocation(), ChatColor.DARK_AQUA));
                 }
