@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import tc.oc.commons.bukkit.gui.buttons.Button;
+import tc.oc.commons.bukkit.gui.buttons.empty.EmptyButton;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.pgm.events.ObserverInteractEvent;
 
@@ -48,7 +49,7 @@ public class InterfaceListener implements Listener, PluginFacet {
         if (gui != null) {
             event.setCancelled(true);
             for (Button button : InterfaceManager.getButtons(gui, event.getRawSlot())) {
-                if (button != null) {
+                if (button != null && !(button instanceof EmptyButton)) {
                     button.function(player);
                     player.updateInventory();
                 }
