@@ -33,6 +33,7 @@ import org.bukkit.util.BlockVector;
 import tc.oc.commons.bukkit.chat.BukkitSound;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.event.CoarsePlayerMoveEvent;
+import tc.oc.commons.bukkit.item.BooleanItemTag;
 import tc.oc.commons.bukkit.util.BukkitUtils;
 import tc.oc.commons.bukkit.util.Materials;
 import tc.oc.commons.bukkit.util.NMSHacks;
@@ -90,6 +91,8 @@ public class Flag extends TouchableGoal<FlagDefinition> implements Listener {
     public static final BukkitSound DROP_SOUND = new BukkitSound(Sound.ENTITY_FIREWORK_TWINKLE_FAR, 1f, 1f);
     public static final BukkitSound RETURN_SOUND = new BukkitSound(Sound.ENTITY_FIREWORK_TWINKLE_FAR, 1f, 1f);
 
+    private static final BooleanItemTag FLAG_ITEM = new BooleanItemTag("flag", false);
+
     private final ImmutableSet<Net> nets;
     private final @Nullable Team owner;
 
@@ -110,6 +113,7 @@ public class Flag extends TouchableGoal<FlagDefinition> implements Listener {
         private BannerInfo(Location location, BannerMeta meta, ItemStack item, AngleProvider yawProvider) {
             this.location = location;
             this.meta = meta;
+            FLAG_ITEM.set(this.meta, true);
             this.item = item;
             this.yawProvider = yawProvider;
         }
@@ -483,9 +487,13 @@ public class Flag extends TouchableGoal<FlagDefinition> implements Listener {
         }
     }
 
+    private boolean isFlagItem(ItemStack item) {
+        return FLAG_ITEM.get(item);
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerDeath(PlayerDeathEvent event) {
-        event.getDrops().removeIf(itemStack -> itemStack.isSimilar(this.getBannerItem()));
+        event.getDrops().removeIf(this::isFlagItem);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
