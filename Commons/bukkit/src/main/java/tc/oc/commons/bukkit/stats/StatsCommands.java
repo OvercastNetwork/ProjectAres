@@ -10,6 +10,7 @@ import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.HeaderComponent;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.commands.UserFinder;
+import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
@@ -45,14 +46,26 @@ public class StatsCommands implements Commands {
     @CommandPermissions("projectares.stats")
     public void listStats(final CommandContext args, final CommandSender sender) throws CommandException {
         syncExecutor.callback(
-                userFinder.findUser(sender, args, 0, UserFinder.Default.SENDER),
+                userFinder.findLocalPlayer(sender, args, 0, UserFinder.Default.SENDER),
                 CommandFutureCallback.onSuccess(sender, args, result -> {
                     HashMap<String, Double> stats = StatsUtil.getStats(result.user);
 
                     Audience audience = audiences.get(sender);
+                    Identity playerIdentity = identityProvider.currentIdentity(result.user);
+
+                    if (!playerIdentity.isRevealed(sender)) {
+                        stats.put("kills", 0.0);
+                        stats.put("deaths", 0.0);
+                        stats.put("kd", 0.0);
+                        stats.put("kk", 0.0);
+                        stats.put("wool_placed", 0.0);
+                        stats.put("cores_leaked", 0.0);
+                        stats.put("destroyables_destroyed", 0.0);
+                        stats.put("tkrate", 0.0);
+                    }
 
                     audience.sendMessage(new HeaderComponent(new Component(ChatColor.AQUA)
-                            .translate("stats.list", new PlayerComponent(identityProvider.currentIdentity(result.user)))));
+                            .translate("stats.list", new PlayerComponent(playerIdentity))));
                     audience.sendMessage(new Component(ChatColor.AQUA)
                             .translate("stats.kills", new Component(String.format("%,d", (int)(double)stats.get("kills")), ChatColor.BLUE)));
                     audience.sendMessage(new Component(ChatColor.AQUA)
