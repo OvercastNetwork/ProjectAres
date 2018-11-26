@@ -5,8 +5,8 @@ import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.message.MessageListener;
+import tc.oc.api.message.MessageQueue;
 import tc.oc.api.message.types.ModelUpdate;
-import tc.oc.api.queue.PrimaryQueue;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.broadcast.BroadcastSender;
 import tc.oc.commons.bukkit.channels.Channel;
@@ -23,14 +23,14 @@ public class ChatAnnouncer implements PluginFacet, MessageListener {
 
     private final Server server;
     private final ServerStore serverStore;
-    private final PrimaryQueue primaryQueue;
+    private final MessageQueue queue;
     private final MainThreadExecutor executor;
     private final ChannelRouter channelRouter;
     private final BroadcastSender broadcaster;
 
-    @Inject ChatAnnouncer(Server server, ServerStore serverStore, PrimaryQueue primaryQueue, MainThreadExecutor executor, ChannelRouter channelRouter, BroadcastSender broadcaster) {
+    @Inject ChatAnnouncer(Server server, ServerStore serverStore, MessageQueue queue, MainThreadExecutor executor, ChannelRouter channelRouter, BroadcastSender broadcaster) {
         this.server = server;
-        this.primaryQueue = primaryQueue;
+        this.queue = queue;
         this.executor = executor;
         this.channelRouter = channelRouter;
         this.broadcaster = broadcaster;
@@ -39,13 +39,13 @@ public class ChatAnnouncer implements PluginFacet, MessageListener {
 
     @Override
     public void enable() {
-        primaryQueue.bind(ModelUpdate.class);
-        primaryQueue.subscribe(this, executor);
+        queue.bind(ModelUpdate.class);
+        queue.subscribe(this, executor);
     }
 
     @Override
     public void disable() {
-        primaryQueue.unsubscribe(this);
+        queue.unsubscribe(this);
     }
 
     @MessageListener.HandleMessage
