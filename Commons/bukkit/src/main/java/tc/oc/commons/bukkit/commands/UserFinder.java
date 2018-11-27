@@ -140,6 +140,19 @@ public class UserFinder {
 
     public ListenableFuture<PlayerSearchResponse> findPlayer(CommandSender sender, @Nullable String name, Scope scope, Default def) {
         try {
+            if (name == null || name.isEmpty()) {
+                switch(def) {
+                    case NULL:
+                        return Futures.immediateFuture(null);
+
+                    case SENDER:
+                        return Futures.immediateFuture(localPlayerResponse(sender, senderToPlayer(sender)));
+
+                    default:
+                        throw new TranslatableCommandException("command.specifyPlayer");
+                }
+            }
+
             final Player player = getLocalPlayer(sender, name);
             if(player != null) {
                 return Futures.immediateFuture(localPlayerResponse(sender, player));
