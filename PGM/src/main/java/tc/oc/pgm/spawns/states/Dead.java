@@ -8,8 +8,10 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import tc.oc.api.docs.User;
 import tc.oc.commons.bukkit.freeze.FrozenPlayer;
+import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.bukkit.util.NMSHacks;
 import tc.oc.commons.core.chat.Component;
+import tc.oc.pgm.PGM;
 import tc.oc.pgm.events.PlayerChangePartyEvent;
 import tc.oc.pgm.match.Competitor;
 import tc.oc.pgm.match.MatchPlayer;
@@ -30,6 +32,7 @@ public class Dead extends Spawning {
     private boolean kitted, rotted;
     private @Nullable FrozenPlayer frozenPlayer;
     private BaseComponent title;
+    private final IdentityProvider identityProvider;
 
     public Dead(MatchPlayer player, @Nullable ParticipantState killer) {
         this(player, killer, player.getMatch().getClock().now().tick);
@@ -39,6 +42,8 @@ public class Dead extends Spawning {
         super(player);
         this.deathTick = deathTick;
         this.killer = killer;
+        // TODO: This is really bad, but I'm not going to rewrite the entire state system to fix a single issue.
+        this.identityProvider = PGM.get().injector().getInstance(IdentityProvider.class);
     }
 
     @Override
@@ -143,11 +148,12 @@ public class Dead extends Spawning {
     protected BaseComponent computeTitle() {
         String screen = "deathScreen.title";
         if(killer != null) {
-            String key = userStore.user(killer.getPlayerId())
-                                  .map(User::death_screen)
-                                  .orElse(null);
-            if(key != null && !key.equals("default")) {
-                screen = "death.screen." + key;
+            User killerUser = userStore.user(killer.getPlayerId()).orElse(null);
+            if (killerUser != null && identityProvider.currentIdentity(killerUser).isRevealed(this.player.getBukkit())) {
+                String key = killerUser.death_screen();
+                if(key != null && !key.equals("default")) {
+                    screen = "death.screen." + key;
+                }
             }
         }
         BaseComponent title = new TranslatableComponent(screen);
