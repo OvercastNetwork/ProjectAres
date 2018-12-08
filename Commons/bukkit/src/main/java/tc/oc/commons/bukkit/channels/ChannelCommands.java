@@ -44,7 +44,7 @@ public class ChannelCommands implements Commands, Listener {
     }
 
     @Command(
-        aliases = "g",
+        aliases = { "g", "shout" },
         desc = "Send a message to everyone on the local server.",
         usage = "[message...]"
     )
@@ -87,12 +87,22 @@ public class ChannelCommands implements Commands, Listener {
         event.setCancelled(true);
         syncPlayerExecutorFactory.queued(event.getPlayer()).execute(player -> {
             Channel channel = channelRouter.getDefaultChannel(player);
+            String message = event.getMessage();
+
+            if (message.startsWith("!")) {
+                channel = channelRouter.getChannel(ChatDoc.Type.SERVER).get();
+                message = message.substring(1);
+            } else if (message.startsWith("@a ")) {
+                channel = channelRouter.getChannel(ChatDoc.Type.SERVER).get();
+                message = message.substring(3);
+            }
+
             if(!channel.sendable(player)) {
                 // If player cannot chat in their preferred channel,
                 // assume they can send to the default channel.
                 channel = channelRouter.getDefaultChannel();
             }
-            channel.chat(player, event.getMessage());
+            channel.chat(player, message);
         });
     }
 
