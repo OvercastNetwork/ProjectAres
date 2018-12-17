@@ -87,14 +87,14 @@ public class ChannelCommands implements Commands, Listener {
         event.setCancelled(true);
         syncPlayerExecutorFactory.queued(event.getPlayer()).execute(player -> {
             Channel channel = channelRouter.getDefaultChannel(player);
-            String message = event.getMessage();
+            String message = event.getMessage().trim();
 
-            if (message.startsWith("!")) {
+            if(message.startsWith("!")) {
                 channel = channelRouter.getChannel(ChatDoc.Type.SERVER).get();
-                message = message.substring(1);
-            } else if (message.startsWith("@a ")) {
+                message = message.substring(1).trim();
+            } else if(message.startsWith("@a ")) {
                 channel = channelRouter.getChannel(ChatDoc.Type.SERVER).get();
-                message = message.substring(3);
+                message = message.substring(3).trim();
             }
 
             if(!channel.sendable(player)) {
@@ -102,7 +102,11 @@ public class ChannelCommands implements Commands, Listener {
                 // assume they can send to the default channel.
                 channel = channelRouter.getDefaultChannel();
             }
-            channel.chat(player, message);
+            if(!message.isEmpty()) {
+                channel.chat(player, message);
+            } else {
+                audiences.get(player).sendWarning(new TranslatableComponent("channels.message.empty"), false);
+            }
         });
     }
 
