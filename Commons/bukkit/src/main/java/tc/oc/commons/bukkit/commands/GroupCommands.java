@@ -5,6 +5,9 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import com.sk89q.minecraft.util.commands.NestedCommand;
+import java.time.Duration;
+import java.time.Instant;
+import javax.inject.Inject;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import tc.oc.api.bukkit.users.BukkitUserStore;
@@ -17,10 +20,6 @@ import tc.oc.commons.core.commands.NestedCommands;
 import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.commons.core.util.ThrowingBiConsumer;
 import tc.oc.minecraft.scheduler.Sync;
-
-import javax.inject.Inject;
-import java.time.Duration;
-import java.time.Instant;
 
 public class GroupCommands implements NestedCommands {
 

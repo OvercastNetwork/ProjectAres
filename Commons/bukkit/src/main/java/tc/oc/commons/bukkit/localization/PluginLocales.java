@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.localization;
 
 import java.util.Locale;
 import javax.annotation.Nullable;
-
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.core.localization.LocaleMatcher;
 import tc.oc.commons.core.localization.Locales;

@@ -1,12 +1,11 @@
 package tc.oc.commons.bukkit.stats;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.inject.Inject;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.User;
-
-import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
 
 public class StatsUtil {
 

@@ -1,5 +1,11 @@
 package tc.oc.commons.bukkit.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.minecraft.server.NBTTagCompound;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -10,8 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
-
-import java.util.*;
 
 public class ItemCreator {
 

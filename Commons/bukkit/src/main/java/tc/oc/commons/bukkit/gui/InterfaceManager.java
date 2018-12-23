@@ -1,14 +1,13 @@
 package tc.oc.commons.bukkit.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import tc.oc.commons.bukkit.gui.buttons.Button;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InterfaceManager {
 

@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.chat;
 
 import java.net.URI;
 import java.util.Optional;
-
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.bukkit.nick.Identity;
 

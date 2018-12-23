@@ -1,12 +1,11 @@
 package tc.oc.commons.bukkit.whisper;
 
+import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.ListenableFuture;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import javax.inject.Inject;
-
-import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.ListenableFuture;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

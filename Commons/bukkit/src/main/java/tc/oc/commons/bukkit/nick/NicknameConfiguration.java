@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.nick;
 
-import javax.inject.Inject;
+import static com.google.common.base.Preconditions.checkNotNull;
 
+import javax.inject.Inject;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class NicknameConfiguration {
 

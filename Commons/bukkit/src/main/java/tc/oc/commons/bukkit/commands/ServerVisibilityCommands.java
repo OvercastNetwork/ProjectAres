@@ -1,14 +1,13 @@
 package tc.oc.commons.bukkit.commands;
 
-import java.util.EnumSet;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-
 import com.google.common.util.concurrent.ListenableFuture;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
+import java.util.EnumSet;
+import java.util.logging.Logger;
+import javax.inject.Inject;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -19,12 +18,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.MinecraftService;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.commons.bukkit.event.WhitelistStateChangeEvent;
 import tc.oc.commons.bukkit.whitelist.Whitelist;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.logging.Loggers;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 public class ServerVisibilityCommands implements Listener, Commands {
 

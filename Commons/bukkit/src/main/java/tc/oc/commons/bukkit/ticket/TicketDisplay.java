@@ -1,12 +1,11 @@
 package tc.oc.commons.bukkit.ticket;
 
+import com.google.common.cache.LoadingCache;
 import java.time.Duration;
 import java.util.Collections;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.cache.LoadingCache;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;

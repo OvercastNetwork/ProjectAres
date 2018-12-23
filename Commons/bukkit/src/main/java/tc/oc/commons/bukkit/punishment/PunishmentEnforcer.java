@@ -1,8 +1,11 @@
 package tc.oc.commons.bukkit.punishment;
 
+import static tc.oc.commons.bukkit.punishment.PunishmentMessageSetting.Options;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP_STALE;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,10 +28,6 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.minecraft.api.event.Enableable;
 import tc.oc.minecraft.scheduler.Sync;
-
-import static tc.oc.commons.bukkit.punishment.PunishmentMessageSetting.Options;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP_STALE;
 
 @Singleton
 public class PunishmentEnforcer implements Enableable, MessageListener {

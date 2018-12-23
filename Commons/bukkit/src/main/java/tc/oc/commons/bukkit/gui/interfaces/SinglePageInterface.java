@@ -1,17 +1,15 @@
 package tc.oc.commons.bukkit.gui.interfaces;
 
-import tc.oc.commons.bukkit.gui.Interface;
+import java.util.ArrayList;
+import java.util.List;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.bukkit.gui.buttons.empty.EmptyButton;
 import tc.oc.commons.bukkit.gui.buttons.nextPage.NextPageButton;
 import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
 import tc.oc.commons.bukkit.util.ObjectUtils;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * MultiPageInterfaces are a special group of interfaces. They aren't a single interface, but a collection of

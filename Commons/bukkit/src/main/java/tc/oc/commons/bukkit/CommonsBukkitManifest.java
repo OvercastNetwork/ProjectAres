@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit;
 
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.ConsoleCommandSender;
@@ -25,7 +24,15 @@ import tc.oc.commons.bukkit.chat.TextComponentRenderer;
 import tc.oc.commons.bukkit.chat.TranslatableComponentRenderer;
 import tc.oc.commons.bukkit.chat.UserTextComponent;
 import tc.oc.commons.bukkit.chat.UserTextComponentRenderer;
-import tc.oc.commons.bukkit.commands.*;
+import tc.oc.commons.bukkit.commands.GroupCommands;
+import tc.oc.commons.bukkit.commands.MiscCommands;
+import tc.oc.commons.bukkit.commands.PermissionCommands;
+import tc.oc.commons.bukkit.commands.ServerCommands;
+import tc.oc.commons.bukkit.commands.ServerVisibilityCommands;
+import tc.oc.commons.bukkit.commands.SkinCommands;
+import tc.oc.commons.bukkit.commands.TraceCommands;
+import tc.oc.commons.bukkit.commands.UserCommands;
+import tc.oc.commons.bukkit.commands.UserFinder;
 import tc.oc.commons.bukkit.debug.LeakListener;
 import tc.oc.commons.bukkit.event.targeted.TargetedEventManifest;
 import tc.oc.commons.bukkit.flairs.FlairConfiguration;

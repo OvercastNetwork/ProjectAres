@@ -1,12 +1,11 @@
 package tc.oc.commons.bukkit.punishment;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.time.Duration;
 import java.time.Instant;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.util.concurrent.ListenableFuture;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.Punishment;
 import tc.oc.api.docs.Server;

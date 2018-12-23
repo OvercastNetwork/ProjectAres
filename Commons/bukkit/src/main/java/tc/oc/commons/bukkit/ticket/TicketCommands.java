@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.ticket;
 
-import java.util.List;
-import javax.inject.Inject;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import java.util.List;
+import javax.inject.Inject;
 import org.bukkit.command.CommandSender;
 import tc.oc.api.docs.Game;
 import tc.oc.commons.bukkit.commands.CommandUtils;

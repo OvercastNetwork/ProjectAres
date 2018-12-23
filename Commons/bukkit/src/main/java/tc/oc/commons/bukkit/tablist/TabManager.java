@@ -1,5 +1,8 @@
 package tc.oc.commons.bukkit.tablist;
 
+import java.util.Map;
+import java.util.logging.Logger;
+import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,10 +16,6 @@ import tc.oc.commons.bukkit.nick.PlayerIdentityChangeEvent;
 import tc.oc.commons.core.logging.ClassLogger;
 import tc.oc.commons.core.util.DefaultMapAdapter;
 import tc.oc.commons.core.util.DefaultProvider;
-
-import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Custom player list display (for 1.8 and later)

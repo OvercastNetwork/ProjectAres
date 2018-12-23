@@ -1,13 +1,12 @@
 package tc.oc.commons.bukkit.report;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.util.concurrent.ListenableFuture;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;

@@ -1,14 +1,12 @@
 package tc.oc.commons.bukkit.localization;
 
-import java.util.Locale;
-import java.util.Set;
+import static tc.oc.test.Assert.assertSequence;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.Locale;
+import java.util.Set;
 import org.junit.Test;
 import tc.oc.commons.core.localization.Locales;
-
-import static tc.oc.test.Assert.*;
-import static org.junit.Assert.*;
 
 public class LocalesTest {
 

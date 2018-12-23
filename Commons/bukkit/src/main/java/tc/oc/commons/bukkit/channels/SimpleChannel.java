@@ -1,5 +1,8 @@
 package tc.oc.commons.bukkit.channels;
 
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,10 +19,6 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.MultiAudience;
 import tc.oc.commons.core.plugin.PluginFacet;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import java.util.stream.Stream;
 
 public abstract class SimpleChannel implements MultiAudience, Channel, PluginFacet {
 

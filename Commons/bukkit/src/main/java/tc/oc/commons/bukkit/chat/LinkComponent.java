@@ -3,7 +3,6 @@ package tc.oc.commons.bukkit.chat;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;

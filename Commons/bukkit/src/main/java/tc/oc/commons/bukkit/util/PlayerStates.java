@@ -1,9 +1,8 @@
 package tc.oc.commons.bukkit.util;
 
+import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
-
-import javax.annotation.Nullable;
 
 /**
  * Mechanism for retrieving basic state data about a match player

@@ -1,12 +1,11 @@
 package tc.oc.commons.bukkit.respack;
 
-import javax.inject.Inject;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
+import javax.inject.Inject;
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.NestedCommands;

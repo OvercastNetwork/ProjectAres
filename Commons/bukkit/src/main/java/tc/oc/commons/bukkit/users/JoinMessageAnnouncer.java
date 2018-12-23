@@ -1,12 +1,16 @@
 package tc.oc.commons.bukkit.users;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static tc.oc.commons.core.IterableUtils.none;
+import static tc.oc.commons.core.util.Nullables.first;
+import static tc.oc.commons.core.util.Utils.notEqual;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import me.anxuiz.settings.Setting;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -46,11 +50,6 @@ import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.Lazy;
 import tc.oc.minecraft.scheduler.SyncExecutor;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static tc.oc.commons.core.IterableUtils.none;
-import static tc.oc.commons.core.util.Nullables.first;
-import static tc.oc.commons.core.util.Utils.notEqual;
 
 /**
  * Receives {@link SessionChange} messages from the topic exchange and generates

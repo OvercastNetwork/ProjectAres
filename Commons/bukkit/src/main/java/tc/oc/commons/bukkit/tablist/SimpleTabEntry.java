@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.tablist;
 
+import java.util.UUID;
+import javax.annotation.Nullable;
 import org.bukkit.GameMode;
 import org.bukkit.Skin;
 import org.bukkit.entity.Player;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 /**
  * Implements part of {@link TabEntry} with a few generally useful properties

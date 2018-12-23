@@ -1,16 +1,14 @@
 package tc.oc.commons.bukkit.gui.interfaces.render;
 
-import tc.oc.commons.bukkit.gui.Interface;
-import tc.oc.commons.bukkit.gui.buttons.Button;
-import tc.oc.commons.bukkit.gui.interfaces.ChestInterface;
-import tc.oc.commons.bukkit.util.ItemCreator;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
+import tc.oc.commons.bukkit.gui.buttons.Button;
+import tc.oc.commons.bukkit.gui.interfaces.ChestInterface;
+import tc.oc.commons.bukkit.util.ItemCreator;
 
 public class ChestRenderInterface extends ChestInterface {
 

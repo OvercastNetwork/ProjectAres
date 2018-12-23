@@ -1,7 +1,15 @@
 package tc.oc.commons.bukkit.chat;
 
+import static java.util.Optional.ofNullable;
+
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.function.Consumer;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.Server;
@@ -13,15 +21,6 @@ import tc.oc.api.model.IdFactory;
 import tc.oc.api.model.ModelService;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.minecraft.api.event.Listener;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.function.Consumer;
-
-import static java.util.Optional.ofNullable;
 
 @Singleton
 public class ChatCreator implements PluginFacet, Listener {

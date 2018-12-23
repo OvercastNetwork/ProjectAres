@@ -1,18 +1,16 @@
 package tc.oc.commons.bukkit.whitelist;
 
-import java.util.Iterator;
-import javax.inject.Inject;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
+import java.util.Iterator;
+import javax.inject.Inject;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import tc.oc.api.docs.PlayerId;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.ListComponent;
 import tc.oc.commons.bukkit.chat.NameStyle;
@@ -26,6 +24,7 @@ import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.NestedCommands;
 import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 public class WhitelistCommands implements NestedCommands {
 

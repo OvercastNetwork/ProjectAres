@@ -1,12 +1,13 @@
 package tc.oc.commons.bukkit.teleport;
 
+import static java.util.Comparator.comparing;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.configuration.Configuration;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
@@ -14,8 +15,6 @@ import tc.oc.api.model.ModelDispatcher;
 import tc.oc.api.model.ModelListener;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.core.plugin.PluginFacet;
-
-import static java.util.Comparator.comparing;
 
 @Singleton
 public class FeaturedServerTracker implements PluginFacet, ModelListener {

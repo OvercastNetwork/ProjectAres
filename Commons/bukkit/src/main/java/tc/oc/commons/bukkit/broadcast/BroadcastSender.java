@@ -1,11 +1,22 @@
 package tc.oc.commons.bukkit.broadcast;
 
+import static tc.oc.api.util.Permissions.hasPermissionForEnum;
+import static tc.oc.commons.bukkit.commands.CommandUtils.newCommandException;
+import static tc.oc.commons.bukkit.commands.CommandUtils.tryEnum;
+
 import com.google.common.collect.Lists;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import com.sk89q.minecraft.util.commands.SuggestionContext;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -31,18 +42,6 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.formatting.StringUtils;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static tc.oc.api.util.Permissions.hasPermissionForEnum;
-import static tc.oc.commons.bukkit.commands.CommandUtils.newCommandException;
-import static tc.oc.commons.bukkit.commands.CommandUtils.tryEnum;
 
 /**
  * Allows {@link User}s to broadcast {@link Chat} messages across multiple servers.

@@ -1,10 +1,9 @@
 package tc.oc.commons.bukkit.broadcast.model;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableList;
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.Stream;
 import tc.oc.commons.core.inspect.Inspectable;
 import tc.oc.commons.core.stream.Collectors;
 import tc.oc.minecraft.server.ServerFilter;

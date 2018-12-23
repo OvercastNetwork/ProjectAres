@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.commands;
 
-import javax.inject.Inject;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
+import javax.inject.Inject;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -17,16 +16,14 @@ import tc.oc.api.docs.User;
 import tc.oc.api.friendships.FriendshipRequest;
 import tc.oc.api.friendships.FriendshipService;
 import tc.oc.api.minecraft.MinecraftService;
-import tc.oc.commons.bukkit.chat.Audiences;
-import tc.oc.commons.bukkit.chat.Links;
-import tc.oc.commons.bukkit.chat.NameStyle;
-import tc.oc.commons.bukkit.chat.PlayerComponent;
-import tc.oc.commons.core.util.Lazy;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.sessions.SessionService;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.ComponentPaginator;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.chat.HeaderComponent;
+import tc.oc.commons.bukkit.chat.Links;
+import tc.oc.commons.bukkit.chat.NameStyle;
+import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.format.UserFormatter;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.core.chat.Audience;
@@ -34,6 +31,8 @@ import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.commons.core.util.Lazy;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 /**
  * Commands for querying and possibly manipulating user records

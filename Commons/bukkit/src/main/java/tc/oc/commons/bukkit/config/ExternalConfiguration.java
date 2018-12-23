@@ -7,15 +7,14 @@ import java.util.logging.Level;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import tc.oc.commons.bukkit.logging.MapdevLogger;
-import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.file.PathWatcher;
 import tc.oc.file.PathWatcherService;
 import tc.oc.minecraft.api.configuration.InvalidConfigurationException;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
 
 /**
  * Base class for a configuration section that is loaded from the external

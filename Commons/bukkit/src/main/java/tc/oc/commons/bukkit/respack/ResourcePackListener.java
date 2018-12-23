@@ -1,5 +1,6 @@
 package tc.oc.commons.bukkit.respack;
 
+import com.google.common.eventbus.Subscribe;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
@@ -7,8 +8,6 @@ import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.eventbus.Subscribe;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -1,17 +1,16 @@
 package tc.oc.commons.bukkit.chat;
 
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Optional;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.bukkit.localization.Translator;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
-
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Optional;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class TranslatableComponentRenderer extends BaseComponentRenderer<TranslatableComponent> {

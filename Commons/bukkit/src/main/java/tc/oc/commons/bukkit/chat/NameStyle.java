@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.chat;
 
+import com.google.common.collect.ForwardingSet;
+import com.google.common.collect.Sets;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
-
-import com.google.common.collect.ForwardingSet;
-import com.google.common.collect.Sets;
 
 /**
  * The formatting properties for each different context in which names are displayed.

@@ -1,16 +1,14 @@
 package tc.oc.commons.bukkit.restart;
 
-import javax.inject.Inject;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import com.sk89q.minecraft.util.commands.Console;
+import javax.inject.Inject;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import tc.oc.api.docs.virtual.ServerDoc;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Audiences;
 import tc.oc.commons.core.commands.CommandFutureCallback;
@@ -18,6 +16,7 @@ import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.TranslatableCommandException;
 import tc.oc.commons.core.restart.RestartManager;
 import tc.oc.minecraft.api.command.CommandSender;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 public class RestartCommands implements Commands {
 

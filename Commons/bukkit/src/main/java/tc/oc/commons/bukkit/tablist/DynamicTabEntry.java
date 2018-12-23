@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.tablist;
 
 import com.google.common.collect.Iterables;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

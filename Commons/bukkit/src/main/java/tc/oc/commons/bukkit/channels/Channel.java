@@ -1,12 +1,11 @@
 package tc.oc.commons.bukkit.channels;
 
+import javax.annotation.Nullable;
 import org.bukkit.command.CommandSender;
 import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.commons.core.chat.Audience;
-
-import javax.annotation.Nullable;
 
 /**
  * An {@link Audience} that sends {@link Chat} messages to the API.

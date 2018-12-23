@@ -3,7 +3,6 @@ package tc.oc.commons.bukkit.tablist;
 import java.util.UUID;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Skin;
 import org.bukkit.entity.Player;

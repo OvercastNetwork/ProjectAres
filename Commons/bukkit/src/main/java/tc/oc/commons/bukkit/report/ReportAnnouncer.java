@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.report;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.BooleanType;
@@ -13,10 +12,8 @@ import tc.oc.api.message.MessageListener;
 import tc.oc.api.message.MessageQueue;
 import tc.oc.api.message.types.ModelUpdate;
 import tc.oc.api.servers.ServerStore;
-import tc.oc.commons.bukkit.channels.admin.AdminChannel;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
-import tc.oc.commons.bukkit.settings.SettingManagerProvider;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.minecraft.scheduler.MainThreadExecutor;
 
@@ -62,7 +59,11 @@ public class ReportAnnouncer implements PluginFacet, MessageListener {
 
     @HandleMessage
     public void broadcast(ModelUpdate<Report> message) {
-        if(serverStore.canCommunicate(localServer._id(), message.document().server_id())) {
+        if (!config.cross_server() && !localServer._id().equals(message.document().server_id())) {
+            return;
+        }
+
+        if(serverStore.canCommunicate(localServer._id(), message.document().server_id()) && config.families().contains(message.document().family())) {
             audiences.permission(ReportPermissions.RECEIVE)
                      .sendMessages(reportFormatter.format(message.document(), true, false));
         }

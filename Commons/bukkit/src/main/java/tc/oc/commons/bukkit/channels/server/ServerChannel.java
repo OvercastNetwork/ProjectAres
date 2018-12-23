@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.channels.server;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 import tc.oc.api.docs.Chat;
@@ -7,9 +9,6 @@ import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.commons.bukkit.channels.SimpleChannel;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.core.chat.Component;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class ServerChannel extends SimpleChannel {

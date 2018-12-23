@@ -1,14 +1,13 @@
 package tc.oc.commons.bukkit.tokens;
 
+import javax.inject.Inject;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.PlayerId;
+import tc.oc.api.docs.User;
 import tc.oc.api.users.CreditTokensRequest;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.util.SyncPlayerExecutorFactory;
-import tc.oc.api.docs.User;
-
-import javax.inject.Inject;
 
 public class TokenUtil {
 

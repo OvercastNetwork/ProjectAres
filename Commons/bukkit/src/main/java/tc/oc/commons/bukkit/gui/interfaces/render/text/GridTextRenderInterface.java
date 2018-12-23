@@ -1,15 +1,16 @@
 package tc.oc.commons.bukkit.gui.interfaces.render.text;
 
-import tc.oc.commons.bukkit.gui.Interface;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.gui.buttons.Button;
 import tc.oc.commons.bukkit.gui.interfaces.render.ChestRenderInterface;
 import tc.oc.commons.bukkit.gui.interfaces.render.Coordinate;
 import tc.oc.commons.bukkit.util.ItemCreator;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-
-import java.util.*;
 
 
 public class GridTextRenderInterface extends ChestRenderInterface {

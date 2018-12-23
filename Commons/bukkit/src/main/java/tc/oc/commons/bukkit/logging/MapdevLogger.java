@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import net.kencochrane.raven.dsn.Dsn;
 import tc.oc.api.util.Permissions;
 import tc.oc.commons.core.logging.Loggers;

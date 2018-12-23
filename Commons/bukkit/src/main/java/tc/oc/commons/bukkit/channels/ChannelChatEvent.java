@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.channels;
 
+import javax.annotation.Nullable;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import tc.oc.api.docs.PlayerId;
-
-import javax.annotation.Nullable;
 
 /**
  * Called when a command sender chats in a local {@link Channel}.

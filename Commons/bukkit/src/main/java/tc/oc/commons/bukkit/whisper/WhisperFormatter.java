@@ -3,7 +3,6 @@ package tc.oc.commons.bukkit.whisper;
 import java.time.Duration;
 import java.time.Instant;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Sound;

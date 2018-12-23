@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.nick;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

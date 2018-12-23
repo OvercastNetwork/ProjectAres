@@ -4,10 +4,9 @@ import com.google.common.base.Preconditions;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.WrappedCommandSender;
 import com.sk89q.minecraft.util.pagination.PaginatedResult;
+import java.util.List;
 import net.md_5.bungee.api.ChatColor;
 import tc.oc.commons.core.chat.ChatUtils;
-
-import java.util.List;
 
 public abstract class PrettyPaginatedResult<T> extends PaginatedResult<T> {
     protected final String header;

@@ -1,5 +1,8 @@
 package tc.oc.commons.bukkit.chat;
 
+import java.util.Optional;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ChatDoc;
@@ -10,17 +13,15 @@ import tc.oc.api.message.types.ModelUpdate;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.broadcast.BroadcastSender;
 import tc.oc.commons.bukkit.channels.Channel;
+import tc.oc.commons.bukkit.channels.ChannelConfiguration;
 import tc.oc.commons.bukkit.channels.ChannelRouter;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.minecraft.scheduler.MainThreadExecutor;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.Optional;
-
 @Singleton
 public class ChatAnnouncer implements PluginFacet, MessageListener {
 
+    private final ChannelConfiguration configuration;
     private final Server server;
     private final ServerStore serverStore;
     private final MessageQueue queue;
@@ -28,13 +29,17 @@ public class ChatAnnouncer implements PluginFacet, MessageListener {
     private final ChannelRouter channelRouter;
     private final BroadcastSender broadcaster;
 
-    @Inject ChatAnnouncer(Server server, ServerStore serverStore, MessageQueue queue, MainThreadExecutor executor, ChannelRouter channelRouter, BroadcastSender broadcaster) {
+    @Inject
+    public ChatAnnouncer(ChannelConfiguration configuration, Server server, ServerStore serverStore,
+                         MessageQueue queue, MainThreadExecutor executor, ChannelRouter channelRouter,
+                         BroadcastSender broadcaster) {
+        this.configuration = configuration;
         this.server = server;
+        this.serverStore = serverStore;
         this.queue = queue;
         this.executor = executor;
         this.channelRouter = channelRouter;
         this.broadcaster = broadcaster;
-        this.serverStore = serverStore;
     }
 
     @Override
@@ -69,7 +74,10 @@ public class ChatAnnouncer implements PluginFacet, MessageListener {
             case TEAM:
                 return false;
             case ADMIN:
-                return remote;
+                if (!configuration.admin_cross_server() && !chat.server_id().equalsIgnoreCase(server._id())) {
+                    return false;
+                }
+                return configuration.admin_enabled() && remote;
             case BROADCAST:
                 return shouldAnnounce(chat.broadcast());
         }

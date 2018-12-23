@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.gui.buttons.nextPage;
 
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.gui.Interface;
 import tc.oc.commons.bukkit.gui.InterfaceManager;
 import tc.oc.commons.bukkit.gui.buttons.Button;
@@ -7,8 +9,6 @@ import tc.oc.commons.bukkit.gui.interfaces.ChestOptionsPageInterface;
 import tc.oc.commons.bukkit.gui.interfaces.SinglePageInterface;
 import tc.oc.commons.bukkit.util.Constants;
 import tc.oc.commons.bukkit.util.ItemCreator;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 public class NextPageButton extends Button {
 

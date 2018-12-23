@@ -1,14 +1,13 @@
 package tc.oc.commons.bukkit.gui.interfaces;
 
-import tc.oc.commons.bukkit.gui.Interface;
-import tc.oc.commons.bukkit.gui.SimpleInterfaceHolder;
+import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import tc.oc.commons.bukkit.gui.Interface;
+import tc.oc.commons.bukkit.gui.SimpleInterfaceHolder;
 import tc.oc.commons.bukkit.gui.buttons.Button;
-
-import java.util.List;
 
 public class HopperInterface extends Interface {
 

@@ -1,5 +1,6 @@
 package tc.oc.parse;
 
+import com.google.inject.assistedinject.Assisted;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -7,14 +8,12 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
-
-import com.google.inject.assistedinject.Assisted;
 import org.xml.sax.SAXException;
 import tc.oc.commons.bukkit.logging.MapdevLogger;
-import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.file.PathWatcher;
 import tc.oc.file.PathWatcherHandle;
 import tc.oc.file.PathWatcherService;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.parse.xml.DocumentParser;
 
 /**

@@ -1,11 +1,13 @@
 package tc.oc.commons.bukkit.tablist;
 
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
+import static tc.oc.minecraft.protocol.MinecraftVersion.atLeast;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.Packet;
 import net.minecraft.server.PacketPlayOutPlayerInfo;
@@ -13,9 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import tc.oc.commons.bukkit.chat.ComponentRenderContext;
 import tc.oc.commons.bukkit.util.NMSHacks;
-
-import static tc.oc.minecraft.protocol.MinecraftVersion.atLeast;
-import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
 
 public class TabRender {
 

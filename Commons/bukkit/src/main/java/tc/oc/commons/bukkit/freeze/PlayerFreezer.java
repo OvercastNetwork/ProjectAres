@@ -1,14 +1,15 @@
 package tc.oc.commons.bukkit.freeze;
 
-import java.time.Duration;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
+import static tc.oc.minecraft.protocol.MinecraftVersion.lessThan;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
+import java.time.Duration;
+import java.util.Map;
+import java.util.WeakHashMap;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,13 +19,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import tc.oc.commons.bukkit.event.CoarsePlayerMoveEvent;
 import tc.oc.commons.bukkit.util.NMSHacks;
-import tc.oc.commons.core.collection.WeakHashSet;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.Pair;
 import tc.oc.minecraft.api.scheduler.Tickable;
-
-import static tc.oc.minecraft.protocol.MinecraftVersion.lessThan;
-import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
 
 /**
  * Freezes players by mounting them on an invisible minecart.

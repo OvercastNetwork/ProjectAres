@@ -1,6 +1,11 @@
 package tc.oc.commons.bukkit.channels;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import java.util.Optional;
+import java.util.function.Function;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
@@ -11,12 +16,6 @@ import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.channels.admin.AdminChannel;
 import tc.oc.commons.bukkit.channels.server.ServerChannel;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Get the {@link Channel} based on the {@link ChatDoc.Type}.

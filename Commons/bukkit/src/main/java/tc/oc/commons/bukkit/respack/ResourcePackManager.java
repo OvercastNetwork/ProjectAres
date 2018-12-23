@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.respack;
 
 import javax.annotation.Nullable;
-
 import org.bukkit.entity.Player;
 
 public interface ResourcePackManager {

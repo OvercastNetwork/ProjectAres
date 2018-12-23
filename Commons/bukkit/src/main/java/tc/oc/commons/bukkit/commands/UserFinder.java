@@ -1,15 +1,14 @@
 package tc.oc.commons.bukkit.commands;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
@@ -21,10 +20,10 @@ import tc.oc.api.users.UserSearchRequest;
 import tc.oc.api.users.UserSearchResponse;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
-import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.commons.bukkit.users.PlayerSearchResponse;
 import tc.oc.commons.core.commands.TranslatableCommandException;
 import tc.oc.commons.core.util.Orderable;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
 
 @Singleton
 public class UserFinder {

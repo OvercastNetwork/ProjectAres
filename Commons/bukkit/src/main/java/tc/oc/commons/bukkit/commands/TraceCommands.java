@@ -1,13 +1,14 @@
 package tc.oc.commons.bukkit.commands;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import javax.inject.Inject;
+import static tc.oc.commons.bukkit.commands.CommandUtils.getCommandSenderOrSelf;
 
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.inject.Inject;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.event.AsyncClientConnectEvent;
@@ -19,8 +20,6 @@ import tc.oc.api.util.Permissions;
 import tc.oc.commons.bukkit.util.PacketTracer;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.NestedCommands;
-
-import static tc.oc.commons.bukkit.commands.CommandUtils.getCommandSenderOrSelf;
 
 /**
  * Packet tracing commands

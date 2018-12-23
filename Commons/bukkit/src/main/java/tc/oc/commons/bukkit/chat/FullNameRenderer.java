@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.chat;
 
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.commons.bukkit.flairs.FlairRenderer;
 import tc.oc.commons.bukkit.nick.Identity;

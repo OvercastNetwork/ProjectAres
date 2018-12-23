@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.nick;
 
 import java.util.Comparator;
 import java.util.function.Function;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

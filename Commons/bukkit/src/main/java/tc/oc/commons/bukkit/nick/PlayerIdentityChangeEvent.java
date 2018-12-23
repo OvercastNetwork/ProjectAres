@@ -1,10 +1,10 @@
 package tc.oc.commons.bukkit.nick;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Fired when a player changes/clears their nickname immediately during a session,

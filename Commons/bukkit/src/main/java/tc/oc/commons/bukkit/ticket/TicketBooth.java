@@ -1,5 +1,8 @@
 package tc.oc.commons.bukkit.ticket;
 
+import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
@@ -7,10 +10,6 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.collect.Sets;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +27,6 @@ import tc.oc.api.games.TicketService;
 import tc.oc.api.games.TicketStore;
 import tc.oc.api.message.types.PlayGameRequest;
 import tc.oc.api.message.types.Reply;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.WarningComponent;
@@ -37,6 +35,7 @@ import tc.oc.commons.bukkit.teleport.PlayerServerChanger;
 import tc.oc.commons.bukkit.util.PlayerStates;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.commands.CommandFutureCallback;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 /**
  * User actions for querying, joining, and leaving {@link Game}s

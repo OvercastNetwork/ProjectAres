@@ -1,20 +1,19 @@
 package tc.oc.commons.bukkit.nick;
 
-import java.lang.ref.WeakReference;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.eventbus.Subscribe;
+import java.lang.ref.WeakReference;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
-import tc.oc.api.minecraft.servers.LocalServerReconfigureEvent;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.minecraft.MinecraftService;
+import tc.oc.api.minecraft.servers.LocalServerReconfigureEvent;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.CacheUtils;
 

@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.localization;
 
 import java.util.Map;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.w3c.dom.Document;
 import tc.oc.commons.bukkit.markup.MarkupParser;

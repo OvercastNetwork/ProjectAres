@@ -1,13 +1,5 @@
 package tc.oc.commons.bukkit.nick;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Objects;
-import java.util.stream.Stream;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.google.common.base.Function;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -15,6 +7,13 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Objects;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -35,9 +34,6 @@ import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.exceptions.UnprocessableEntity;
-import tc.oc.commons.core.commands.TranslatableCommandException;
-import tc.oc.commons.core.formatting.PeriodFormats;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.NameStyle;
@@ -52,6 +48,9 @@ import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.ComponentCommandException;
+import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.commons.core.formatting.PeriodFormats;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 @Singleton
 public class NicknameCommands implements Listener, Commands {

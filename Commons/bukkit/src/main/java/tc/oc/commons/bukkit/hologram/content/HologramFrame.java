@@ -1,10 +1,9 @@
 package tc.oc.commons.bukkit.hologram.content;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Represents a single frame of a {@link tc.oc.commons.bukkit.hologram.Hologram}.

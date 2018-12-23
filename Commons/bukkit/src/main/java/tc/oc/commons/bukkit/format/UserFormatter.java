@@ -1,19 +1,18 @@
 package tc.oc.commons.bukkit.format;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import java.time.Duration;
-import java.time.Instant;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.Session;
 import tc.oc.api.docs.virtual.ServerDoc;

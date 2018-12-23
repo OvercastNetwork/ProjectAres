@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.whisper;
 
 import javax.inject.Singleton;
-
 import tc.oc.commons.bukkit.settings.SettingBinder;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.plugin.PluginFacetBinder;

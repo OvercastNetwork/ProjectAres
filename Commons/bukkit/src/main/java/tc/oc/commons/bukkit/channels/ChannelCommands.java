@@ -4,6 +4,8 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,9 +19,6 @@ import tc.oc.commons.bukkit.commands.CommandUtils;
 import tc.oc.commons.bukkit.util.SyncPlayerExecutorFactory;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.TranslatableCommandException;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class ChannelCommands implements Commands, Listener {

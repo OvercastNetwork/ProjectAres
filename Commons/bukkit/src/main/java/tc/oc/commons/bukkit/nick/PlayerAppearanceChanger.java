@@ -1,25 +1,23 @@
 package tc.oc.commons.bukkit.nick;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import org.bukkit.Skin;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import tc.oc.commons.bukkit.flairs.FlairConfiguration;
-import tc.oc.commons.bukkit.flairs.FlairRenderer;
 import tc.oc.commons.bukkit.chat.FullNameRenderer;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.NameType;
+import tc.oc.commons.bukkit.flairs.FlairConfiguration;
+import tc.oc.commons.bukkit.flairs.FlairRenderer;
 import tc.oc.commons.core.scheduler.Scheduler;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Manages the Bukkit aspects of a player's name and appearance

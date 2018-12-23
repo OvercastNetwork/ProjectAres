@@ -3,15 +3,14 @@ package tc.oc.commons.bukkit.nick;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import tc.oc.commons.bukkit.chat.NameFlag;
-import tc.oc.commons.bukkit.chat.PartialNameRenderer;
 import tc.oc.commons.bukkit.chat.NameType;
+import tc.oc.commons.bukkit.chat.PartialNameRenderer;
 import tc.oc.commons.core.chat.Component;
 
 @Singleton

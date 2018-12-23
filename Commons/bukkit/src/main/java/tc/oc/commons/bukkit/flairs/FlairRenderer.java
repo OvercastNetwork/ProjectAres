@@ -1,13 +1,10 @@
 package tc.oc.commons.bukkit.flairs;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.collect.ImmutableSet;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.api.bukkit.users.BukkitUserStore;

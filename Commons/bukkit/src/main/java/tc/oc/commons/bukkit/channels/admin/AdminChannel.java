@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.channels.admin;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.BooleanType;
@@ -20,9 +22,6 @@ import tc.oc.commons.bukkit.format.ServerFormatter;
 import tc.oc.commons.bukkit.permissions.PermissionRegistry;
 import tc.oc.commons.bukkit.settings.SettingManagerProvider;
 import tc.oc.commons.core.chat.Component;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Singleton
 public class AdminChannel extends SimpleChannel implements PermissibleChannel {

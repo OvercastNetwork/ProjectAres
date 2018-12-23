@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.chat;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 

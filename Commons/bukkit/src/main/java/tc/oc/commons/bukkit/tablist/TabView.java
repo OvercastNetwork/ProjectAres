@@ -2,14 +2,12 @@ package tc.oc.commons.bukkit.tablist;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitTask;
 import tc.oc.commons.core.util.DefaultProvider;
-
-import javax.annotation.Nullable;
 
 /**
  * A single player's tab list. When this view is enabled, it creates a scoreboard team for

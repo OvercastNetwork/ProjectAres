@@ -1,16 +1,25 @@
 package tc.oc.commons.bukkit.punishment;
 
-import java.time.Duration;
-import java.util.List;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type.BAN;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type.KICK;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type.WARN;
+import static tc.oc.commons.bukkit.commands.UserFinder.Default.NULL;
+import static tc.oc.commons.bukkit.commands.UserFinder.Default.SENDER;
+import static tc.oc.commons.bukkit.commands.UserFinder.Scope;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromFlag;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromType;
 
 import com.google.common.collect.Collections2;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import java.time.Duration;
+import java.util.List;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
@@ -29,14 +38,6 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.minecraft.scheduler.Sync;
-
-import static tc.oc.api.docs.virtual.PunishmentDoc.Type;
-import static tc.oc.api.docs.virtual.PunishmentDoc.Type.*;
-import static tc.oc.commons.bukkit.commands.UserFinder.Default.NULL;
-import static tc.oc.commons.bukkit.commands.UserFinder.Default.SENDER;
-import static tc.oc.commons.bukkit.commands.UserFinder.Scope;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromFlag;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromType;
 
 @Singleton
 public class PunishmentCommands implements Commands {

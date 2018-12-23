@@ -5,6 +5,11 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
@@ -13,12 +18,6 @@ import org.bukkit.plugin.PluginManager;
 import tc.oc.api.util.Permissions;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.NestedCommands;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
 
 public class PermissionCommands implements NestedCommands {
     public static class Parent implements Commands {

@@ -1,10 +1,9 @@
 package tc.oc.commons.bukkit.broadcast;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 import javax.inject.Inject;
-
-import java.time.Duration;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

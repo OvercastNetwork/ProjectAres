@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.listeners;
 
+import com.google.common.eventbus.Subscribe;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import com.google.common.eventbus.Subscribe;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;

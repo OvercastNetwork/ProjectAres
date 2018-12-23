@@ -1,17 +1,16 @@
 package tc.oc.commons.bukkit.format;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import java.time.Duration;
-import java.time.Instant;
 import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.minecraft.MinecraftService;

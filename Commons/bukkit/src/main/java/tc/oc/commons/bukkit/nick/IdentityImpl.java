@@ -1,8 +1,9 @@
 package tc.oc.commons.bukkit.nick;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Objects;
 import javax.annotation.Nullable;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.friends.OnlineFriends;
@@ -10,8 +11,6 @@ import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.UserId;
 import tc.oc.commons.bukkit.util.PlayerStates;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Functionality common to real and nicked identities

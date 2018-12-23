@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.settings;
 
+import java.util.Optional;
 import me.anxuiz.settings.SettingManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.docs.User;
-
-import java.util.Optional;
 
 /**
  * Provides access to player settings for both online and offline players
