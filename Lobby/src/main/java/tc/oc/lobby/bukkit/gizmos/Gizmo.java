@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tc.oc.lobby.bukkit.LobbyTranslations;
+import tc.oc.lobby.bukkit.gizmos.christmas.ChristmasGizmo;
 import tc.oc.lobby.bukkit.gizmos.halloween.HalloweenGizmo;
 import tc.oc.lobby.bukkit.listeners.RaindropsListener;
 
@@ -76,7 +77,7 @@ public abstract class Gizmo implements Listener {
     }
 
     public boolean ownsGizmo(Player player) {
-        if(cost <= 0 && (!(this instanceof HalloweenGizmo))) {
+        if(cost <= 0 && (!(this instanceof HalloweenGizmo)) && !(this instanceof ChristmasGizmo)) {
             return true;
         } else {
             return player.hasPermission(this.getPermissionNode());
