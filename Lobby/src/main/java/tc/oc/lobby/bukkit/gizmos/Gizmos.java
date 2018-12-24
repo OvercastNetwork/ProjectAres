@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import tc.oc.lobby.bukkit.LobbyTranslations;
 import tc.oc.lobby.bukkit.gizmos.chicken.ChickenGizmo;
+import tc.oc.lobby.bukkit.gizmos.christmas.tree.ChristmasTreeGizmo;
 import tc.oc.lobby.bukkit.gizmos.empty.EmptyGizmo;
 import tc.oc.lobby.bukkit.gizmos.gun.GunGizmo;
 import tc.oc.lobby.bukkit.gizmos.halloween.ghost.GhostGizmo;
@@ -32,10 +33,14 @@ public class Gizmos implements Listener {
     public static GunGizmo gunGizmo = new GunGizmo("Raindrop Gun", ChatColor.AQUA.toString(), "Gift raindrops with a punch :D", Material.IRON_HOE, 7500);
     public static ChickenGizmo chickenGizmo = new ChickenGizmo("Chickenifier5000", ChatColor.YELLOW.toString(), "bok B'GAWK", Material.EGG, 10000);
     public static LauncherGizmo launcherGizmo = new LauncherGizmo("Murica", ChatColor.RED.toString(), "Show your pride!", Material.FEATHER, 17760);
+    // Halloween
     public static HeadlessHorsemanGizmo headlessHorsemanGizmo = new HeadlessHorsemanGizmo("The Headless Horseman", ChatColor.RED.toString(), "You have been taken over by the darkness...", Material.NETHER_STAR);
     public static GhostGizmo ghostGizmo = new GhostGizmo("Ghosts", ChatColor.RED.toString(), "Surround yourself in ghosts!", Material.BONE);
 
-    public static final List<Gizmo> gizmos = Lists.newArrayList(emptyGizmo, popperGizmo, rocketGizmo, gunGizmo, chickenGizmo, launcherGizmo, headlessHorsemanGizmo, ghostGizmo);
+    // Christmas
+    public static ChristmasTreeGizmo treeGizmo = new ChristmasTreeGizmo("Christmas Tree", ChatColor.AQUA.toString(), "Get in the holiday spirit!", Material.SAPLING);
+
+    public static final List<Gizmo> gizmos = Lists.newArrayList(emptyGizmo, popperGizmo, rocketGizmo, gunGizmo, chickenGizmo, launcherGizmo, headlessHorsemanGizmo, ghostGizmo, treeGizmo);
     public static Map<Player, Gizmo> gizmoMap = Maps.newHashMap();
     public static Map<Player, Gizmo> purchasingMap = Maps.newHashMap();
 
