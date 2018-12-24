@@ -38,7 +38,7 @@ public class Gizmos implements Listener {
     public static GhostGizmo ghostGizmo = new GhostGizmo("Ghosts", ChatColor.RED.toString(), "Surround yourself in ghosts!", Material.BONE);
 
     // Christmas
-    public static ChristmasTreeGizmo treeGizmo = new ChristmasTreeGizmo("Christmas Tree", ChatColor.AQUA.toString(), "Get in the holiday spirit!", Material.SAPLING);
+    public static ChristmasTreeGizmo treeGizmo = new ChristmasTreeGizmo("Christmas Tree", ChatColor.AQUA.toString(), "Get in the holiday spirit!", Material.COAL);
 
     public static final List<Gizmo> gizmos = Lists.newArrayList(emptyGizmo, popperGizmo, rocketGizmo, gunGizmo, chickenGizmo, launcherGizmo, headlessHorsemanGizmo, ghostGizmo, treeGizmo);
     public static Map<Player, Gizmo> gizmoMap = Maps.newHashMap();
