@@ -1,5 +1,7 @@
 package tc.oc.lobby.bukkit.gizmos.christmas.tree;
 
+import com.google.common.collect.Range;
+import java.time.MonthDay;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,6 +22,10 @@ public class ChristmasTreeGizmo extends ChristmasGizmo {
 
     @Override protected void initialize() {
         Bukkit.getPluginManager().registerEvents(this, Lobby.get());
+    }
+
+    @Override public Range<MonthDay> freeRange() {
+        return Range.open(MonthDay.of(12, 24), MonthDay.of(12, 26));
     }
 
     @EventHandler(ignoreCancelled = true)
