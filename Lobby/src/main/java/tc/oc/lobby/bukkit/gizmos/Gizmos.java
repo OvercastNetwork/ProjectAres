@@ -36,7 +36,6 @@ public class Gizmos implements Listener {
     // Halloween
     public static HeadlessHorsemanGizmo headlessHorsemanGizmo = new HeadlessHorsemanGizmo("The Headless Horseman", ChatColor.RED.toString(), "You have been taken over by the darkness...", Material.NETHER_STAR);
     public static GhostGizmo ghostGizmo = new GhostGizmo("Ghosts", ChatColor.RED.toString(), "Surround yourself in ghosts!", Material.BONE);
-
     // Christmas
     public static ChristmasTreeGizmo treeGizmo = new ChristmasTreeGizmo("Christmas Tree", ChatColor.AQUA.toString(), "Get in the holiday spirit!", Material.COAL);
 
