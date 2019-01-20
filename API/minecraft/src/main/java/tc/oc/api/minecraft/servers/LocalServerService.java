@@ -9,12 +9,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
-import tc.oc.api.message.types.FindMultiRequest;
-import tc.oc.api.message.types.FindMultiResponse;
-import tc.oc.api.message.types.FindRequest;
-import tc.oc.api.message.types.PartialModelUpdate;
-import tc.oc.api.message.types.UpdateMultiRequest;
-import tc.oc.api.message.types.UpdateMultiResponse;
+import tc.oc.api.message.types.*;
 import tc.oc.api.model.NullModelService;
 import tc.oc.api.servers.BungeeMetricRequest;
 import tc.oc.api.servers.ServerService;
@@ -53,5 +48,9 @@ public class LocalServerService extends NullModelService<Server, ServerDoc.Parti
     public ListenableFuture<UpdateMultiResponse> updateMulti(UpdateMultiRequest<? extends ServerDoc.Partial> request) {
         request.documents().forEach(this::update);
         return super.updateMulti(request);
+    }
+
+    @Override public ListenableFuture<UseServerResponse> requestServer(UseServerRequest request) {
+        return Futures.immediateFuture(UseServerResponse.EMPTY);
     }
 }

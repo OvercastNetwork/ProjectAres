@@ -27,7 +27,7 @@ public abstract class AbstractRotationProvider implements RotationProvider {
         Preconditions.checkNotNull(name, "rotation name");
         synchronized(this) {
             RotationState state = this.rotations.get(name);
-            if (state != null) return state
+            if (state != null) return state;
 
             for (String key : this.rotations.keySet()) {
                 if (key.equalsIgnoreCase(name)) {

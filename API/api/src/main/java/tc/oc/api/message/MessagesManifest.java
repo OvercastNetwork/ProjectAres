@@ -13,6 +13,8 @@ import tc.oc.api.message.types.PlayGameRequest;
 import tc.oc.api.message.types.PlayerTeleportRequest;
 import tc.oc.api.message.types.Reply;
 import tc.oc.api.message.types.UpdateMultiResponse;
+import tc.oc.api.message.types.UseServerRequest;
+import tc.oc.api.message.types.UseServerResponse;
 import tc.oc.api.servers.ServerSearchRequest;
 import tc.oc.api.sessions.BadNickname;
 import tc.oc.api.sessions.SessionChange;
@@ -47,5 +49,8 @@ public class MessagesManifest extends HybridManifest {
         messages.register(PlayGameRequest.class);
         messages.register(CycleRequest.class);
         messages.register(CycleResponse.class);
+
+        messages.register(UseServerRequest.class);
+        messages.register(UseServerResponse.class);
     }
 }

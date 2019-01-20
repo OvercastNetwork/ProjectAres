@@ -1,6 +1,7 @@
 package tc.oc.commons.bungee.commands;
 
 import java.util.concurrent.ExecutorService;
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 import com.google.common.util.concurrent.Futures;
@@ -16,12 +17,19 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.CommandBypassException;
+import tc.oc.api.bungee.users.BungeeUserStore;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.ServerDoc;
+import tc.oc.api.message.types.UseServerRequest;
+import tc.oc.api.message.types.UseServerResponse;
+import tc.oc.api.minecraft.users.UserStore;
 import tc.oc.api.model.ModelSync;
+import tc.oc.api.servers.ServerService;
 import tc.oc.commons.bungee.servers.ServerTracker;
 import tc.oc.commons.core.commands.Commands;
+import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.commons.core.restart.RestartManager;
+import tc.oc.minecraft.scheduler.Sync;
 
 public class ServerCommands implements Commands {
 
@@ -29,12 +37,20 @@ public class ServerCommands implements Commands {
     private final ServerTracker serverTracker;
     private final ProxyServer proxy;
     private final ExecutorService executor;
+    private final ServerService serverService;
+    private final BungeeUserStore userStore;
+    private final Flexecutor commandExecutor;
 
-    @Inject ServerCommands(RestartManager restartManager, ServerTracker serverTracker, ProxyServer proxy, @ModelSync ExecutorService executor) {
+    @Inject ServerCommands(RestartManager restartManager, ServerTracker serverTracker, ProxyServer proxy,
+                           @ModelSync ExecutorService executor, ServerService serverService,
+                           BungeeUserStore userStore, @Sync Flexecutor commandExecutor) {
         this.restartManager = restartManager;
         this.serverTracker = serverTracker;
         this.proxy = proxy;
         this.executor = executor;
+        this.serverService = serverService;
+        this.userStore = userStore;
+        this.commandExecutor = commandExecutor;
     }
 
     @Command(
@@ -52,6 +68,33 @@ public class ServerCommands implements Commands {
 
             player.connect(proxy.getServerInfo("default"));
             player.sendMessage(new ComponentBuilder("Teleporting you to the lobby").color(ChatColor.GREEN).create());
+        } else {
+            sender.sendMessage(new ComponentBuilder("Only players may use this command").color(ChatColor.RED).create());
+        }
+    }
+
+    @Command(
+        aliases = {"requestserver", "re"},
+        desc = "Request a server for yourself"
+    )
+    @CommandPermissions("ocn.requestserver")
+    public void request(final CommandContext args, CommandSender sender) throws CommandException {
+        if(sender instanceof ProxiedPlayer) {
+            final ProxiedPlayer player = (ProxiedPlayer) sender;
+            commandExecutor.callback(
+                serverService.requestServer(new UseServerRequest() {
+                    @Nonnull @Override public String user_id() {
+                        return userStore.getUser(player)._id();
+                    }
+                }), (response) -> {
+                    if (response.now()) {
+                        player.connect(proxy.getServerInfo(response.server_name()));
+                        player.sendMessage(new ComponentBuilder("Your server is already online! Connecting...").color(ChatColor.GREEN).create());
+                    } else {
+                        player.sendMessage(new ComponentBuilder("Server requested! Please wait up to two minutes before trying to connect to /server " +
+                                                                response.server_name()).color(ChatColor.GOLD).create());
+                    }
+                });
         } else {
             sender.sendMessage(new ComponentBuilder("Only players may use this command").color(ChatColor.RED).create());
         }
