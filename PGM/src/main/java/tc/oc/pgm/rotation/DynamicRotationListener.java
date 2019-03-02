@@ -47,7 +47,7 @@ public class DynamicRotationListener implements PluginFacet, Listener {
         // If a mutation was set for the next map, don't change it yet.
         if (!mutationQueue.isEmpty()) return;
 
-        int playerCount = players.count() + Math.round(event.getMatch().getObservingPlayers().size() / 2);
+        int playerCount = players.count() - Math.round(event.getMatch().getObservingPlayers().size() / 2);
 
         // Get appropriate rotation
         RotationProviderInfo rotation = rotationManager.getProviders().stream()
