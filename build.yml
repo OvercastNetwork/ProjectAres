@@ -15,7 +15,8 @@ steps:
       - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME/.m2
       - .
   - id: maven
-    name: gcr.io/cloud-builders/mvn
+    name: maven:3.6.0-jdk-8-slim
+    entrypoint: 'mvn'
     args:
       - install
     env:
