@@ -75,16 +75,21 @@ public class ServerCommands implements Commands {
 
     @Command(
         aliases = {"requestserver", "re"},
-        desc = "Request a server for yourself"
+        desc = "Request a server for yourself",
+        max = 1
     )
     @CommandPermissions("ocn.requestserver")
     public void request(final CommandContext args, CommandSender sender) throws CommandException {
         if(sender instanceof ProxiedPlayer) {
             final ProxiedPlayer player = (ProxiedPlayer) sender;
+            final String name = player.hasPermission("ocn.requestserver.custom") && args.argsLength() > 0 ? args.getString(0) : "";
             commandExecutor.callback(
                 serverService.requestServer(new UseServerRequest() {
                     @Nonnull @Override public String user_id() {
                         return userStore.getUser(player)._id();
+                    }
+                    @Nonnull @Override public String server_name() {
+                        return name;
                     }
                 }), (response) -> {
                     if (response.now()) {

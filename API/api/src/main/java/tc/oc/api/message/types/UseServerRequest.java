@@ -10,4 +10,5 @@ import tc.oc.api.queue.MessageDefaults;
 @MessageDefaults.ExpirationMillis(10000)
 public interface UseServerRequest extends Message {
     @Nonnull String user_id();
+    @Nonnull String server_name();
 }
