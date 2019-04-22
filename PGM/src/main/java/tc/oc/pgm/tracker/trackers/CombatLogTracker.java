@@ -99,7 +99,7 @@ public class CombatLogTracker implements Listener {
         return 1d - (amplifier / 5d);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageEvent event) {
         if(event.getDamage() <= 0) return;
 
