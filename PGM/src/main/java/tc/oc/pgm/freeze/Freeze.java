@@ -1,5 +1,6 @@
 package tc.oc.pgm.freeze;
 
+import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,6 +29,9 @@ import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
 import tc.oc.commons.core.commands.ComponentCommandException;
 import tc.oc.commons.core.plugin.PluginFacet;
+import tc.oc.pgm.PGM;
+import tc.oc.pgm.match.MatchPlayer;
+import tc.oc.pgm.match.MatchPlayerFinder;
 
 @Singleton
 public class Freeze implements PluginFacet {
@@ -85,6 +89,15 @@ public class Freeze implements PluginFacet {
 
         final FrozenPlayer frozenPlayer = frozenPlayers.get(freezee);
         if(frozen && frozenPlayer == null) {
+      Optional<MatchPlayer> matchPlayer = PGM.getMatchManager().match(freezee)
+          .flatMap(match -> match.player(freezee));
+            if (matchPlayer.isPresent() && matchPlayer.get().isObserving()) {
+                throw new ComponentCommandException(new TranslatableComponent(
+                    "command.freeze.exempt",
+                    new PlayerComponent(identityProvider.currentIdentity(freezee), NameStyle.VERBOSE)
+                ));
+            }
+
             frozenPlayers.put(freezee, playerFreezer.freeze(freezee));
 
             final BaseComponent freezeeMessage = new Component(new TranslatableComponent("freeze.frozen", freezerComponent), ChatColor.RED);

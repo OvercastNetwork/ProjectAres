@@ -55,10 +55,7 @@ public class FreezeListener implements Listener, PluginFacet {
                event.getClickedItem().getType() == Material.ICE &&
                event.getPlayer().getBukkit().hasPermission(Freeze.PERMISSION) &&
                event.getClickedPlayer() != null) {
-
                 event.setCancelled(true);
-
-                if (event.getClickedPlayer().isObserving()) return;
 
                 try {
                     freeze.toggleFrozen(event.getPlayer().getBukkit(), event.getClickedPlayer().getBukkit());
