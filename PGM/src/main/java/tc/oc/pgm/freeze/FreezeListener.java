@@ -58,6 +58,8 @@ public class FreezeListener implements Listener, PluginFacet {
 
                 event.setCancelled(true);
 
+                if (event.getClickedPlayer().isObserving()) return;
+
                 try {
                     freeze.toggleFrozen(event.getPlayer().getBukkit(), event.getClickedPlayer().getBukkit());
                 } catch(CommandException e) {
