@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventBus;
@@ -49,6 +50,11 @@ public abstract class SimpleChannel implements MultiAudience, Channel, PluginFac
         if(!event.isCancelled()) {
             chatCreator.chat(playerId, event.message(), type(), this::show);
         }
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        sendMessage(new TextComponent(message));
     }
 
     @Override
