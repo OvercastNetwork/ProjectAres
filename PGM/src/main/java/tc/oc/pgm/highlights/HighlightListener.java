@@ -33,7 +33,7 @@ public class HighlightListener implements Listener {
             MatchPlayer bestPlayer = null;
             double bestPlayerPoints = 0;
 
-            if (event.getMatch().getParticipatingPlayers().size() < 10) {
+            if (event.getMatch().getParticipatingPlayers().size() < 8) {
                 return;
             }
 
