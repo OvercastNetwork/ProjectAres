@@ -167,6 +167,10 @@ public class Carried extends Spawned implements Missing {
 
     @Override
     public void tickRunning() {
+        if (flag.getMatch().isFinished()) {
+            this.flag.transition(new Returned(this.flag, this.post, this.carrier.getEntityLocation()));
+            return;
+        }
         super.tickRunning();
         BaseComponent message = this.getMessage();
 
@@ -307,6 +311,11 @@ public class Carried extends Spawned implements Missing {
     @Override
     public void onEvent(CoarsePlayerMoveEvent event) {
         super.onEvent(event);
+
+        if(flag.getMatch().isFinished()) {
+            dropFlag();
+            return;
+        }
 
         if(this.isCarrier(event.getPlayer())) {
             final Location playerLoc = event.getBlockTo();

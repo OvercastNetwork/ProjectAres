@@ -365,7 +365,7 @@ public class Flag extends TouchableGoal<FlagDefinition> implements Listener {
 
         // Check again, in case startCountdown transitioned. In that case, the nested
         // transition will have already called these events if necessary.
-        if(this.state == newState) {
+        if(this.state == newState && match.isRunning()) {
             getMatch().callEvent(new GoalStatusChangeEvent(this));
             if(isCompleted()) {
                 getMatch().callEvent(new GoalCompleteEvent(this,
