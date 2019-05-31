@@ -88,7 +88,8 @@ public abstract class State {
         if(maxHealth > 0) {
             bukkit.setHealth(maxHealth);
         } else {
-            smm.getMatch().getMap().getLogger().severe("Failed to set max health to a non-zero value, custom death screen will fail");
+            bukkit.kickPlayer("An internal error has occurred! If this continues, contact a staff member");
+            smm.getMatch().getMap().getLogger().severe("Failed to set max health to a non-zero value, custom death screen will fail for " + bukkit.getName());
         }
     }
 
