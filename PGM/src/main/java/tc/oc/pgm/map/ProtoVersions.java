@@ -45,6 +45,9 @@ public class ProtoVersions {
     // Enable block 36 to be used, protos before this will remove it from the map
     public static final SemanticVersion ENABLE_BLOCK_36 = new SemanticVersion(1, 4, 3);
 
+    // Wool pre touch metric defaults to null
+    public static final SemanticVersion WOOL_PRE_TOUCH_OFF = new SemanticVersion(1, 4, 4);
+
     // Current version - change this whenever we bump the proto
-    public static final SemanticVersion CURRENT = ENABLE_BLOCK_36;
+    public static final SemanticVersion CURRENT = WOOL_PRE_TOUCH_OFF;
 }

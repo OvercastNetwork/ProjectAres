@@ -70,6 +70,7 @@ public class ProximityMetric {
     public static ProximityMetric parse(Element el, String prefix, ProximityMetric def) throws InvalidXMLException {
         if(!prefix.isEmpty()) prefix = prefix + "-";
 
+        if (def == null && el.getAttribute(prefix + "proximity-metric") == null) return null;
         return new ProximityMetric(XMLUtils.parseEnum(Node.fromAttr(el, prefix + "proximity-metric"), ProximityMetric.Type.class, "proximity metric", def.type),
                                    XMLUtils.parseBoolean(el.getAttribute(prefix + "proximity-horizontal"), def.horizontal));
     }
