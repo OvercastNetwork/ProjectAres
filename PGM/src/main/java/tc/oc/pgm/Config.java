@@ -203,4 +203,18 @@ public class Config {
             return getConfiguration().getBoolean("mutations.enabled", true);
         }
     }
+
+    public static class Effects {
+        public static boolean blood() {
+            return getConfiguration().getBoolean("effects.blood", true);
+        }
+
+        public static boolean explosions() {
+            return getConfiguration().getBoolean("effects.explosions", true);
+        }
+
+        public static boolean trails() {
+            return getConfiguration().getBoolean("effects.trails", true);
+        }
+    }
 }

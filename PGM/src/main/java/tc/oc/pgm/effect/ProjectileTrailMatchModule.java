@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import tc.oc.pgm.Config;
 import tc.oc.pgm.PGM;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.match.MatchModule;
@@ -87,4 +88,8 @@ public class ProjectileTrailMatchModule extends MatchModule implements Listener 
         });
     }
 
+    @Override
+    public boolean shouldLoad() {
+        return Config.Effects.trails();
+    }
 }
