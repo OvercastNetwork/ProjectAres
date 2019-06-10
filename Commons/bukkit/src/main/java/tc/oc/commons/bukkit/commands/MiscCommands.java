@@ -1,5 +1,6 @@
 package tc.oc.commons.bukkit.commands;
 
+import com.google.common.collect.Sets;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -9,18 +10,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.users.UserService;
@@ -41,6 +53,8 @@ import tc.oc.minecraft.scheduler.Sync;
  * Commands for miscellaneous purposes.
  */
 public class MiscCommands implements Commands {
+
+    private static final Random RANDOM = new Random();
 
     private final Flexecutor flexecutor;
     private final UserService userService;
@@ -188,6 +202,55 @@ public class MiscCommands implements Commands {
                 }
             }
         );
+    }
+
+    @Command(
+        aliases = { "vice" },
+        desc = "WELCOME BACK VICE!"
+    )
+    public void vice(final CommandContext args, final CommandSender sender) throws CommandException {
+        Player player = CommandUtils.senderToPlayer(sender);
+        UUID vice = UUID.fromString("bf331953-4f92-43ee-8abc-7544b8234936");
+        if (!(player.isOp() || player.getUniqueId().equals(vice))) throw new CommandPermissionsException();
+        Set<Location> fireworkLocs = Sets.newHashSet();
+        Location center = player.getLocation();
+        if (!player.getUniqueId().equals(vice) && sender.getServer().getPlayer(vice) != null)
+            center = sender.getServer().getPlayer(vice).getLocation();
+        center = center.clone();
+        fireworkLocs.add(center);
+        int radius = 5;
+        for (int i = 0 - radius; i <= radius; i = i + (radius / 2)) {
+            if (i == 0) continue;
+            fireworkLocs.add(center.clone().add(i, 0, 0));
+            fireworkLocs.add(center.clone().add(0, 0, i));
+            fireworkLocs.add(center.clone().add(i, 0, i));
+        }
+        for (Location location : fireworkLocs) {
+            FireworkMeta meta = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK);
+            meta.setPower(RANDOM.nextInt(15));
+            meta.addEffect(randomRGBEffect());
+
+            Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+            firework.setFireworkMeta(meta);
+        }
+        sender.getServer().broadcast(new TextComponent(
+            ChatColor.RED + "WELCOME " +
+            ChatColor.YELLOW + "BACK " +
+            ChatColor.GREEN + "VICE" +
+            ChatColor.BLUE + "!!")
+        );
+    }
+
+    private FireworkEffect randomRGBEffect() {
+        return FireworkEffect.builder()
+            .flicker(RANDOM.nextBoolean())
+            .trail(true)
+            .with(Type.values()[RANDOM.nextInt(4)])
+            .withColor(Color.fromRGB(RANDOM.nextInt(255), RANDOM.nextInt(255), RANDOM.nextInt(255)))
+            .withColor(Color.fromRGB(RANDOM.nextInt(255), RANDOM.nextInt(255), RANDOM.nextInt(255)))
+            .withColor(Color.fromRGB(RANDOM.nextInt(255), RANDOM.nextInt(255), RANDOM.nextInt(255)))
+            .withFade(Color.fromRGB(RANDOM.nextInt(255), RANDOM.nextInt(255), RANDOM.nextInt(255)))
+            .build();
     }
 
     @Command(
