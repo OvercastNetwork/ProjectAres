@@ -19,7 +19,6 @@ import tc.oc.commons.core.commands.CommandRegistry;
 import tc.oc.inject.ProtectedBinder;
 import tc.oc.minecraft.logging.BetterRaven;
 import tc.oc.pgm.antigrief.CraftingProtect;
-import tc.oc.pgm.channels.ChannelCommands;
 import tc.oc.pgm.commands.MapCommands;
 import tc.oc.pgm.commands.PollCommands;
 import tc.oc.pgm.commands.RotationControlCommands;
@@ -38,11 +37,14 @@ import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchLoader;
 import tc.oc.pgm.match.MatchManager;
 import tc.oc.pgm.match.MatchPlayer;
+import tc.oc.pgm.menu.gui.SettingMenuHelper;
+import tc.oc.pgm.pollablemaps.PollableMaps;
 import tc.oc.pgm.polls.PollListener;
 import tc.oc.pgm.polls.PollManager;
 import tc.oc.pgm.start.StartCommands;
 import tc.oc.pgm.tablist.MatchTabManager;
 import tc.oc.pgm.timelimit.TimeLimitCommands;
+import tc.oc.pgm.tokens.gui.MainTokenButton;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -92,6 +94,12 @@ public final class PGM extends JavaPlugin {
         return pgm == null ? null : pgm.pollManager;
     }
 
+    private PollableMaps pollableMaps;
+
+    public static PollableMaps getPollableMaps() {
+        return pgm == null ? null : pgm.pollableMaps;
+    }
+
     public MapLibrary getMapLibrary() {
         return mapLibrary;
     }
@@ -129,6 +137,7 @@ public final class PGM extends JavaPlugin {
         }
 
         this.pollManager = new PollManager(this);
+        this.pollableMaps = new PollableMaps();
 
         this.registerListeners();
 
@@ -162,6 +171,9 @@ public final class PGM extends JavaPlugin {
         // Would rather configure this with a Guice binding, but we can't as long as
         // PGM modules are installed on lobby servers, because the bindings will conflict.
         navigatorInterface.setOpenButtonSlot(Slot.Hotbar.forPosition(7));
+
+        new MainTokenButton();
+        SettingMenuHelper.initializeSettings();
     }
 
     @Override
@@ -182,7 +194,6 @@ public final class PGM extends JavaPlugin {
 
     private void setupCommands() {
         commands.register(MapCommands.class);
-        commands.register(ChannelCommands.class);
         commands.register(PollCommands.class);
         commands.register(RotationEditCommands.RotationEditParent.class);
         commands.register(RotationControlCommands.RotationControlParent.class);

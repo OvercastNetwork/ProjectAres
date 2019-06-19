@@ -1,19 +1,18 @@
 package tc.oc.commons.bukkit.format;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import java.time.Duration;
-import java.time.Instant;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.Session;
 import tc.oc.api.docs.virtual.ServerDoc;
@@ -88,10 +87,14 @@ public class UserFormatter {
     }
 
     public List<BaseComponent> formatSessions(Collection<Session> sessions) {
-        return formatSessions(sessions, minecraftService.getLocalServer());
+        return formatSessions(sessions, NameStyle.FANCY);
     }
 
-    public List<BaseComponent> formatSessions(Collection<Session> sessions, ServerDoc.Identity localServer) {
+    public List<BaseComponent> formatSessions(Collection<Session> sessions, NameStyle style) {
+        return formatSessions(sessions, minecraftService.getLocalServer(), style);
+    }
+
+    public List<BaseComponent> formatSessions(Collection<Session> sessions, ServerDoc.Identity localServer, NameStyle style) {
         List<BaseComponent> lines = new ArrayList<>();
 
         SetMultimap<Server, BaseComponent> namesByServer = HashMultimap.create();
@@ -100,7 +103,7 @@ public class UserFormatter {
             if(session.end() == null) {
                 final Server server = serverStore.byId(session.server_id());
                 if(server != null) {
-                    namesByServer.put(server, new PlayerComponent(identityProvider.createIdentity(session), NameStyle.FANCY));
+                    namesByServer.put(server, new PlayerComponent(identityProvider.createIdentity(session), style));
                 }
             }
         }

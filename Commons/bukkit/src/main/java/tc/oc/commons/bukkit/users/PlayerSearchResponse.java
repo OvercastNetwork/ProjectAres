@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.users;
 
 import javax.annotation.Nullable;
-
 import org.bukkit.entity.Player;
 import tc.oc.api.users.UserSearchResponse;
 

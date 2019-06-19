@@ -168,9 +168,9 @@ public class WoolMatchModule extends MatchModule implements Listener {
         if(player != null) { // wool can only be placed by a player
             BaseComponent woolName = BukkitUtils.woolName(wool.getDyeColor());
             if(!isValidWool(wool.getDyeColor(), event.getNewState())) {
-                player.getAudience().sendWarning(new TranslatableComponent("match.wool.placeWrong", woolName), true);
+                player.sendWarning(new TranslatableComponent("match.wool.placeWrong", woolName), true);
             } else if(wool.getOwner() != player.getParty()) {
-                player.getAudience().sendWarning(new TranslatableComponent("match.wool.placeOther", wool.getOwner().getComponentName(), woolName), true);
+                player.sendWarning(new TranslatableComponent("match.wool.placeOther", wool.getOwner().getComponentName(), woolName), true);
             } else {
                 event.setCancelled(false);
                 wool.markPlaced();
@@ -187,6 +187,8 @@ public class WoolMatchModule extends MatchModule implements Listener {
 
     @EventHandler
     public void handleWoolCrafting(PrepareItemCraftEvent event) {
+        if(event.getRecipe() == null) return;
+
         ItemStack result = event.getRecipe().getResult();
         InventoryHolder holder = event.getInventory().getHolder();
 

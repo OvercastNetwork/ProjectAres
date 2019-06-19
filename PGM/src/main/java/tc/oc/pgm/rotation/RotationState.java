@@ -1,9 +1,11 @@
 package tc.oc.pgm.rotation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import tc.oc.commons.core.util.Lazy;
 import tc.oc.pgm.map.PGMMap;
 
 import com.google.common.base.Preconditions;
@@ -37,6 +39,18 @@ public final class RotationState {
      */
     public @Nonnull List<PGMMap> getMaps() {
         return this.maps;
+    }
+
+    
+    private Lazy<Integer> averageNeededPlayers = Lazy.from(() ->
+            (int) getMaps().stream().mapToInt(map -> map.getPersistentContext().playerLimitAverage()).average().orElse(0));
+    
+    /**
+     * Gets the approximate number of players supposed to be playing the rotation maps.
+     * @return Integer with average size of teams over all maps
+     */
+    public @Nonnull Integer getAverageNeededPlayers() {
+        return averageNeededPlayers.get();
     }
 
     /**

@@ -25,7 +25,8 @@ public class WhisperSettings {
             .name("PrivateMessages")
             .alias("msg").alias("message").alias("messages").alias("pm").alias("pmr")
             .description(description).type(enumType).defaultValue(defaultValue)
-            .summary("Who can send you private messages").get();
+            .summary("Who can send you private messages")
+            .get();
 
     public static Setting receive() {
         return recieve;
@@ -41,7 +42,7 @@ public class WhisperSettings {
             .name("PrivateMessageSounds")
             .alias("sounds").alias("pmsound").alias("pms")
             .description(description).type(enumType).defaultValue(defaultValue)
-            .summary("Whether you hear a sound when you receive a private message").get();
+            .summary("Hear a sound when you get a message").get();
 
     public static Setting sound() {
         return sound;

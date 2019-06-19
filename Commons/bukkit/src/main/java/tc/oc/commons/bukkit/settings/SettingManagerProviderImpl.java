@@ -1,5 +1,6 @@
 package tc.oc.commons.bukkit.settings;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -7,8 +8,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.collect.ImmutableMap;
 import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingCallback;
 import me.anxuiz.settings.SettingCallbackManager;

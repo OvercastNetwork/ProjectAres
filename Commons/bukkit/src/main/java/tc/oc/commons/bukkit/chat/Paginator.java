@@ -1,12 +1,14 @@
 package tc.oc.commons.bukkit.chat;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -15,9 +17,6 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.util.IndexedFunction;
 import tc.oc.commons.core.util.Numbers;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Paginator<T> {
     public static final int DEFAULT_PER_PAGE = 14;
@@ -52,7 +51,7 @@ public class Paginator<T> {
     }
 
     public void display(CommandSender sender, Collection<? extends T> results, int page) {
-        display(BukkitAudiences.getAudience(sender), results, page);
+        display(Audiences.Deprecated.get(sender), results, page);
     }
 
     public void display(Audience audience, Collection<? extends T> results, int page) {

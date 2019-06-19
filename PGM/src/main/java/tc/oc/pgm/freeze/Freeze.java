@@ -1,5 +1,6 @@
 package tc.oc.pgm.freeze;
 
+import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,15 +15,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
-import tc.oc.commons.bukkit.channels.AdminChannel;
+import tc.oc.commons.bukkit.channels.admin.AdminChannel;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
-import tc.oc.commons.bukkit.commands.CommandUtils;
 import tc.oc.commons.bukkit.freeze.FrozenPlayer;
 import tc.oc.commons.bukkit.freeze.PlayerFreezer;
-import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.bukkit.util.OnlinePlayerMapAdapter;
 import tc.oc.commons.core.chat.Audience;
@@ -30,6 +29,9 @@ import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
 import tc.oc.commons.core.commands.ComponentCommandException;
 import tc.oc.commons.core.plugin.PluginFacet;
+import tc.oc.pgm.PGM;
+import tc.oc.pgm.match.MatchPlayer;
+import tc.oc.pgm.match.MatchPlayerFinder;
 
 @Singleton
 public class Freeze implements PluginFacet {
@@ -81,20 +83,24 @@ public class Freeze implements PluginFacet {
             ));
         }
 
-        final Identity freezerIdentity = identityProvider.createIdentity(freezer);
+        final PlayerComponent freezerComponent = new PlayerComponent(identityProvider.createIdentity(freezer), NameStyle.VERBOSE);
+        final PlayerComponent freezeeComponent = new PlayerComponent(identityProvider.createIdentity(freezee), NameStyle.VERBOSE);
         final Audience freezeeAudience = audiences.get(freezee);
 
         final FrozenPlayer frozenPlayer = frozenPlayers.get(freezee);
         if(frozen && frozenPlayer == null) {
+      Optional<MatchPlayer> matchPlayer = PGM.getMatchManager().match(freezee)
+          .flatMap(match -> match.player(freezee));
+            if (matchPlayer.isPresent() && matchPlayer.get().isObserving()) {
+                throw new ComponentCommandException(new TranslatableComponent(
+                    "command.freeze.exempt",
+                    new PlayerComponent(identityProvider.currentIdentity(freezee), NameStyle.VERBOSE)
+                ));
+            }
+
             frozenPlayers.put(freezee, playerFreezer.freeze(freezee));
 
-            final BaseComponent freezeeMessage = new Component(
-                new TranslatableComponent(
-                    "freeze.frozen",
-                    new PlayerComponent(freezerIdentity, NameStyle.FANCY)
-                ),
-                ChatColor.RED
-            );
+            final BaseComponent freezeeMessage = new Component(new TranslatableComponent("freeze.frozen", freezerComponent), ChatColor.RED);
 
             freezeeAudience.playSound(FREEZE_SOUND);
             freezeeAudience.sendWarning(freezeeMessage, false);
@@ -106,26 +112,15 @@ public class Freeze implements PluginFacet {
                 removeEntities(((Player) freezer).getLocation(), config.tntSenderRadius());
             }
 
-            adminChannel.broadcast(CommandUtils.getDisplayName(freezer) +
-                                   ChatColor.RED + " froze " +
-                                   CommandUtils.getDisplayName(freezee));
+            adminChannel.sendMessage(new TranslatableComponent("freeze.frozen.broadcast", freezeeComponent, freezerComponent));
         } else if(!frozen && frozenPlayer != null) {
             frozenPlayer.thaw();
             frozenPlayers.remove(freezee);
 
             freezeeAudience.hideTitle();
             freezeeAudience.playSound(THAW_SOUND);
-            freezeeAudience.sendMessage(new Component(
-                new TranslatableComponent(
-                    "freeze.unfrozen",
-                    new PlayerComponent(freezerIdentity, NameStyle.FANCY)
-                ),
-                ChatColor.GREEN
-            ));
-
-            adminChannel.broadcast(CommandUtils.getDisplayName(freezer) +
-                                   ChatColor.RED + " unfroze " +
-                                   CommandUtils.getDisplayName(freezee));
+            freezeeAudience.sendMessage(new Component(new TranslatableComponent("freeze.unfrozen", freezerComponent), ChatColor.GREEN));
+            adminChannel.sendMessage(new TranslatableComponent("freeze.unfrozen.broadcast", freezeeComponent, freezerComponent));
         }
     }
 

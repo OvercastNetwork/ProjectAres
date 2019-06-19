@@ -1,8 +1,7 @@
 package tc.oc.commons.bukkit.chat;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableList;
+import java.util.List;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.bukkit.localization.MessageTemplate;

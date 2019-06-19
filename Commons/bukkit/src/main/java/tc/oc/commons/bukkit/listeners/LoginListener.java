@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.listeners;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -8,12 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
-import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventBus;
 import org.bukkit.event.EventHandler;
@@ -143,6 +141,8 @@ public class LoginListener implements Listener, PluginFacet {
         try {
             final Player player = event.getPlayer();
             final UUID uuid = player.getUniqueId();
+
+            player.setGravity(true);
 
             this.logins.cleanUp();
             final LoginResponse response = this.logins.getIfPresent(uuid);

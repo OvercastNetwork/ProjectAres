@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.localization;
 
+import com.google.common.cache.LoadingCache;
+import com.google.inject.assistedinject.Assisted;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
@@ -9,18 +11,15 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
-
-import com.google.common.cache.LoadingCache;
-import com.google.inject.assistedinject.Assisted;
 import org.xml.sax.SAXException;
 import tc.oc.commons.bukkit.logging.MapdevLogger;
-import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.commons.core.localization.Locales;
 import tc.oc.commons.core.localization.LocalizedFileManager;
 import tc.oc.commons.core.util.CacheUtils;
 import tc.oc.file.PathWatcher;
 import tc.oc.file.PathWatcherHandle;
 import tc.oc.file.PathWatcherService;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.parse.ParseException;
 import tc.oc.parse.xml.DocumentParser;
 

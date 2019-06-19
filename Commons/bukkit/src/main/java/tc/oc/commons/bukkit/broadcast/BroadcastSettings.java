@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.broadcast;
 
 import javax.inject.Inject;
-
 import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.BooleanType;
@@ -57,7 +56,6 @@ public class BroadcastSettings {
                 break;
 
             case NEWS:
-            case ALERT:
                 setting = NEWS;
                 break;
 
@@ -70,6 +68,7 @@ public class BroadcastSettings {
                 setting = RANDOM;
                 break;
 
+            case ALERT:
             default:
                 return true;
         }

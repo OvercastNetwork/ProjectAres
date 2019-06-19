@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.inventory.ItemStack;
 import tc.oc.commons.bukkit.localization.Translations;
 import tc.oc.commons.core.logging.Loggers;
@@ -25,7 +26,6 @@ import tc.oc.pgm.Config;
 import tc.oc.pgm.events.MatchBeginEvent;
 import tc.oc.pgm.events.MatchEndEvent;
 import tc.oc.pgm.events.MatchLoadEvent;
-import tc.oc.pgm.gamerules.GameRule;
 import tc.oc.pgm.gamerules.GameRulesModule;
 import tc.oc.pgm.match.MatchManager;
 import tc.oc.pgm.modules.TimeLockModule;
@@ -99,9 +99,11 @@ public class PGMListener implements PluginFacet, Listener {
     // Time Lock
     // lock time before, during (if time lock enabled), and after the match
     //
+    static final String DO_DAYLIGHT_CYCLE = "doDaylightCycle";
+
     @EventHandler
     public void lockTime(final MatchLoadEvent event) {
-        event.getMatch().getWorld().setGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE.getValue(), Boolean.toString(false));
+        event.getMatch().getWorld().setGameRuleValue(DO_DAYLIGHT_CYCLE, Boolean.toString(false));
     }
 
     @EventHandler
@@ -113,16 +115,16 @@ public class PGMListener implements PluginFacet, Listener {
 
         GameRulesModule gameRulesModule = event.getMatch().getModuleContext().getModule(GameRulesModule.class);
 
-        if (gameRulesModule != null && gameRulesModule.getGameRules().containsKey(GameRule.DO_DAYLIGHT_CYCLE)) {
-            unlockTime = gameRulesModule.getGameRules().get(GameRule.DO_DAYLIGHT_CYCLE);
+        if (gameRulesModule != null && gameRulesModule.getGameRules().containsKey(DO_DAYLIGHT_CYCLE)) {
+            unlockTime = Boolean.valueOf(gameRulesModule.getGameRules().get(DO_DAYLIGHT_CYCLE));
         }
 
-        event.getMatch().getWorld().setGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE.getValue(), Boolean.toString(unlockTime));
+        event.getMatch().getWorld().setGameRuleValue(DO_DAYLIGHT_CYCLE, Boolean.toString(unlockTime));
     }
 
     @EventHandler
     public void lockTime(final MatchEndEvent event) {
-        event.getMatch().getWorld().setGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE.getValue(), Boolean.toString(false));
+        event.getMatch().getWorld().setGameRuleValue(DO_DAYLIGHT_CYCLE, Boolean.toString(false));
     }
 
     @EventHandler
@@ -132,6 +134,14 @@ public class PGMListener implements PluginFacet, Listener {
             if (caught.getItemStack().getType() != Material.RAW_FISH) {
                 caught.setItemStack(new ItemStack(Material.RAW_FISH));
             }
+        }
+    }
+
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void onEnterVehicle(VehicleEnterEvent event) {
+        if (!(event.getActor() instanceof Player)) {
+            event.setCancelled(true);
         }
     }
 }

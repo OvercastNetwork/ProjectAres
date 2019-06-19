@@ -1,6 +1,7 @@
 package tc.oc.pgm.map;
 
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class MapDefinition {
 
     @Inject private MapConfiguration configuration;
     @Inject private Provider<MapModuleContext> contextProvider;
+    @Inject private Provider<MapPersistentContext> persistentContextProvider;
     @Inject private ExceptionHandler exceptionHandler;
     @Inject private MapInjectionScope mapInjectionScope;
 
@@ -50,7 +52,8 @@ public class MapDefinition {
 
     private final MapFolder folder;
 
-    protected @Nullable MapModuleContext context;
+    protected @Nullable SoftReference<MapModuleContext> context;
+    private @Nullable MapPersistentContext persistentContext;
 
     protected MapDefinition(MapFolder folder) {
         this.folder = folder;
@@ -81,20 +84,29 @@ public class MapDefinition {
         return context != null;
     }
 
-    public MapModuleContext getContext() {
+    public Optional<MapModuleContext> getContext() {
         if(context == null) {
             throw new IllegalStateException("Map is not loaded: " + this);
         }
-        return context;
+        return Optional.ofNullable(context.get());
+    }
+
+    public MapPersistentContext getPersistentContext() {
+        if(persistentContext == null) {
+            throw new IllegalStateException("Map is not loaded: " + this);
+        }
+        return persistentContext;
     }
 
     public boolean shouldReload() {
         if(context == null) return true;
         if(!configuration.autoReload()) return false;
-        if(context.loadedFiles().isEmpty()) return configuration.reloadWhenError();
+        MapModuleContext mapContext = context.get();
+        if(mapContext == null) return true;
+        if(mapContext.loadedFiles().isEmpty()) return configuration.reloadWhenError();
 
         try {
-            for(Map.Entry<Path, HashCode> loaded : context.loadedFiles().entrySet()) {
+            for(Map.Entry<Path, HashCode> loaded : mapContext.loadedFiles().entrySet()) {
                 HashCode latest = Files.hash(loaded.getKey().toFile(), Hashing.sha256());
                 if(!latest.equals(loaded.getValue())) return true;
             }
@@ -116,7 +128,8 @@ public class MapDefinition {
             });
 
             if(!newContext.hasErrors()) {
-                this.context = newContext;
+                this.context = new SoftReference<>(newContext);
+                this.persistentContext = newContext.asCurrentScope(persistentContextProvider::get);
                 return true;
             }
 

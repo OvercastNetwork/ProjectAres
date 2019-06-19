@@ -2,6 +2,8 @@ package tc.oc.api.minecraft;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -150,6 +152,14 @@ public class MinecraftServiceImpl implements MinecraftService, MessageListener, 
             handleLocalReconfigure(serverService.update(apiConfiguration.serverId(), startupDocument).get());
 
             logger.info("Connected to API as server." + getLocalServer()._id());
+
+            if(apiConfiguration.publishIp()) {
+                String oldIp = server.ip(), newIp = startupDocument.ip();
+                if(!Objects.equals(oldIp, newIp)) {
+                    updateLocalServer((ServerDoc.Ip) () -> newIp).get();
+                    logger.info("Changed ip from " + oldIp + " to " + newIp);
+                }
+            }
         } catch (Exception e) {
             this.processIntoIOException(e);
         }

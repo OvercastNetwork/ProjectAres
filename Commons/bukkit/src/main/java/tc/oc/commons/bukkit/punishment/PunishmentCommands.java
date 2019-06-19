@@ -1,16 +1,25 @@
 package tc.oc.commons.bukkit.punishment;
 
-import java.time.Duration;
-import java.util.List;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type.BAN;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type.KICK;
+import static tc.oc.api.docs.virtual.PunishmentDoc.Type.WARN;
+import static tc.oc.commons.bukkit.commands.UserFinder.Default.NULL;
+import static tc.oc.commons.bukkit.commands.UserFinder.Default.SENDER;
+import static tc.oc.commons.bukkit.commands.UserFinder.Scope;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromFlag;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromType;
 
 import com.google.common.collect.Collections2;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import java.time.Duration;
+import java.util.List;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
@@ -29,13 +38,6 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.minecraft.scheduler.Sync;
-
-import static tc.oc.api.docs.virtual.PunishmentDoc.Type;
-import static tc.oc.api.docs.virtual.PunishmentDoc.Type.*;
-import static tc.oc.commons.bukkit.commands.UserFinder.Default.NULL;
-import static tc.oc.commons.bukkit.commands.UserFinder.Default.SENDER;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromFlag;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.fromType;
 
 @Singleton
 public class PunishmentCommands implements Commands {
@@ -86,13 +88,14 @@ public class PunishmentCommands implements Commands {
 
     public void create(CommandContext args, CommandSender sender, @Nullable Type type, @Nullable Duration duration) throws CommandException {
         final User punisher = userFinder.getLocalUser(sender);
-        final String reason = args.getRemainingString(duration == null ? 1 : 2);
+        final String reason = args.getJoinedStrings(duration == null ? 1 : 2);
         final boolean auto = flag('a', args, sender);
         final boolean silent = flag('s', args, sender);
         final boolean offrecord = flag('o', args, sender);
+        final Scope scope = punishmentCreator.offRecord() ? Scope.LOCAL : Scope.ALL;
         if(permission(sender, type)) {
             syncExecutor.callback(
-                userFinder.findUser(sender, args, 0),
+                userFinder.findUser(sender, args, 0, scope),
                 response -> {
                     punishmentCreator.create(
                         punisher,

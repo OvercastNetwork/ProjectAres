@@ -215,7 +215,7 @@ public class FreeForAllMatchModule extends MatchModule implements Listener, Join
         kickMe.sendMessage(Links.shopPlug("shop.plug.ffa.neverKicked"));
         kickMe.playSound(Sound.ENTITY_VILLAGER_HURT, kickMe.getBukkit().getLocation(), 1, 1);
 
-        getMatch().setPlayerParty(kickMe, getMatch().getDefaultParty());
+        getMatch().setPlayerParty(kickMe, getMatch().getDefaultParty(), false);
 
         return true;
     }
@@ -281,7 +281,7 @@ public class FreeForAllMatchModule extends MatchModule implements Listener, Join
             joining.sendWarning(new TranslatableComponent("command.gameplay.join.alreadyJoined"), false);
         }
 
-        return getMatch().setPlayerParty(joining, getTribute(joining));
+        return getMatch().setPlayerParty(joining, getTribute(joining), false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

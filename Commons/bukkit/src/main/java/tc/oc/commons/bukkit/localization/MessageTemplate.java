@@ -3,7 +3,6 @@ package tc.oc.commons.bukkit.localization;
 import java.text.MessageFormat;
 import java.util.Locale;
 import javax.inject.Inject;
-
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.core.localization.Locales;
 

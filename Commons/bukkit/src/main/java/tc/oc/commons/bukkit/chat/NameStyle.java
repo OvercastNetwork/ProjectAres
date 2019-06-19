@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.chat;
 
+import com.google.common.collect.ForwardingSet;
+import com.google.common.collect.Sets;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
-
-import com.google.common.collect.ForwardingSet;
-import com.google.common.collect.Sets;
 
 /**
  * The formatting properties for each different context in which names are displayed.
@@ -49,6 +48,13 @@ public class NameStyle extends ForwardingSet<NameFlag> {
         )
     );
 
+
+    public static final NameStyle VERBOSE_SIMPLE = new NameStyle(
+        Sets.difference(
+            VERBOSE,
+            Sets.newHashSet(NameFlag.SELF, NameFlag.FRIEND)
+        )
+    );
 
     // Fancy minus mapmaker flair (for display in map credits)
     public static final NameStyle MAPMAKER = new NameStyle(

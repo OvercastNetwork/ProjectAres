@@ -1,14 +1,12 @@
 package tc.oc.commons.bukkit.teleport;
 
-import javax.inject.Inject;
-
 import com.google.common.util.concurrent.ListenableFuture;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import javax.inject.Inject;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.users.UserSearchResponse;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
@@ -18,6 +16,7 @@ import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 public class TeleportCommands implements Commands {
 

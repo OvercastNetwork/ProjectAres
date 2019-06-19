@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import tc.oc.pgm.Config;
 import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchScope;
@@ -37,4 +38,8 @@ public class LongRangeExplosionMatchModule extends MatchModule implements Listen
         render(event.getBlock().getLocation());
     }
 
+    @Override
+    public boolean shouldLoad() {
+        return Config.Effects.explosions();
+    }
 }

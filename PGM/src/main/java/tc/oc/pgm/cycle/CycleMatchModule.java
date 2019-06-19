@@ -120,11 +120,11 @@ public class CycleMatchModule extends MatchModule implements Listener {
                         }
 
                         @Override public int min_players() {
-                            return nextMap.getContext().playerLimits().lowerEndpoint();
+                            return nextMap.getPersistentContext().playerLimits().lowerEndpoint();
                         }
 
                         @Override public int max_players() {
-                            return nextMap.getContext().playerLimits().upperEndpoint();
+                            return nextMap.getPersistentContext().playerLimits().upperEndpoint();
                         }
                     }
                 ),

@@ -1,14 +1,13 @@
 package tc.oc.commons.bukkit.debug;
 
+import java.time.Duration;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
-import java.time.Duration;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.virtual.Model;
 import tc.oc.api.model.ModelDispatcher;

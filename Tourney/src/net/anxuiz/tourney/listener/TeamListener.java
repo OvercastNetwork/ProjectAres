@@ -4,7 +4,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import com.github.rmsy.channels.ChannelsPlugin;
 import net.anxuiz.tourney.MatchManager;
 import net.anxuiz.tourney.TeamManager;
 import net.anxuiz.tourney.Tourney;
@@ -26,10 +25,11 @@ import tc.oc.api.docs.Entrant;
 import tc.oc.api.docs.Tournament;
 import tc.oc.commons.bukkit.event.UserLoginEvent;
 import tc.oc.commons.core.chat.Component;
-import tc.oc.pgm.blitz.BlitzMatchModule;
+import tc.oc.pgm.blitz.BlitzMatchModuleImpl;
 import tc.oc.pgm.channels.ChannelMatchModule;
 import tc.oc.pgm.events.MatchEndEvent;
 import tc.oc.pgm.events.MatchPlayerAddEvent;
+import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchState;
@@ -120,7 +120,7 @@ public class TeamListener implements Listener {
             TourneyState state = event.getNewState();
             if(tourney.getKDMSession() == null && state.equals(TourneyState.ENABLED_WAITING_FOR_READY)) {
                 Match match = matchProvider.get();
-                if(match.getMatchModule(ScoreMatchModule.class) != null || match.getMatchModule(BlitzMatchModule.class) != null) {
+                if(match.getMatchModule(ScoreMatchModule.class) != null || match.module(BlitzMatchModuleImpl.class).filter(BlitzMatchModule::activated).isPresent()) {
                     tourney.createKDMSession();
                 }
             }
@@ -135,11 +135,7 @@ public class TeamListener implements Listener {
                 final Player player = event.getPlayer().getBukkit();
                 Team team = teamManagerProvider.get().getTeam(player);
                 if(team != null) {
-                    event.getMatch().setPlayerParty(event.getPlayer(), team);
-                    ChannelsPlugin.get().getPlayerManager().setMembershipChannel(
-                        player,
-                        event.getMatch().needMatchModule(ChannelMatchModule.class).getChannel(team)
-                    );
+                    event.getMatch().setPlayerParty(event.getPlayer(), team, false);
                 }
             }
         }

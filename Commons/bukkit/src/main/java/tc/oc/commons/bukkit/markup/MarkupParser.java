@@ -7,24 +7,23 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import tc.oc.commons.bukkit.chat.LinkComponent;
 import tc.oc.commons.bukkit.chat.Links;
-import tc.oc.commons.bukkit.chat.UserURI;
 import tc.oc.commons.bukkit.chat.Renderable;
+import tc.oc.commons.bukkit.chat.UserURI;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
 import tc.oc.parse.MissingException;
 import tc.oc.parse.ParseException;
 import tc.oc.parse.ValueException;
-import tc.oc.parse.xml.XML;
 import tc.oc.parse.xml.ElementParser;
 import tc.oc.parse.xml.NodeParser;
 import tc.oc.parse.xml.UnrecognizedNodeException;
+import tc.oc.parse.xml.XML;
 
 /**
  * Parses an XML dialect similar to HTML into {@link BaseComponent}s

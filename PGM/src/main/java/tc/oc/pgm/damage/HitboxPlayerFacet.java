@@ -28,8 +28,8 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
     private static final double PLAYER_HEIGHT = 1.8;
     private static final double VIEW_RADIUS = 12;
 
-    private final NMSHacks.FakeEntity[] fakes = new NMSHacks.FakeEntity[4];
-    private final Location[] locations = new Location[4];
+//    private final NMSHacks.FakeEntity[] fakes = new NMSHacks.FakeEntity[4];
+//    private final Location[] locations = new Location[4];
 
     private final Match match;
     private final HitboxMatchModule mm;
@@ -51,18 +51,18 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
 
     @Override
     public void enable() {
-        for(int i = 0; i < fakes.length; i++) {
+        /*for(int i = 0; i < fakes.length; i++) {
             fakes[i] = new NMSHacks.FakeZombie(world, true);
             locations[i] = new Location(world, 0, 0, 0);
             mm.facets.put(fakes[i].entityId(), this);
-        }
+        }*/
     }
 
     @Override
     public void disable() {
-        for(NMSHacks.FakeEntity fake : fakes) {
+        /*for(NMSHacks.FakeEntity fake : fakes) {
             mm.facets.remove(fake.entityId());
-        }
+        }*/
     }
 
     public double getWidth() {
@@ -78,7 +78,7 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
             final Location location = player.getLocation();
             final double radius = width / 2;
             return Cuboid.between(location.position().minus(radius, 0, radius),
-                                  location.position().plus(radius, PLAYER_HEIGHT, radius));
+                    location.position().plus(radius, PLAYER_HEIGHT, radius));
         } else {
             return player.getBoundingBox();
         }
@@ -122,7 +122,7 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
 
     @Repeatable(scope = MatchScope.RUNNING)
     public void updateViewers() {
-        final Location location = player.getLocation();
+        /*final Location location = player.getLocation();
         updateFakeLocations(location);
 
         final Set<Player> remove = new HashSet<>(viewers);
@@ -145,15 +145,15 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
         for(Player viewer : remove) {
             destroyFakes(viewer);
         }
-        viewers.removeAll(remove);
+        viewers.removeAll(remove);*/
     }
 
     private boolean isAttacker(Player attacker) {
         final MatchPlayer mp = match.getPlayer(attacker);
         return mp != null &&
-               mp.canInteract() &&
-               (mapInfo.friendlyFire ||
-                !mp.getParty().equals(matchPlayer.getParty()));
+                mp.canInteract() &&
+                (mapInfo.friendlyFire ||
+                        !mp.getParty().equals(matchPlayer.getParty()));
     }
 
     private void updateFakeLocations(Location c) {
@@ -165,27 +165,27 @@ public class HitboxPlayerFacet implements MatchPlayerFacet {
         final double pz = c.getZ() + h;
         final double mz = c.getZ() - h;
 
-        locations[0].setPosition(mx, y, mz);
+/*        locations[0].setPosition(mx, y, mz);
         locations[1].setPosition(px, y, mz);
         locations[2].setPosition(mx, y, pz);
-        locations[3].setPosition(px, y, pz);
+        locations[3].setPosition(px, y, pz);*/
     }
 
     private void destroyFakes(Player viewer) {
-        for(NMSHacks.FakeEntity fake : fakes) {
+        /*for(NMSHacks.FakeEntity fake : fakes) {
             fake.destroy(viewer);
-        }
+        }*/
     }
 
     private void spawnFakes(Player viewer) {
-        for(int i = 0; i < fakes.length; i++) {
+        /*for(int i = 0; i < fakes.length; i++) {
             fakes[i].spawn(viewer, locations[i]);
-        }
+        }*/
     }
 
     private void moveFakes(Player viewer) {
-        for(int i = 0; i < fakes.length; i++) {
+        /*for(int i = 0; i < fakes.length; i++) {
             fakes[i].teleport(viewer, locations[i]);
-        }
+        }*/
     }
 }

@@ -25,6 +25,9 @@ public class KitManifest extends HybridManifest implements ParserBinders, MatchB
         bind(GrenadeListener.class).in(MatchScoped.class);
         matchListener(GrenadeListener.class);
 
+        bind(KitListener.class).in(MatchScoped.class);
+        matchListener(KitListener.class);
+
         bind(ItemSharingAndLockingListener.class).in(MatchScoped.class);
         matchListener(ItemSharingAndLockingListener.class);
 

@@ -6,6 +6,7 @@ import tc.oc.pgm.match.Competitor;
 import tc.oc.pgm.victory.MatchResult;
 
 public class BlitzMatchResult implements MatchResult {
+
     @Override
     public int compare(Competitor a, Competitor b) {
         return Integer.compare(b.getPlayers().size(), a.getPlayers().size());
@@ -15,4 +16,5 @@ public class BlitzMatchResult implements MatchResult {
     public BaseComponent describeResult() {
         return new Component("most survivors");
     }
+
 }

@@ -2,6 +2,7 @@ package tc.oc.pgm.spawns;
 
 import java.util.Optional;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import tc.oc.pgm.features.FeatureDefinition;
 import tc.oc.pgm.features.FeatureInfo;
@@ -9,6 +10,7 @@ import tc.oc.pgm.kits.Kit;
 import tc.oc.pgm.kits.KitPlayerFacet;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.points.PointProvider;
+import tc.oc.pgm.tracker.trackers.PlayerLocationTracker;
 
 @FeatureInfo(name = "spawn")
 public interface Spawn extends FeatureDefinition {
@@ -53,6 +55,12 @@ class SpawnImpl extends FeatureDefinition.Impl implements Spawn {
     @Override
     public Location getSpawn(MatchPlayer player) {
         Location location = this.pointProvider.getPoint(player.getMatch(), player.getBukkit());
+        if (attributes.useLastParticipatingLocation) {
+            Location lastParticipatingLocation = PlayerLocationTracker.getLastParticipatingLocation(player);
+            if (lastParticipatingLocation != null) {
+                location = lastParticipatingLocation;
+            }
+        }
         if(location == null) {
             player.getMatch().needMatchModule(SpawnMatchModule.class).reportFailedSpawn(this, player);
         }

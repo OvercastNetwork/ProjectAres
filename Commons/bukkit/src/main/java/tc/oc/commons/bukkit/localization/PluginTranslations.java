@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.localization;
 
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableSet;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.NavigableSet;
@@ -7,9 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.annotation.Nullable;
-
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableSet;
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.core.localization.Locales;
 import tc.oc.commons.core.localization.TranslationSet;

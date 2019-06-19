@@ -1,50 +1,46 @@
 package tc.oc.pgm.match;
 
-import javax.inject.Inject;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import tc.oc.commons.bukkit.chat.ConsoleAudience;
-import tc.oc.commons.core.chat.AbstractMultiAudience;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.chat.MultiAudience;
+import tc.oc.minecraft.api.entity.Player;
 import tc.oc.pgm.filters.Filter;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Provides various aggregate {@link Audience}s within a match
  */
+@Singleton
 public class MatchAudiences {
 
     private final Match match;
-    private final Audience participants;
-    private final Audience observers;
-    private final ImmutableSet<ConsoleAudience> console;
+    private final Audiences audiences;
 
-    @Inject MatchAudiences(Match match, ConsoleAudience console) {
+    @Inject
+    MatchAudiences(Match match, Audiences audiences) {
         this.match = match;
-        this.console = ImmutableSet.of(console);
-        this.participants = new MultiAudience(Iterables.concat(this.console, match.getParticipatingPlayers()));
-        this.observers = new MultiAudience(Iterables.concat(this.console, match.getObservingPlayers()));
+        this.audiences = audiences;
     }
 
-    public Audience all() {
-        return match;
+    public MultiAudience all() {
+        return () -> Stream.of(audiences.console(), audiences.playerFilter(player -> match.player(player).isPresent()));
     }
 
-    public Audience participants() {
-        return participants;
+    public MultiAudience participants() {
+        return () -> Stream.of(audiences.console(), audiences.playerFilter(player -> match.participant(player).isPresent()));
     }
 
-    public Audience observers() {
-        return observers;
+    public MultiAudience observers() {
+        return () -> Stream.of(audiences.console(), audiences.playerFilter(player -> match.getObservingPlayers().contains(match.player(player).orElse(null))));
     }
 
-    public Audience filter(Filter filter) {
-        return new AbstractMultiAudience() {
-            @Override
-            protected Iterable<? extends Audience> getAudiences() {
-                return Iterables.concat(console, Iterables.filter(match.getPlayers(), player -> !filter.denies(player)));
-            }
-        };
+    public MultiAudience filter(Filter filter) {
+        final Set<Player> allowed = match.players().filter(player -> !filter.denies(player)).map(MatchPlayer::getBukkit).collect(Collectors.toSet());
+        return () -> Stream.of(audiences.console(), audiences.playerFilter(allowed::contains));
     }
 }

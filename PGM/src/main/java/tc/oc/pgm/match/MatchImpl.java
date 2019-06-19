@@ -24,13 +24,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Range;
 import com.google.common.collect.SetMultimap;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -45,10 +42,8 @@ import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.UserId;
 import tc.oc.api.model.IdFactory;
-import tc.oc.commons.bukkit.chat.ConsoleAudience;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.core.chat.Audience;
-import tc.oc.commons.core.chat.ForwardingAudience;
-import tc.oc.commons.core.chat.MultiAudience;
 import tc.oc.commons.core.exception.ExceptionHandler;
 import tc.oc.commons.core.inject.ChildInjectorFactory;
 import tc.oc.commons.core.inject.FacetContext;
@@ -99,7 +94,7 @@ import tc.oc.pgm.utils.WorldTickRandom;
 
 import static com.google.common.base.Preconditions.*;
 
-public class MatchImpl implements Match, ForwardingAudience {
+public class MatchImpl implements Match {
 
     private Logger logger;
 
@@ -121,8 +116,7 @@ public class MatchImpl implements Match, ForwardingAudience {
     @Inject private FeatureDefinitionContext featureDefinitions;
     @Inject private World world;
 
-    @Inject private ConsoleAudience consoleAudience;
-    private Audience audience;
+    @Inject private Audiences audiences;
 
     // State management
     private final AtomicBoolean unloaded = new AtomicBoolean(true);     // true before loading starts and after unloading finishes
@@ -194,7 +188,6 @@ public class MatchImpl implements Match, ForwardingAudience {
         id = idFactory.newId();
         url = new URL("http", "localhost:3000", "/matches/" + id);
         loadTime = clock.now();
-        audience = new MultiAudience(Iterables.concat(ImmutableSet.of(consoleAudience), getPlayers()));
         setState(MatchState.Idle);
     }
 
@@ -265,8 +258,8 @@ public class MatchImpl implements Match, ForwardingAudience {
     }
 
     @Override
-    public Audience audience() {
-        return audience;
+    public Stream<Audience> audiences() {
+        return Stream.of(audiences.console(), audiences.filter(sender -> player(sender).isPresent()));
     }
 
 
@@ -350,14 +343,6 @@ public class MatchImpl implements Match, ForwardingAudience {
     public void unregisterRepeatable(Object object) {
         scheduler.unregisterRepeatables(object);
         runningScheduler.unregisterRepeatables(object);
-    }
-
-    @Override
-    public void registerEventsAndRepeatables(Object thing) {
-        registerRepeatable(thing);
-        if(thing instanceof Listener) {
-            registerEvents((Listener) thing);
-        }
     }
 
 
@@ -712,7 +697,7 @@ public class MatchImpl implements Match, ForwardingAudience {
 
                 // If the player hasn't joined a party by this point, join the default party
                 if(!player.hasParty()) {
-                    setPlayerParty(player, getDefaultParty());
+                    setPlayerParty(player, getDefaultParty(), false);
                 }
 
                 return player;
@@ -728,7 +713,7 @@ public class MatchImpl implements Match, ForwardingAudience {
 
         try {
             logger.fine("Removing player " + player);
-            setOrClearPlayerParty(player, null);
+            setOrClearPlayerParty(player, null, false);
 
             // As with enable, facets are disabled after the player is removed
             // from their party and all collections.
@@ -811,8 +796,8 @@ public class MatchImpl implements Match, ForwardingAudience {
     }
 
     @Override
-    public boolean setPlayerParty(MatchPlayer player, Party newParty) {
-        return setOrClearPlayerParty(player, checkNotNull(newParty));
+    public boolean setPlayerParty(MatchPlayer player, Party newParty, boolean force) {
+        return setOrClearPlayerParty(player, checkNotNull(newParty), force);
     }
 
     /**
@@ -827,7 +812,7 @@ public class MatchImpl implements Match, ForwardingAudience {
      *  - If the player is already in newParty, or if the party change is cancelled by {@link PlayerParticipationStopEvent},
      *    none of the above changes will happen, and the method will return false.
      */
-    private boolean setOrClearPlayerParty(MatchPlayer player, @Nullable Party newParty) {
+    private boolean setOrClearPlayerParty(MatchPlayer player, @Nullable Party newParty, boolean force) {
         final Party oldParty = player.party;
 
         checkArgument(equals(player.getMatch()), "Player belongs to a different match");
@@ -847,7 +832,7 @@ public class MatchImpl implements Match, ForwardingAudience {
                 throw new IllegalStateException("Nested party change: " + player + " tried to join " + newParty + " in the middle of joining " + nested);
             }
 
-            if(oldParty instanceof Competitor) {
+            if(oldParty instanceof Competitor && !force) {
                 final PlayerParticipationStopEvent request = new PlayerParticipationStopEvent(player, (Competitor) oldParty);
                 bukkitEventBus.callEvent(request);
                 if(request.isCancelled() && newParty != null) { // Can't cancel this if the player is leaving the match
@@ -934,22 +919,5 @@ public class MatchImpl implements Match, ForwardingAudience {
         } finally {
             partyChanges.remove(player);
         }
-    }
-
-
-    // --------------
-    // ---- Chat ----
-    // --------------
-
-    @Override
-    public void sendMessageExcept(BaseComponent message, MatchPlayer... except) {
-        consoleAudience.sendMessage(message);
-        Match.super.sendMessageExcept(message, except);
-    }
-
-    @Override
-    public void sendMessageExcept(BaseComponent message, MatchPlayerState... except) {
-        consoleAudience.sendMessage(message);
-        Match.super.sendMessageExcept(message, except);
     }
 }

@@ -2,11 +2,10 @@ package tc.oc.pgm.killreward;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import org.bukkit.event.Event;
@@ -27,34 +26,38 @@ import tc.oc.pgm.tracker.damage.DamageInfo;
 
 @ListenerScope(MatchScope.RUNNING)
 public class KillRewardMatchModule extends MatchModule implements Listener {
-    protected final ImmutableList<KillReward> killRewards;
-    protected final Multimap<MatchPlayer, KillReward> deadPlayerRewards = ArrayListMultimap.create();
+
+    private final List<KillReward> killRewards;
+    private final Multimap<MatchPlayer, KillReward> deadPlayerRewards = ArrayListMultimap.create();
 
     public KillRewardMatchModule(Match match, List<KillReward> killRewards) {
         super(match);
-        this.killRewards = ImmutableList.copyOf(killRewards);
+        this.killRewards = killRewards;
     }
 
-    private Collection<KillReward> getRewards(@Nullable Event event, ParticipantState victim, DamageInfo damageInfo) {
+    public List<KillReward> rewards() {
+        return killRewards;
+    }
+
+    public ImmutableList<KillReward> rewardsImmutable() {
+        return ImmutableList.copyOf(killRewards);
+    }
+
+    public List<KillReward> rewards(@Nullable Event event, ParticipantState victim, DamageInfo damageInfo) {
         final DamageQuery query = DamageQuery.attackerDefault(event, victim, damageInfo);
-        return Collections2.filter(killRewards, new Predicate<KillReward>() {
-            @Override
-            public boolean apply(KillReward killReward) {
-                return killReward.filter.query(query).isAllowed();
-            }
-        });
+        return rewardsImmutable().stream().filter(reward -> reward.filter.query(query).isAllowed()).collect(Collectors.toList());
     }
 
-    private Collection<KillReward> getRewards(MatchPlayerDeathEvent event) {
-        return getRewards(event, event.getVictim().getParticipantState(), event.getDamageInfo());
+    public List<KillReward> rewards(MatchPlayerDeathEvent event) {
+        return rewards(event, event.getVictim().getParticipantState(), event.getDamageInfo());
     }
 
-    private void giveRewards(MatchPlayer killer, Collection<KillReward> rewards) {
-        for(KillReward reward : rewards) {
+    public void giveRewards(MatchPlayer killer, Collection<KillReward> rewards) {
+        rewards.forEach(reward -> {
             // Apply kit first so it can not override reward items
             reward.kit.apply(killer);
             reward.items.forEach(stack -> ItemKitApplicator.fireEventAndTransfer(killer, stack));
-        }
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -63,7 +66,7 @@ public class KillRewardMatchModule extends MatchModule implements Listener {
         MatchPlayer killer = event.getOnlineKiller();
         if(killer == null) return;
 
-        Collection<KillReward> rewards = getRewards(event);
+        List<KillReward> rewards = rewards(event);
 
         if(killer.isDead()) {
             // If a player earns a KW while dead, give it to them when they respawn. Rationale: If they click respawn
@@ -87,4 +90,5 @@ public class KillRewardMatchModule extends MatchModule implements Listener {
     public void onPartyChange(PlayerPartyChangeEvent event) {
         deadPlayerRewards.removeAll(event.getPlayer());
     }
+
 }

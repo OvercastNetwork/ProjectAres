@@ -1,8 +1,7 @@
 package tc.oc.commons.bukkit.broadcast;
 
-import java.util.List;
-
 import com.google.inject.TypeLiteral;
+import java.util.List;
 import tc.oc.commons.bukkit.broadcast.model.BroadcastPrefix;
 import tc.oc.commons.bukkit.broadcast.model.BroadcastSchedule;
 import tc.oc.commons.bukkit.settings.SettingBinder;

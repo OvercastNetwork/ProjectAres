@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit;
 
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.ConsoleCommandSender;
@@ -12,7 +11,8 @@ import tc.oc.bukkit.analytics.BukkitPlayerReporter;
 import tc.oc.bukkit.analytics.LatencyReporter;
 import tc.oc.bukkit.analytics.TickReporter;
 import tc.oc.commons.bukkit.broadcast.BroadcastManifest;
-import tc.oc.commons.bukkit.channels.AdminChatManifest;
+import tc.oc.commons.bukkit.channels.ChannelManifest;
+import tc.oc.commons.bukkit.chat.ChatManifest;
 import tc.oc.commons.bukkit.chat.ComponentRenderContext;
 import tc.oc.commons.bukkit.chat.ComponentRendererRegistry;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
@@ -24,6 +24,8 @@ import tc.oc.commons.bukkit.chat.TextComponentRenderer;
 import tc.oc.commons.bukkit.chat.TranslatableComponentRenderer;
 import tc.oc.commons.bukkit.chat.UserTextComponent;
 import tc.oc.commons.bukkit.chat.UserTextComponentRenderer;
+import tc.oc.commons.bukkit.commands.GroupCommands;
+import tc.oc.commons.bukkit.commands.MiscCommands;
 import tc.oc.commons.bukkit.commands.PermissionCommands;
 import tc.oc.commons.bukkit.commands.ServerCommands;
 import tc.oc.commons.bukkit.commands.ServerVisibilityCommands;
@@ -33,6 +35,7 @@ import tc.oc.commons.bukkit.commands.UserCommands;
 import tc.oc.commons.bukkit.commands.UserFinder;
 import tc.oc.commons.bukkit.debug.LeakListener;
 import tc.oc.commons.bukkit.event.targeted.TargetedEventManifest;
+import tc.oc.commons.bukkit.flairs.FlairConfiguration;
 import tc.oc.commons.bukkit.format.ServerFormatter;
 import tc.oc.commons.bukkit.freeze.PlayerFreezer;
 import tc.oc.commons.bukkit.inject.BukkitPluginManifest;
@@ -60,17 +63,19 @@ import tc.oc.commons.bukkit.nick.PlayerOrder;
 import tc.oc.commons.bukkit.nick.PlayerOrderCache;
 import tc.oc.commons.bukkit.punishment.PunishmentManifest;
 import tc.oc.commons.bukkit.raindrops.RaindropManifest;
-import tc.oc.commons.bukkit.report.ReportAnnouncer;
-import tc.oc.commons.bukkit.report.ReportCommands;
+import tc.oc.commons.bukkit.report.ReportManifest;
 import tc.oc.commons.bukkit.respack.ResourcePackCommands;
 import tc.oc.commons.bukkit.respack.ResourcePackListener;
 import tc.oc.commons.bukkit.respack.ResourcePackManager;
 import tc.oc.commons.bukkit.restart.RestartCommands;
 import tc.oc.commons.bukkit.sessions.SessionListener;
 import tc.oc.commons.bukkit.settings.SettingManifest;
+import tc.oc.commons.bukkit.stats.StatsManifest;
 import tc.oc.commons.bukkit.suspend.SuspendListener;
 import tc.oc.commons.bukkit.tablist.PlayerTabEntry;
 import tc.oc.commons.bukkit.tablist.TabRender;
+import tc.oc.commons.bukkit.teleport.Navigator;
+import tc.oc.commons.bukkit.teleport.NavigatorInterface;
 import tc.oc.commons.bukkit.teleport.NavigatorManifest;
 import tc.oc.commons.bukkit.teleport.PlayerServerChanger;
 import tc.oc.commons.bukkit.teleport.TeleportCommands;
@@ -80,6 +85,7 @@ import tc.oc.commons.bukkit.ticket.TicketBooth;
 import tc.oc.commons.bukkit.ticket.TicketCommands;
 import tc.oc.commons.bukkit.ticket.TicketDisplay;
 import tc.oc.commons.bukkit.ticket.TicketListener;
+import tc.oc.commons.bukkit.tokens.TokenManifest;
 import tc.oc.commons.bukkit.trophies.TrophyCase;
 import tc.oc.commons.bukkit.trophies.TrophyCommands;
 import tc.oc.commons.bukkit.users.JoinMessageManifest;
@@ -105,11 +111,15 @@ public final class CommonsBukkitManifest extends HybridManifest {
         install(new SettingManifest());
         install(new WhisperManifest());
         install(new JoinMessageManifest());
-        install(new AdminChatManifest());
+        install(new ChatManifest());
+        install(new ChannelManifest());
         install(new BroadcastManifest());
         install(new LocalizationManifest());
         install(new NavigatorManifest());
         install(new RaindropManifest());
+        install(new ReportManifest());
+        install(new TokenManifest());
+        install(new StatsManifest());
         install(new PunishmentManifest());
 
         // These are already bound as facets, so they only need to be exposed
@@ -119,6 +129,7 @@ public final class CommonsBukkitManifest extends HybridManifest {
         expose(TicketDisplay.class);
         expose(TicketListener.class);
 
+        bindAndExpose(FlairConfiguration.class);
         bindAndExpose(PlayerAppearanceChanger.class);
         bindAndExpose(UserFinder.class);
         bindAndExpose(Teleporter.class);
@@ -155,6 +166,9 @@ public final class CommonsBukkitManifest extends HybridManifest {
         facets.register(LeakListener.class);
         facets.register(LocaleListener.class);
         facets.register(LoginListener.class);
+        facets.register(MiscCommands.class);
+        facets.register(Navigator.class);
+        facets.register(NavigatorInterface.class);
         facets.register(NicknameCommands.class);
         facets.register(PermissionCommands.class);
         facets.register(PermissionCommands.Parent.class);
@@ -163,8 +177,6 @@ public final class CommonsBukkitManifest extends HybridManifest {
         facets.register(PlayerFreezer.class);
         facets.register(PlayerOrderCache.class);
         facets.register(PlayerServerChanger.class);
-        facets.register(ReportAnnouncer.class);
-        facets.register(ReportCommands.class);
         facets.register(ResourcePackCommands.class);
         facets.register(ResourcePackCommands.Parent.class);
         facets.register(ResourcePackListener.class);
@@ -189,6 +201,7 @@ public final class CommonsBukkitManifest extends HybridManifest {
         facets.register(WindowManager.class);
         facets.register(AppealAlertListener.class);
         facets.register(SuspendListener.class);
+        facets.register(GroupCommands.Parent.class);
 
         // DataDog
         facets.register(TickReporter.class);

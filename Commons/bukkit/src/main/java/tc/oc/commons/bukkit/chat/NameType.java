@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.chat;
 
-import org.bukkit.command.CommandSender;
-import tc.oc.commons.bukkit.nick.Identity;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Objects;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.bukkit.command.CommandSender;
+import tc.oc.commons.bukkit.nick.Identity;
 
 /**
  * These are the parameters that determine how a player's name is

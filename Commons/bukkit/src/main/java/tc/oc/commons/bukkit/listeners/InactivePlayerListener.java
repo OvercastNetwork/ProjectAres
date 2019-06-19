@@ -1,11 +1,12 @@
 package tc.oc.commons.bukkit.listeners;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.configuration.Configuration;
@@ -15,8 +16,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import java.time.Duration;
-import java.time.Instant;
 import tc.oc.commons.bukkit.configuration.ConfigUtils;
 import tc.oc.commons.bukkit.localization.CommonsTranslations;
 import tc.oc.commons.bukkit.teleport.PlayerServerChanger;

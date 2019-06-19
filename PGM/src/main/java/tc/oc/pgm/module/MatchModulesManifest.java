@@ -5,7 +5,6 @@ import tc.oc.pgm.api.EngagementMatchModule;
 import tc.oc.pgm.api.MatchPublishingMatchModule;
 import tc.oc.pgm.api.ParticipationPublishingMatchModule;
 import tc.oc.pgm.bossbar.BossBarMatchModule;
-import tc.oc.pgm.channels.ChannelMatchModule;
 import tc.oc.pgm.cycle.CycleMatchModule;
 import tc.oc.pgm.damage.HitboxMatchModule;
 import tc.oc.pgm.death.DeathMessageMatchModule;
@@ -52,7 +51,6 @@ public class MatchModulesManifest extends HybridManifest {
         install(new MatchModuleFixtureManifest<SkillRequirementMatchModule>(){});
         install(new MatchModuleFixtureManifest<StartMatchModule>(){});
         install(new MatchModuleFixtureManifest<ArrowRemovalMatchModule>(){});
-        install(new MatchModuleFixtureManifest<ChannelMatchModule>(){});
         install(new MatchModuleFixtureManifest<DoubleJumpMatchModule>(){});
         install(new MatchModuleFixtureManifest<GoalMatchModule>(){});
         install(new MatchModuleFixtureManifest<ProjectileMatchModule>(){});

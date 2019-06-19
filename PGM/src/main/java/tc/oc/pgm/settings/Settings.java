@@ -5,8 +5,10 @@ import javax.inject.Singleton;
 import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.BooleanType;
+import org.bukkit.Material;
 import tc.oc.commons.bukkit.settings.SettingBinder;
 import tc.oc.commons.bukkit.settings.SettingCallbackBinder;
+import tc.oc.commons.bukkit.util.ItemCreator;
 import tc.oc.commons.core.inject.HybridManifest;
 
 /**
@@ -35,13 +37,13 @@ public class Settings extends HybridManifest {
 
     public static final Setting RATINGS = new SettingBuilder()
         .name("Ratings").alias("rate")
-        .summary("Automatically show the map rating dialog for maps you haven't rated yet")
+        .summary("Show map rating dialog for unrated maps")
         .type(new BooleanType())
         .defaultValue(true).get();
 
     public static final Setting SOUNDS = new SettingBuilder()
         .name("Sounds").alias("sound")
-        .summary("Hear sounds to alert you of the last three seconds of a countdown")
+        .summary("Hear sounds at the end of a countdown")
         .type(new BooleanType())
         .defaultValue(true).get();
 }

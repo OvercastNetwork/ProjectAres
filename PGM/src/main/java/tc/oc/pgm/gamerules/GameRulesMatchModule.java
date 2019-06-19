@@ -6,29 +6,38 @@ import com.google.common.collect.ImmutableMap;
 
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
-import tc.oc.pgm.mutation.Mutation;
-import tc.oc.pgm.mutation.MutationMatchModule;
+import tc.oc.pgm.match.Repeatable;
+import tc.oc.time.Time;
 
 public class GameRulesMatchModule extends MatchModule {
 
-    private final Map<GameRule, Boolean> gameRules;
+    private final Map<String, String> gameRules;
 
-    public GameRulesMatchModule(Match match, Map<GameRule, Boolean> gameRules) {
+    public GameRulesMatchModule(Match match, Map<String, String> gameRules) {
         super(match);
         this.gameRules = Preconditions.checkNotNull(gameRules, "gamerules");
-        if(MutationMatchModule.check(match, Mutation.UHC)) {
-            this.gameRules.put(GameRule.NATURAL_REGENERATION, Boolean.FALSE);
-        }
     }
 
     @Override
     public void load() {
-        for (Map.Entry<GameRule, Boolean> gameRule : this.gameRules.entrySet()) {
-            this.match.getWorld().setGameRuleValue(gameRule.getKey().getValue(), gameRule.getValue().toString());
-        }
+        update();
     }
 
-    public ImmutableMap<GameRule, Boolean> getGameRules() {
-        return ImmutableMap.copyOf(gameRules);
+    @Repeatable(interval = @Time(seconds = 1))
+    public void tick() {
+        update();
     }
+
+    public void update() {
+        gameRulesImmutable().forEach((String rule, String val) -> match.getWorld().setGameRuleValue(rule, val));
+    }
+
+    public Map<String, String> gameRules() {
+        return gameRules;
+    }
+
+    public ImmutableMap<String, String> gameRulesImmutable() {
+        return ImmutableMap.copyOf(gameRules());
+    }
+
 }

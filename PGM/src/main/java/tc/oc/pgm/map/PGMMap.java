@@ -48,7 +48,7 @@ public class PGMMap extends MapDefinition {
     }
 
     public MapInfo getInfo() {
-        return getContext().needModule(InfoModule.class).getMapInfo();
+        return getPersistentContext().getInfoModule().getMapInfo();
     }
 
     public MapId getId() {
@@ -56,7 +56,7 @@ public class PGMMap extends MapDefinition {
     }
 
     public MapDoc getDocument() {
-        return getContext().apiDocument();
+        return getPersistentContext().apiDocument();
     }
 
     @Override

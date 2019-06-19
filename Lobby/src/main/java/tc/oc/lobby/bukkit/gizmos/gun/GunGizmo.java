@@ -1,13 +1,12 @@
 package tc.oc.lobby.bukkit.gizmos.gun;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

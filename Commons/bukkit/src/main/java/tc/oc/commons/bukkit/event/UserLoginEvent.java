@@ -1,7 +1,8 @@
 package tc.oc.commons.bukkit.event;
 
-import javax.annotation.Nullable;
+import static com.google.common.base.Preconditions.checkNotNull;
 
+import javax.annotation.Nullable;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,8 +11,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import tc.oc.api.docs.Session;
 import tc.oc.api.docs.User;
 import tc.oc.api.users.LoginResponse;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Fired from within {@link PlayerLoginEvent}, and inludes our {@link User} document.

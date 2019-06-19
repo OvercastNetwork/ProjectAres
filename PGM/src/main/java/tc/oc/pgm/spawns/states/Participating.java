@@ -16,6 +16,7 @@ public class Participating extends State {
     @Override
     public void enterState() {
         super.enterState();
+        bukkit.setGravity(true);
         permissionAttachment = bukkit.addAttachment(smm.getMatch().getPlugin(), Permissions.PARTICIPANT, true);
     }
 

@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.time.Instant;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.UserId;
-import tc.oc.commons.core.chat.Audience;
+import tc.oc.commons.core.chat.MultiAudience;
 import tc.oc.commons.core.inject.InjectionScopable;
 import tc.oc.commons.core.random.Entropy;
 import tc.oc.commons.core.util.ArrayUtils;
@@ -47,7 +47,7 @@ import tc.oc.pgm.module.ModuleLoadException;
 import tc.oc.pgm.time.TickClock;
 import tc.oc.pgm.time.TickTime;
 
-public interface Match extends Audience, IMatchQuery, Filterable<IMatchQuery>, MatchPlayerFinder, InjectionScopable<MatchScoped> {
+public interface Match extends MultiAudience, IMatchQuery, Filterable<IMatchQuery>, MatchPlayerFinder, InjectionScopable<MatchScoped> {
 
     /**
      * Unique ID for this match
@@ -203,7 +203,22 @@ public interface Match extends Audience, IMatchQuery, Filterable<IMatchQuery>, M
      * @see #registerEvents
      * @see #registerRepeatable
      */
-    void registerEventsAndRepeatables(Object thing);
+    default void registerEventsAndRepeatables(Object thing) {
+        registerRepeatable(thing);
+        if(thing instanceof Listener) registerEvents((Listener) thing);
+    }
+
+    /**
+     * Unregister {@link Repeatable} methods on the given object, and also
+     * unregister it for events if it is a {@link Listener}.
+     *
+     * @see #unregisterEvents
+     * @see #unregisterRepeatable
+     */
+    default void unregisterEventsAndRepeatables(Object thing) {
+        unregisterRepeatable(thing);
+        if(thing instanceof Listener) unregisterEvents((Listener) thing);
+    }
 
     /**
      * Return the {@link MapModuleContext} that was used to load this match.
@@ -612,7 +627,7 @@ public interface Match extends Audience, IMatchQuery, Filterable<IMatchQuery>, M
      * This is the ONLY way that external code can change a player's party.
      * Any other methods that appear to do so are meant for internal use only.
      */
-    boolean setPlayerParty(MatchPlayer player, Party newParty);
+    boolean setPlayerParty(MatchPlayer player, Party newParty, boolean force);
 
     /**
      * Commit the match, if it is not already committed. Commitment is a boolean

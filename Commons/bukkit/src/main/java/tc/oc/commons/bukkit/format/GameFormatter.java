@@ -3,7 +3,6 @@ package tc.oc.commons.bukkit.format;
 import java.util.Collection;
 import java.util.Optional;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -210,7 +209,10 @@ public class GameFormatter {
     }
 
     public void sendList(Audience audience, Collection<Game> games) {
-        if(games.isEmpty()) return;
+        if(games.isEmpty()) {
+            audience.sendMessage(new WarningComponent("game.none"));
+            return;
+        }
 
         audience.sendMessage(
             new Component(

@@ -19,10 +19,14 @@ import tc.oc.pgm.match.MatchScheduler;
 import tc.oc.pgm.match.MatchScope;
 import tc.oc.pgm.match.inject.ForRunningMatch;
 
+import static tc.oc.minecraft.protocol.MinecraftVersion.lessThan;
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
+
 @ListenerScope(MatchScope.RUNNING)
 public class StatsPlayerFacet implements MatchPlayerFacet, Listener {
 
     private static final int DISPLAY_TICKS = 60;
+    private static final int LEGACY_TICKS = 2;
     private static final DecimalFormat FORMAT = new DecimalFormat("0.00");
 
     private final MatchScheduler scheduler;
@@ -49,8 +53,9 @@ public class StatsPlayerFacet implements MatchPlayerFacet, Listener {
         if (task != null) {
             task.cancel();
         }
+
         task = scheduler.createRepeatingTask(1, 1, new Runnable() {
-            int ticks = DISPLAY_TICKS;
+            int ticks = lessThan(MINECRAFT_1_8, player.getBukkit().getProtocolVersion()) ? LEGACY_TICKS : DISPLAY_TICKS;
             @Override
             public void run() {
                 if (--ticks > 0) {

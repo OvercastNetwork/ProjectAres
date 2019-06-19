@@ -43,6 +43,7 @@ public class Observing extends State {
         player.refreshVisibility();
         bukkit.setGameMode(GameMode.CREATIVE);
         bukkit.setAllowFlight(true);
+        bukkit.setGravity(true);
 
         Spawn spawn = smm.getDefaultSpawn();
 

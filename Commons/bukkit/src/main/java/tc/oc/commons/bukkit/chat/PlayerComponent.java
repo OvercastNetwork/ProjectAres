@@ -1,14 +1,13 @@
 package tc.oc.commons.bukkit.chat;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.List;
 import java.util.Objects;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.core.chat.ImmutableComponent;
 import tc.oc.commons.core.util.Utils;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A component that renders as a player's name.

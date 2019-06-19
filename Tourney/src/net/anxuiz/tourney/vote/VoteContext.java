@@ -139,7 +139,7 @@ public class VoteContext {
             // broadcast to team
             if (classificationSelected) {
                 for (Entrant participation : vote.getParticipatingTeams()) {
-                    final Audience team = teamManager.entrantToTeam(participation).audience();
+                    final Audience team = teamManager.entrantToTeam(participation);
                     team.sendMessage(StringUtils.dashedChatMessage(ChatColor.GRAY + " Veto Information", "-", ChatColor.RED + "" + ChatColor.STRIKETHROUGH));
                     team.sendMessage(ChatColor.GRAY + "Your team may now veto another map.");
                     team.sendMessage(ChatColor.GRAY + "Note that any team member may veto. Please consult with your teammates and choose wisely.");
@@ -149,7 +149,7 @@ public class VoteContext {
                 }
             } else {
                 for (Entrant participation : vote.getParticipatingTeams()) {
-                    final Audience team = teamManager.entrantToTeam(participation).audience();
+                    final Audience team = teamManager.entrantToTeam(participation);
                     team.sendMessage(StringUtils.dashedChatMessage(ChatColor.GRAY + " Veto Information", "-", ChatColor.RED + "" + ChatColor.STRIKETHROUGH));
                     team.sendMessage(ChatColor.GRAY + "Your team may now veto another classification.");
                     team.sendMessage(ChatColor.GRAY + "Note that any team member may veto. Please consult with your teammates and choose wisely.");

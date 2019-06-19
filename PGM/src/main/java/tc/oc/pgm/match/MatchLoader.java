@@ -165,7 +165,7 @@ public class MatchLoader implements MatchFinder {
      * @param map Map to load.
      */
     private Match loadMatch(PGMMap map) throws Throwable {
-        return map.getContext().asCurrentScope(() -> {
+        return map.getContext().orElseThrow(MapNotFoundException::new).asCurrentScope(() -> {
             final WorldManager worldManager = this.worldManager.get();
             final String worldName = Match.createSlug(matchCounter.get());
             final World world = worldManager.createWorld(worldName);

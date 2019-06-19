@@ -27,6 +27,7 @@ import tc.oc.pgm.events.ListenerScope;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
 import tc.oc.pgm.match.MatchScope;
+import tc.oc.pgm.terrain.TerrainOptions;
 
 @ListenerScope(MatchScope.LOADED)
 public class WorldProblemMatchModule extends MatchModule implements Listener {
@@ -35,8 +36,9 @@ public class WorldProblemMatchModule extends MatchModule implements Listener {
 
     private final Set<ChunkPosition> repairedChunks = new HashSet<>();
     private final BlockVectorSet block36Locations = new BlockVectorSet();
-
-    private @Inject World world;
+    
+    @Inject private TerrainOptions options;
+    @Inject private World world;
 
     @Inject WorldProblemMatchModule(Match match) {
         super(match);
@@ -64,6 +66,8 @@ public class WorldProblemMatchModule extends MatchModule implements Listener {
         for(Chunk chunk : world.getLoadedChunks()) {
             checkChunk(chunk);
         }
+        if (!options.remove36())
+            broadcastDeveloperWarning("Block 36 will NOT be removed! This can cause lag.");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -99,13 +103,14 @@ public class WorldProblemMatchModule extends MatchModule implements Listener {
                     ironDoor.setType(Material.BARRIER, false);
                 }
             }
-
-            // Remove all block 36 and remember the ones at y=0 so VoidFilter can check them
-            for(Block block36 : chunk.getBlocks(Material.PISTON_MOVING_PIECE)) {
-                if(block36.getY() == 0) {
-                    block36Locations.add(block36.getX(), block36.getY(), block36.getZ());
+            if (options.remove36()) {
+                // Remove all block 36 and remember the ones at y=0 so VoidFilter can check them
+                for(Block block36 : chunk.getBlocks(Material.PISTON_MOVING_PIECE)) {
+                    if(block36.getY() == 0) {
+                        block36Locations.add(block36.getX(), block36.getY(), block36.getZ());
+                    }
+                    block36.setType(Material.AIR, false);
                 }
-                block36.setType(Material.AIR, false);
             }
         }
     }

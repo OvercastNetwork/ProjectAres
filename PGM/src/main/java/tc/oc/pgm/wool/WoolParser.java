@@ -41,7 +41,11 @@ public class WoolParser implements FeatureDefinitionParser<MonumentWoolFactory> 
             teamParser.property(el, "owner")
                       .alias("team")
                       .required(),
-            ProximityMetric.parse(el, "wool", new ProximityMetric(ProximityMetric.Type.CLOSEST_KILL, false)),
+            ProximityMetric.parse(el, "wool",
+                proto.isOlderThan(ProtoVersions.WOOL_PRE_TOUCH_OFF) ?
+                    new ProximityMetric(ProximityMetric.Type.CLOSEST_KILL, false) :
+                    null
+            ),
             ProximityMetric.parse(el, "monument", new ProximityMetric(ProximityMetric.Type.CLOSEST_BLOCK, false)),
             dyeColors.property(el, "color").required(),
             location,

@@ -6,13 +6,17 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import tc.oc.api.docs.User;
 import tc.oc.commons.bukkit.freeze.FrozenPlayer;
+import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.bukkit.util.NMSHacks;
 import tc.oc.commons.core.chat.Component;
+import tc.oc.pgm.PGM;
 import tc.oc.pgm.events.PlayerChangePartyEvent;
 import tc.oc.pgm.match.Competitor;
 import tc.oc.pgm.match.MatchPlayer;
 import tc.oc.pgm.match.MatchScope;
+import tc.oc.pgm.match.ParticipantState;
 import tc.oc.pgm.spawns.Spawn;
 import tc.oc.pgm.spawns.SpawnModule;
 import tc.oc.pgm.spawns.events.DeathKitApplyEvent;
@@ -24,16 +28,22 @@ public class Dead extends Spawning {
     private static final long CORPSE_ROT_TICKS = 15;
 
     private final long deathTick;
+    private final @Nullable ParticipantState killer;
     private boolean kitted, rotted;
     private @Nullable FrozenPlayer frozenPlayer;
+    private BaseComponent title;
+    private final IdentityProvider identityProvider;
 
-    public Dead(MatchPlayer player) {
-        this(player, player.getMatch().getClock().now().tick);
+    public Dead(MatchPlayer player, @Nullable ParticipantState killer) {
+        this(player, killer, player.getMatch().getClock().now().tick);
     }
 
-    public Dead(MatchPlayer player, long deathTick) {
+    public Dead(MatchPlayer player,  @Nullable ParticipantState killer, long deathTick) {
         super(player);
         this.deathTick = deathTick;
+        this.killer = killer;
+        // TODO: This is really bad, but I'm not going to rewrite the entire state system to fix a single issue.
+        this.identityProvider = PGM.get().injector().getInstance(IdentityProvider.class);
     }
 
     @Override
@@ -41,6 +51,7 @@ public class Dead extends Spawning {
         super.enterState();
 
         player.clearInventory();
+        bukkit.setGravity(true);
 
         if(player.isVisible()) NMSHacks.playDeathAnimation(player.getBukkit());
 
@@ -128,7 +139,24 @@ public class Dead extends Spawning {
 
     @Override
     protected BaseComponent getTitle() {
-        BaseComponent title = new TranslatableComponent("deathScreen.title");
+        if(title == null) {
+            title = computeTitle();
+        }
+        return title;
+    }
+
+    protected BaseComponent computeTitle() {
+        String screen = "deathScreen.title";
+        if(killer != null) {
+            User killerUser = userStore.user(killer.getPlayerId()).orElse(null);
+            if (killerUser != null && identityProvider.currentIdentity(killerUser).isRevealed(this.player.getBukkit())) {
+                String key = killerUser.death_screen();
+                if(key != null && !key.equals("default")) {
+                    screen = "death.screen." + key;
+                }
+            }
+        }
+        BaseComponent title = new TranslatableComponent(screen);
         title.setColor(ChatColor.RED);
         return title;
     }

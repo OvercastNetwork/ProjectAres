@@ -11,12 +11,27 @@ public class NaturalRegenerationKit extends Kit.Impl {
         this.enabled = enabled;
     }
 
-    @Override
-    public void apply(MatchPlayer player, boolean force, ItemKitApplicator items) {
+    public void toggle(MatchPlayer player, boolean enabled) {
         if(fast) {
             player.getBukkit().setFastNaturalRegeneration(enabled);
         } else {
             player.getBukkit().setSlowNaturalRegeneration(enabled);
         }
     }
+
+    @Override
+    public void apply(MatchPlayer player, boolean force, ItemKitApplicator items) {
+        toggle(player, enabled);
+    }
+
+    @Override
+    public boolean isRemovable() {
+        return true;
+    }
+
+    @Override
+    public void remove(MatchPlayer player) {
+        toggle(player, !enabled);
+    }
+
 }

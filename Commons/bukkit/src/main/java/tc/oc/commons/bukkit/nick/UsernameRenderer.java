@@ -3,15 +3,14 @@ package tc.oc.commons.bukkit.nick;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import tc.oc.commons.bukkit.chat.NameFlag;
-import tc.oc.commons.bukkit.chat.PartialNameRenderer;
 import tc.oc.commons.bukkit.chat.NameType;
+import tc.oc.commons.bukkit.chat.PartialNameRenderer;
 import tc.oc.commons.core.chat.Component;
 
 @Singleton
@@ -84,7 +83,7 @@ public class UsernameRenderer implements PartialNameRenderer {
             rendered.setColor(getColor(identity, type));
         }
 
-        if(type.style.contains(NameFlag.TELEPORT)) {
+        if(!identity.isConsole() && type.style.contains(NameFlag.TELEPORT)) {
             Component dupe = rendered.duplicate();
             rendered.clickEvent(makeRemoteTeleportClickEvent(identity, identity.getNickname() != null && !type.reveal));
             rendered.hoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableComponent("tip.teleportTo", dupe));

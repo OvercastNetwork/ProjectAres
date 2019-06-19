@@ -1,8 +1,7 @@
 package tc.oc.lobby.bukkit.gizmos;
 
-import javax.inject.Inject;
-
 import com.google.common.collect.Lists;
+import javax.inject.Inject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,17 +11,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tc.oc.api.bukkit.users.Users;
 import tc.oc.api.docs.PlayerId;
-import tc.oc.lobby.bukkit.Lobby;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.users.PurchaseGizmoRequest;
 import tc.oc.api.users.UserService;
+import tc.oc.commons.bukkit.raindrops.PlayerRecieveRaindropsEvent;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.formatting.StringUtils;
+import tc.oc.lobby.bukkit.Lobby;
 import tc.oc.lobby.bukkit.LobbyTranslations;
 import tc.oc.lobby.bukkit.Utils;
 import tc.oc.lobby.bukkit.listeners.RaindropsListener;
-import tc.oc.commons.bukkit.raindrops.PlayerRecieveRaindropsEvent;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 public class GizmoUtils {
 

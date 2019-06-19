@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -11,7 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import com.google.api.client.util.Throwables;
 import tc.oc.commons.core.FileUtils;
 import tc.oc.commons.core.stream.Collectors;
 import tc.oc.commons.core.util.Lazy;
@@ -52,7 +52,7 @@ public class LocalizedFileManager {
             return dir.map(path -> Locale.forLanguageTag(path.getFileName().toString()))
                       .collect(Collectors.toImmutableSet());
         } catch(IOException e) {
-            throw Throwables.propagate(e);
+            return Collections.emptySet();
         }
     }
 

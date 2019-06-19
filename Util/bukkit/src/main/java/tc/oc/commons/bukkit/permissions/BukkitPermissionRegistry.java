@@ -14,12 +14,12 @@ public class BukkitPermissionRegistry implements PermissionRegistry {
     }
 
     @Override
-    public void addPermission(Permission permission) {
+    public void register(Permission permission) {
         pluginManager.addPermission(permission);
     }
 
     @Override
-    public void removePermission(Permission permission) {
+    public void unregister(Permission permission) {
         pluginManager.removePermission(permission);
     }
 }

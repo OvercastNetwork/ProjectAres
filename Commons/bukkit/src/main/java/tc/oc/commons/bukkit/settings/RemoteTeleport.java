@@ -10,7 +10,7 @@ import me.anxuiz.settings.types.BooleanType;
 public class RemoteTeleport {
     private static final Setting inst = new SettingBuilder()
         .name("RemoteTeleport").alias("rtp")
-        .summary("Allow /tp to teleport you across servers, just like /rtp")
+        .summary("Allow /tp to move you across servers like /rtp")
         .type(new BooleanType())
         .defaultValue(true).get();
 

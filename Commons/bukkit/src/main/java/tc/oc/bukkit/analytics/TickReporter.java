@@ -3,7 +3,6 @@ package tc.oc.bukkit.analytics;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-
 import tc.oc.analytics.Count;
 import tc.oc.analytics.Gauge;
 import tc.oc.analytics.MetricFactory;

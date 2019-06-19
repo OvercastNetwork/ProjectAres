@@ -113,9 +113,8 @@ public class BossBarMatchModule extends MatchModule implements Listener {
         View(BossBarSource source, Player viewer) {
             this.source = source;
             this.viewer = viewer;
-            this.bar = bossBarFactory.createBossBar(Components.blank(), BarColor.WHITE, BarStyle.SOLID);
+            this.bar = bossBarFactory.createBossBar(viewer, Components.blank(), BarColor.WHITE, BarStyle.SOLID);
             render();
-            bar.addPlayer(viewer);
         }
 
         void destroy() {

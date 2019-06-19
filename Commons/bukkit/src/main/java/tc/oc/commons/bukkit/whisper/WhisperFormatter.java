@@ -3,7 +3,6 @@ package tc.oc.commons.bukkit.whisper;
 import java.time.Duration;
 import java.time.Instant;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Sound;
@@ -14,7 +13,6 @@ import tc.oc.api.docs.Whisper;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
-import tc.oc.commons.bukkit.chat.ConsoleAudience;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.chat.UserTextComponent;
@@ -41,16 +39,14 @@ public class WhisperFormatter {
     private final Server localServer;
     private final SettingManagerProvider playerSettings;
     private final Audiences audiences;
-    private final ConsoleAudience consoleAudience;
 
-    @Inject WhisperFormatter(IdentityProvider identities, MiscFormatter miscFormatter, ServerStore serverStore, Server localServer, SettingManagerProvider playerSettings, Audiences audiences, ConsoleAudience consoleAudience) {
+    @Inject WhisperFormatter(IdentityProvider identities, MiscFormatter miscFormatter, ServerStore serverStore, Server localServer, SettingManagerProvider playerSettings, Audiences audiences) {
         this.identities = identities;
         this.miscFormatter = miscFormatter;
         this.serverStore = serverStore;
         this.localServer = localServer;
         this.playerSettings = playerSettings;
         this.audiences = audiences;
-        this.consoleAudience = consoleAudience;
         this.serverFormatter = ServerFormatter.dark;
     }
 
@@ -80,7 +76,7 @@ public class WhisperFormatter {
             .extra(new Component(new UserTextComponent(sender, whisper.content()), ChatColor.WHITE));
 
         audience.sendMessage(display);
-        consoleAudience.sendMessage(display);
+        audiences.console().sendMessage(display);
     }
 
     public void receive(Player viewer, Whisper whisper) {
@@ -97,7 +93,11 @@ public class WhisperFormatter {
             // will also know what server they are on. The former is unavoidable. The latter could be
             // avoided by saving a flag in the message indicating that the sender was disguised, but
             // that probably isn't worth the trouble. We might do it when we move PMs to the API.
-            from.extra(serverFormatter.nameWithDatacenter(serverStore.byId(whisper.server_id()))).extra(" ");
+            try {
+                from.extra(serverFormatter.nameWithDatacenter(serverStore.byId(whisper._id()))).extra(" ");
+            } catch(IllegalStateException e) {
+                // Send the message without the server of origin if the document cannot be found
+            }
         }
         from.extra(new PlayerComponent(sender, NameStyle.VERBOSE));
 
@@ -130,7 +130,7 @@ public class WhisperFormatter {
 
         audience.sendMessage(display);
         if(!local) {
-            consoleAudience.sendMessage(display);
+            audiences.console().sendMessage(display);
         }
     }
 

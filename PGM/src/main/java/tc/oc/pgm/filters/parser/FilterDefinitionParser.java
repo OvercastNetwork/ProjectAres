@@ -35,13 +35,7 @@ import tc.oc.pgm.filters.matcher.damage.RelationFilter;
 import tc.oc.pgm.filters.matcher.damage.VictimFilter;
 import tc.oc.pgm.filters.matcher.entity.EntityTypeFilter;
 import tc.oc.pgm.filters.matcher.entity.SpawnReasonFilter;
-import tc.oc.pgm.filters.matcher.match.FlagStateFilter;
-import tc.oc.pgm.filters.matcher.match.LegacyRandomFilter;
-import tc.oc.pgm.filters.matcher.match.MatchMutationFilter;
-import tc.oc.pgm.filters.matcher.match.MatchStateFilter;
-import tc.oc.pgm.filters.matcher.match.MonostableFilter;
-import tc.oc.pgm.filters.matcher.match.PlayerCountFilter;
-import tc.oc.pgm.filters.matcher.match.RandomFilter;
+import tc.oc.pgm.filters.matcher.match.*;
 import tc.oc.pgm.filters.matcher.party.CompetitorFilter;
 import tc.oc.pgm.filters.matcher.party.GoalFilter;
 import tc.oc.pgm.filters.matcher.party.RankFilter;
@@ -79,6 +73,7 @@ import tc.oc.pgm.map.ProtoVersions;
 import tc.oc.pgm.match.MatchState;
 import tc.oc.pgm.match.PlayerRelation;
 import tc.oc.pgm.mutation.Mutation;
+import tc.oc.pgm.payload.PayloadDefinition;
 import tc.oc.pgm.teams.TeamFactory;
 import tc.oc.pgm.utils.MethodParser;
 import tc.oc.pgm.utils.XMLUtils;
@@ -347,6 +342,18 @@ public class FilterDefinitionParser extends MagicMethodFeatureParser<Filter> imp
     @MethodParser("score")
     public Filter parseScoreFilter(Element el) throws InvalidXMLException {
         return parseExplicitTeam(el, new ScoreFilter(XMLUtils.parseNumericRange(new Node(el), Integer.class)));
+    }
+
+    @MethodParser("payload-checkpoint")
+    public PayloadEnemyCheckpointFilter parsePayloadCheckpoint(Element el) throws InvalidXMLException {
+       return new PayloadEnemyCheckpointFilter(features.reference(Node.fromAttr(el, "payload-id"), PayloadDefinition.class),
+                                            XMLUtils.parseNumericRange(new Node(el), Integer.class));
+    }
+
+    @MethodParser("payload-friendly-checkpoint")
+    public PayloadFriendlyCheckpointFilter parseFriendlyPayloadCheckpoint(Element el) throws InvalidXMLException {
+        return new PayloadFriendlyCheckpointFilter(features.reference(Node.fromAttr(el, "payload-id"), PayloadDefinition.class),
+                                            XMLUtils.parseNumericRange(new Node(el), Integer.class));
     }
 
     protected FlagStateFilter parseFlagState(Element el, Class<? extends State> state) throws InvalidXMLException {

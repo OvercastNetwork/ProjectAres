@@ -19,6 +19,7 @@ import tc.oc.commons.bukkit.inventory.ArmorType;
 import tc.oc.commons.core.IterableUtils;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.chat.Components;
+import tc.oc.minecraft.protocol.MinecraftVersion;
 import tc.oc.pgm.events.PlayerLeavePartyEvent;
 import tc.oc.pgm.filters.query.PlayerQueryWithLocation;
 import tc.oc.pgm.flag.Flag;
@@ -59,6 +60,10 @@ public class Carried extends Spawned implements Missing {
         super(flag, post);
         this.carrier = carrier;
         this.dropLocations.add(dropLocation); // Need an initial dropLocation in case the carrier never generates ones
+    }
+
+    public MatchPlayer getCarrier() {
+        return carrier;
     }
 
     @Override
@@ -162,10 +167,16 @@ public class Carried extends Spawned implements Missing {
 
     @Override
     public void tickRunning() {
+        if (flag.getMatch().isFinished()) {
+            this.flag.transition(new Returned(this.flag, this.post, this.carrier.getEntityLocation()));
+            return;
+        }
         super.tickRunning();
-
         BaseComponent message = this.getMessage();
-        this.carrier.sendHotbarMessage(message);
+
+        if (MinecraftVersion.atLeast(MinecraftVersion.MINECRAFT_1_8, this.carrier.getBukkit().getProtocolVersion())) {
+            this.carrier.sendHotbarMessage(message);
+        }
 
         if(!Components.equals(message, this.lastMessage)) {
             this.lastMessage = message;
@@ -191,7 +202,7 @@ public class Carried extends Spawned implements Missing {
 
     @Override
     protected boolean canSeeParticles(Player player) {
-        return player != this.carrier.getBukkit();
+        return super.canSeeParticles(player) && player != this.carrier.getBukkit();
     }
 
     protected void dropFlag() {
@@ -300,6 +311,11 @@ public class Carried extends Spawned implements Missing {
     @Override
     public void onEvent(CoarsePlayerMoveEvent event) {
         super.onEvent(event);
+
+        if(flag.getMatch().isFinished()) {
+            dropFlag();
+            return;
+        }
 
         if(this.isCarrier(event.getPlayer())) {
             final Location playerLoc = event.getBlockTo();

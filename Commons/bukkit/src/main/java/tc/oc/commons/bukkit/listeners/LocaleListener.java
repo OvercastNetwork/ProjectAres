@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.listeners;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

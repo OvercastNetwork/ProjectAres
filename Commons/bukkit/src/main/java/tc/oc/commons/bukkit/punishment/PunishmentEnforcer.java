@@ -1,8 +1,11 @@
 package tc.oc.commons.bukkit.punishment;
 
+import static tc.oc.commons.bukkit.punishment.PunishmentMessageSetting.Options;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP;
+import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP_STALE;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,10 +28,6 @@ import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.concurrent.Flexecutor;
 import tc.oc.minecraft.api.event.Enableable;
 import tc.oc.minecraft.scheduler.Sync;
-
-import static tc.oc.commons.bukkit.punishment.PunishmentMessageSetting.Options;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP;
-import static tc.oc.commons.bukkit.punishment.PunishmentPermissions.LOOK_UP_STALE;
 
 @Singleton
 public class PunishmentEnforcer implements Enableable, MessageListener {
@@ -105,7 +104,9 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
                 break;
         }
 
-        punishmentService.update(punishment._id(), (PunishmentDoc.Enforce) () -> true);
+        if(!punishment.off_record()) {
+            punishmentService.update(punishment._id(), (PunishmentDoc.Enforce) () -> true);
+        }
     }
 
     private void announce(Punishment punishment) {
@@ -114,14 +115,18 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
                .filter(player -> viewable(player, punishment, true))
                .forEach(player -> audiences.get(player).sendMessages(
                    punishmentFormatter.format(punishment, true,
-                                              !punishment.server_id().equals(localServer._id()))
+                                              !localServer._id().equals(punishment.server_id()))
                ));
     }
 
     public boolean viewable(CommandSender sender, Punishment punishment, boolean announced) {
         if(viewByIdentity(sender, punishment)) {
             if(announced) {
-                return viewByType(sender, punishment) && viewBySetting(sender, punishment) && viewByIdentity(sender, punishment);
+                return viewByType(sender, punishment)
+                        && viewBySetting(sender, punishment)
+                        && viewByIdentity(sender, punishment)
+                        && viewByRecord(sender, punishment)
+                        && viewBySilent(sender, punishment);
             } else {
                 return viewByLookup(sender, punishment);
             }
@@ -144,6 +149,13 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
                 return false;
         }
     }
+    
+    private boolean viewByRecord(CommandSender sender, Punishment punishment) {
+        if(punishment.off_record()) {
+            return localServer._id().equals(punishment.server_id());   
+        }
+        return true;
+    }
 
     private boolean viewByType(CommandSender sender, Punishment punishment) {
         switch(punishment.type()) {
@@ -162,4 +174,7 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
         return sender.hasPermission(punishment.stale() ? LOOK_UP_STALE : LOOK_UP);
     }
 
+    private boolean viewBySilent(CommandSender sender, Punishment punishment) {
+        return !punishment.silent() || sender.hasPermission(Permissions.STAFF);
+    }
 }

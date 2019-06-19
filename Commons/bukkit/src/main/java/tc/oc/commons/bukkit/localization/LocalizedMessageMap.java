@@ -1,5 +1,9 @@
 package tc.oc.commons.bukkit.localization;
 
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
+import com.google.inject.assistedinject.Assisted;
 import java.nio.file.Path;
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -7,11 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
-
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import com.google.inject.assistedinject.Assisted;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.command.CommandSender;
 import tc.oc.commons.bukkit.chat.ComponentRenderContext;

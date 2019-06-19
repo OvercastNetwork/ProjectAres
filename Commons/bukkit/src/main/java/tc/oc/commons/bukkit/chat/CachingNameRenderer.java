@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.chat;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.commons.bukkit.nick.Identity;
 

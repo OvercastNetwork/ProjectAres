@@ -6,9 +6,6 @@ depend:
 - Commons
 - API
 - BukkitSettings
-- Channels
-softdepend:
-- ChatModerator
 authors:
 - Overcast Network
 
@@ -27,6 +24,9 @@ permissions:
     description: Allows access to the /rotations command
   pgm.mapnext:
     description: Allows access to the /mapnext command.
+    default: true
+  pgm.pollablemaps:
+    description: Allows access to the /pollablemaps command.
     default: true
 
   map.rating.rate:
@@ -163,6 +163,8 @@ permissions:
     description: Allows the player to poll kick an exempt player.
   poll.next:
     description: Allows the player to start a poll to set the next map.
+  poll.mutation:
+    description: Allows the player to start a poll to set a mutation.
 
   # rotation editing
   pgm.rotation.reload:
@@ -205,3 +207,7 @@ permissions:
   pgm.listing.announce:
     description: Allows the /announce command
     default: op
+
+  projectares.stats:
+    description: Allows the player to use the /stats command
+    default: true

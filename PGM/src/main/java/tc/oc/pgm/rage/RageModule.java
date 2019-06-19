@@ -47,7 +47,7 @@ public class RageModule implements MapModule, MatchModuleFactory<RageMatchModule
     public static RageModule parse(MapModuleContext context, Logger logger, Document doc) {
 
         if(doc.getRootElement().getChild("rage") != null) {
-            return new RageModule(context.hasModule(BlitzModule.class));
+            return new RageModule(context.module(BlitzModule.class).filter(BlitzModule::active).isPresent());
         } else {
             return null;
         }

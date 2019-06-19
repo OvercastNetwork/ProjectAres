@@ -6,7 +6,9 @@ import org.bukkit.World;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.commons.core.plugin.PluginFacetBinder;
 import tc.oc.lobby.bukkit.gizmos.GizmoUtils;
+import tc.oc.lobby.bukkit.gizmos.christmas.tree.ChristmasTreeGizmo;
 import tc.oc.lobby.bukkit.gizmos.gun.GunGizmo;
+import tc.oc.lobby.bukkit.gizmos.halloween.ghost.GhostGizmo;
 import tc.oc.lobby.bukkit.listeners.PlayerListener;
 import tc.oc.lobby.bukkit.listeners.PortalsListener;
 import tc.oc.lobby.bukkit.listeners.RaindropsListener;
@@ -24,6 +26,8 @@ public class LobbyManifest extends HybridManifest {
 
         requestStaticInjection(GizmoUtils.class);
         requestStaticInjection(GunGizmo.class);
+        requestStaticInjection(GhostGizmo.class);
+        requestStaticInjection(ChristmasTreeGizmo.class);
     }
 
     @Provides World world(Server server) {

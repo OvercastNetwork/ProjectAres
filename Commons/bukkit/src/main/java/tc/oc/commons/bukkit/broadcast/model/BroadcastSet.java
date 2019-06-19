@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.broadcast.model;
 
 import java.nio.file.Path;
-
 import tc.oc.commons.core.inspect.Inspectable;
 
 public class BroadcastSet extends Inspectable.Impl {

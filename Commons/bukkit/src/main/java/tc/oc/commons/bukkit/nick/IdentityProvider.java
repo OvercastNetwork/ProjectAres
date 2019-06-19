@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.nick;
 
 import javax.annotation.Nullable;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.docs.PlayerId;

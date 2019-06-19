@@ -1,12 +1,16 @@
 package tc.oc.commons.bukkit.users;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static tc.oc.commons.core.IterableUtils.none;
+import static tc.oc.commons.core.util.Nullables.first;
+import static tc.oc.commons.core.util.Utils.notEqual;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import me.anxuiz.settings.Setting;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -36,6 +40,7 @@ import tc.oc.api.sessions.SessionChange;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
+import tc.oc.commons.bukkit.event.UserLoginEvent;
 import tc.oc.commons.bukkit.format.ServerFormatter;
 import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
@@ -45,11 +50,6 @@ import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.Lazy;
 import tc.oc.minecraft.scheduler.SyncExecutor;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static tc.oc.commons.core.IterableUtils.none;
-import static tc.oc.commons.core.util.Nullables.first;
-import static tc.oc.commons.core.util.Utils.notEqual;
 
 /**
  * Receives {@link SessionChange} messages from the topic exchange and generates
@@ -152,8 +152,12 @@ public class JoinMessageAnnouncer implements MessageListener, Listener, PluginFa
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJoin(PlayerJoinEvent event) {
+    public void preJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onJoin(UserLoginEvent event) {
         final User user = userStore.getUser(event.getPlayer());
         final SessionChange change = pendingJoins.getIfPresent(user);
         if(change != null) {

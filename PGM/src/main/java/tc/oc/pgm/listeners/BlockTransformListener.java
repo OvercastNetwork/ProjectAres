@@ -478,7 +478,7 @@ public class BlockTransformListener implements PluginFacet, Listener {
            event.getCancelMessage() != null &&
            event.isManual()) {
 
-            ((PlayerBlockTransformEvent) event).getPlayerState().getAudience().sendWarning(event.getCancelMessage(), false);
+            ((PlayerBlockTransformEvent) event).getPlayerState().sendWarning(event.getCancelMessage(), false);
         }
     }
 

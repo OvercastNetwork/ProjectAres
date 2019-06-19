@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.whisper;
 
-import javax.inject.Inject;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
+import javax.inject.Inject;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.BukkitUserStore;
@@ -18,10 +17,10 @@ import tc.oc.commons.bukkit.commands.CommandUtils;
 import tc.oc.commons.bukkit.commands.UserFinder;
 import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
-import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.commons.core.chat.Audience;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
 
 public class WhisperCommands implements Commands {
     private final BukkitUserStore userStore;

@@ -3,16 +3,15 @@ package tc.oc.commons.bukkit.util;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import javax.inject.Inject;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.SimpleUserId;
 import tc.oc.api.docs.UserId;
-import tc.oc.minecraft.scheduler.SyncExecutor;
-import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.commons.core.concurrent.ContextualExecutor;
 import tc.oc.commons.core.concurrent.ContextualExecutorImpl;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 /**
  * Creates {@link ContextualExecutor}s for {@link Player}s that will only execute

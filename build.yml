@@ -1,0 +1,41 @@
+timeout: 15m
+steps:
+  - id: git
+    name: gcr.io/cloud-builders/git
+    args:
+      - clone
+      - --depth=1
+      - https://github.com/Electroid/infrastructure.git
+  - id: m2-download
+    name: gcr.io/cloud-builders/gsutil
+    args:
+      - -mq
+      - cp
+      - -r
+      - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME/.m2
+      - .
+  - id: maven
+    name: maven:3.6.0-jdk-8-slim
+    entrypoint: 'mvn'
+    args:
+      - install
+    env:
+      - MAVEN_OPTS=-Dmaven.repo.local=/workspace/.m2
+  - id: m2-deploy
+    name: gcr.io/cloud-builders/gsutil
+    args:
+      - -mq
+      - cp
+      - -r
+      - .m2
+      - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME
+  - id: docker-deploy
+    name: gcr.io/cloud-builders/gcloud
+    dir: infrastructure
+    args:
+      - builds
+      - submit
+      - --async
+      - --no-source
+      - --substitutions=_BRANCH=$BRANCH_NAME,_VERSION=$_VERSION,_BUKKIT_VERSION=$_BUKKIT_VERSION,_BUNGEE_VERSION=$_BUNGEE_VERSION
+      - --config=models/minecraft/build.yml

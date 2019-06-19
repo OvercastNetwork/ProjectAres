@@ -34,6 +34,10 @@ public interface MatchPlayerFinder {
         return state == null ? null : getPlayer(state.getUniqueId());
     }
 
+    default Optional<MatchPlayer> player(@Nullable tc.oc.minecraft.api.entity.Player api) {
+        return Optional.ofNullable(getPlayer((Player) api));
+    }
+
     default Optional<MatchPlayer> player(@Nullable Player bukkit) {
         return Optional.ofNullable(getPlayer(bukkit));
     }
@@ -52,6 +56,10 @@ public interface MatchPlayerFinder {
 
     default Optional<MatchPlayer> player(@Nullable UserId userId) {
         return Optional.ofNullable(getPlayer(userId));
+    }
+
+    default Optional<MatchPlayer> participant(@Nullable tc.oc.minecraft.api.entity.Player api) {
+        return player(api).filter(MatchPlayer::isParticipating);
     }
 
     default Optional<MatchPlayer> participant(@Nullable Entity entity) {

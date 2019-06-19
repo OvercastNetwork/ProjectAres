@@ -1,12 +1,11 @@
 package tc.oc.commons.bukkit.localization;
 
-import javax.inject.Inject;
+import static org.junit.Assert.assertTrue;
 
+import javax.inject.Inject;
 import org.junit.Test;
 import tc.oc.api.docs.virtual.MapDoc;
 import tc.oc.commons.CommonsBukkitTest;
-
-import static org.junit.Assert.assertTrue;
 
 public class TranslationKeyTests extends CommonsBukkitTest {
 

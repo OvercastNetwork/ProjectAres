@@ -1,8 +1,7 @@
 package tc.oc.commons.bukkit.punishment;
 
-import tc.oc.api.docs.virtual.PunishmentDoc;
-
 import javax.annotation.Nullable;
+import tc.oc.api.docs.virtual.PunishmentDoc;
 
 public interface PunishmentPermissions {
 

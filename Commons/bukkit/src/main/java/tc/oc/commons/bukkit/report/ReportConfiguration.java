@@ -1,10 +1,9 @@
 package tc.oc.commons.bukkit.report;
 
+import java.time.Duration;
 import java.util.List;
 import javax.inject.Inject;
-
 import org.bukkit.configuration.Configuration;
-import java.time.Duration;
 import tc.oc.commons.bukkit.configuration.ConfigUtils;
 
 public class ReportConfiguration {
@@ -27,7 +26,7 @@ public class ReportConfiguration {
         return config.getStringList("reports.families");
     }
 
-    public boolean crossServer() {
+    public boolean cross_server() {
         return config.getBoolean("reports.cross-server", false);
     }
 }

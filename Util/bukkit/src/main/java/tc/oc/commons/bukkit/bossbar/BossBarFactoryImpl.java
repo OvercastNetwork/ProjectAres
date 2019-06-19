@@ -17,15 +17,24 @@ public class BossBarFactoryImpl implements BossBarFactory {
 
     private final Server server;
     private final Provider<RenderedBossBar> renderedBossBarProvider;
+    private final Provider<LegacyBossBar> legacyBossBarProvider;
 
-    @Inject BossBarFactoryImpl(Server server, Provider<RenderedBossBar> renderedBossBarProvider) {
+    @Inject BossBarFactoryImpl(Server server, Provider<RenderedBossBar> renderedBossBarProvider, Provider<LegacyBossBar> legacyBossBarProvider) {
         this.server = server;
         this.renderedBossBarProvider = renderedBossBarProvider;
+        this.legacyBossBarProvider = legacyBossBarProvider;
     }
 
     @Override
-    public BossBar createBossBar(BaseComponent title, BarColor color, BarStyle style, BarFlag... flags) {
-        return server.createBossBar(title, color, style, flags);
+    public BossBar createBossBar(BaseComponent title, BarColor color, BarStyle style, boolean legacy, BarFlag... flags) {
+        BossBar bar;
+        if(legacy) {
+            bar = createLegacyBossBar();
+            bar.setTitle(title);
+        } else {
+            bar = server.createBossBar(title, color, style, flags);
+        }
+        return bar;
     }
 
     @Override
@@ -36,5 +45,10 @@ public class BossBarFactoryImpl implements BossBarFactory {
     @Override
     public BossBar createRenderedBossBar() {
         return renderedBossBarProvider.get();
+    }
+
+    @Override
+    public BossBar createLegacyBossBar() {
+        return legacyBossBarProvider.get();
     }
 }

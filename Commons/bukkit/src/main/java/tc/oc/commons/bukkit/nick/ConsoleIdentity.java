@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.nick;
 
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,6 +60,11 @@ public class ConsoleIdentity implements Identity {
 
     @Override
     public boolean isCurrent() {
+        return true;
+    }
+
+    @Override
+    public boolean isConsole() {
         return true;
     }
 

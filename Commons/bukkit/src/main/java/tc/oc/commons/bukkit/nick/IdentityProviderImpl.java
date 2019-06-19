@@ -6,7 +6,6 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventBus;
@@ -21,11 +20,11 @@ import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.Session;
 import tc.oc.api.docs.UserId;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.users.UserSearchResponse;
 import tc.oc.commons.bukkit.event.UserLoginEvent;
 import tc.oc.commons.bukkit.util.PlayerStates;
 import tc.oc.commons.core.plugin.PluginFacet;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 @Singleton
 public class IdentityProviderImpl implements IdentityProvider, Listener, PluginFacet {

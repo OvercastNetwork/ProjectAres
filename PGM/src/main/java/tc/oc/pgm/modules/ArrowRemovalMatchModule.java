@@ -20,7 +20,7 @@ public class ArrowRemovalMatchModule extends MatchModule implements Listener {
     @Repeatable(interval = @Time(seconds = 1))
     public void repeat() {
         for(Arrow arrow : getMatch().getWorld().getEntitiesByClass(Arrow.class)) {
-            if(arrow.getTicksLived() >= this.maxTicks && arrow.getPickupRule() != Arrow.PickupRule.ALLOWED) arrow.remove();
+            if(arrow.getTicksLived() >= this.maxTicks && arrow.getPickupStatus() != Arrow.PickupStatus.ALLOWED) arrow.remove();
         }
     }
 }

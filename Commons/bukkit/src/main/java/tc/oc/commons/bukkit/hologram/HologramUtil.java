@@ -2,13 +2,12 @@ package tc.oc.commons.bukkit.hologram;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableBiMap;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.ChatColor;
-
-import javax.annotation.Nullable;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+import javax.annotation.Nullable;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 
 /**
  * Various {@link tc.oc.commons.bukkit.hologram.content.HologramFrame}-related utility methods

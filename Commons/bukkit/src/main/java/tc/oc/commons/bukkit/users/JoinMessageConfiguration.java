@@ -2,7 +2,6 @@ package tc.oc.commons.bukkit.users;
 
 import java.util.function.Predicate;
 import javax.inject.Inject;
-
 import tc.oc.commons.core.configuration.ConfigUtils;
 import tc.oc.commons.core.util.Predicates;
 import tc.oc.minecraft.api.configuration.Configuration;

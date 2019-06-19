@@ -1,7 +1,6 @@
 package tc.oc.commons.bukkit.nick;
 
 import javax.annotation.Nullable;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tc.oc.api.docs.PlayerId;
@@ -59,6 +58,11 @@ public interface Identity {
      * Is the owner of this identity currently online and using this identity?
      */
     boolean isCurrent();
+
+    /**
+     * Does the identity belong to a console?
+     */
+    boolean isConsole();
 
     // Viewer-relative properties
 

@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,7 +16,6 @@ import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.Session;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.sessions.SessionService;
 import tc.oc.api.sessions.SessionStartRequest;
 import tc.oc.commons.bukkit.event.UserLoginEvent;
@@ -25,6 +23,8 @@ import tc.oc.commons.bukkit.nick.PlayerIdentityChangeEvent;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.commons.core.plugin.PluginFacet;
 import tc.oc.commons.core.util.SystemFutureCallback;
+import tc.oc.minecraft.protocol.MinecraftVersion;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 /**
  * Adds login sessions to the local cache
@@ -68,6 +68,11 @@ public class SessionListener implements Listener, PluginFacet {
                 @Override
                 public InetAddress ip() {
                     return player.getAddress().getAddress();
+                }
+
+                @Override
+                public String version() {
+                    return MinecraftVersion.describeProtocol(player.getProtocolVersion());
                 }
 
                 @Override

@@ -22,12 +22,14 @@ import net.minecraft.server.DataWatcher;
 import net.minecraft.server.Enchantment;
 import net.minecraft.server.EntityArmorStand;
 import net.minecraft.server.EntityChicken;
+import net.minecraft.server.EntityFallingBlock;
 import net.minecraft.server.EntityFireworks;
 import net.minecraft.server.EntityItem;
 import net.minecraft.server.EntityLiving;
 import net.minecraft.server.EntityPlayer;
 import net.minecraft.server.EntityTrackerEntry;
 import net.minecraft.server.EntityTypes;
+import net.minecraft.server.EntityWither;
 import net.minecraft.server.EntityZombie;
 import net.minecraft.server.EnumGamemode;
 import net.minecraft.server.EnumHand;
@@ -89,6 +91,7 @@ import org.bukkit.craftbukkit.util.Skins;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -100,6 +103,9 @@ import org.bukkit.potion.PotionEffectTypeWrapper;
 import org.bukkit.registry.Key;
 import org.bukkit.util.Vector;
 import java.time.Duration;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import tc.oc.commons.core.util.TimeUtils;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -112,7 +118,8 @@ public class NMSHacks {
     // There is no nice way to get at them.
     private static final Map<Class<? extends Entity>, Integer> ENTITY_TYPE_IDS = ImmutableMap.of(
         org.bukkit.entity.Item.class, 2,
-        ArmorStand.class, 78
+        ArmorStand.class, 78,
+        FallingBlock.class, 70
     );
 
     private static EntityTrackerEntry getTrackerEntry(net.minecraft.server.Entity nms) {
@@ -270,8 +277,12 @@ public class NMSHacks {
                                                  metadata);
     }
 
+    public static Packet setPassengerPacket(int vehicleId, IntStream riderIds) {
+        return new PacketPlayOutMount(vehicleId, riderIds.toArray());
+    }
+
     public static Packet setPassengerPacket(int vehicleId, int riderId) {
-        return new PacketPlayOutMount(vehicleId, riderId);
+        return setPassengerPacket(vehicleId, IntStream.of(riderId));
     }
 
     public static Packet moveEntityRelativePacket(int entityId, Vector delta, boolean onGround) {
@@ -290,6 +301,10 @@ public class NMSHacks {
                                                true);
     }
 
+    public static Packet entityVelocityPacket(int entityId, Vector velocity) {
+        return new PacketPlayOutEntityVelocity(entityId, velocity.getX(), velocity.getY(), velocity.getZ());
+    }
+
     private static Packet entityMetadataPacket(int entityId, net.minecraft.server.Entity nmsEntity, boolean complete) {
         return new PacketPlayOutEntityMetadata(entityId, nmsEntity.getDataWatcher(), complete);
     }
@@ -302,8 +317,12 @@ public class NMSHacks {
         return entityMetadataPacket(nmsEntity.getId(), nmsEntity, complete);
     }
 
+    public static Packet entityEquipmentPacket(int entityId, EquipmentSlot slot, org.bukkit.inventory.ItemStack armor) {
+        return new PacketPlayOutEntityEquipment(entityId, EnumItemSlot.values()[slot.ordinal()], CraftItemStack.asNMSCopy(armor));
+    }
+
     public static Packet entityHelmetPacket(int entityId, org.bukkit.inventory.ItemStack helmet) {
-        return new PacketPlayOutEntityEquipment(entityId, EnumItemSlot.HEAD, CraftItemStack.asNMSCopy(helmet));
+        return entityEquipmentPacket(entityId, EquipmentSlot.HEAD, helmet);
     }
 
     /**
@@ -315,6 +334,8 @@ public class NMSHacks {
 
     public interface FakeEntity {
         int entityId();
+
+        Entity entity();
 
         void spawn(Player viewer, Location location, Vector velocity);
 
@@ -334,8 +355,20 @@ public class NMSHacks {
             sendPacket(viewer, teleportEntityPacket(entityId(), location));
         }
 
+        default void ride(Player viewer, Stream<Entity> riders) {
+            sendPacket(viewer, setPassengerPacket(entityId(), riders.mapToInt(Entity::getEntityId)));
+        }
+
         default void ride(Player viewer, Entity rider) {
-            sendPacket(viewer, setPassengerPacket(entityId(), rider.getEntityId()));
+            ride(viewer, Stream.of(rider));
+        }
+
+        default void mount(Player viewer, Entity vehicle) {
+            sendPacket(viewer, setPassengerPacket(vehicle.getEntityId(), entityId()));
+        }
+
+        default void wear(Player viewer, EquipmentSlot slot, org.bukkit.inventory.ItemStack item) {
+            sendPacket(viewer, entityEquipmentPacket(entityId(), slot, item));
         }
     }
 
@@ -344,6 +377,11 @@ public class NMSHacks {
 
         protected FakeEntityImpl(T entity) {
             this.entity = entity;
+        }
+
+        @Override
+        public Entity entity() {
+            return entity.getBukkitEntity();
         }
 
         @Override
@@ -383,6 +421,26 @@ public class NMSHacks {
         }
     }
 
+    public static class FakeFallingBlock extends FakeEntityImpl<EntityFallingBlock> {
+
+        private final MaterialData data;
+
+        public FakeFallingBlock(World world, @Nullable MaterialData data) {
+            super(new EntityFallingBlock(((CraftWorld) world).getHandle()));
+            this.data = data != null ? data : new MaterialData(Material.SAND);
+            entity.setNoGravity(true);
+            entity.formBlock = false;
+            entity.dropItem = false;
+            entity.ticksLived = 1;
+        }
+
+        @Override
+        public void spawn(Player viewer, Location location, Vector velocity) {
+            sendPacket(viewer, spawnEntityPacket(FallingBlock.class, data.getItemTypeId() + (data.getData() << 12), entityId(), entity.getUniqueID(), location, velocity));
+            sendPacket(viewer, entityMetadataPacket(entity, true));
+        }
+    }
+
     private static class FakeLivingEntity<T extends EntityLiving> extends FakeEntityImpl<T> {
 
         protected FakeLivingEntity(T entity) {
@@ -403,13 +461,57 @@ public class NMSHacks {
         }
     }
 
+    public static class FakeWither extends FakeLivingEntity<EntityWither> {
+
+        public FakeWither(World world, @Nullable String name) {
+            super(new EntityWither(((CraftWorld) world).getHandle()));
+
+            entity.setNoAI(true);
+            entity.setNoGravity(true);
+            entity.setSilent(true);
+            entity.setInvulnerable(true);
+            entity.setInvisible(true);
+            entity.setCustomNameVisible(true);
+            entity.g(890); // Required to make the wither extremely small
+
+            if(name != null) {
+                entity.setCustomName(name);
+            }
+        }
+
+        public void update(Player viewer, @Nullable String name, @Nullable Double percent, boolean send) {
+            if(name != null) entity.setCustomName(name);
+            if(percent != null) entity.setHealth(percent.floatValue() * entity.getMaxHealth());
+            if(send) sendPacket(viewer, entityMetadataPacket(entity, true));
+        }
+
+        public void name(Player viewer, String name, boolean update) {
+            update(viewer, name, null, update);
+        }
+
+        public void health(Player viewer, double percent, boolean update) {
+            update(viewer, null, percent, update);
+        }
+
+    }
+
     public static class FakeZombie extends FakeLivingEntity<EntityZombie> {
+
         public FakeZombie(World world, boolean invisible) {
+            this(world, invisible, false);
+        }
+
+        public FakeZombie(World world, boolean invisible, boolean baby) {
             super(new EntityZombie(((CraftWorld) world).getHandle()));
 
             entity.setInvisible(invisible);
-            entity.setAI(true);
+            entity.setBaby(baby);
+            entity.setNoAI(true);
+            entity.setNoGravity(true);
+            entity.setInvulnerable(true);
+            entity.setSilent(true);
         }
+
     }
 
     public static class FakeChicken extends FakeLivingEntity<EntityChicken> {
@@ -456,6 +558,11 @@ public class NMSHacks {
         public FakePlayer(int entityId, UUID uuid) {
             this.entityId = entityId;
             this.uuid = uuid;
+        }
+
+        @Override
+        public Entity entity() {
+            return prototype().getBukkitEntity();
         }
 
         @Override
@@ -684,7 +791,7 @@ public class NMSHacks {
 
         // Add/replace health to zero
         boolean replaced = false;
-        DataWatcher.Item<Float> zeroHealth = new DataWatcher.Item<>(EntityPlayer.class, EntityLiving.HEALTH, 0f);
+        DataWatcher.Item<Float> zeroHealth = new DataWatcher.Item<>(EntityLiving.HEALTH, 0f);
 
         if(packet.b != null) {
             for(int i = 0; i < packet.b.size(); i++) {

@@ -1,5 +1,7 @@
 package tc.oc.commons.bukkit.localization;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
@@ -8,13 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import org.bukkit.command.CommandSender;
 import tc.oc.api.docs.virtual.MapDoc;
 import tc.oc.commons.core.localization.Locales;
 import tc.oc.commons.core.localization.TranslationSet;
-
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Contains translations for all plugins. This should be used instead of the

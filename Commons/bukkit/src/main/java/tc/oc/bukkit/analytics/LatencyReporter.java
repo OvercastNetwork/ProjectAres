@@ -2,7 +2,6 @@ package tc.oc.bukkit.analytics;
 
 import java.time.Duration;
 import javax.inject.Inject;
-
 import tc.oc.analytics.Gauge;
 import tc.oc.analytics.MetricFactory;
 import tc.oc.api.bukkit.users.OnlinePlayers;

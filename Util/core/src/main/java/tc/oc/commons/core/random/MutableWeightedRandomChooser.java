@@ -1,7 +1,11 @@
 package tc.oc.commons.core.random;
 
+import tc.oc.commons.core.stream.Collectors;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * A random chooser that supports insertion and removal of choices.
@@ -15,6 +19,10 @@ public class MutableWeightedRandomChooser<T, N extends Number> extends WeightedR
 
     public MutableWeightedRandomChooser(Map<T, N> weights) {
         addAll(weights);
+    }
+
+    public MutableWeightedRandomChooser(Stream<T> elements, Function<T, N> scale) {
+        this(elements.collect(Collectors.mappingTo(scale)));
     }
 
     @Override

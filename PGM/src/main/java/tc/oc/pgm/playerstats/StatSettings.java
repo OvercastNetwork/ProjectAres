@@ -3,6 +3,8 @@ package tc.oc.pgm.playerstats;
 import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingBuilder;
 import me.anxuiz.settings.types.BooleanType;
+import org.bukkit.Material;
+import tc.oc.commons.bukkit.util.ItemCreator;
 
 public class StatSettings {
 

@@ -25,13 +25,15 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import java.time.Duration;
+
+import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.util.NullCommandSender;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.scheduler.Task;
 import tc.oc.pgm.Config;
-import tc.oc.pgm.blitz.BlitzMatchModule;
+import tc.oc.pgm.blitz.LivesEvent;
 import tc.oc.pgm.destroyable.Destroyable;
 import tc.oc.pgm.events.FeatureChangeEvent;
 import tc.oc.pgm.events.ListenerScope;
@@ -50,6 +52,9 @@ import tc.oc.pgm.goals.events.GoalCompleteEvent;
 import tc.oc.pgm.goals.events.GoalProximityChangeEvent;
 import tc.oc.pgm.goals.events.GoalStatusChangeEvent;
 import tc.oc.pgm.goals.events.GoalTouchEvent;
+import tc.oc.pgm.blitz.Lives;
+import tc.oc.pgm.blitz.BlitzEvent;
+import tc.oc.pgm.blitz.BlitzMatchModule;
 import tc.oc.pgm.match.Competitor;
 import tc.oc.pgm.match.Match;
 import tc.oc.pgm.match.MatchModule;
@@ -72,6 +77,8 @@ public class SidebarMatchModule extends MatchModule implements Listener {
     public static final int MAX_SUFFIX = 16;    // Max chars in a team suffix
 
     @Inject private List<MonumentWoolFactory> wools;
+    @Inject private BlitzMatchModule blitz;
+    @Inject private MinecraftService minecraftService;
 
     private final String legacyTitle;
 
@@ -172,8 +179,8 @@ public class SidebarMatchModule extends MatchModule implements Listener {
         return getMatch().getMatchModule(ScoreMatchModule.class) != null;
     }
 
-    private boolean isBlitz() {
-        return getMatch().getMatchModule(BlitzMatchModule.class) != null;
+    private boolean lives(Lives.Type type) {
+        return blitz.activated() && blitz.properties().type.equals(type);
     }
 
     private boolean isCompactWool() {
@@ -290,6 +297,16 @@ public class SidebarMatchModule extends MatchModule implements Listener {
         renderSidebarDebounce();
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void blitzEnable(BlitzEvent event) {
+        renderSidebarDebounce();
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void livesChange(LivesEvent event) {
+        renderSidebarDebounce();
+    }
+
     private String renderGoal(Goal<?> goal, @Nullable Competitor competitor, Party viewingParty) {
         StringBuilder sb = new StringBuilder(" ");
 
@@ -325,11 +342,10 @@ public class SidebarMatchModule extends MatchModule implements Listener {
     }
 
     private String renderBlitz(Competitor competitor, Party viewingParty) {
-        BlitzMatchModule bmm = getMatch().needMatchModule(BlitzMatchModule.class);
         if(competitor instanceof tc.oc.pgm.teams.Team) {
-            return ChatColor.WHITE.toString() + bmm.getRemainingPlayers(competitor);
-        } else if(competitor instanceof Tribute && bmm.getConfig().getNumLives() > 1) {
-            return ChatColor.WHITE.toString() + bmm.lifeManager.getLives(competitor.getPlayers().iterator().next().getPlayerId());
+            return ChatColor.WHITE.toString() + competitor.getPlayers().size();
+        } else if(competitor instanceof Tribute && blitz.properties().multipleLives()) {
+            return ChatColor.WHITE.toString() + blitz.livesCount(competitor.getPlayers().iterator().next());
         } else {
             return "";
         }
@@ -341,7 +357,8 @@ public class SidebarMatchModule extends MatchModule implements Listener {
 
     private void renderSidebar() {
         final boolean hasScores = hasScores();
-        final boolean isBlitz = isBlitz();
+        final boolean hasIndividualLives = lives(Lives.Type.INDIVIDUAL);
+        final boolean hasTeamLives = lives(Lives.Type.TEAM);
         final GoalMatchModule gmm = match.needMatchModule(GoalMatchModule.class);
 
         Set<Competitor> competitorsWithGoals = new HashSet<>();
@@ -367,7 +384,7 @@ public class SidebarMatchModule extends MatchModule implements Listener {
             List<String> rows = new ArrayList<>(MAX_ROWS);
 
             // Scores/Blitz
-            if(hasScores || isBlitz) {
+            if(hasScores || hasIndividualLives || (hasTeamLives && competitorsWithGoals.isEmpty())) {
                 for(Competitor competitor : getMatch().needMatchModule(VictoryMatchModule.class).rankedCompetitors()) {
                     String text;
                     if(hasScores) {
@@ -419,6 +436,11 @@ public class SidebarMatchModule extends MatchModule implements Listener {
                 rows.add(ComponentRenderers.toLegacyText(competitor.getStyledName(NameStyle.GAME),
                                                          NullCommandSender.INSTANCE));
 
+                // Add lives status under the team name
+                if(hasTeamLives) {
+                    blitz.lives(competitor).ifPresent(l -> rows.add(ComponentRenderers.toLegacyText(l.status(), NullCommandSender.INSTANCE)));
+                }
+
                 if(isCompactWool()) {
                     String woolText = " ";
                     boolean firstWool = true;
@@ -450,6 +472,11 @@ public class SidebarMatchModule extends MatchModule implements Listener {
                         }
                     }
                 }
+            }
+
+            if(Config.Scoreboard.showIp()) {
+                rows.add("");
+                rows.add(ChatColor.AQUA + minecraftService.getLocalServer().domain());
             }
 
             // Need at least one row for the sidebar to show

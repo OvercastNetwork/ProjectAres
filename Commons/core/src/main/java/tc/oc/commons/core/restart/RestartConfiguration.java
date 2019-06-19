@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import java.time.Duration;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 import tc.oc.commons.core.configuration.ConfigUtils;
 import tc.oc.commons.core.exception.ExceptionHandler;
 import tc.oc.minecraft.api.configuration.Configuration;
@@ -54,5 +57,26 @@ public class RestartConfiguration {
      */
     public int kickLimit() {
         return config.getInt("kick-limit", Integer.MAX_VALUE);
+    }
+
+    /**
+     * Restart the server when any of the given stop signals are received from the system.
+     */
+    public Set<String> stopSignals() {
+        return ConfigUtils.getStringSet(config, "stop-signal.triggers", Sets.newHashSet("INT", "TERM"));
+    }
+
+    /**
+     * The priority that stop signals will restart the server with.
+     */
+    public Integer stopSignalPriority() {
+        return config.getInt("stop-signal.priority", Integer.MAX_VALUE);
+    }
+
+    /**
+     * Maximum time the server will wait for deferals to resume before forcing a restart.
+     */
+    public Duration stopSignalTimeout() {
+        return ConfigUtils.getDuration(config, "stop-signal.timeout", Duration.ofHours(6));
     }
 }

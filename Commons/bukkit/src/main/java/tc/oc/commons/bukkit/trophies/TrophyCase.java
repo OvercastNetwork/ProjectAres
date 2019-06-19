@@ -1,11 +1,14 @@
 package tc.oc.commons.bukkit.trophies;
 
+import static com.google.common.util.concurrent.Futures.immediateFuture;
+import static tc.oc.commons.core.concurrent.FutureUtils.mapAsync;
+import static tc.oc.commons.core.concurrent.FutureUtils.mapSync;
+
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.util.concurrent.ListenableFuture;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventBus;
 import tc.oc.api.bukkit.users.BukkitUserStore;
@@ -13,15 +16,11 @@ import tc.oc.api.docs.Trophy;
 import tc.oc.api.docs.User;
 import tc.oc.api.docs.UserId;
 import tc.oc.api.docs.virtual.UserDoc;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.trophies.TrophyStore;
 import tc.oc.api.users.UserService;
 import tc.oc.commons.core.stream.Collectors;
 import tc.oc.commons.core.util.Streams;
-
-import static com.google.common.util.concurrent.Futures.immediateFuture;
-import static tc.oc.commons.core.concurrent.FutureUtils.mapAsync;
-import static tc.oc.commons.core.concurrent.FutureUtils.mapSync;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 /**
  * Handles listing, granting, and revoking of {@link Trophy}s from {@link User}s.

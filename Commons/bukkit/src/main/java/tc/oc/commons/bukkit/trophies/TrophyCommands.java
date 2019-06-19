@@ -1,7 +1,5 @@
 package tc.oc.commons.bukkit.trophies;
 
-import javax.inject.Inject;
-
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -10,6 +8,7 @@ import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
+import javax.inject.Inject;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -24,12 +23,12 @@ import tc.oc.commons.bukkit.chat.WarningComponent;
 import tc.oc.commons.bukkit.commands.UserFinder;
 import tc.oc.commons.bukkit.nick.Identity;
 import tc.oc.commons.bukkit.nick.IdentityProvider;
-import tc.oc.minecraft.scheduler.MainThreadExecutor;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
 import tc.oc.commons.core.commands.NestedCommands;
 import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.minecraft.scheduler.MainThreadExecutor;
 
 public class TrophyCommands implements NestedCommands {
 

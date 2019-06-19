@@ -3,6 +3,8 @@ package tc.oc.pgm.rotation;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -12,10 +14,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import java.time.Instant;
+
+import com.google.common.util.concurrent.Futures;
+import org.bukkit.configuration.file.YamlConfiguration;
+import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.commons.core.logging.ClassLogger;
 import tc.oc.commons.core.util.Joiners;
 import tc.oc.pgm.PGM;
@@ -23,38 +28,31 @@ import tc.oc.pgm.map.MapLibrary;
 import tc.oc.pgm.map.PGMMap;
 
 public class FileRotationProvider extends AbstractRotationProvider {
-    public static final String FILE_NEXTID_SUFFIX = ".next";
-    public static final int DEFAULT_NEXTID = 0;
-
     private final Logger logger;
     private final Logger mapLogger;
     private final MapLibrary mapLibrary;
     private final String name;
     private final Path rotationFile;
-    private final Path dataPath;
+    private final Optional<ServerDoc.Rotation> rotationApi;
+    private final boolean shuffle;
 
-    public FileRotationProvider(MapLibrary mapLibrary, String name, Path rotationFile, Path dataPath) {
+    public FileRotationProvider(MapLibrary mapLibrary, String name, Path rotationFile, Optional<ServerDoc.Rotation> rotationApi, boolean shuffle) {
         Preconditions.checkNotNull(mapLibrary, "map manager");
         Preconditions.checkNotNull(rotationFile, "rotation path");
-        Preconditions.checkNotNull(dataPath, "data path");
         Preconditions.checkArgument(Files.isRegularFile(rotationFile), "rotation path must be a file");
-        Preconditions.checkArgument(Files.isDirectory(dataPath), "data path must be a directory");
 
         this.logger = ClassLogger.get(PGM.get().getLogger(), getClass());
         this.mapLogger = PGM.get().getRootMapLogger();
         this.mapLibrary = mapLibrary;
         this.name = name;
         this.rotationFile = rotationFile;
-        this.dataPath = dataPath;
-    }
-
-    Path nextIdFile() {
-        return dataPath.resolve(name + FILE_NEXTID_SUFFIX);
+        this.rotationApi = rotationApi;
+        this.shuffle = shuffle;
     }
 
     @Override
     public @Nonnull Future<?> loadRotations() {
-        return getExecutorService().submit((Runnable) () -> {
+        return getExecutorService().submit(() -> {
             try {
                 setRotation(name, loadRotationFromDisk(), Instant.now());
             } catch(IOException e) {
@@ -64,8 +62,8 @@ public class FileRotationProvider extends AbstractRotationProvider {
     }
 
     private RotationState loadRotationFromDisk() throws IOException {
-        int nextId = this.parseNextId();
         List<PGMMap> maps = this.parseRotationNames();
+        int nextId = this.fetchNextId(maps);
 
         if(maps.isEmpty()) {
             throw new IOException(String.format("Rotation '%s' was empty!", name));
@@ -80,32 +78,17 @@ public class FileRotationProvider extends AbstractRotationProvider {
         return new RotationState(maps, nextId);
     }
 
-    private int parseNextId() {
-        List<String> lines;
-        try {
-            lines = Files.readAllLines(nextIdFile(), Charsets.UTF_8);
-        } catch (IOException e) {
-            this.logger.warning("Failed to read next id from " + nextIdFile().toString());
-            return DEFAULT_NEXTID;
-        }
-
-        for(String line : lines) {
-            try {
-                return Integer.parseInt(line);
-            } catch (NumberFormatException e) {
-                continue;
-            }
-        }
-
-        this.logger.warning("Failed to parse next id from " + nextIdFile().toString());
-        return DEFAULT_NEXTID;
+    // TODO: Provide an alternative implementation for no API
+    private int fetchNextId(List<PGMMap> maps) {
+        return rotationApi.map(rot -> maps.indexOf(mapLibrary.getMapByNameOrId(rot.next_map_id()).get()))
+            .flatMap(index -> Optional.ofNullable(index >= 0 ? index : null))
+            .orElse(0);
     }
 
     private List<PGMMap> parseRotationNames() throws IOException {
-        List<String> lines = Files.readAllLines(rotationFile, Charsets.UTF_8);
-
-        ImmutableList.Builder<PGMMap> maps = ImmutableList.builder();
-        for(String line : lines) {
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(rotationFile.toFile());
+        List<PGMMap> maps = new ArrayList<>();
+        for(String line : yaml.getStringList("maps")) {
             line = line.trim();
             if(line.isEmpty()) {
                 continue;
@@ -118,27 +101,14 @@ public class FileRotationProvider extends AbstractRotationProvider {
                 mapLogger.severe("Unknown map '" + line + "' when parsing " + rotationFile.toString());
             }
         }
-
-        return maps.build();
+        if(shuffle) Collections.shuffle(maps);
+        return ImmutableList.copyOf(maps);
     }
 
     @Override
     public Future<?> saveRotation(@Nonnull final String name, @Nonnull final RotationState rotation) {
         this.setRotation(name, rotation);
-        return getExecutorService().submit(new Runnable() {
-            @Override public void run() {
-                FileRotationProvider.this.saveRotationToDisk(name, rotation);
-            }
-        });
-    }
-
-    private void saveRotationToDisk(@Nonnull String name, @Nonnull RotationState rotation) {
-        List<String> nextIdSerialized = ImmutableList.of(Integer.toString(rotation.getNextId()));
-        try {
-            Files.write(nextIdFile(), nextIdSerialized, Charsets.UTF_8);
-        } catch (IOException e) {
-            this.logger.log(Level.SEVERE, "Failed to save next id for rotation: " + name, e);
-        }
+        return Futures.immediateFuture(null);
     }
 
     private static @Nonnull ExecutorService getExecutorService() {

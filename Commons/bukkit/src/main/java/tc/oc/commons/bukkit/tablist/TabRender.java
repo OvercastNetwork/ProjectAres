@@ -1,11 +1,13 @@
 package tc.oc.commons.bukkit.tablist;
 
+import static tc.oc.minecraft.protocol.MinecraftVersion.MINECRAFT_1_8;
+import static tc.oc.minecraft.protocol.MinecraftVersion.atLeast;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.server.Packet;
 import net.minecraft.server.PacketPlayOutPlayerInfo;
@@ -38,7 +40,10 @@ public class TabRender {
     }
 
     private void send(Packet packet) {
-        NMSHacks.sendPacket(this.view.getViewer(), packet);
+        // Legacy players will be unable to see custom tab rendering code
+        if(atLeast(MINECRAFT_1_8, this.view.getViewer().getProtocolVersion())) {
+            NMSHacks.sendPacket(this.view.getViewer(), packet);
+        }
     }
 
     private PacketPlayOutPlayerInfo createPlayerInfoPacket(PacketPlayOutPlayerInfo.EnumPlayerInfoAction action) {

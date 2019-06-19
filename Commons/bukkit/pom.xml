@@ -8,7 +8,7 @@
         <artifactId>commons</artifactId>
         <groupId>tc.oc</groupId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.11-SNAPSHOT</version>
+        <version>1.12.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>commons-bukkit</artifactId>
@@ -39,18 +39,6 @@
             <groupId>tc.oc</groupId>
             <artifactId>api-bukkit</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.rmsy.Channels</groupId>
-            <artifactId>Channels</artifactId>
-            <version>1.9-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>

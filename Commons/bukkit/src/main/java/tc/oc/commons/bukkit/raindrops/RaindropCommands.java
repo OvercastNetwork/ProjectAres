@@ -1,15 +1,13 @@
 package tc.oc.commons.bukkit.raindrops;
 
-import javax.inject.Inject;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import javax.inject.Inject;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
 import tc.oc.commons.bukkit.commands.UserFinder;
@@ -17,6 +15,7 @@ import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.CommandFutureCallback;
 import tc.oc.commons.core.commands.Commands;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 /**
  * General raindrop related commands
@@ -36,9 +35,9 @@ public class RaindropCommands implements Commands {
     }
 
     @Command(
-        aliases = {"raindrops", "rds"},
+        aliases = {"droplets", "drp"},
         usage = "[player]",
-        desc = "Shows the amount of raindrops that you have",
+        desc = "Shows the amount of droplets that you have",
         min = 0,
         max = 1
     )

@@ -92,6 +92,14 @@ public class ObjectiveModeManager implements Listener {
         return modes.keySet().stream().collect(Collectors.mappingTo(this::timeUntilMode));
     }
 
+    public void advance(ObjectiveMode mode) {
+        Set<ObjectiveMode> currentModes = modes().keySet();
+        if(currentModes.contains(mode)) {
+            goals.forEach(goal -> goal.replaceBlocks(mode.material()));
+            countdowns.getAll(ModeChangeCountdown.class).stream().findFirst().ifPresent(countdowns::cancel);
+        }
+    }
+
     @EventHandler
     private void start(MatchBeginEvent event) {
         modes.forEach((mode, countdown) -> countdowns.start(countdown, mode.after()));

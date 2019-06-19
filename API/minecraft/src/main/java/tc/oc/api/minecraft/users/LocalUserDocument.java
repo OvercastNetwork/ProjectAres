@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.SimplePlayerId;
 import tc.oc.api.docs.User;
+import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.minecraft.servers.DefaultPermissions;
 
@@ -37,6 +39,11 @@ public class LocalUserDocument extends SimplePlayerId implements User {
 
     @Override
     public @Nullable String nickname() {
+        return null;
+    }
+
+    @Override
+    public Instant nickname_updated_at() {
         return null;
     }
 
@@ -81,6 +88,16 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     }
 
     @Override
+    public int maptokens() {
+        return 0;
+    }
+
+    @Override
+    public int mutationtokens() {
+        return 0;
+    }
+
+    @Override
     public String mc_last_sign_in_ip() {
         return ip;
     }
@@ -88,6 +105,11 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     @Override
     public @Nullable Date trial_expires_at() {
         return null;
+    }
+
+    @Override
+    public Map<String, Map<String, Map<String, Object>>> stats_value() {
+        return Collections.emptyMap();
     }
 
     @Override
@@ -120,5 +142,30 @@ public class LocalUserDocument extends SimplePlayerId implements User {
     @Override
     public int enemy_kills() {
         return 0;
+    }
+
+    @Override
+    public String default_server_id() {
+        return null;
+    }
+
+    @Override
+    public int friend_tokens_limit() {
+        return 0;
+    }
+
+    @Override
+    public int friend_tokens_concurrent() {
+        return 1;
+    }
+
+    @Override
+    public String death_screen() {
+        return null;
+    }
+
+    @Override
+    public ChatDoc.Type chat_channel() {
+        return ChatDoc.Type.TEAM;
     }
 }

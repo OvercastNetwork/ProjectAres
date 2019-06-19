@@ -1,6 +1,7 @@
 package tc.oc.api.ocn;
 
 import tc.oc.api.docs.Arena;
+import tc.oc.api.docs.Chat;
 import tc.oc.api.docs.Death;
 import tc.oc.api.docs.Game;
 import tc.oc.api.docs.Objective;
@@ -8,11 +9,13 @@ import tc.oc.api.docs.Participation;
 import tc.oc.api.docs.Punishment;
 import tc.oc.api.docs.Report;
 import tc.oc.api.docs.Trophy;
+import tc.oc.api.docs.virtual.ChatDoc;
 import tc.oc.api.docs.virtual.DeathDoc;
 import tc.oc.api.docs.virtual.MatchDoc;
 import tc.oc.api.docs.virtual.PunishmentDoc;
 import tc.oc.api.docs.virtual.ReportDoc;
 import tc.oc.api.engagement.EngagementService;
+import tc.oc.api.friendships.FriendshipService;
 import tc.oc.api.games.TicketService;
 import tc.oc.api.maps.MapService;
 import tc.oc.api.model.ModelBinders;
@@ -46,6 +49,9 @@ public class OCNModelsManifest extends HybridManifest implements ModelBinders {
         bindModel(Punishment.class, PunishmentDoc.Partial.class, model -> {
             model.bindService().to(model.httpService());
         });
+        bindModel(Chat.class, ChatDoc.Partial.class, model -> {
+            model.bindService().to(model.httpService());
+        });
         bindModel(MatchDoc.class, model -> {
             model.bindService().to(model.httpService());
         });
@@ -58,7 +64,6 @@ public class OCNModelsManifest extends HybridManifest implements ModelBinders {
         bindModel(Objective.class, model -> {
             model.bindService().to(model.httpService());
         });
-
         publicBinder().install(new Manifest() {
             @Override protected void configure() {
                 // Specialized AMQP services
@@ -72,6 +77,7 @@ public class OCNModelsManifest extends HybridManifest implements ModelBinders {
                 forOptional(TournamentService.class).setBinding().to(OCNTournamentService.class);
                 forOptional(UserService.class).setBinding().to(OCNUserService.class);
                 forOptional(WhisperService.class).setBinding().to(OCNWhisperService.class);
+                forOptional(FriendshipService.class).setBinding().to(OCNFriendshipService.class);
             }
         });
     }

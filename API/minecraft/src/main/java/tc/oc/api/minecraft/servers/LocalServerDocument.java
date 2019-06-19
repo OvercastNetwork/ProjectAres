@@ -155,6 +155,11 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     }
 
     @Override
+    public String domain() {
+        return "play.stratus.network";
+    }
+
+    @Override
     public String settings_profile() {
         return "public";
     }
@@ -219,6 +224,11 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     }
 
     @Override
+    public String cross_server_profile() {
+        return null;
+    }
+
+    @Override
     public Map<UUID, String> fake_usernames() {
         return Collections.emptyMap();
     }
@@ -279,7 +289,12 @@ public class LocalServerDocument extends StartupServerDocument implements Server
     }
 
     @Override
-    public Set<MatchDoc.Mutation> queued_mutations() {
+    public Set<String> queued_mutations() {
         return mutations != null ? mutations.queued_mutations() : Collections.emptySet();
+    }
+
+    @Override
+    public List<ServerDoc.Rotation> rotations() {
+        return Collections.emptyList();
     }
 }

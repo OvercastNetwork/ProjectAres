@@ -1,11 +1,10 @@
 package tc.oc.commons.bukkit.whitelist;
 
+import com.google.common.collect.ForwardingSet;
 import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.google.common.collect.ForwardingSet;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -1,15 +1,20 @@
 package tc.oc.commons.bukkit.commands;
 
-import java.time.Duration;
-import java.time.format.DateTimeParseException;
-import java.util.List;
-import java.util.Optional;
-import javax.annotation.Nullable;
-
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import java.time.Duration;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,9 +25,11 @@ import org.bukkit.permissions.Permission;
 import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.Server;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
+import tc.oc.commons.bukkit.chat.ListComponent;
 import tc.oc.commons.bukkit.localization.Translations;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.commands.TranslatableCommandException;
+import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.commons.core.util.TimeUtils;
 
 public abstract class CommandUtils {
@@ -124,14 +131,14 @@ public abstract class CommandUtils {
     }
 
     public static Duration getDuration(CommandContext args, int index, Duration def) throws CommandException {
-        return args.argsLength() > index ? getDuration(args.getString(index), null) : def;
+        return getDuration(args.getString(index, null), def);
     }
 
-    public static @Nullable Duration getDuration(@Nullable String text) throws CommandException {
+    public static @Nullable Duration getDuration(String text) throws CommandException {
         return getDuration(text, null);
     }
 
-    public static Duration getDuration(@Nullable String text, Duration def) throws CommandException {
+    public static Duration getDuration(String text, Duration def) throws CommandException {
         if(text == null) {
             return def;
         } else {
@@ -139,6 +146,26 @@ public abstract class CommandUtils {
                 return TimeUtils.parseDuration(text);
             } catch(DateTimeParseException e) {
                 throw new TranslatableCommandException("command.error.invalidTimePeriod", text);
+            }
+        }
+    }
+
+    public static @Nullable <E extends Enum<E>> E getEnum(CommandContext args, CommandSender sender, int index, Class<E> type) throws CommandException {
+        return getEnum(args, sender, index, type, null);
+    }
+
+    public static <E extends Enum<E>> E getEnum(CommandContext args, CommandSender sender, int index, Class<E> type, E def) throws CommandException {
+        return getEnum(args.getString(index, null), sender, type, def);
+    }
+
+    public static <E extends Enum<E>> E getEnum(String text, CommandSender sender, Class<E> type, E def) throws CommandException {
+        if(text == null) {
+            return def;
+        } else {
+            try {
+                return Enum.valueOf(type, text.toUpperCase().replace(' ', '_'));
+            } catch(IllegalArgumentException e) {
+                throw newCommandException(sender, new TranslatableComponent("command.error.invalidEnum", text));
             }
         }
     }
@@ -197,5 +224,36 @@ public abstract class CommandUtils {
 
     public static void notEnoughArguments(CommandSender sender) throws CommandException {
         throw new CommandException(Translations.get().t("command.error.notEnoughArguments", sender));
+    }
+
+    public static <E extends Enum> Map<String, E> enumChoices(Class<E> enumClass) {
+        return Stream.of(enumClass.getEnumConstants())
+                .collect(Collectors.toMap(e -> e.name().toLowerCase().replaceAll("_", "-"), Function.identity()));
+    }
+
+    public static <E extends Enum> List<String> enumChoicesList(Class<E> enumClass) {
+        return new ArrayList<>(enumChoices(enumClass).keySet());
+    }
+
+    public static @Nullable <E extends Enum> E tryEnum(String text, Class<E> enumClass) {
+        return StringUtils.bestFuzzyMatch(text, enumChoices(enumClass), 0.8);
+    }
+
+    public static <E extends Enum> E tryEnum(String text, Class<E> enumClass, E def) {
+        final E option = tryEnum(text, enumClass);
+        return option == null ? def : option;
+    }
+
+    public static <E extends Enum> E getEnum(String text, Class<E> enumClass) throws CommandException {
+        final E option = tryEnum(text, enumClass);
+        if(option != null) {
+            return option;
+        } else {
+            throw new TranslatableCommandException("command.error.invalidOption", text, new ListComponent(enumChoicesList(enumClass), TextComponent::new));
+        }
+    }
+
+    public static <E extends Enum> List<String> completeEnum(String prefix, Class<E> enumClass) {
+        return StringUtils.complete(prefix, enumChoicesList(enumClass));
     }
 }

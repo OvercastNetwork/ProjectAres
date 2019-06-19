@@ -1,28 +1,25 @@
 package tc.oc.commons.bukkit.report;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Map;
+import java.util.WeakHashMap;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import java.time.Duration;
-import java.time.Instant;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import tc.oc.api.bukkit.users.BukkitUserStore;
 import tc.oc.api.docs.Report;
 import tc.oc.api.docs.Server;
-import tc.oc.minecraft.scheduler.SyncExecutor;
 import tc.oc.api.model.QueryService;
 import tc.oc.api.reports.ReportSearchRequest;
 import tc.oc.commons.bukkit.chat.Audiences;
@@ -39,6 +36,7 @@ import tc.oc.commons.core.commands.TranslatableCommandException;
 import tc.oc.commons.core.formatting.PeriodFormats;
 import tc.oc.commons.core.util.Comparables;
 import tc.oc.minecraft.api.event.Listener;
+import tc.oc.minecraft.scheduler.SyncExecutor;
 
 @Singleton
 public class ReportCommands implements Commands, Listener {
@@ -116,7 +114,7 @@ public class ReportCommands implements Commands, Listener {
             userFinder.findLocalPlayer(sender, args, 0),
             CommandFutureCallback.onSuccess(sender, args, response -> {
                 if(response.player().hasPermission(ReportPermissions.EXEMPT) && !sender.hasPermission(ReportPermissions.OVERRIDE)) {
-                    throw new TranslatableCommandException("command.report.exempt");
+                    throw new TranslatableCommandException("command.report.exempt", new PlayerComponent(identities.createIdentity(response)));
                 }
 
                 senderLastReport.put(sender, Instant.now());
@@ -161,11 +159,8 @@ public class ReportCommands implements Commands, Listener {
                 final boolean crossServer = args.hasFlag('a');
 
                 ReportSearchRequest request = ReportSearchRequest.create(page, PER_PAGE);
-                request = crossServer ? request.forFamilies(reportConfiguration.families())
-                                      : request.forServer(localServer);
-                if(userResult != null) {
-                    request = request.forPlayer(userResult.user);
-                }
+                request = userResult != null ? request.forPlayer(userResult.user)
+                                             : request.forServer(localServer, crossServer);
 
                 syncExecutor.callback(
                     reportService.find(request),

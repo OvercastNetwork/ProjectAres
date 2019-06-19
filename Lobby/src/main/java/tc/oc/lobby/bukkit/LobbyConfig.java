@@ -3,7 +3,6 @@ package tc.oc.lobby.bukkit;
 import java.util.List;
 import java.util.logging.Level;
 import javax.inject.Inject;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;

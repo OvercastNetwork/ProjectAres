@@ -20,8 +20,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.EventBus;
+import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.api.util.Permissions;
 import tc.oc.commons.core.logging.Loggers;
+import tc.oc.pgm.PGM;
 import tc.oc.pgm.development.MapErrorTracker;
 import tc.oc.pgm.events.SetNextMapEvent;
 import tc.oc.pgm.map.MapLibrary;
@@ -47,6 +49,7 @@ public class MatchManager implements MatchFinder {
     private final FileRotationProviderFactory fileRotationProviderFactory;
     private final EventBus eventBus;
     private final MatchLoader matchLoader;
+    private final MinecraftService minecraftService;
     private @Nullable RotationManager rotationManager;
 
     /** Custom set next map. */
@@ -63,7 +66,8 @@ public class MatchManager implements MatchFinder {
                          MapErrorTracker mapErrorTracker,
                          FileRotationProviderFactory fileRotationProviderFactory,
                          EventBus eventBus,
-                         MatchLoader matchLoader) throws MapNotFoundException {
+                         MatchLoader matchLoader,
+                         MinecraftService minecraftService) throws MapNotFoundException {
 
         this.pluginDataFolder = pluginDataFolder;
         this.mapErrorTracker = mapErrorTracker;
@@ -74,6 +78,7 @@ public class MatchManager implements MatchFinder {
         this.mapLoader = mapLoader;
         this.eventBus = eventBus;
         this.matchLoader = matchLoader;
+        this.minecraftService = minecraftService;
     }
 
     @Override
@@ -113,13 +118,19 @@ public class MatchManager implements MatchFinder {
     public Set<PGMMap> loadMapsAndRotations() throws MapNotFoundException {
         Set<PGMMap> maps = loadNewMaps();
         loadRotations();
+        PGM.getPollableMaps().loadPollableMaps();
         return maps;
+    }
+
+    public Path getPluginDataFolder() {
+        return pluginDataFolder;
     }
 
     public RotationManager getRotationManager() {
         if(rotationManager == null) {
             rotationManager = new RotationManager(
                 log,
+                minecraftService,
                 config.get(),
                 mapLibrary.getMaps().iterator().next(),
                 fileRotationProviderFactory.parse(
@@ -233,6 +244,10 @@ public class MatchManager implements MatchFinder {
         }
 
         return null;
+    }
+
+    public boolean hasMapSet() {
+        return this.nextMap != null;
     }
 
     private @Nullable Match cycleTo(@Nullable Match oldMatch, PGMMap map) {

@@ -31,7 +31,7 @@ import static tc.oc.commons.core.stream.Collectors.toImmutableSet;
 
 @Singleton
 public class PingListener implements Listener, PluginFacet {
-    private static final int MAX_PLAYERS = 3000;
+    private static final int MAX_PLAYERS = 300;
 
     private final Logger logger;
     private final Random random = new Random();

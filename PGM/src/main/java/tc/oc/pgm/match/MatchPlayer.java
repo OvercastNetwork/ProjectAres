@@ -14,7 +14,6 @@ import me.anxuiz.settings.Setting;
 import me.anxuiz.settings.SettingManager;
 import me.anxuiz.settings.bukkit.PlayerSettings;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.EntityLocation;
 import org.bukkit.Location;
@@ -33,8 +32,8 @@ import tc.oc.api.docs.PlayerId;
 import tc.oc.api.docs.Server;
 import tc.oc.api.docs.User;
 import tc.oc.commons.bukkit.attribute.AttributeUtils;
+import tc.oc.commons.bukkit.chat.Audiences;
 import tc.oc.commons.bukkit.chat.BukkitSound;
-import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.chat.NameStyle;
 import tc.oc.commons.bukkit.chat.Named;
 import tc.oc.commons.bukkit.chat.PlayerComponent;
@@ -43,7 +42,7 @@ import tc.oc.commons.bukkit.nick.IdentityProvider;
 import tc.oc.commons.bukkit.settings.SettingManagerProvider;
 import tc.oc.commons.bukkit.util.PlayerStates;
 import tc.oc.commons.core.chat.Audience;
-import tc.oc.commons.core.chat.Component;
+import tc.oc.commons.core.chat.ForwardingAudience;
 import tc.oc.commons.core.chat.Sound;
 import tc.oc.commons.core.logging.Loggers;
 import tc.oc.commons.core.util.Optionals;
@@ -54,8 +53,6 @@ import tc.oc.pgm.kits.WalkSpeedKit;
 import tc.oc.pgm.settings.ObserverSetting;
 import tc.oc.pgm.settings.Settings;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * MatchPlayer represents a player who is part of a match.  Note that the
  * MatchPlayer object should only exist as long as the corresponding Match
@@ -64,7 +61,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * MatchPlayer stores all information that is necessary for the core plugin.
  */
 public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements InventoryHolder,
-                                                                                Audience,
+                                                                                ForwardingAudience,
                                                                                 Named,
                                                                                 IPlayerQuery,
                                                                                 Listener,
@@ -80,6 +77,7 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
     @Inject private Server localServer;
     @Inject private OnlineFriends friendMap;
     @Inject private PlayerStates playerStates;
+    @Inject private Audiences audiences;
 
     @Inject MatchUserContext userContext;
 
@@ -92,9 +90,11 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
 
     private Logger logger;
     private SettingManager settings;
-    @Inject private void init(Loggers loggers, SettingManagerProvider settingManagerProvider, Player player) {
+    private Audience audience;
+    @Inject private void init(Loggers loggers, SettingManagerProvider settingManagerProvider, Audiences audiences, Player player) {
         this.logger = loggers.get(match.getLogger(), getClass(), getName());
         this.settings = settingManagerProvider.getManager(player);
+        this.audience = audiences.get(player);
     }
 
     protected @Nullable Party party;
@@ -430,6 +430,7 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
         bukkit.setSlowNaturalRegeneration(true);
         bukkit.setAllowFlight(false);
         bukkit.setFlying(false);
+        bukkit.setGliding(false);
         bukkit.setSneaking(false);
         bukkit.setSprinting(false);
         bukkit.setFlySpeed(0.1f);
@@ -519,57 +520,25 @@ public class MatchPlayer extends MatchFacetContext<MatchPlayerFacet> implements 
     }
 
     @Override
-    public void sendMessage(String message) {
-        getBukkit().sendMessage(message);
-    }
-
-    @Override
-    public void sendMessage(BaseComponent message) {
-        getBukkit().sendMessage(ComponentRenderers.render(checkNotNull(message), getBukkit()));
-    }
-
-    @Override
-    public void sendHotbarMessage(BaseComponent message) {
-        getBukkit().sendMessage(ChatMessageType.ACTION_BAR, ComponentRenderers.render(message, getBukkit()));
-    }
-
-    @Override
-    public void showTitle(BaseComponent title, BaseComponent subtitle, int inTicks, int stayTicks, int outTicks) {
-        title = title == null ? new Component("") : ComponentRenderers.render(title, getBukkit());
-        subtitle = subtitle == null ? new Component("") : ComponentRenderers.render(subtitle, getBukkit());
-        getBukkit().showTitle(title, subtitle, inTicks, stayTicks, outTicks);
-    }
-
-    @Override
-    public void hideTitle() {
-        getBukkit().hideTitle();
+    public Optional<Audience> audience() {
+        return Optional.ofNullable(audiences.get(bukkit));
     }
 
     @Override
     public void sendWarning(String message, boolean audible) {
-        getBukkit().sendMessage(ChatColor.YELLOW + " \u26a0 " + ChatColor.RED + message); // The character is '⚠'
+        audience().get().sendWarning(message, audible);
         if(audible) playWarningSound();
     }
 
     @Override
     public void sendWarning(BaseComponent message, boolean audible) {
-        sendMessage(new Component(net.md_5.bungee.api.ChatColor.RED).extra(new Component(" \u26a0 ", net.md_5.bungee.api.ChatColor.YELLOW), message));
+        audience().get().sendWarning(message, audible);
         if(audible) playWarningSound();
     }
 
     @Override
     public void playSound(Sound sound) {
         this.playSound(sound, getBukkit().getLocation());
-    }
-
-    public void sendMessage(List<String> lines) {
-        for(String line : lines) {
-            this.sendMessage(line);
-        }
-    }
-
-    public void sendWarning(String message) {
-        this.sendWarning(message, false);
     }
 
     public void sendWarning(BaseComponent message) {

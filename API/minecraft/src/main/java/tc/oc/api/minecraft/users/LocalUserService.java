@@ -18,17 +18,7 @@ import tc.oc.api.docs.virtual.UserDoc;
 import tc.oc.api.exceptions.NotFound;
 import tc.oc.api.minecraft.sessions.LocalSessionFactory;
 import tc.oc.api.model.NullModelService;
-import tc.oc.api.users.ChangeClassRequest;
-import tc.oc.api.users.ChangeSettingRequest;
-import tc.oc.api.users.CreditRaindropsRequest;
-import tc.oc.api.users.LoginRequest;
-import tc.oc.api.users.LoginResponse;
-import tc.oc.api.users.LogoutRequest;
-import tc.oc.api.users.PurchaseGizmoRequest;
-import tc.oc.api.users.UserSearchRequest;
-import tc.oc.api.users.UserSearchResponse;
-import tc.oc.api.users.UserService;
-import tc.oc.api.users.UserUpdateResponse;
+import tc.oc.api.users.*;
 import tc.oc.commons.core.concurrent.FutureUtils;
 import tc.oc.minecraft.api.user.UserFinder;
 
@@ -118,8 +108,7 @@ class LocalUserService extends NullModelService<User, UserDoc.Partial> implement
         return Futures.immediateFuture(null);
     }
 
-    @Override
-    public ListenableFuture<UserUpdateResponse> creditRaindrops(UserId userId, CreditRaindropsRequest request) {
+    private ListenableFuture<UserUpdateResponse> update(UserId userId) {
         return FutureUtils.mapSync(find(userId), user -> new UserUpdateResponse() {
             @Override
             public boolean success() {
@@ -129,6 +118,31 @@ class LocalUserService extends NullModelService<User, UserDoc.Partial> implement
             @Override
             public User user() {
                 return user;
+            }
+        });
+    }
+
+    @Override
+    public ListenableFuture<UserUpdateResponse> creditTokens(UserId userId, CreditTokensRequest request) {
+        return update(userId);
+    }
+
+    @Override
+    public ListenableFuture<User> changeGroup(UserId userId, ChangeGroupRequest request) {
+        return find(userId);
+    }
+
+    @Override
+    public ListenableFuture<FriendJoinResponse> joinFriend(UserId userId, FriendJoinRequest request) {
+        return Futures.immediateFuture(new FriendJoinResponse() {
+            @Override
+            public boolean authorized() {
+                return false;
+            }
+
+            @Override
+            public String message() {
+                return null;
             }
         });
     }
