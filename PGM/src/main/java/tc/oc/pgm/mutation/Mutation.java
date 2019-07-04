@@ -37,7 +37,7 @@ public enum Mutation {
     EQUESTRIAN (EquestrianMutation.class,  Material.SADDLE, MinecraftVersion.MINECRAFT_1_9),
     HEALTH     (HealthMutation.class,      Material.COOKED_BEEF),
     GLOW       (GlowMutation.class,        Material.GLOWSTONE_DUST, MinecraftVersion.MINECRAFT_1_9),
-    STEALTH    (StealthMutation.class,     Material.THIN_GLASS),
+    STEALTH    (StealthMutation.class,     Material.THIN_GLASS, MinecraftVersion.MINECRAFT_1_9),
     ARMOR      (ArmorMutation.class,       Material.DIAMOND_CHESTPLATE),
     MOBS       (MobsMutation.class,        Material.MONSTER_EGG),
     LIGHTNING  (LightningMutation.class,   Material.JACK_O_LANTERN),
