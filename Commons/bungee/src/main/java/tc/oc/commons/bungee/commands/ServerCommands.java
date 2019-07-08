@@ -82,7 +82,7 @@ public class ServerCommands implements Commands {
     public void request(final CommandContext args, CommandSender sender) throws CommandException {
         if(sender instanceof ProxiedPlayer) {
             final ProxiedPlayer player = (ProxiedPlayer) sender;
-            final String name = player.hasPermission("ocn.requestserver.custom") && args.argsLength() > 0 ? args.getString(0) : "";
+            final String name = (player.hasPermission("ocn.requestserver.custom") && args.argsLength() > 0 ? args.getString(0) : player.getName()).replace('_', 'u');
             commandExecutor.callback(
                 serverService.requestServer(new UseServerRequest() {
                     @Nonnull @Override public String user_id() {
