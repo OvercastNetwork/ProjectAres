@@ -1,6 +1,7 @@
 package net.anxuiz.tourney;
 
 import java.util.Set;
+import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
@@ -17,15 +18,24 @@ public class ClassificationManager {
 
     private final Set<MapClassification> classifications;
 
-    @Inject ClassificationManager(Tournament tournament, MapLibrary mapLibrary) {
-        this.classifications = tournament.map_classifications()
-                                         .stream()
-                                         .map(cl -> new MapClassification(cl.name(),
-                                                                          cl.map_ids()
-                                                                            .stream()
-                                                                            .map(mapLibrary::getMapById)
-                                                                            .collect(Collectors.toImmutableSet())))
-                                         .collect(Collectors.toImmutableSet());
+    @Inject ClassificationManager(Tournament tournament, MapLibrary mapLibrary, Logger logger) {
+    this.classifications =
+        tournament.map_classifications().stream()
+            .map(
+                cl ->
+                    new MapClassification(
+                        cl.name(),
+                        cl.map_ids().stream()
+                            .map(
+                                id -> {
+                                  PGMMap map = mapLibrary.getMapById(id);
+                                  if (map == null) {
+                                    logger.severe("Unable to find map matching ID: " + id);
+                                    return null;
+                                  } else return map;
+                                })
+                            .collect(Collectors.toImmutableSet())))
+            .collect(Collectors.toImmutableSet());
     }
 
     public @Nullable MapClassification firstClassificationForMap(PGMMap map) {

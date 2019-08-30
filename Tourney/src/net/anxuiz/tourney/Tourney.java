@@ -1,5 +1,6 @@
 package net.anxuiz.tourney;
 
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -18,8 +19,10 @@ import tc.oc.commons.bukkit.chat.ListComponent;
 import tc.oc.commons.bukkit.inject.BukkitPluginManifest;
 import tc.oc.commons.core.chat.Component;
 import tc.oc.commons.core.concurrent.Flexecutor;
+import tc.oc.commons.core.formatting.StringUtils;
 import tc.oc.inject.ProtectedBinder;
 import tc.oc.minecraft.scheduler.Sync;
+import tc.oc.pgm.map.PGMMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -37,6 +40,7 @@ public class Tourney extends JavaPlugin {
     @Inject private Provider<Tournament> tournamentProvider;
     @Inject private Provider<MatchManager> matchManagerProvider;
     @Inject private Provider<KDMSession> kdmSessionProvider;
+    @Inject private Provider<ClassificationManager> classificationManagerProvider;
 
     public static Tourney get() {
         return checkNotNull(inst);
@@ -145,6 +149,18 @@ public class Tourney extends JavaPlugin {
                 ChatColor.RED + "We do not allow BetterSprint to be used for tournament matches.\n\n" +
                 ChatColor.RED + "Please re-connect without BetterSprint enabled."
             ));
+        }
+
+        ClassificationManager classificationManager = classificationManagerProvider.get();
+        if (!classificationManager.getClassifications().isEmpty()) {
+            getLogger().info("Map Classifications: ");
+            classificationManager
+                .getClassifications()
+                .forEach(
+                    classification -> getLogger().info(classification.name() + " - " +
+                        StringUtils.listToEnglishCompound(classification.maps().stream()
+                            .map(map -> map.getId().toString())
+                            .collect(Collectors.toList()))));
         }
     }
 }
