@@ -185,12 +185,12 @@
             <dependency>
                 <groupId>tc.oc</groupId>
                 <artifactId>sportbukkit-api</artifactId>
-                <version>1.12.2.0</version>
+                <version>1.12.2.1</version>
             </dependency>
             <dependency>
                 <groupId>tc.oc</groupId>
                 <artifactId>sportbukkit</artifactId>
-                <version>1.12.2.0</version>
+                <version>1.12.2.1</version>
             </dependency>
             <dependency>
                 <groupId>com.sk89q</groupId>
