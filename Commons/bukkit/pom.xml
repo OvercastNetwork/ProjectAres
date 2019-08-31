@@ -8,7 +8,7 @@
         <artifactId>commons</artifactId>
         <groupId>tc.oc</groupId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.11-SNAPSHOT</version>
+        <version>1.12.0</version>
     </parent>
 
     <artifactId>commons-bukkit</artifactId>
@@ -44,11 +44,11 @@
         <dependency>
             <groupId>com.github.rmsy.Channels</groupId>
             <artifactId>Channels</artifactId>
-            <version>1.9-SNAPSHOT</version>
+            <version>1.12.2.0</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
+                    <groupId>tc.oc</groupId>
+                    <artifactId>sportbukkit</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

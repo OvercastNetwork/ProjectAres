@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
-import tc.oc.chatmoderator.ChatModeratorPlugin;
 import tc.oc.commons.bukkit.chat.ComponentRenderers;
 import tc.oc.commons.bukkit.util.NullCommandSender;
 import tc.oc.commons.bukkit.util.OnlinePlayerMapAdapter;
@@ -101,8 +100,8 @@ public class ChannelMatchModule extends MatchModule implements Listener {
 
             String format = ComponentRenderers.toLegacyText(party.getChatPrefix(), NullCommandSender.INSTANCE) + "{1}§f: {3}";
 
-            PartyChannel channel;
-            if (getMatch().getPluginManager().getPlugin("ChatModerator") == null) {
+            PartyChannel channel = new UnfilteredPartyChannel(format, createChannelPermission(party), party);
+            /*if (getMatch().getPluginManager().getPlugin("ChatModerator") == null) {
                 channel = new UnfilteredPartyChannel(format,
                                                      createChannelPermission(party),
                                                      party);
@@ -112,7 +111,7 @@ public class ChannelMatchModule extends MatchModule implements Listener {
                                                    party,
                                                    ChatModeratorPlugin.MINIMUM_SCORE_NO_SEND,
                                                    ChatModeratorPlugin.PARTIALLY_OFFENSIVE_RATIO);
-            }
+            }*/
 
             if(partyChannels.put((MultiPlayerParty) party, channel) != null) {
                 throw new IllegalStateException("Party added multiple times");

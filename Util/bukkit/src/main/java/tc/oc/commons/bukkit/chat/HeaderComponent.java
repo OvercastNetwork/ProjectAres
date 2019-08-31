@@ -53,6 +53,11 @@ public class HeaderComponent extends ImmutableComponent implements RenderableCom
         return new HeaderComponent(lineColor, width, content == null ? null : content.duplicate());
     }
 
+    @Override
+    public BaseComponent duplicateWithoutFormatting() {
+        return duplicate();
+    }
+
     public ChatColor getLineColor() {
         return lineColor;
     }

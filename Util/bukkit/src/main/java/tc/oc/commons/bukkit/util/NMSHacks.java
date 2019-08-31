@@ -408,7 +408,7 @@ public class NMSHacks {
             super(new EntityZombie(((CraftWorld) world).getHandle()));
 
             entity.setInvisible(invisible);
-            entity.setAI(true);
+            entity.setNoAI(true);
         }
     }
 
@@ -684,7 +684,7 @@ public class NMSHacks {
 
         // Add/replace health to zero
         boolean replaced = false;
-        DataWatcher.Item<Float> zeroHealth = new DataWatcher.Item<>(EntityPlayer.class, EntityLiving.HEALTH, 0f);
+        DataWatcher.Item<Float> zeroHealth = new DataWatcher.Item<>(EntityLiving.HEALTH, 0f);
 
         if(packet.b != null) {
             for(int i = 0; i < packet.b.size(); i++) {

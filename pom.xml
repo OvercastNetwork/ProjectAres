@@ -2,13 +2,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <global.version>1.11-SNAPSHOT</global.version>
+        <global.version>1.12.0</global.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <groupId>tc.oc</groupId>
     <artifactId>ProjectAres</artifactId>
-    <version>1.11-SNAPSHOT</version>
+    <version>1.12.0</version>
     <packaging>pom</packaging>
 
     <scm>
@@ -19,25 +19,10 @@
 
     <repositories>
         <repository>
-            <id>pa-snapshots</id>
-            <url>https://repo.extension.ws/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>pa-releases</id>
-            <url>https://repo.extension.ws/content/repositories/releases</url>
+            <id>octc-universe</id>
+            <url>https://maven.pkg.github.com/Electroid</url>
         </repository>
     </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>pa-deployment</id>
-            <url>https://repo.extension.ws/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>pa-deployment</id>
-            <url>https://repo.extension.ws/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <modules>
         <module>Util</module>
@@ -108,7 +93,7 @@
                 <!-- Our fork -->
                 <groupId>tc.oc</groupId>
                 <artifactId>gson</artifactId>
-                <version>2.5-SNAPSHOT</version>
+                <version>2.5</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>
@@ -176,23 +161,23 @@
             <!-- Bukkit/Bungee shared -->
             <dependency>
                 <groupId>tc.oc</groupId>
-                <artifactId>minecraft-api</artifactId>
-                <version>1.11-SNAPSHOT</version>
+                <artifactId>minecraft</artifactId>
+                <version>1.0.1</version>
             </dependency>
             <dependency>
                 <groupId>tc.oc</groupId>
                 <artifactId>bungeecord-chat</artifactId>
-                <version>1.11-SNAPSHOT</version>
+                <version>1.12.0</version>
             </dependency>
             <dependency>
                 <groupId>com.sk89q</groupId>
                 <artifactId>command-framework-core</artifactId>
-                <version>1.9-SNAPSHOT</version>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>me.anxuiz</groupId>
                 <artifactId>settings</artifactId>
-                <version>1.9-SNAPSHOT</version>
+                <version>1.0.0</version>
             </dependency>
 
 
@@ -200,22 +185,22 @@
             <dependency>
                 <groupId>tc.oc</groupId>
                 <artifactId>sportbukkit-api</artifactId>
-                <version>1.11.1-R0.1-SNAPSHOT</version>
+                <version>1.12.2.0</version>
             </dependency>
             <dependency>
                 <groupId>tc.oc</groupId>
                 <artifactId>sportbukkit</artifactId>
-                <version>1.11.1-R0.1-SNAPSHOT</version>
+                <version>1.12.2.0</version>
             </dependency>
             <dependency>
                 <groupId>com.sk89q</groupId>
                 <artifactId>command-framework-bukkit</artifactId>
-                <version>1.9-SNAPSHOT</version>
+                <version>1.12.2.0</version>
             </dependency>
             <dependency>
                 <groupId>me.anxuiz</groupId>
                 <artifactId>bukkit-settings</artifactId>
-                <version>1.9-SNAPSHOT</version>
+                <version>1.12.2.0</version>
             </dependency>
 
 
@@ -223,12 +208,12 @@
             <dependency>
                 <groupId>tc.oc</groupId>
                 <artifactId>bungeecord-api</artifactId>
-                <version>1.11-SNAPSHOT</version>
+                <version>1.12.0</version>
             </dependency>
             <dependency>
                 <groupId>com.sk89q</groupId>
                 <artifactId>command-framework-bungee</artifactId>
-                <version>1.9-SNAPSHOT</version>
+                <version>1.12.0</version>
             </dependency>
 
         </dependencies>

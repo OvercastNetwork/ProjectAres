@@ -45,6 +45,11 @@ public class ListComponent extends ImmutableComponent implements RenderableCompo
     }
 
     @Override
+    public BaseComponent duplicateWithoutFormatting() {
+        return duplicate();
+    }
+
+    @Override
     public BaseComponent render(ComponentRenderContext context, CommandSender viewer) {
         if(expanded == null) {
             expanded = Components.naturalList(elements);

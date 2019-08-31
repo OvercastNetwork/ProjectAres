@@ -70,6 +70,11 @@ public class GoalComponent extends ImmutableComponent implements RenderableCompo
     }
 
     @Override
+    public BaseComponent duplicateWithoutFormatting() {
+        return duplicate();
+    }
+
+    @Override
     public BaseComponent render(ComponentRenderContext context, CommandSender viewer) {
         final Match match = goal.getMatch();
         final MatchPlayer player = match.getPlayer(viewer);

@@ -54,6 +54,11 @@ public class PlayerComponent extends ImmutableComponent {
     }
 
     @Override
+    public BaseComponent duplicateWithoutFormatting() {
+        return duplicate();
+    }
+
+    @Override
     protected void toStringFirst(List<String> fields) {
         super.toStringFirst(fields);
         fields.add("identity=" + identity);

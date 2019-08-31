@@ -5,7 +5,7 @@
         <groupId>tc.oc</groupId>
         <artifactId>ProjectAres</artifactId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.11-SNAPSHOT</version>
+        <version>1.12.0</version>
     </parent>
 
     <!-- Parent Project Information -->
@@ -30,16 +30,6 @@
             <artifactId>commons-bukkit</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-
-        <!-- Bukkit plugins -->
-
-        <dependency>
-            <groupId>tc.oc</groupId>
-            <artifactId>chatmoderator</artifactId>
-            <version>1.9-SNAPSHOT</version>
-        </dependency>
-
 
         <!-- Testing -->
 

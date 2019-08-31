@@ -30,6 +30,11 @@ public class TemplateComponent extends ImmutableComponent implements RenderableC
     }
 
     @Override
+    public BaseComponent duplicateWithoutFormatting() {
+        return duplicate();
+    }
+
+    @Override
     public BaseComponent render(ComponentRenderContext context, CommandSender viewer) {
         return new Component(Components.format(message.format(viewer),
                                                context.render(with, viewer)));

@@ -33,6 +33,11 @@ public class WarningComponent extends ImmutableComponent implements RenderableCo
     }
 
     @Override
+    public BaseComponent duplicateWithoutFormatting() {
+        return duplicate();
+    }
+
+    @Override
     public BaseComponent render(ComponentRenderContext context, CommandSender viewer) {
         return Components.warning(context.render(content, viewer));
     }

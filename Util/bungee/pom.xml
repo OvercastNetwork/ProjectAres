@@ -8,7 +8,7 @@
         <artifactId>util</artifactId>
         <groupId>tc.oc</groupId>
         <relativePath>../pom.xml</relativePath>
-        <version>1.11-SNAPSHOT</version>
+        <version>1.12.0</version>
     </parent>
 
     <artifactId>util-bungee</artifactId>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>tc.oc</groupId>
             <artifactId>raven-bungee</artifactId>
-            <version>1.11-SNAPSHOT</version>
+            <version>1.12.0</version>
         </dependency>
 
         <dependency>

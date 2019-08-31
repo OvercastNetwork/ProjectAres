@@ -89,5 +89,10 @@ public class LocalizedMessageMap extends AbstractMap<String, BaseComponent> {
                            .orElseThrow(() -> new IllegalStateException("Can't find localized message " + key +
                                                                         " for locale " + locale));
         }
+
+        @Override
+        public BaseComponent duplicateWithoutFormatting() {
+            return duplicate();
+        }
     }
 }

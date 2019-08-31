@@ -91,4 +91,9 @@ public class LinkComponent extends ImmutableComponent implements RenderableCompo
         }
         return new Component(display);
     }
+
+    @Override
+    public BaseComponent duplicateWithoutFormatting() {
+        return duplicate();
+    }
 }
