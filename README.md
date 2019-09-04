@@ -11,6 +11,7 @@ Custom Bukkit/Bungee plugins used by the former Overcast Network
 ```bash
 git clone git@github.com:Electroid/Universe.git
 cd Universe
+git submodule update --init
 mvn clean install
 ```
 
