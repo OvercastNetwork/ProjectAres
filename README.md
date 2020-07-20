@@ -1,27 +1,7 @@
 ProjectAres
 ===========
 
-Custom Bukkit/Bungee plugins used by the former Overcast Network
-
-**NOTE**: This repository is no longer maintained, but you can still contribute to [forks](https://github.com/OvercastNetwork/ProjectAres/network).
-
-# Install
-
-1. Clone and install `Universe` to download the required dependencies.
-```bash
-git clone git@github.com:Electroid/Universe.git
-cd Universe
-git submodule update --init
-mvn clean install
-```
-
-2. Clone and install `ProjectAres` to build the suite of plugins.
-```bash
-cd ..
-git clone git@github.com:OvercastNetwork/ProjectAres.git
-cd ProjectAres
-mvn clean install
-```
+**NOTE**: This repository is no longer maintained, development has moved to [PGMDev/PGM](https://github.com/PGMDev/PGM).
 
 # License
 
