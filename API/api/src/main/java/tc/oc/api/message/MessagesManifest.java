@@ -23,8 +23,10 @@ public class MessagesManifest extends HybridManifest {
     public void configure() {
         bindAndExpose(MessageRegistry.class);
 
-        publicBinder().forOptional(MessageQueue.class)
-                      .setDefault().to(NullMessageQueue.class);
+        publicBinder().forOptional(MessageService.class)
+                .setDefault().to(LocalMessageService.class);
+        
+        bindAndExpose(LocalMessageService.class);
 
         final MessageBinder messages = new MessageBinder(publicBinder());
         

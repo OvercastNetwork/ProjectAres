@@ -1,19 +1,12 @@
 package tc.oc.api.queue;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
@@ -28,15 +21,11 @@ import tc.oc.api.connectable.Connectable;
 import tc.oc.api.message.Message;
 import tc.oc.api.message.MessageHandler;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
-import tc.oc.api.message.MessageRegistry;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.NoSuchMessageException;
+import tc.oc.api.message.AbstractMessageService;
 import tc.oc.api.serialization.Pretty;
-import tc.oc.commons.core.exception.ExceptionHandler;
-import tc.oc.commons.core.logging.Loggers;
-import tc.oc.commons.core.reflect.Methods;
-import tc.oc.commons.core.reflect.Types;
-import tc.oc.commons.core.util.CachingTypeMap;
+import tc.oc.commons.core.util.Threadable;
 import tc.oc.minecraft.suspend.Suspendable;
 
 /**
@@ -78,36 +67,19 @@ import tc.oc.minecraft.suspend.Suspendable;
  *
  *     MY_QUEUE.subscribe(new MyWorker(), syncExecutor);
  */
-public class Queue implements MessageQueue, Connectable, Suspendable {
+public class Queue extends AbstractMessageService implements MessageService, Connectable, Suspendable {
 
-    private static class RegisteredHandler<T extends Message> {
-        final @Nullable MessageListener listener;
-        final MessageHandler<T> handler;
-        final @Nullable Executor executor;
-
-        private RegisteredHandler(@Nullable MessageListener listener, MessageHandler<T> handler, @Nullable Executor executor) {
-            this.listener = listener;
-            this.handler = handler;
-            this.executor = executor;
-        }
-    }
-
-    protected Logger logger;
-    @Inject protected MessageRegistry messageRegistry;
     @Inject protected Gson gson;
     @Inject @Pretty protected Gson prettyGson;
     @Inject protected QueueClient client;
     @Inject protected Exchange.Topic topic;
-    @Inject protected ExceptionHandler exceptionHandler;
+    
+    protected static Threadable<Metadata> METADATA = new Threadable<>();
 
     protected final Consume consume;
 
     @Nullable String consumerTag;
     private MultiDispatcher dispatcher;
-
-    private final Set<RegisteredHandler<?>> handlers = new HashSet<>();
-    private final CachingTypeMap<Message, RegisteredHandler<?>> handlersByType = CachingTypeMap.create();
-    private volatile boolean suspended;
 
     public Consume consume() { return consume; }
     public String name() { return consume.name(); }
@@ -115,10 +87,6 @@ public class Queue implements MessageQueue, Connectable, Suspendable {
 
     public Queue(Consume consume) {
         this.consume = consume;
-    }
-
-    @Inject void init(Loggers loggers) {
-        logger = loggers.get(getClass());
     }
 
     @Override
@@ -167,112 +135,6 @@ public class Queue implements MessageQueue, Connectable, Suspendable {
     @Override
     public void bind(Class<? extends Message> type) {
         bind(topic, messageRegistry.typeName(type));
-    }
-
-    @Override
-    public <T extends Message> void subscribe(TypeToken<T> messageType, MessageHandler<T> handler, @Nullable Executor executor) {
-        subscribe(messageType, null, handler, executor);
-    }
-
-    private <T extends Message> void subscribe(TypeToken<T> messageType, @Nullable MessageListener listener, MessageHandler<T> handler, @Nullable Executor executor) {
-        logger.fine("Subscribing handler " + handler);
-        synchronized(handlers) {
-            final RegisteredHandler<T> registered = new RegisteredHandler<>(listener, handler, executor);
-            handlers.add(registered);
-            handlersByType.put(messageType, registered);
-            handlersByType.invalidate();
-        }
-    }
-
-    private TypeToken<? extends Message> getMessageType(TypeToken decl, Method method) {
-        if(method.getParameterTypes().length < 1 || method.getParameterTypes().length > 3) {
-            throw new IllegalStateException("Message handler method must take 1 to 3 parameters");
-        }
-
-        final TypeToken<Message> base = new TypeToken<Message>(){};
-
-        for(Type param : method.getGenericParameterTypes()) {
-            final TypeToken paramToken = decl.resolveType(param);
-            Types.assertFullySpecified(paramToken);
-            if(base.isAssignableFrom(paramToken)) {
-                messageRegistry.typeName(paramToken.getRawType()); // Verify message type is registered
-                return paramToken;
-            }
-        }
-
-        throw new IllegalStateException("Message handler has no message parameter");
-    }
-
-    @Override
-    public void subscribe(final MessageListener listener, @Nullable Executor executor) {
-        logger.fine("Subscribing listener " + listener);
-
-        final TypeToken<? extends MessageListener> listenerType = TypeToken.of(listener.getClass());
-        Methods.declaredMethodsInAncestors(listener.getClass()).forEach(method -> {
-            final MessageListener.HandleMessage annot = method.getAnnotation(MessageListener.HandleMessage.class);
-            if(annot != null) {
-                method.setAccessible(true);
-                final TypeToken<? extends Message> messageType = getMessageType(listenerType, method);
-
-                logger.fine("  dispatching " + messageType.getRawType().getSimpleName() + " to method " + method.getName());
-
-                MessageHandler handler = new MessageHandler() {
-                    @Override
-                    public void handleDelivery(Message message, TypeToken type, Metadata properties, Delivery delivery) {
-                        try {
-                            if(annot.protocolVersion() != -1 && annot.protocolVersion() != properties.protocolVersion()) {
-                                return;
-                            }
-
-                            final Class<?>[] paramTypes = method.getParameterTypes();
-                            Object[] params = new Object[paramTypes.length];
-                            for(int i = 0; i < paramTypes.length; i++) {
-                                if(paramTypes[i].isAssignableFrom(message.getClass())) {
-                                    params[i] = message;
-                                } else if(paramTypes[i].isAssignableFrom(Metadata.class)) {
-                                    params[i] = properties;
-                                } else if(paramTypes[i].isAssignableFrom(Delivery.class)) {
-                                    params[i] = delivery;
-                                }
-                            }
-                            method.invoke(listener, params);
-                        } catch(IllegalAccessException e) {
-                            throw new IllegalStateException(e);
-                        } catch(InvocationTargetException e) {
-                            if(e.getCause() instanceof RuntimeException) {
-                                throw (RuntimeException) e.getCause();
-                            } else {
-                                throw new IllegalStateException(e);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public String toString() {
-                        return listener + "." + method.getName();
-                    }
-                };
-
-                subscribe(messageType, listener, handler, executor);
-            }
-        });
-    }
-
-    @Override
-    public void unsubscribe(MessageHandler<?> handler) {
-        synchronized(handlers) {
-            handlers.removeIf(registered -> registered.handler == handler);
-            handlersByType.entries().removeIf(registered -> registered.getValue().handler == handler);
-        }
-    }
-
-    @Override
-    public void unsubscribe(MessageListener listener) {
-        if(listener == null) return;
-        synchronized(handlers) {
-            handlers.removeIf(registered -> registered.listener == listener);
-            handlersByType.entries().removeIf(registered -> registered.getValue().listener == listener);
-        }
     }
 
     private class MultiDispatcher extends DefaultConsumer {
@@ -329,27 +191,8 @@ public class Queue implements MessageQueue, Connectable, Suspendable {
                 if(logger.isLoggable(Level.FINE)) {
                     logger.fine("Received message " + properties.getType() + "\nMetadata: " + properties + "\n" + prettyGson.toJson(json));
                 }
-
-                for(final RegisteredHandler handler : matchingHandlers) {
-                    if(suspended && handler.listener != null &&
-                       !handler.listener.listenWhileSuspended()) continue;
-
-                    logger.fine("Dispatching " + amqProperties.getType() + " to " + handler.handler.getClass());
-                    if(handler.executor == null) {
-                        exceptionHandler.run(() -> handler.handler.handleDelivery(message, type, properties, delivery));
-                    } else {
-                        handler.executor.execute(() -> {
-                            synchronized(handlers) {
-                                // Double check from the handler's executor that it is still registered.
-                                // This makes it much less likely to dispatch a message to a handler
-                                // after it unsubs. It should work perfectly if the handler unsubs on
-                                // the same thread it handles messages on.
-                                if(!handlers.contains(handler)) return;
-                            }
-                            exceptionHandler.run(() -> handler.handler.handleDelivery(message, type, properties, delivery));
-                        });
-                    }
-                }
+                
+                METADATA.let(properties, () -> dispatchMessage(message, type));
             } catch(Throwable t) {
                 logger.log(Level.SEVERE, "Exception dispatching AMQP message", t);
                 // Don't let any exceptions through to the AMQP driver or it will close the channel

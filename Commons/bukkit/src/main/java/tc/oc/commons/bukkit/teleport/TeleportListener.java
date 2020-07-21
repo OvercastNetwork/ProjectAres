@@ -16,7 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import tc.oc.api.bukkit.users.OnlinePlayers;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.types.PlayerTeleportRequest;
 import tc.oc.commons.bukkit.permissions.PermissionRegistry;
 import tc.oc.commons.core.logging.Loggers;
@@ -51,7 +51,7 @@ public class TeleportListener implements MessageListener, Listener, PluginFacet,
     }
 
     private final Logger logger;
-    private final MessageQueue primaryQueue;
+    private final MessageService primaryQueue;
     private final Teleporter teleporter;
     private final SyncExecutor syncExecutor;
     private final Scheduler scheduler;
@@ -60,7 +60,7 @@ public class TeleportListener implements MessageListener, Listener, PluginFacet,
 
     private final Map<UUID, Received> requests = new HashMap<>();
 
-    @Inject TeleportListener(Loggers loggers, MessageQueue primaryQueue, Teleporter teleporter, SyncExecutor syncExecutor, Scheduler scheduler, PermissionRegistry permissionRegistry, OnlinePlayers onlinePlayers) {
+    @Inject TeleportListener(Loggers loggers, MessageService primaryQueue, Teleporter teleporter, SyncExecutor syncExecutor, Scheduler scheduler, PermissionRegistry permissionRegistry, OnlinePlayers onlinePlayers) {
         this.logger = loggers.get(getClass());
         this.primaryQueue = primaryQueue;
         this.onlinePlayers = onlinePlayers;

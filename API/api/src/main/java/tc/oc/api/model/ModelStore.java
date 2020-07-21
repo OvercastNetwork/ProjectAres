@@ -27,7 +27,7 @@ import tc.oc.api.docs.virtual.DeletableModel;
 import tc.oc.api.docs.virtual.Model;
 import tc.oc.api.document.DocumentGenerator;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.types.FindMultiResponse;
 import tc.oc.api.message.types.FindRequest;
 import tc.oc.api.message.types.ModelDelete;
@@ -42,7 +42,8 @@ public abstract class ModelStore<T extends Model> implements MessageListener, Co
 
     protected Logger logger;
     protected @Inject QueryService<T> queryService;
-    protected @Inject MessageQueue primaryQueue;
+    protected @Inject
+    MessageService primaryQueue;
     protected @Inject @ModelSync ExecutorService modelSync;
     protected @Inject ModelDispatcher dispatcher;
 

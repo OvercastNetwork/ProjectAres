@@ -13,13 +13,11 @@ import tc.oc.minecraft.api.configuration.Configuration;
 /**
  * TODO: Should this be in the test source root? That seems to make it unavailable to downstream modules.
  */
-public class TestModule extends AbstractModule {
+public class TestModule extends HybridManifest {
     @Override
     protected void configure() {
-        bind(Loggers.class).to(SimpleLoggerFactory.class);
+        bindAndExpose(Loggers.class).to(SimpleLoggerFactory.class);
         bind(Configuration.class).to(YamlConfiguration.class);
-        bind(ExceptionHandler.class).to(LoggingExceptionHandler.class).in(Singleton.class);
-
-
+        bindAndExpose(ExceptionHandler.class).to(LoggingExceptionHandler.class).in(Singleton.class);
     }
 }

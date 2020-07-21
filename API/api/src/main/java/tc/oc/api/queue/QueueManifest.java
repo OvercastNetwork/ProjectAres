@@ -1,6 +1,6 @@
 package tc.oc.api.queue;
 
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.commons.core.inject.HybridManifest;
 import tc.oc.minecraft.suspend.SuspendableBinder;
 
@@ -17,7 +17,7 @@ public class QueueManifest extends HybridManifest {
         bindAndExpose(Exchange.Topic.class).asEagerSingleton();
         bindAndExpose(PrimaryQueue.class).asEagerSingleton();
 
-        publicBinder().forOptional(MessageQueue.class)
+        publicBinder().forOptional(MessageService.class)
                       .setBinding().to(PrimaryQueue.class);
 
         final SuspendableBinder suspendables = new SuspendableBinder(publicBinder());

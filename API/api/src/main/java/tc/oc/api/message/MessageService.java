@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.reflect.TypeToken;
 
-public interface MessageQueue {
+public interface MessageService {
 
     /**
      * Tell the queue to receive messages of the given type
@@ -35,4 +35,5 @@ public interface MessageQueue {
     void unsubscribe(MessageHandler<?> handler);
 
     void unsubscribe(MessageListener listener);
+    
 }
