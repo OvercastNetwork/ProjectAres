@@ -12,7 +12,7 @@ import tc.oc.api.docs.Server;
 import tc.oc.api.docs.virtual.PunishmentDoc;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.types.ModelUpdate;
 import tc.oc.api.model.UpdateService;
 import tc.oc.api.util.Permissions;
@@ -35,7 +35,7 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
 
     private final PunishmentFormatter punishmentFormatter;
     private final UpdateService<PunishmentDoc.Partial> punishmentService;
-    private final MessageQueue queue;
+    private final MessageService queue;
     private final Flexecutor executor;
     private final Server localServer;
     private final OnlinePlayers players;
@@ -46,7 +46,7 @@ public class PunishmentEnforcer implements Enableable, MessageListener {
 
     @Inject PunishmentEnforcer(PunishmentFormatter punishmentFormatter,
                                UpdateService<PunishmentDoc.Partial> punishmentService,
-                               MessageQueue queue,
+                               MessageService queue,
                                @Sync Flexecutor executor,
                                Server localServer,
                                OnlinePlayers players,

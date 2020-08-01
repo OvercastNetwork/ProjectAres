@@ -8,7 +8,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import tc.oc.api.docs.Report;
 import tc.oc.api.docs.Server;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.types.ModelUpdate;
 import tc.oc.commons.bukkit.channels.AdminChannel;
 import tc.oc.commons.bukkit.chat.Audiences;
@@ -20,13 +20,13 @@ public class ReportAnnouncer implements PluginFacet, MessageListener {
 
     private final ReportConfiguration config;
     private final ReportFormatter reportFormatter;
-    private final MessageQueue primaryQueue;
+    private final MessageService primaryQueue;
     private final MainThreadExecutor executor;
     private final Server localServer;
     private final AdminChannel adminChannel;
     private final Audiences audiences;
 
-    @Inject ReportAnnouncer(ReportConfiguration config, ReportFormatter reportFormatter, MessageQueue primaryQueue, MainThreadExecutor executor, Server localServer, AdminChannel adminChannel, Audiences audiences) {
+    @Inject ReportAnnouncer(ReportConfiguration config, ReportFormatter reportFormatter, MessageService primaryQueue, MainThreadExecutor executor, Server localServer, AdminChannel adminChannel, Audiences audiences) {
         this.config = config;
         this.reportFormatter = reportFormatter;
         this.primaryQueue = primaryQueue;

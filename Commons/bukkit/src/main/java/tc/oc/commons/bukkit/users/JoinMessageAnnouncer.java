@@ -29,7 +29,7 @@ import tc.oc.api.docs.User;
 import tc.oc.api.docs.UserId;
 import tc.oc.api.docs.virtual.ServerDoc;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.minecraft.MinecraftService;
 import tc.oc.api.servers.ServerStore;
 import tc.oc.api.sessions.SessionChange;
@@ -72,7 +72,7 @@ import static tc.oc.commons.core.util.Utils.notEqual;
  */
 public class JoinMessageAnnouncer implements MessageListener, Listener, PluginFacet {
 
-    private final MessageQueue queue;
+    private final MessageService queue;
     private final OnlineFriends onlineFriends;
     private final IdentityProvider identityProvider;
     private final SettingManagerProvider playerSettings;
@@ -91,7 +91,7 @@ public class JoinMessageAnnouncer implements MessageListener, Listener, PluginFa
     private final Cache<UserId, SessionChange> pendingJoins = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.SECONDS).build();
     private final Cache<UserId, SessionChange> pendingQuits = CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.SECONDS).build();
 
-    @Inject JoinMessageAnnouncer(MessageQueue queue,
+    @Inject JoinMessageAnnouncer(MessageService queue,
                                  OnlineFriends onlineFriends,
                                  IdentityProvider identityProvider,
                                  SettingManagerProvider playerSettings,

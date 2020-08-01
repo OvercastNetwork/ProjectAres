@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.ListenableFuture;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,7 @@ import tc.oc.api.docs.Server;
 import tc.oc.api.docs.Whisper;
 import tc.oc.api.docs.virtual.WhisperDoc;
 import tc.oc.api.message.MessageListener;
-import tc.oc.api.message.MessageQueue;
+import tc.oc.api.message.MessageService;
 import tc.oc.api.message.types.ModelUpdate;
 import tc.oc.api.model.IdFactory;
 import tc.oc.api.users.UserService;
@@ -39,7 +40,7 @@ public class WhisperDispatcher implements WhisperSender, Listener, MessageListen
     // at the same time they received it.
     private static final Duration MARK_READ_DELAY = Duration.ofSeconds(3);
 
-    private final MessageQueue queue;
+    private final MessageService queue;
     private final OnlinePlayers onlinePlayers;
     private final MainThreadExecutor executor;
     private final Scheduler scheduler;
@@ -50,7 +51,7 @@ public class WhisperDispatcher implements WhisperSender, Listener, MessageListen
     private final SettingManagerProvider playerSettings;
     private final UserService userService;
 
-    @Inject WhisperDispatcher(MessageQueue queue,
+    @Inject WhisperDispatcher(MessageService queue,
                               OnlinePlayers onlinePlayers,
                               MainThreadExecutor executor,
                               Scheduler scheduler,

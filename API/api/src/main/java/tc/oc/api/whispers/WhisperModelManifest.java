@@ -15,7 +15,7 @@ public class WhisperModelManifest extends HybridManifest implements ModelBinders
         });
 
         OptionalBinder.newOptionalBinder(publicBinder(), WhisperService.class)
-                      .setDefault().to(NullWhisperService.class);
+                      .setDefault().to(LocalWhisperService.class);
 
     }
 }
